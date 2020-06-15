@@ -15,7 +15,7 @@ use Illuminate\Support\Facades\Log;
 */
 
 // Portal Session
-Route::middleware('auth:portal')->group(function () {
+//Route::middleware('auth:portal')->group(function () {
     
     // DEBUG
     Route::any('/', function () {
@@ -25,7 +25,7 @@ Route::middleware('auth:portal')->group(function () {
         Log::info(request()->all());
         return view('welcome');
     });
-});
+//});
 
 
 // Console Webtool 
