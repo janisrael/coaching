@@ -28,7 +28,7 @@ Route::middleware('auth:portal')->group(function () {
 });
 
 
-// Admin Webtool 
+// Console Webtool 
 Route::group(['prefix' => 'console'], function () {
     Auth::routes([
         'register' => false,
@@ -36,7 +36,7 @@ Route::group(['prefix' => 'console'], function () {
         'verify' => true,
     ]);
 
-    Route::middleware(['auth', 'verified'])->namespace('Admin')->group(function () {
+    Route::middleware(['auth', 'verified'])->namespace('Console')->group(function () {
         
         Route::get('/', 'DashboardController@index')->name('home');
         

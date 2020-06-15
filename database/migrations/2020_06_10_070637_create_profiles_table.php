@@ -20,17 +20,14 @@ class CreateProfilesTable extends Migration
             $table->string('first_name', 100);
             $table->string('last_name', 100);
             $table->enum('gender', ['Male', 'Female']);
-            $table->tinyInteger('age', 100);
+            $table->tinyInteger('age');
             $table->string('market', 100);
-            $table->tinyInteger('years_xp', 2);
+            $table->tinyInteger('years_xp');
             $table->string('country', 100);
             $table->string('picture', 100);
             $table->string('coaching_style', 100);
             $table->string('timezone', 50);
             $table->timestamps();
-
-            $table->foreign('user_id')->references('id')->on($tableNames['users']);
-            $table->foreign('locale_id')->references('id')->on($tableNames['locales']);
         });
     }
 
