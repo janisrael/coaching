@@ -1,7 +1,6 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use Illuminate\Support\Facades\Log;
 
 /*
 |--------------------------------------------------------------------------
@@ -14,19 +13,24 @@ use Illuminate\Support\Facades\Log;
 |
 */
 
-// Portal Session
-//Route::middleware('auth:portal')->group(function () {
-    
-    // DEBUG
-    Route::any('/', function () {
-        Log::info('------------------');
-        Log::info('Method: ' . request()->method());
-        Log::info('URL: ' . request()->fullUrl());
-        Log::info(request()->all());
-        return view('welcome');
-    });
-//});
+// Validate Login Portal
+Route::get('/', 'Auth\PortalLoginController@login');
 
+// Portal Session
+Route::middleware('portal.auth')->group(function () {
+    
+    Route::group(['namespace' => 'Coaching/V1', 'prefix' => 'v1'], function () {
+        Route::get('{any}', function () {
+            return view('layouts.coaching.v1');
+        });        
+    });
+    
+    Route::group(['namespace' => 'Coaching/V2', 'prefix' => 'v2'], function () {
+        Route::get('{any}', function () {
+            return view('layouts.coaching.v2');
+        }); 
+    });
+});
 
 // Console Webtool 
 Route::group(['prefix' => 'console'], function () {
@@ -38,7 +42,7 @@ Route::group(['prefix' => 'console'], function () {
 
     Route::middleware(['auth', 'verified'])->namespace('Console')->group(function () {
         
-        Route::get('/', 'DashboardController@index')->name('home');
+        Route::get('/', 'DashboardController@index')->name('dashboard');
         
         //
     });

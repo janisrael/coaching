@@ -78,8 +78,9 @@ return [
     'middleware' => [
         'web',
         Authorize::class,
+        'auth:web'
     ],
-
+    
     /*
     |--------------------------------------------------------------------------
     | Ignored Paths & Commands

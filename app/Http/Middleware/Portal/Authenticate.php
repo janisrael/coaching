@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Middleware\Portal;
+use Illuminate\Auth\Access\AuthorizationException;
 
 use Closure;
 
@@ -15,7 +16,14 @@ class Authenticate
      */
     public function handle($request, Closure $next)
     {
-        // redirect()->away(config('app.portal_url'));
+        if (config('app.auth_user_portal')) {
+            if (! is_null(config('app.portal_url'))) {
+                return redirect()->away(config('app.portal_url'));
+            }
+            
+            throw new AuthorizationException();
+        }
+
         return $next($request);
     }
 }

@@ -83,6 +83,8 @@ return [
 
     'lifetime' => env('SESSION_TIMEOUT', 120),
 
+    'auth_user_portal' => env('PORTAL_AUTH_USER'),
+
     'portal_url' => env('PORTAL_URL'),
 
     /*
