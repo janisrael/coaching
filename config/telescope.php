@@ -80,7 +80,7 @@ return [
         Authorize::class,
         'auth:web'
     ],
-    
+
     /*
     |--------------------------------------------------------------------------
     | Ignored Paths & Commands
@@ -93,7 +93,7 @@ return [
     */
 
     'ignore_paths' => [
-        'nova-api*',
+        //
     ],
 
     'ignore_commands' => [

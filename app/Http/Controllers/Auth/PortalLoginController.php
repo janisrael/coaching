@@ -10,7 +10,7 @@ class PortalLoginController extends Controller
 {
     public function __construct()
     {
-        
+        //
     }
 
     public function login(Request $request)

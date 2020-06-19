@@ -14,7 +14,7 @@ class CreateLocalesTable extends Migration
     public function up()
     {
         Schema::create('locales', function (Blueprint $table) {
-            $table->id();
+            $table->bigIncrements('id');
             $table->string('locale', 10);
             $table->string('name', 100);
             $table->string('timezone', 100);
