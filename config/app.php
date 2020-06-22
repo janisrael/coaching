@@ -87,6 +87,8 @@ return [
 
     'portal_url' => env('PORTAL_URL'),
 
+    'coaching_url' => env('APP_URL') . '/' . env('DEFAULT_COACHING_VERSION', 'v1'),
+
     /*
     |--------------------------------------------------------------------------
     | Application Locale Configuration
@@ -199,6 +201,7 @@ return [
         App\Providers\TelescopeServiceProvider::class,
         App\Providers\HorizonServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
+        App\Providers\RepositoryServiceProvider::class,
 
     ],
 

@@ -17,18 +17,11 @@ Route::get('/', 'Auth\PortalLoginController@login');
 // Portal Session
 Route::middleware('portal.auth')->group(function () {
     
-    Route::group(['namespace' => 'Coaching/V1', 'prefix' => 'v1'], function () {
-        Route::get('{any}', function () {
-            return view('layouts.coaching.v1');
-        });        
-    });
+    require 'coaching/v1.php';
     
-    Route::group(['namespace' => 'Coaching/V2', 'prefix' => 'v2'], function () {
-        Route::get('{any}', function () {
-            return view('layouts.coaching.v2');
-        }); 
-    });
+    // require 'coaching/v2.php';
 });
+
 
 // Console Webtool 
 Route::group(['prefix' => 'console'], function () {
