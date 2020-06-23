@@ -26,5 +26,12 @@
         <h3 class="text-center">Theme one</h3>
         <p class="text-center">{{ request()->segment(2) }}</p>
     </div>
+
+    <script>
+        window.ENV = {
+            APP_URL: '{{ config('app.coaching_url') }}',
+            APP_DEBUG: '{{ config('app.debug') }}',
+        };
+    </script>
 </body>
 </html>
