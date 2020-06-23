@@ -25,7 +25,7 @@ class CoachController extends Controller
      */
     public function all()
     {
-        //
+        return 'all';
     }
     /**
      * Get All Coaches Schedule
@@ -34,6 +34,6 @@ class CoachController extends Controller
      */
     public function schedule($date_from=null, $date_to=null)
     {
-        //
+        return 'schedule ' . $date_from . ' - ' . $date_to;
     }
 }

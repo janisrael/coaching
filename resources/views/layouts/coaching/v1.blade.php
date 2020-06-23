@@ -24,7 +24,7 @@
 
         <h1 class="text-center">{{ config('app.name') }}</h1>
         <h3 class="text-center">Theme one</h3>
-        <p class="text-center">{{ request()->segment(2) }}</p>
+        <p class="text-center">/{{ request()->segment(2) }}</p>
     </div>
 
     <script>

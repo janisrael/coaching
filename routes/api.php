@@ -12,7 +12,9 @@ use Illuminate\Http\Request;
 | is assigned the "api" middleware group. Enjoy building your API!
 |
 */
-
-Route::middleware('auth:api')->get('/user', function (Request $request) {
-    return $request->user();
+Route::middleware('portal.auth')->group(function () {
+    Route::group(['namespace' => 'Coaching\V1', 'prefix' => 'v1/coaches'], function () {
+        Route::get('/', 'CoachController@all');
+        Route::get('schedule/{date_from?}/{date_to?}', 'CoachController@schedule');
+    });
 });
