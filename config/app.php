@@ -87,6 +87,8 @@ return [
 
     'portal_url' => env('PORTAL_URL'),
 
+    'portal_session_url' => env('PORTAL_SESSION_URL'),
+
     'coaching_url' => env('APP_URL') . '/' . env('DEFAULT_COACHING_VERSION', 'v1'),
 
     /*

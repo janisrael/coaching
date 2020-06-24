@@ -6,13 +6,13 @@ use App\Repositories\Interfaces\ScheduleRepositoryInterface;
 
 class ScheduleRepository implements ScheduleRepositoryInterface
 {
-    public function all()
+    public function all(): array
     {
-        return '';
+        return [];
     }
 
-    public function getByDate($date_from, $date_to)
+    public function getByDate($date_from, $date_to): array
     {
-        return '';
+        return [];
     }
 }

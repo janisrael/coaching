@@ -15,7 +15,7 @@
 Route::get('/', 'Auth\PortalLoginController@login');
 
 // Portal Session
-Route::middleware('portal.auth')->group(function () {
+Route::middleware('portal.auth:portal')->group(function () {
     require 'coaching/v1.php';
     # require 'coaching/v2.php';
 });

@@ -6,8 +6,8 @@ use App\Repositories\Interfaces\CoachRepositoryInterface;
 
 class CoachRepository implements CoachRepositoryInterface
 {
-    public function all()
+    public function all(): array
     {
-        return '';
+        return [];
     }
 }

@@ -26,8 +26,8 @@ class PortalLoginRequest extends FormRequest
     public function rules()
     {
         return [
-            'token' => 'required',
-            'user_id' => 'required'
+            'token' => 'required|string',
+            'user_id' => 'required|integer'
         ];
     }
 

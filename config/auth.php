@@ -48,9 +48,8 @@ return [
         ],
 
         'portal' => [
-            'driver' => 'token',
+            'driver' => 'session',
             'provider' => 'potal_logins',
-            'hash' => true,
         ],
     ],
 
@@ -78,9 +77,8 @@ return [
         ],
 
         'potal_logins' => [
-            'driver' => 'database',
-            'table' => 'potal_logins',
-            'expire' => 60,
+            'driver' => 'eloquent',
+            'model' => App\Models\PortalLogin::class,
         ],
 
         // 'users' => [

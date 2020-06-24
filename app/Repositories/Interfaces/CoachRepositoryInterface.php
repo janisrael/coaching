@@ -4,5 +4,5 @@ namespace App\Repositories\Interfaces;
 
 interface CoachRepositoryInterface
 {
-    public function all();
+    public function all(): array;
 }
