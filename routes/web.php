@@ -14,9 +14,14 @@
 // Validate Login Portal
 Route::get('/', 'Auth\PortalLoginController@login');
 
+// Logout Portal
+Route::get('logout', 'Auth\PortalLoginController@logout');
+
 // Portal Session
 Route::middleware('portal.auth:portal')->group(function () {
+
     require 'coaching/v1.php';
+    
     # require 'coaching/v2.php';
 });
 

@@ -46,7 +46,7 @@ class PortalLoginController extends Controller
                 'last_login_ip' => $request->ip()
             ]);
     
-        $request->session()->regenerate();    
+        //$request->session()->regenerate();    
     
         $this->guard()->login($this->portalLogin);
 
