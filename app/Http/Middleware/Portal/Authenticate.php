@@ -12,18 +12,17 @@ class Authenticate
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  \Closure  $next
+     * @param  string|null  $guard
      * @return mixed
      */
-    public function handle($request, Closure $next, $guard='')
+    public function handle($request, Closure $next, $guard=null)
     {
-        if (! config('app.auth_user_portal')) {
+        if (Auth::guard($guard)->check() and $guard == 'portal') {
             return $next($request);
         }
 
-        if (Auth::guard($guard)->check()) {
-            if ($guard == 'portal') {
-                return $next($request);
-            }
+        if (! config('app.auth_user_portal')) {
+            return $next($request);
         }
 
         if (! is_null(config('app.portal_url'))) {

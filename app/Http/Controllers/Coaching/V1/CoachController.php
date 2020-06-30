@@ -28,6 +28,7 @@ class CoachController extends Controller
     {
         return CoachResource::collection(collect($this->coachRepository->all()));
     }
+    
     /**
      * Get All Coaches Schedule
      * 

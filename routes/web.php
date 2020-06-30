@@ -11,15 +11,13 @@
 |
 */
 
-// Validate Login Portal
-Route::get('/', 'Auth\PortalLoginController@login');
-
-// Logout Portal
+// Login Portal
+Route::get('/', 'Auth\PortalLoginController@loginPortal');
 Route::get('logout', 'Auth\PortalLoginController@logout');
 
 // Portal Session
-Route::middleware('portal.auth:portal')->group(function () {
-
+Route::group(['middleware' => 'portal.auth:portal'], function () {
+    
     require 'coaching/v1.php';
     
     # require 'coaching/v2.php';

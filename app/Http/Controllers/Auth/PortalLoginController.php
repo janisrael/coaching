@@ -3,32 +3,32 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use Illuminate\Foundation\Auth\AuthenticatesUsers;
+use Illuminate\Http\Request;
 use App\Http\Requests\PortalLoginRequest;
+use Illuminate\Support\Facades\Auth;
 use App\Models\PortalLogin;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\ServerException;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Http\Request;
 
 class PortalLoginController extends Controller
 {
+    use AuthenticatesUsers;
+
     private $portalLogin;
 
     private $client;
 
     public function __construct(PortalLogin $portalLogin, Client $client)
     {
+        $this->middleware('guest')->except('logout');
+
         $this->portalLogin = $portalLogin;
 
         $this->client = $client;
     }
 
-    /**
-     * Handle a login request to the application.
-     *
-     * @param  \App\Http\Requests\PortalLoginRequest  $request
-     */
-    public function login(PortalLoginRequest $request)
+    public function loginPortal(PortalLoginRequest $request)
     {
         $url = config('app.portal_session_url').'?token='.$request->token;
         
@@ -36,29 +36,28 @@ class PortalLoginController extends Controller
 
         $clientResponse = json_decode($clientRequest->getBody()->getContents());
 
-        $this->portalLogin->updateOrCreate(
+        $password = $clientResponse->user->id . $clientResponse->token . config('app.coaching_url');
+
+        $portalSession = $this->portalLogin->updateOrCreate(
             ['portal_user_id' => $clientResponse->user->id, 'salesforce_token' => $clientResponse->user->salesforce_token],
             [
                 'portal_user_details' => json_encode($clientResponse->user),
                 'api_token' => $clientResponse->token,
+                'email' => $clientResponse->user->email,
+                'password' => $password,
                 'expired_at' => $clientResponse->expires_at,
                 'last_login_at' => now(),
                 'last_login_ip' => $request->ip()
             ]);
-    
-        //$request->session()->regenerate();    
-    
-        $this->guard()->login($this->portalLogin);
 
-        return redirect()->intended(config('app.coaching_url'));
+        $request->merge([
+                'email' => $portalSession->email, 
+                'password' => $password
+                ]);
+
+        return $this->login($request);
     }
 
-    /**
-     * Log the user out of the application.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
     public function logout(Request $request)
     {
         $this->guard()->logout();
@@ -68,11 +67,11 @@ class PortalLoginController extends Controller
         return redirect()->away(config('app.portal_url'));
     }
 
-    /**
-     * Get the guard to be used during authentication.
-     *
-     * @return \Illuminate\Contracts\Auth\StatefulGuard
-     */
+    protected function redirectPath()
+    {
+        return config('app.coaching_url');
+    }
+
     protected function guard()
     {
         return Auth::guard('portal');
