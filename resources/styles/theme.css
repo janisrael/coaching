@@ -257,3 +257,7 @@ input.el-range-input {
 .list-4.list-item:hover {
     background-color: #b36374 !important;
 }
+
+.el-date-editor .el-range-input {
+    width: 25% !important;
+}
