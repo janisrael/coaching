@@ -32,7 +32,7 @@ import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 Vue.use(ElementUI, { locale })
 // library.add(faSpinner)
 Vue.component('font-awesome-icon', FontAwesomeIcon)
-Vue.component('index', require('./components/Index.vue').default);
+Vue.component('Index', require('./components/Index.vue').default);
 
 /**
  * Next, we will create a fresh Vue application instance and attach it to

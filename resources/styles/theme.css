@@ -261,3 +261,9 @@ input.el-range-input {
 .el-date-editor .el-range-input {
     width: 25% !important;
 }
+<<<<<<< HEAD:resources/styles/theme.css
+=======
+.el-range-separator {
+    color: #fff !important;
+}
+>>>>>>> main-view-page:resources/styles/theme.css
