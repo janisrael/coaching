@@ -91,6 +91,10 @@ return [
 
     'coaching_url' => env('APP_URL') . '/' . env('DEFAULT_COACHING_VERSION', 'v1'),
 
+    'enable_api_dummy_data' => env('API_ENABLE_DUMMY_DATA'),
+
+    'total_dummy_data' => env('API_TOTAL_DUMMY_DATA'),
+
     /*
     |--------------------------------------------------------------------------
     | Application Locale Configuration
