@@ -28,63 +28,112 @@
             content="this is content, this is content, this is content">
             <div class="icon-info"><i class="fas fa-info"></i></div>
           </el-popover>
+          <el-popover
+            placement="top-start"
+            title="Title"
+            width="500"
+            trigger="click"
+            content="this is content, this is content, this is content">
+            <div style="color:#fff">this is a test</div>
+            <span slot="reference" class="session-info"><i class="fas fa-info"></i></span>
+            <!--            <el-button slot="reference">Hover to activate</el-button>-->
+          </el-popover>
         </div>
       </div>
       <div v-for="position in filteredPositions">
-        <div :class="['list-' + position.country_id, 'list-item']">
-          <div v-if="position.country_id === 1" class="session-listitem" @click="dialogMentor()">
+        <div v-if="position.country_id === 1" class="list-item" @click="dialogMentor(position)">
+          <div :class="['list-' + position.country_id, 'session-listitem']">
             <i class="far fa-clock"></i>
-            <el-avatar :size="60" src="https://empty" @error="errorHandler" class="session-list-avatar">
+            <el-avatar :size="60" src="https://empty" class="session-list-avatar">
               <img src="https://cube.elemecdn.com/e/fd/0fc7d20532fdaf769a25683617711png.png"/>
             </el-avatar>
             <span class="session-list-time">09:00 TUESDAY 9/15</span>
           </div>
-          <div v-if="position.country_id === 2" class="session-listitem">
+          <div v-if="position.country_id === 1" :class="['list-' + position.country_id, 'list-item-btn']">
+            <span>BOOK</span>
+          </div>
+        </div>
+        <div v-if="position.country_id === 2" class="list-item" @click="dialogMentor(position)">
+          <div :class="['list-' + position.country_id, 'session-listitem']">
             <i class="fa fa-calendar-check" aria-hidden="true"></i>
-            <el-avatar :size="60" src="https://empty" @error="errorHandler" class="session-list-avatar">
+            <el-avatar :size="60" src="https://empty" class="session-list-avatar">
               <img src="https://cube.elemecdn.com/e/fd/0fc7d20532fdaf769a25683617711png.png"/>
             </el-avatar>
             <span class="session-list-time">09:00 TUESDAY 9/15</span>
             <span><i class="fas fa-headset"></i></span>
             <div style="float:right; display: inline-block;font-size: 14px;"><i class="fas fa-calendar-plus" style="margin-right:10px;"></i>CALENDAR</div>
           </div>
-          <div v-if="position.country_id === 3" class="session-listitem">
+          <div v-if="position.country_id === 2" :class="['list-' + position.country_id, 'list-item-btn']">
+            <span>VIEW</span>
+          </div>
+        </div>
+        <div v-if="position.country_id === 3" class="list-item" @click="dialogMentor(position)">
+          <div :class="['list-' + position.country_id, 'session-listitem']">
             <i class="el-icon-circle-check"></i>
-            <el-avatar :size="60" src="https://empty" @error="errorHandler" class="session-list-avatar">
+            <el-avatar :size="60" src="https://empty" class="session-list-avatar">
               <img src="https://cube.elemecdn.com/e/fd/0fc7d20532fdaf769a25683617711png.png"/>
             </el-avatar>
             <span class="session-list-time">09:00 TUESDAY 9/15</span>
           </div>
-          <div v-if="position.country_id === 4" class="session-listitem">
+          <div v-if="position.country_id === 3" :class="['list-' + position.country_id, 'list-item-btn']">
+            <span>VIEW</span>
+          </div>
+        </div>
+        <div v-if="position.country_id === 4" class="list-item" @click="dialogMentor(position)">
+          <div :class="['list-' + position.country_id, 'session-listitem']">
             <i class="fa fa-ban" aria-hidden="true"></i>
-            <el-avatar :size="60" src="https://empty" @error="errorHandler" class="session-list-avatar">
+            <el-avatar :size="60" src="https://empty" class="session-list-avatar">
               <img src="https://cube.elemecdn.com/e/fd/0fc7d20532fdaf769a25683617711png.png"/>
             </el-avatar>
             <span class="session-list-time">09:00 TUESDAY 9/15</span>
           </div>
+          <div v-if="position.country_id === 4" :class="['list-' + position.country_id, 'list-item-btn']">
+            <span>VIEW</span>
+          </div>
         </div>
-        <div v-if="position.country_id === 1" :class="['list-' + position.country_id, 'list-item-btn']">
-          <span>BOOK</span>
-        </div>
+        <!--        <div v-if="position.country_id === 2" class="session-listitem">-->
+        <!--          <i class="fa fa-calendar-check" aria-hidden="true"></i>-->
+        <!--          <el-avatar :size="60" src="https://empty" class="session-list-avatar">-->
+        <!--            <img src="https://cube.elemecdn.com/e/fd/0fc7d20532fdaf769a25683617711png.png"/>-->
+        <!--          </el-avatar>-->
+        <!--          <span class="session-list-time">09:00 TUESDAY 9/15</span>-->
+        <!--          <span><i class="fas fa-headset"></i></span>-->
+        <!--          <div style="float:right; display: inline-block;font-size: 14px;"><i class="fas fa-calendar-plus" style="margin-right:10px;"></i>CALENDAR</div>-->
+        <!--        </div>-->
+        <!--        <div v-if="position.country_id === 3" class="session-listitem">-->
+        <!--          <i class="el-icon-circle-check"></i>-->
+        <!--          <el-avatar :size="60" src="https://empty" class="session-list-avatar">-->
+        <!--            <img src="https://cube.elemecdn.com/e/fd/0fc7d20532fdaf769a25683617711png.png"/>-->
+        <!--          </el-avatar>-->
+        <!--          <span class="session-list-time">09:00 TUESDAY 9/15</span>-->
+        <!--        </div>-->
+        <!--        <div v-if="position.country_id === 4" class="session-listitem">-->
+        <!--          <i class="fa fa-ban" aria-hidden="true"></i>-->
+        <!--          <el-avatar :size="60" src="https://empty" class="session-list-avatar">-->
+        <!--            <img src="https://cube.elemecdn.com/e/fd/0fc7d20532fdaf769a25683617711png.png"/>-->
+        <!--          </el-avatar>-->
+        <!--          <span class="session-list-time">09:00 TUESDAY 9/15</span>-->
+        <!--        </div>-->
 
-        <div v-if="position.country_id === 2" :class="['list-' + position.country_id, 'list-item-btn']">
-          <span>VIEW</span>
-        </div>
 
-        <div v-if="position.country_id === 3" :class="['list-' + position.country_id, 'list-item-btn']">
-          <span>VIEW</span>
-        </div>
 
-        <div v-if="position.country_id === 4" :class="['list-' + position.country_id, 'list-item-btn']">
-          <span>VIEW</span>
-        </div>
+        <!--        <div v-if="position.country_id === 2" :class="['list-' + position.country_id, 'list-item-btn']">-->
+        <!--          <span>VIEW</span>-->
+        <!--        </div>-->
+
+        <!--        <div v-if="position.country_id === 3" :class="['list-' + position.country_id, 'list-item-btn']">-->
+        <!--          <span>VIEW</span>-->
+        <!--        </div>-->
+
+        <!--        <div v-if="position.country_id === 4" :class="['list-' + position.country_id, 'list-item-btn']">-->
+        <!--          <span>VIEW</span>-->
+        <!--        </div>-->
       </div>
     </el-col>
     <el-dialog
       title="Biography"
       :visible.sync="dialogItem"
-      width="40%"
-      :before-close="handleClose">
+      width="40%">
       <!--      <div style="float:left; padding: 8px;">-->
       <!--        <el-avatar :size="60" :src="selected.pic" class="dbl-border">-->
       <!--          <img :src="selected.pic"/>-->
@@ -117,7 +166,7 @@
       <!--        <span style="color:#fff">{{ selected.profile }}</span>-->
       <!--      </div>-->
       <span slot="footer" class="dialog-footer">
-    <el-button @click="dialogProfile = false" type="success">Close</el-button>
+    <el-button @click="dialogItem = false" type="success">Close</el-button>
   </span>
     </el-dialog>
   </el-col>
@@ -180,8 +229,10 @@
       }
     },
     methods: {
-      dialogMentor() {
+      dialogMentor(position) {
+        console.log(position)
         this.dialogItem = true
+
       }
     }
   }

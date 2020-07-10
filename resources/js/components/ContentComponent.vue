@@ -22,8 +22,7 @@
     <el-dialog
       title="Biography"
       :visible.sync="dialogProfile"
-      width="40%"
-      :before-close="handleClose">
+      width="40%">
 
       <div style="float:left; padding: 8px;">
         <el-avatar :size="60" :src="selected.pic" class="dbl-border">
@@ -75,6 +74,7 @@
     },
     data() {
       return {
+        handleClose: '',
         fit: 'contain',
         dialogProfile: false
       }

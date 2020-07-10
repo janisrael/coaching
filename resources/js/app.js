@@ -28,9 +28,12 @@ import 'element-ui/lib/theme-chalk/index.css';
 import locale from 'element-ui/lib/locale/lang/en'
 // import { faSpinner } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
+import CountryFlag from 'vue-country-flag'
 
 Vue.use(ElementUI, { locale })
 // library.add(faSpinner)
+
+Vue.component('country-flag', CountryFlag)
 Vue.component('font-awesome-icon', FontAwesomeIcon)
 Vue.component('Index', require('./components/Index.vue').default);
 

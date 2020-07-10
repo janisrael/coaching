@@ -56,23 +56,68 @@ label#id-4 span {
 
 .list-1 {
     background-color: #6e8e6a !important;
+    transition: 0.3s;
 }
 .list-2 {
     background-color: #5e7aa4 !important;
+    transition: 0.3s;
 }
 .list-3 {
     background-color: #917c4e !important;
+    transition: 0.3s;
 }
 .list-4 {
     background-color: #92505e !important;
+    transition: 0.3s;
+}
+
+.list-item:hover .list-1.session-listitem, .list-item.hover .list-1.session-listitem {
+    background: #91b98c !important;
+}
+.list-item:hover .list-1.list-item-btn, .list-item.hover .list-1.list-item-btn {
+    background: #91b98c !important;
+}
+
+.list-item:hover .list-2.session-listitem, .list-item.hover .list-2.session-listitem {
+    background: #7495c7  !important;
+}
+.list-item:hover .list-2.list-item-btn, .list-item.hover .list-2.list-item-btn {
+    background: #7495c7 !important;
+}
+
+.list-item:hover .list-3.session-listitem, .list-item.hover .list-3.session-listitem {
+    background: #bba167  !important;
+}
+.list-item:hover .list-3.list-item-btn, .list-item.hover .list-3.list-item-btn {
+    background: #bba167 !important;
+}
+
+.list-item:hover .list-4.session-listitem, .list-item.hover .list-4.session-listitem {
+    background: #b36374  !important;
+}
+.list-item:hover .list-4.list-item-btn, .list-item.hover .list-4.list-item-btn {
+    background: #b36374 !important;
+}
+
+.list-1.session-listitem {
+    background-color: #6e8e6a !important;
+}
+
+.session-info {
+    cursor: pointer;
+    color: #fff;
+    border: 1px solid white;
+    padding: 3px 6px;
+    font-size: 9px;
+    border-radius: 50%;
 }
 
 .list-item {
-    padding: 10px;
+    padding: 0px;
     border-radius: 3px;
-    margin-bottom: 10px;
+    /*margin-bottom: 10px;*/
     color: #fff;
-    width: 90%;
+    width: 100%;
     display: inline-block;
 }
 
@@ -158,6 +203,12 @@ span.dbl-border.el-avatar.el-avatar--circle {
     margin-top: 20px;
     position: absolute;
     margin-left: 16px;
+    transition: 0.3s;
+}
+
+.right-detail-btnprofile:hover {
+    color: #bfdcff;
+    border-color: #bfdcff;
 }
 
 .right-list-container {
@@ -170,6 +221,13 @@ span.dbl-border.el-avatar.el-avatar--circle {
     background-color: transparent !important;
     color: #9ecaff !important;
     border-color: #9ecaff !important;
+}
+
+.session-listitem {
+    padding: 10px;
+    width: 90%;
+    display: inline-block;
+    border-radius: 3px;
 }
 
 .el-checkbox:last-of-type {
@@ -205,7 +263,7 @@ span.session-list-avatar.el-avatar.el-avatar--circle {
 }
 
 .el-dialog__body {
-    /*padding: 30px 20px;*/
+    padding: 30px 40px !important;
     /*color: #606266;*/
     /*font-size: 14px;*/
     /*word-break: break-all;*/
@@ -242,25 +300,214 @@ input.el-range-input {
 .list-item {
     cursor: pointer;
 }
-.list-1.list-item:hover {
-    background-color: #91b98c !important;
-}
+/*.list-1.list-item:hover {*/
+/*    background-color: #91b98c !important;*/
+/*}*/
 
-.list-2.list-item:hover {
-    background-color: #7495c7 !important;
-}
+/*.list-2.list-item:hover {*/
+/*    background-color: #7495c7 !important;*/
+/*}*/
 
-.list-3.list-item:hover {
-    background-color: #bba167 !important;
-}
+/*.list-3.list-item:hover {*/
+/*    background-color: #bba167 !important;*/
+/*}*/
 
-.list-4.list-item:hover {
-    background-color: #b36374 !important;
-}
+/*.list-4.list-item:hover {*/
+/*    background-color: #b36374 !important;*/
+/*}*/
 
 .el-date-editor .el-range-input {
     width: 25% !important;
 }
 .el-range-separator {
     color: #fff !important;
+}
+
+/*filter*/
+.filter-blocks.el-col.el-col-24 {
+    padding: 10px 0;
+}
+
+.el-checkbox-button:first-child .el-checkbox-button__inner {
+    /*border-radius: 4px !important;*/
+    /*margin-right: 5px !important;*/
+}
+
+span.filter-title {
+    color: rgba(255, 255, 255, 0.62);
+    margin-bottom: 10px;
+    display: block;
+}
+
+/*global*/
+.btn-default > span.el-checkbox-button__inner {
+    background-color: transparent !important;
+    color: #fff !important;
+    border-color: rgba(255, 255, 255, 0.25) !important;
+}
+
+.el-checkbox-button.is-checked .el-checkbox-button__inner {
+    color: #FFF;
+    background-color: #409EFF;
+    border-color: #9ecaff !important;
+    box-shadow: -1px 0 0 0 #8cc5ff !important;
+}
+
+.input-default > .el-input__inner {
+    background-color: transparent !important;
+    color: #fff !important;
+}
+
+
+.el-checkbox-button{
+    display: inline-block;
+    position: relative;
+    /*margin-left: 5px !important;*/
+    border-radius: 4px !important;
+    /* border: 1px solid white; */
+}
+
+label.el-checkbox.filter-checkbox.is-bordered {
+    padding: 6px 20px 9px 10px !important;
+    color: #fff !important;
+    margin-right: 10px !important;
+    border-color: rgba(255, 255, 255, 0.25) !important;
+}
+
+label.el-checkbox.filter-checkbox.is-bordered.is-checked {
+    border-color: #9ecaff !important;
+
+}
+
+label.el-checkbox.filter-checkbox.is-bordered.is-checked > .el-checkbox__input.is-checked+.el-checkbox__label {
+    color: #fff !important;
+}
+
+label.el-checkbox.filter-checkbox.is-bordered span.el-checkbox__inner {
+    display: none !important;
+}
+
+.el-carousel__item {
+    /*width: 200px !important;*/
+    display: inline-block;
+    /* overflow: hidden; */
+    z-index: 0;
+}
+
+
+
+
+/*.scrolling-wrapper {*/
+/*    overflow-x: scroll;*/
+/*    overflow-y: hidden;*/
+/*    white-space: nowrap;*/
+/*}*/
+/*.card {*/
+/*    display: inline-block;*/
+/*}*/
+
+
+/*.scrolling-wrapper-flexbox {*/
+/*    display: flex;*/
+/*    flex-wrap: nowrap;*/
+/*    overflow-x: auto;*/
+/*}*/
+/*.card {*/
+/*    flex: 0 0 auto;*/
+/*    margin-right: 3px;*/
+/*}*/
+
+
+/*.card {*/
+/*    border: 2px solid red;*/
+/*    width: 150px;*/
+/*    height: 75px;*/
+/*    background: black;*/
+/*}*/
+
+/*.scrolling-wrapper, .scrolling-wrapper-flexbox {*/
+/*    height: 80px;*/
+/*    margin-bottom: 20px;*/
+/*    width: 100%;*/
+/*    -webkit-overflow-scrolling: touch;*/
+/*}*/
+/*::-webkit-scrollbar {*/
+/*     display: none;*/
+/* }*/
+
+
+
+/*.scrolling-wrapper {*/
+/*    background: #eee;*/
+/*    padding: 20px 15px 20px;*/
+/*    margin: 0 37px;*/
+/*    !* Make this scrollable when needed *!*/
+/*    overflow-x: auto;*/
+/*    !* We don't want vertical scrolling *!*/
+/*    overflow-y: hidden;*/
+/*    !* Make an auto-hiding scroller for the 3 people using a IE *!*/
+/*    -ms-overflow-style: -ms-autohiding-scrollbar;*/
+/*    !* For WebKit implementations, provide inertia scrolling *!*/
+/*    -webkit-overflow-scrolling: touch;*/
+/*    !* We don't want internal inline elements to wrap *!*/
+/*    white-space: nowrap;*/
+/*    !* Remove the default scrollbar for WebKit implementations *!*/
+/*}*/
+/*.scrolling-wrapper::-webkit-scrollbar {*/
+/*    display: none;*/
+/*}*/
+
+
+.cata-sub-nav {
+    /*background: #eee;*/
+    padding: 20px 15px 20px;
+    margin: 0 37px;
+    /* Make this scrollable when needed */
+    overflow-x: auto;
+    /* We don't want vertical scrolling */
+    overflow-y: hidden;
+    /* Make an auto-hiding scroller for the 3 people using a IE */
+    -ms-overflow-style: -ms-autohiding-scrollbar;
+    /* For WebKit implementations, provide inertia scrolling */
+    -webkit-overflow-scrolling: touch;
+    /* We don't want internal inline elements to wrap */
+    white-space: nowrap;
+    /* Remove the default scrollbar for WebKit implementations */
+}
+.cata-sub-nav::-webkit-scrollbar {
+    display: none;
+}
+
+.arrow{
+    background: transparent;
+}
+.nav-prev {
+    width: 25px;
+    height: 25px;
+    position: absolute;
+    left: 0px;
+    margin-top: 8px;
+    cursor: pointer;
+    z-index: 99 !important;
+}
+.nav-next {
+    width: 25px;
+    height: 25px;
+    position: absolute;
+    right: 0px;
+    margin-top: -22px;
+    cursor: pointer;
+    z-index: 99 !important;
+}
+
+.el-popover {
+    background: #55769a !important;
+    border: 1px solid #55769a !important;
+}
+
+.el-popper[x-placement^=top] .popper__arrow::after {
+    border-top-color: #55769a !important;
+}
+.el-popper[x-placement^=top] .popper__arrow {
+    border-top-color: #55769a !important;
 }
