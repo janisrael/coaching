@@ -23,6 +23,7 @@
 <!--                {{ item.last_name }}-->
               <el-table
                 :data="list"
+                ref="singleTable"
                 highlight-current-row
                 @cell-click="getSummary"
                 style="width: 100%; cursor: pointer">
@@ -34,7 +35,7 @@
                       </el-avatar>
                     </div>
                     <div style="display: inline-block; width: 80%; padding-left: 10px;">
-                      <div style="display: block; float: right;">
+                      <div class="flag-container">
                         <country-flag :country='scope.row.country_code' size='normal'/>
                       </div>
                       <div class="left-list-header">{{ scope.row.first_name }} {{ scope.row.last_name }}</div>
@@ -47,7 +48,7 @@
                         Style -
                         <span v-for="st in scope.row.style">{{ st }}, </span>
                       </div>
-                      <div style="float:right; margin-top: -20px;">
+                      <div style="float:right; margin-top: 0px;">
                         <el-badge :value="1" class="item">
                           <i class="fa fa-calendar-check left-list-badge-icon" aria-hidden="true" style="color: #617da5"></i>
                         </el-badge>
@@ -110,11 +111,13 @@
         const res = await fetch('/api/v1/coaches');
         const data = await res.json();
         this.data = data;
-        // console.log(this.data)
+        setTimeout(() => this.loadDefault(this.data), 1)
+      },
+      loadDefault(data) {
+        this.getSummary(data.data[0])
       },
       getSummary(row) {
-        console.log(row)
-        // this.passData = row
+        this.passData = row
       },
       callFilter() {
         this.importComponent = FilterComponent

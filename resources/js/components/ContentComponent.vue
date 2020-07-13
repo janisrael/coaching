@@ -5,55 +5,48 @@
         <img :src="selected.pic"/>
       </el-avatar>
     </div>
+<!--    {{ selected }}-->
     <div style="display: inline-block; width: 90%; padding-left: 15px;">
-      <div class="right-detail-header">{{ selected.name }}</div>
+      <div class="right-detail-header">{{ selected.first_name }} {{ selected.last_name }}</div>
       <div class="right-detail-btnprofile" @click="showInfo()"><i class="fas fa-info"></i></div>
       <div class="right-list-sub">
-        <div style="display: inline-block; float: left;">
-          <el-image
-            style="width: 24px; height: 24px"
-            :src="selected.flag"
-            :fit="fit">
-          </el-image>
+        <div style="display: inline-block; float: left; margin-left: -15px;">
+          <country-flag :country='selected.country_code' size='normal'/>
         </div>
-        <div class="right-detail-sub">{{ selected.address }}</div>
+        <div class="right-detail-sub">{{ selected.country }}</div>
       </div>
     </div>
     <el-dialog
       title="Biography"
       :visible.sync="dialogProfile"
+      top="3%"
       width="40%">
-
       <div style="float:left; padding: 8px;">
         <el-avatar :size="60" :src="selected.pic" class="dbl-border">
           <img :src="selected.pic"/>
         </el-avatar>
       </div>
       <div style="display: inline-block; width: 70%; padding-left: 15px;">
-        <div class="right-detail-header">{{ selected.name }}</div>
-        <div class="right-detail-btnprofile" @click="showInfo()"><i class="fas fa-info"></i></div>
+        <div class="right-detail-header">{{ selected.first_name }} {{ selected.last_name }}</div>
         <div class="right-list-sub">
-          <div style="display: inline-block; float: left;">
-            <el-image
-              style="width: 24px; height: 24px"
-              :src="selected.flag"
-              :fit="fit">
-            </el-image>
+          <div style="display: inline-block; float: left; margin-left: -15px;">
+            <country-flag :country='selected.country_code' size='normal'/>
           </div>
-          <div class="right-detail-sub">{{ selected.address }}</div>
+          <div class="right-detail-sub">{{ selected.country }}</div>
         </div>
       </div>
       <div style="display: block; padding: 20px;">
         <div style="color:#fff; font-weight: bold">Experience</div>
-        <span style="color:#fff">{{ selected.profile }}</span>
+        <span style="color:#fff">{{ selected.experience_summary }}</span>
+        <p class="collapse-area" aria-expanded="false">{{ selected.experience_summary }}</p>
       </div>
       <div style="display: block; padding: 20px;">
         <div style="color:#fff; font-weight: bold">Markets Traded</div>
-        <span style="color:#fff">{{ selected.profile }}</span>
+        <span style="color:#fff">{{ selected.market_traded_summary }}</span>
       </div>
       <div style="display: block; padding: 20px;">
         <div style="color:#fff; font-weight: bold">Style</div>
-        <span style="color:#fff">{{ selected.profile }}</span>
+        <span style="color:#fff">{{ selected.style_summary }}</span>
       </div>
       <span slot="footer" class="dialog-footer">
     <el-button @click="dialogProfile = false" type="success">Close</el-button>
