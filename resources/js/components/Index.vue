@@ -9,7 +9,8 @@
                 id="searchBar"
                 size="small"
                 placeholder="Search for Coach"
-                v-model="selectedTags">
+                clearable
+                v-model="search">
                 <i slot="prefix" class="el-input__icon el-icon-search"></i>
               </el-input>
             </div>
@@ -26,7 +27,7 @@
             <div class="grid-content bg-purple-dark">
 <!--              <div v-for="item in list">-->
               <el-table
-                :data="activeCards"
+                :data="activeCards.filter(data => !search || data.last_name.toLowerCase().includes(search.toLowerCase()) || data.first_name.toLowerCase().includes(search.toLowerCase()))"
                 ref="singleTable"
                 highlight-current-row
                 @cell-click="getSummary"
@@ -189,7 +190,6 @@
         var filters = this.selectedTags;
 
         this.coaches.forEach(function(card) {
-
           function cardContainsFilter(filter) {
             console.log(card.experience)
             return card.languages.indexOf(filter) != -1 ||
