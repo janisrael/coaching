@@ -36,17 +36,16 @@
         </div>
       </div>
       <div style="display: block; padding: 20px;">
-        <div style="color:#fff; font-weight: bold">Experience</div>
-        <span style="color:#fff">{{ selected.experience_summary }}</span>
-        <p class="collapse-area" aria-expanded="false">{{ selected.experience_summary }}</p>
+        <div class="info-head">Experience</div>
+        <span class="info-sub">{{ selected.experience_summary }}</span>
       </div>
-      <div style="display: block; padding: 20px;">
-        <div style="color:#fff; font-weight: bold">Markets Traded</div>
-        <span style="color:#fff">{{ selected.market_traded_summary }}</span>
+      <div style="display: block; padding: 20px; padding-bottom: 10px;">
+        <div class="info-head">Markets Traded</div>
+        <span class="info-sub">{{ selected.market_traded_summary }}</span>
       </div>
-      <div style="display: block; padding: 20px;">
-        <div style="color:#fff; font-weight: bold">Style</div>
-        <span style="color:#fff">{{ selected.style_summary }}</span>
+      <div style="display: block; padding: 20px; padding-bottom: 10px;">
+        <div class="info-head">Style</div>
+        <span class="info-sub">{{ selected.style_summary }}</span>
       </div>
       <span slot="footer" class="dialog-footer">
     <el-button @click="dialogProfile = false" type="success">Close</el-button>

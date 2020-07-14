@@ -524,22 +524,13 @@ label.el-checkbox.filter-checkbox.is-bordered span.el-checkbox__inner {
     border-top-color: #55769a !important;
 }
 
-/*collpase read more*/
 
-#collapseArea.collapse:not(.show) {
-    display: block;
-    height: 3rem;
-    overflow: hidden;
+.info-sub {
+    color:rgba(255, 255, 255, 0.62);
 }
 
-#collapseArea.collapsing {
-    height: 3rem;
-}
-
-a.collapsed::after {
-    content: '+ Show More';
-}
-
-a:not(.collapsed)::after {
-    content: '- Show Less';
+.info-head {
+    color:#fff;
+    font-weight: bold;
+    padding-bottom: 10px;
 }

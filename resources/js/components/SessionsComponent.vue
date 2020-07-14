@@ -181,7 +181,7 @@
         dialogItem: false,
         positions: [
           {
-            name: "MENTOR AVAILABLE",
+            name: ["MENTOR AVAILABLE","BOOKED SESSIONS"],
             country_id: 1,
           },
           {

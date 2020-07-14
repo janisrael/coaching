@@ -9,20 +9,24 @@
                 id="searchBar"
                 size="small"
                 placeholder="Search for Coach"
-                v-model="search">
+                v-model="selectedTags">
                 <i slot="prefix" class="el-input__icon el-icon-search"></i>
               </el-input>
             </div>
             <div style="width: 10%; display: inline-block;">
               <el-button type="primary" class="plain" plain size="small" @click="callFilter()"><i class="fas fa-sliders-h" aria-hidden="true" style="color: rgba(255, 255, 255, 0.68);"></i></el-button>
             </div>
+
           </el-col>
           <div>
-            <div v-for="list in data" class="grid-content bg-purple-dark">
+
+<!--            <ul>-->
+<!--              <li v-for="card in activeCards">{{ card }}</li>-->
+<!--            </ul>-->
+            <div class="grid-content bg-purple-dark">
 <!--              <div v-for="item in list">-->
-<!--                {{ item.last_name }}-->
               <el-table
-                :data="list"
+                :data="activeCards"
                 ref="singleTable"
                 highlight-current-row
                 @cell-click="getSummary"
@@ -73,8 +77,60 @@
           <session-component></session-component>
         </el-col>
       </el-col>
+      <el-dialog title="Filter Settings" :visible.sync="filterDialog" top="3%">
+        <el-row>
+          <el-col :span="24">
+            <span style="float: right;"><el-link type="primary" style="color:#fff">Select All </el-link> | <el-link type="primary" style="color:#fff" @click="clear()"> Clear</el-link> </span>
+          </el-col>
+          <el-col :span="24" class="filter-blocks">
+            <span class="filter-title">LANGUAGE</span>
+            <div class="cata-sub-nav">
+              <div class="nav-prev arrow" @click="left()"><i class="el-icon-arrow-left"></i></div>
+              <el-checkbox v-model="preselectedTags" v-for="lang in languages" class="filter-checkbox" size="small" :label="lang" :key="lang" border>{{ lang }}</el-checkbox>
+              <div class="nav-next arrow" style="" @click="left()"><i class="el-icon-arrow-right"></i></div>
+            </div>
+          </el-col>
+          <el-col :span="24" class="filter-blocks">
+            <span class="filter-title">EXPERIENCE</span>
+            <div>
+              <el-col :span="24">
+                <span style="display: inline-block !important;"><span style="color: rgba(255, 255, 255, 0.52);">FROM </span><el-input v-model="value_range[0]" class="input-default" size="mini" clearable style="width: 15%"></el-input>  Years  &nbsp; &nbsp; &nbsp; <span style="color: rgba(255, 255, 255, 0.52);">TO</span>  <el-input v-model="value_range[1]" class="input-default" size="mini" clearable style="width: 15%"></el-input> Years</span>
+                <div class="block">
+                  <el-slider
+                    v-model="value_range"
+                    range
+                    show-stops
+                    :max="30">
+                  </el-slider>
+                </div>
+              </el-col>
+            </div>
+          </el-col>
+          <el-col :span="24" class="filter-blocks">
+            <span class="filter-title">MARKET</span>
+            <div>
+              <el-checkbox v-model="preselectedTags" v-for="market in options.market_traded" class="filter-checkbox" size="small" :label="market" :key="market" border>{{ market}}</el-checkbox>
+            </div>
+          </el-col>
+          <el-col :span="24" class="filter-blocks">
+            <span class="filter-title">STYLE</span>
+            <div>
+              <el-checkbox v-model="preselectedTags" v-for="style in options.style" class="filter-checkbox" size="small" :label="style" :key="style" border>{{ style }}</el-checkbox>
+            </div>
+          </el-col>
+          <el-col :span="24" class="filter-blocks">
+            <span class="filter-title">BOOKINGS</span>
+            <div>
+              <el-checkbox v-model="checkboxGroup3" v-for="book in books" class="filter-checkbox" size="small" :label="book" :key="book" border>{{ book }}</el-checkbox>
+            </div>
+          </el-col>
+        </el-row>
+        <span slot="footer" class="dialog-footer">
+        <el-button @click="handleFilter()" type="success">Update</el-button>
+      </span>
+      </el-dialog>
     </el-row>
-    <component ref="modalComponent" :is="importComponent" :selected="selected" @clear="clear()"/>
+<!--    <component ref="modalComponent" :is="importComponent" :selected="selected" @clear="clear()"/>-->
   </div>
 
 
@@ -82,12 +138,16 @@
 
 <script>
   import ContentComponent from './ContentComponent.vue'
-  import FilterComponent from './FilterComponent.vue'
+  // import FilterComponent from './FilterComponent.vue'
   import SessionComponent from './SessionsComponent.vue'
+
+  const langOptions = ['Tagalog', 'English', 'Russian', 'Armenian', 'Chinese', 'Japanese','Korean','Vietnamese','Mandarin'];
+  const marketOptions = ['Forex', 'Stock Indices', 'Commodities'];
+  const styleOptions = ['End of Day', 'Intra-day', 'Scalper'];
+  const bookingOptions = ['Youve booked this mentor before' , 'You havent booked this mentor before'];
   export default {
     name: 'Index',
     components: {
-      FilterComponent,
       ContentComponent,
       SessionComponent
     },
@@ -99,7 +159,50 @@
         passData: {},
         fit: 'contain',
         search: '',
-        data: []
+        data: [],
+        options: [],
+        coaches: [],
+        filterDialog: false,
+        checkboxGroup1: ['Forex'],
+        checkboxGroup2: ['End of Day'],
+        checkboxGroup3: ['Youve booked this mentor before'],
+        checkboxGroup4: ['English'],
+        markets: marketOptions,
+        styles: styleOptions,
+        books: bookingOptions,
+        langs: langOptions,
+        ex_from: '',
+        ex_to: '',
+        range: '',
+        value_range: [0,6],
+        val: 0,
+        selectedTags: [],
+        preselectedTags: [],
+        languages: []
+      }
+    },
+    computed: {
+      activeCards: function() {
+        if(this.selectedTags.length == 0) return this.coaches;
+
+        var activeCards = [];
+        var filters = this.selectedTags;
+
+        this.coaches.forEach(function(card) {
+
+          function cardContainsFilter(filter) {
+            console.log(card.experience)
+            return card.languages.indexOf(filter) != -1 ||
+              card.style.indexOf(filter) != -1 ||
+              card.market_traded.indexOf(filter) != -1;
+          }
+
+          if(filters.every(cardContainsFilter)) {
+            activeCards.push(card);
+          }
+        });
+
+        return activeCards;
       }
     },
     created: function() {
@@ -110,22 +213,70 @@
         // const data = window.axios.get('/api/v1/coaches');
         const res = await fetch('/api/v1/coaches');
         const data = await res.json();
-        this.data = data;
+        this.data = data.data;
+        this.options = this.data.options
+        this.coaches = this.data.coaches
+        this.languages = this.options.languages
+        // this.activeCards = this.coaches
         setTimeout(() => this.loadDefault(this.data), 1)
       },
       loadDefault(data) {
-        this.getSummary(data.data[0])
+        this.getSummary(data.coaches[0])
       },
       getSummary(row) {
         this.passData = row
       },
       callFilter() {
-        this.importComponent = FilterComponent
-        setTimeout(() => this.ex_callmodal(), 1)
+        this.filterDialog = true
+        // this.importComponent = FilterComponent
+        // this.selected = this.options
+        // setTimeout(() => this.ex_callmodal(), 1)
         // this.dialogFormVisible = true
       },
-      ex_callmodal() {
-        this.$refs.modalComponent.show()
+      // ex_callmodal() {
+      //   this.$refs.modalComponent.show()
+      // },
+      left() {
+        $(".cata-sub-nav").on("scroll", function () {
+          this.val = $(this).scrollLeft();
+
+          if ($(this).scrollLeft() + $(this).innerWidth() >= $(this)[0].scrollWidth) {
+            $(".nav-next").hide();
+          } else {
+            $(".nav-next").show();
+          }
+
+          if (this.val == 0) {
+            $(".nav-prev").hide();
+          } else {
+            $(".nav-prev").show();
+          }
+
+        });
+        console.log("init-scroll: " + $(".nav-next").scrollLeft());
+        $(".nav-next").on("click", function () {
+          $(".cata-sub-nav").animate({ scrollLeft: "+=460" }, 200);
+        });
+        $(".nav-prev").on("click", function () {
+          $(".cata-sub-nav").animate({ scrollLeft: "-=460" }, 200);
+        });
+      },
+      clear() {
+        this.preselectedTags = []
+      },
+      handleFilter() {
+        // console.log(this.preselectedTags)
+        this.selectedTags = this.preselectedTags
+        // console.log(this.checkboxGroup4)
+        // this.selecteditems = []
+        // this.retval = []
+        // val.forEach(index => {
+        //   this.selval = { id: index.id }
+        //   this.retval.push(this.selval)
+        // })
+        // this.selecteditems = this.retval
+        // console.log(this.selecteditems)
+
       }
     }
   }
