@@ -17,15 +17,9 @@
             <div style="width: 10%; display: inline-block;">
               <el-button type="primary" class="plain" plain size="small" @click="callFilter()"><i class="fas fa-sliders-h" aria-hidden="true" style="color: rgba(255, 255, 255, 0.68);"></i></el-button>
             </div>
-
           </el-col>
           <div>
-
-<!--            <ul>-->
-<!--              <li v-for="card in activeCards">{{ card }}</li>-->
-<!--            </ul>-->
             <div class="grid-content bg-purple-dark">
-<!--              <div v-for="item in list">-->
               <el-table
                 :data="activeCards.filter(data => !search || data.last_name.toLowerCase().includes(search.toLowerCase()) || data.first_name.toLowerCase().includes(search.toLowerCase()))"
                 ref="singleTable"
@@ -68,7 +62,6 @@
                   </template>
                 </el-table-column>
               </el-table>
-<!--              </div>-->
             </div>
           </div>
         </el-col>
@@ -134,7 +127,6 @@
 <!--    <component ref="modalComponent" :is="importComponent" :selected="selected" @clear="clear()"/>-->
   </div>
 
-
 </template>
 
 <script>
@@ -175,7 +167,7 @@
         ex_from: '',
         ex_to: '',
         range: '',
-        value_range: [0,6],
+        value_range: [0,30],
         val: 0,
         selectedTags: [],
         preselectedTags: [],
@@ -185,23 +177,23 @@
     computed: {
       activeCards: function() {
         if(this.selectedTags.length == 0) return this.coaches;
-
         var activeCards = [];
+
         var filters = this.selectedTags;
-
+        var start = this.value_range[0]
+        var end = this.value_range[1]
         this.coaches.forEach(function(card) {
-          function cardContainsFilter(filter) {
-            console.log(card.experience)
-            return card.languages.indexOf(filter) != -1 ||
-              card.style.indexOf(filter) != -1 ||
-              card.market_traded.indexOf(filter) != -1;
-          }
-
-          if(filters.every(cardContainsFilter)) {
-            activeCards.push(card);
+          if(card.experience >= start && card.experience <= end) {
+            function cardContainsFilter(filter) {
+              return card.languages.indexOf(filter) != -1 ||
+                card.style.indexOf(filter) != -1 ||
+                card.market_traded.indexOf(filter) != -1;
+            }
+            if(filters.every(cardContainsFilter)) {
+              activeCards.push(card);
+            }
           }
         });
-
         return activeCards;
       }
     },
@@ -210,14 +202,12 @@
     },
     methods: {
       async read() {
-        // const data = window.axios.get('/api/v1/coaches');
         const res = await fetch('/api/v1/coaches');
         const data = await res.json();
         this.data = data.data;
         this.options = this.data.options
         this.coaches = this.data.coaches
         this.languages = this.options.languages
-        // this.activeCards = this.coaches
         setTimeout(() => this.loadDefault(this.data), 1)
       },
       loadDefault(data) {
@@ -265,18 +255,7 @@
         this.preselectedTags = []
       },
       handleFilter() {
-        // console.log(this.preselectedTags)
         this.selectedTags = this.preselectedTags
-        // console.log(this.checkboxGroup4)
-        // this.selecteditems = []
-        // this.retval = []
-        // val.forEach(index => {
-        //   this.selval = { id: index.id }
-        //   this.retval.push(this.selval)
-        // })
-        // this.selecteditems = this.retval
-        // console.log(this.selecteditems)
-
       }
     }
   }
