@@ -201,7 +201,7 @@ span.dbl-border.el-avatar.el-avatar--circle {
 .right-detail-header {
     color: #9ecaff;
     font-size: 30px !important;
-    margin-top: 15px;
+    margin-top: 5px;
     display: inline-block;
 }
 
@@ -220,7 +220,7 @@ span.dbl-border.el-avatar.el-avatar--circle {
     text-align: center;
     border-radius: 50%;
     font-size: 15px;
-    margin-top: 20px;
+    margin-top: 9px;
     position: absolute;
     margin-left: 16px;
     transition: 0.3s;
@@ -297,6 +297,7 @@ span.demonstration {
 .el-date-editor.el-range-editor.el-input__inner.el-date-editor--daterange.el-range-editor--mini {
     background-color: transparent;
     border: none !important;
+    width: 250px !important;
 }
 
 input.el-range-input {
@@ -337,7 +338,7 @@ input.el-range-input {
 /*}*/
 
 .el-date-editor .el-range-input {
-    width: 25% !important;
+    width: 50% !important;
 }
 .el-range-separator {
     color: #fff !important;
@@ -555,4 +556,37 @@ label.el-checkbox.filter-checkbox.is-bordered span.el-checkbox__inner {
 .full-height {
     display: block;
     overflow: hidden;
+}
+
+#tablecoaches {
+    overflow-y: scroll !important;
+    height: 93vh !important;
+}
+
+/*scroll*/
+/* width */
+::-webkit-scrollbar {
+    width: 10px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+    background: rgb(68, 104, 152) !important;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+    background: #8cafe3;
+    transition: 0.3s;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+    background: #a2c4f7;
+}
+
+.avatar-wrapper {
+    float:left;
+    padding: 8px;
+    width: 21%;
 }

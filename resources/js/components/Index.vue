@@ -21,19 +21,24 @@
           <div>
             <div class="grid-content bg-purple-dark">
                <el-table
+                 v-loading="loading"
                 :data="activeCards.filter(data => !search || data.last_name.toLowerCase().includes(search.toLowerCase()) || data.first_name.toLowerCase().includes(search.toLowerCase()))"
                 ref="singleTable"
+                id="tablecoaches"
+                 element-loading-text="Loading..."
+                element-loading-spinner="el-icon-loading"
+                element-loading-background="rgba(0, 0, 0, 0.21)"
                 highlight-current-row
                 @cell-click="getSummary"
                 style="width: 100%; cursor: pointer">
                 <el-table-column>
                   <template slot-scope="scope">
-                    <div style="float:left; padding: 8px;">
+                    <div class="avatar-wrapper">
                       <el-avatar :size="60" :src="scope.row.pic" class="dbl-border">
                         <img :src="scope.row.pic"/>
                       </el-avatar>
                     </div>
-                    <div style="display: inline-block; width: 80%; padding-left: 10px;">
+                    <div style="display: inline-block; width: 79%; padding-left: 10px;">
                       <div class="flag-container">
                         <country-flag :country='scope.row.country_code' size='normal'/>
                       </div>
@@ -146,6 +151,7 @@
     },
     data() {
       return {
+        loading: false,
         importComponent: null,
         dialogFormVisible: false,
         selected: '',
@@ -171,57 +177,7 @@
         val: 0,
         selectedTags: [],
         preselectedTags: [],
-        languages: [],
-        tableData: [{
-          date: '2016-05-03',
-          name: 'Tom',
-          state: 'California',
-          city: 'Los Angeles',
-          address: 'No. 189, Grove St, Los Angeles',
-          zip: 'CA 90036'
-        }, {
-          date: '2016-05-02',
-          name: 'Tom',
-          state: 'California',
-          city: 'Los Angeles',
-          address: 'No. 189, Grove St, Los Angeles',
-          zip: 'CA 90036'
-        }, {
-          date: '2016-05-04',
-          name: 'Tom',
-          state: 'California',
-          city: 'Los Angeles',
-          address: 'No. 189, Grove St, Los Angeles',
-          zip: 'CA 90036'
-        }, {
-          date: '2016-05-01',
-          name: 'Tom',
-          state: 'California',
-          city: 'Los Angeles',
-          address: 'No. 189, Grove St, Los Angeles',
-          zip: 'CA 90036'
-        }, {
-          date: '2016-05-08',
-          name: 'Tom',
-          state: 'California',
-          city: 'Los Angeles',
-          address: 'No. 189, Grove St, Los Angeles',
-          zip: 'CA 90036'
-        }, {
-          date: '2016-05-06',
-          name: 'Tom',
-          state: 'California',
-          city: 'Los Angeles',
-          address: 'No. 189, Grove St, Los Angeles',
-          zip: 'CA 90036'
-        }, {
-          date: '2016-05-07',
-          name: 'Tom',
-          state: 'California',
-          city: 'Los Angeles',
-          address: 'No. 189, Grove St, Los Angeles',
-          zip: 'CA 90036'
-        }]
+        languages: []
       }
     },
     computed: {
@@ -248,6 +204,7 @@
       }
     },
     created: function() {
+      this.loading = true
       this.read()
     },
     methods: {
@@ -262,6 +219,7 @@
       },
       loadDefault(data) {
         this.getSummary(data.coaches[0])
+        this.loading = false
       },
       getSummary(row) {
         this.passData = row

@@ -1,6 +1,6 @@
 <template>
   <div class="right-list-container">
-    <div style="float:left; padding: 8px;">
+    <div style="float:left; padding: 8px; width: 6%; display: inline-block;">
       <el-avatar :size="60" :src="selected.pic" class="dbl-border">
         <img :src="selected.pic"/>
       </el-avatar>
