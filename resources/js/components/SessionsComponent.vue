@@ -18,7 +18,8 @@
             lang="en"
             range-separator="-"
             :start-placeholder="startdate"
-            end-placeholder="">
+            end-placeholder=""
+            @change="handleDatePick()">
           </el-date-picker>
           <el-popover
             placement="bottom"
@@ -232,7 +233,9 @@
       dialogMentor(position) {
         console.log(position)
         this.dialogItem = true
-
+      },
+      handleDatePick() {
+        console.log(this.value1)
       }
     }
   }

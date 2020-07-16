@@ -264,6 +264,7 @@
       },
       handleFilter() {
         this.selectedTags = this.preselectedTags
+        this.filterDialog = false
       }
     }
   }
