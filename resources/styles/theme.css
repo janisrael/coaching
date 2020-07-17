@@ -245,7 +245,7 @@ span.dbl-border.el-avatar.el-avatar--circle {
 
 .session-listitem {
     padding: 10px;
-    width: 90%;
+    width: 89%;
     display: inline-block;
     border-radius: 3px;
 }
@@ -263,10 +263,10 @@ span.dbl-border.el-avatar.el-avatar--circle {
 }
 
 span.session-list-avatar.el-avatar.el-avatar--circle {
-    height: 22px !important;
-    width: 22px !important;
+    height: 17px !important;
+    width: 18px !important;
     line-height: 22px !important;
-    position: absolute !important;
+    /* position: absolute !important; */
     margin-top: -3px !important;
     margin-left: 11px !important;
 }
@@ -589,4 +589,186 @@ label.el-checkbox.filter-checkbox.is-bordered span.el-checkbox__inner {
     float:left;
     padding: 8px;
     width: 21%;
+}
+
+/*content*/
+
+.content-avatar-container {
+    float:left;
+    padding: 8px;
+    width: 6%;
+    display: inline-block;
+}
+
+.content-coaches-name {
+    display: inline-block;
+    width: 90%;
+    padding-left: 15px;
+}
+
+/*session*/
+
+.mobile-session-filter {
+    display: none;
+}
+
+.desktop-session-filter {
+    display: block;
+}
+
+.coaches-mobile {
+    display: none;
+}
+
+.coaches-desktop {
+    display: block;
+}
+
+.index-col-right {
+    background: #293f5d;
+    padding: 20px;
+}
+.index-col-left {
+    background: #15224a;
+}
+
+.coaches-list-icons {
+    float:right; margin-top: 0px;
+}
+
+.coaches-search-btn {
+    width: 88%;
+    display: inline-block;
+}
+.coaches-search-desktop {
+    display: block;
+}
+
+.coaches-search-mobile {
+    display: none;
+}
+
+.session-daterange {
+    display: inline-block;
+    float: right;
+    margin-top: 15px;
+}
+
+.session-items-container {
+    display: block;
+    overflow-x: scroll;
+    height: 550px;
+}
+
+
+/*media query*/
+
+@media only screen and (min-width: 450px) and (max-width: 812px) {
+    .index-col-left {
+        width: 40% !important;
+    }
+
+    .index-col-right {
+        width: 60% !important;
+        padding: 10px
+    }
+
+    .content-avatar-container {
+        width: 10%;
+    }
+
+    .content-coaches-name {
+        width: 70%;
+    }
+
+    .right-detail-header {
+        font-size: 20px !important;
+    }
+
+    span.dbl-border.el-avatar.el-avatar--circle {
+        width: 40px !important;
+        height: 40px !important;
+    }
+
+    .right-detail-btnprofile {
+        font-size: 10px;
+        padding: 2px 6px;
+    }
+    .right-list-container {
+        padding: 0px !important;
+    }
+
+    .mobile-session-filter {
+        display: block !important;
+    }
+
+    div.desktop-session-filter {
+        display: none !important;
+    }
+
+    .session-listitem {
+        width: 80% !important;
+    }
+
+    .list-item-btn {
+        width: 9%;
+    }
+
+    .el-date-editor.el-range-editor.el-input__inner.el-date-editor--daterange.el-range-editor--mini {
+        width: 207px !important;
+    }
+
+    .el-range-editor--mini .el-range-input, span.demonstration {
+        font-size: 12px !important;
+    }
+
+    .coaches-mobile {
+        display: block;
+    }
+
+    .coaches-desktop {
+        display: none;
+    }
+
+    .coaches-list-icons {
+        display: block;
+        margin-left: 20px;
+        margin-top: 10px;
+    }
+
+    .el-table td {
+        border-bottom: 1px solid rgba(167, 167, 167, 0.06) !important;
+        display: block;
+    }
+
+    .btn-buy-session {
+        padding: 5px 8px !important;
+    }
+
+    .coaches-search-desktop {
+        display: none;
+    }
+
+    .coaches-search-mobile {
+        display: block;
+    }
+
+    .coaches-search-mobile button {
+        width: 45%;
+    }
+
+    .session-daterange {
+        display: inline-block;
+        float: left;
+        margin-top: 2px;
+    }
+
+    .el-checkbox:last-of-type {
+        padding: 5px 0 5px !important;
+    }
+
+    #dialogFilter .el-dialog {
+        margin-top: 0 !important;
+        width: 100% !important;
+    }
 }

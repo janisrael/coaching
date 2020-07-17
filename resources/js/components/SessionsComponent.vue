@@ -5,10 +5,20 @@
     <el-col :span="24">
       <div style="display: block;">
         <div v-for="filter in filters" style="display: inline-block;">
+          <div class="desktop-session-filter">
           <el-checkbox :id="'id-' + filter.id" :value="filter.name" v-model="checkedFilters" :class="['obj-' + filter.id]" :label="filter.name">
           </el-checkbox>
+          </div>
+          <div class="mobile-session-filter">
+            <el-checkbox :id="'id-' + filter.id" :value="filter.name" v-model="checkedFilters" :class="['obj-' + filter.id]" :label="filter.name">
+              <span v-if="filter.name === 'MENTOR AVAILABLE'"><i class="far fa-clock"></i></span>
+              <span v-if="filter.name === 'BOOKED SESSIONS'"><i class="fa fa-calendar-check" aria-hidden="true"></i></span>
+              <span v-if="filter.name === 'ATTENDED SESSIONS'"><i class="el-icon-circle-check"></i></span>
+              <span v-if="filter.name === 'NO SHOW SESSIONS'"> <i class="fa fa-ban" aria-hidden="true"></i></span>
+            </el-checkbox>
+          </div>
         </div>
-        <div style="display: inline-block; float: right; margin-top: 15px;">
+        <div class="session-daterange">
           <span class="demonstration">Date</span>
           <el-date-picker
             v-model="value1"
@@ -37,11 +47,12 @@
             content="this is content, this is content, this is content">
             <div style="color:#fff">this is a test</div>
             <span slot="reference" class="session-info"><i class="fas fa-info"></i></span>
-            <!--            <el-button slot="reference">Hover to activate</el-button>-->
           </el-popover>
         </div>
       </div>
-      <div v-for="position in filteredPositions">
+<!--      {{ filteredPositions }}-->
+      <el-row class="session-items-container">
+        <div v-for="position in filteredPositions">
         <div v-if="position.country_id === 1" class="list-item" @click="dialogMentor(position)">
           <div :class="['list-' + position.country_id, 'session-listitem']">
             <i class="far fa-clock"></i>
@@ -92,44 +103,8 @@
             <span>VIEW</span>
           </div>
         </div>
-        <!--        <div v-if="position.country_id === 2" class="session-listitem">-->
-        <!--          <i class="fa fa-calendar-check" aria-hidden="true"></i>-->
-        <!--          <el-avatar :size="60" src="https://empty" class="session-list-avatar">-->
-        <!--            <img src="https://cube.elemecdn.com/e/fd/0fc7d20532fdaf769a25683617711png.png"/>-->
-        <!--          </el-avatar>-->
-        <!--          <span class="session-list-time">09:00 TUESDAY 9/15</span>-->
-        <!--          <span><i class="fas fa-headset"></i></span>-->
-        <!--          <div style="float:right; display: inline-block;font-size: 14px;"><i class="fas fa-calendar-plus" style="margin-right:10px;"></i>CALENDAR</div>-->
-        <!--        </div>-->
-        <!--        <div v-if="position.country_id === 3" class="session-listitem">-->
-        <!--          <i class="el-icon-circle-check"></i>-->
-        <!--          <el-avatar :size="60" src="https://empty" class="session-list-avatar">-->
-        <!--            <img src="https://cube.elemecdn.com/e/fd/0fc7d20532fdaf769a25683617711png.png"/>-->
-        <!--          </el-avatar>-->
-        <!--          <span class="session-list-time">09:00 TUESDAY 9/15</span>-->
-        <!--        </div>-->
-        <!--        <div v-if="position.country_id === 4" class="session-listitem">-->
-        <!--          <i class="fa fa-ban" aria-hidden="true"></i>-->
-        <!--          <el-avatar :size="60" src="https://empty" class="session-list-avatar">-->
-        <!--            <img src="https://cube.elemecdn.com/e/fd/0fc7d20532fdaf769a25683617711png.png"/>-->
-        <!--          </el-avatar>-->
-        <!--          <span class="session-list-time">09:00 TUESDAY 9/15</span>-->
-        <!--        </div>-->
-
-
-
-        <!--        <div v-if="position.country_id === 2" :class="['list-' + position.country_id, 'list-item-btn']">-->
-        <!--          <span>VIEW</span>-->
-        <!--        </div>-->
-
-        <!--        <div v-if="position.country_id === 3" :class="['list-' + position.country_id, 'list-item-btn']">-->
-        <!--          <span>VIEW</span>-->
-        <!--        </div>-->
-
-        <!--        <div v-if="position.country_id === 4" :class="['list-' + position.country_id, 'list-item-btn']">-->
-        <!--          <span>VIEW</span>-->
-        <!--        </div>-->
       </div>
+      </el-row>
     </el-col>
     <el-dialog
       title="Biography"
@@ -190,8 +165,52 @@
             country_id: 2,
           },
           {
+            name: "BOOKED SESSIONS",
+            country_id: 2,
+          },
+          {
+            name: "BOOKED SESSIONS",
+            country_id: 2,
+          },
+          {
+            name: "BOOKED SESSIONS",
+            country_id: 2,
+          },
+          {
+            name: "BOOKED SESSIONS",
+            country_id: 2,
+          },
+          {
             name: "ATTENDED SESSIONS",
             country_id: 3,
+          },
+          {
+            name: "ATTENDED SESSIONS",
+            country_id: 3,
+          },
+          {
+            name: "ATTENDED SESSIONS",
+            country_id: 3,
+          },
+          {
+            name: "ATTENDED SESSIONS",
+            country_id: 3,
+          },
+          {
+            name: "ATTENDED SESSIONS",
+            country_id: 3,
+          },
+          {
+            name: "NO SHOW SESSIONS",
+            country_id: 4,
+          },
+          {
+            name: "NO SHOW SESSIONS",
+            country_id: 4,
+          },
+          {
+            name: "NO SHOW SESSIONS",
+            country_id: 4,
           },
           {
             name: "NO SHOW SESSIONS",

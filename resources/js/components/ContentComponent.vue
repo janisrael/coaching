@@ -1,12 +1,12 @@
 <template>
   <div class="right-list-container">
-    <div style="float:left; padding: 8px; width: 6%; display: inline-block;">
+    <div class="content-avatar-container">
       <el-avatar :size="60" :src="selected.pic" class="dbl-border">
         <img :src="selected.pic"/>
       </el-avatar>
     </div>
 <!--    {{ selected }}-->
-    <div style="display: inline-block; width: 90%; padding-left: 15px;">
+    <div class="content-coaches-name">
       <div class="right-detail-header">{{ selected.first_name }} {{ selected.last_name }}</div>
       <div class="right-detail-btnprofile" @click="showInfo()"><i class="fas fa-info"></i></div>
       <div class="right-list-sub">
