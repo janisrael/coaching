@@ -73,7 +73,7 @@
             </el-avatar>
             <span class="session-list-time">09:00 TUESDAY 9/15</span>
             <span><i class="fas fa-headset"></i></span>
-            <div style="float:right; display: inline-block;font-size: 14px;"><i class="fas fa-calendar-plus" style="margin-right:10px;"></i>CALENDAR</div>
+            <div style="float:right; display: inline-block;font-size: 14px;" @click="alert('test')"><i class="fas fa-calendar-plus" style="margin-right:10px;"></i>CALENDAR</div>
           </div>
           <div v-if="position.country_id === 2" :class="['list-' + position.country_id, 'list-item-btn']">
             <span>VIEW</span>
