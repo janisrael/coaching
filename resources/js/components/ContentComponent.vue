@@ -18,6 +18,7 @@
     </div>
     <el-dialog
       title="Biography"
+      id="dialogProfile"
       :visible.sync="dialogProfile"
       top="3%"
       width="40%">

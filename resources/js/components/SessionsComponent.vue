@@ -26,8 +26,9 @@
             size="mini"
             default-value="2020-6-27"
             lang="en"
-            range-separator="-"
-            :start-placeholder="startdate"
+            clearable
+            :range-separator="range_sep"
+            :start-placeholder="currentDate"
             end-placeholder=""
             @change="handleDatePick()">
           </el-date-picker>
@@ -50,7 +51,6 @@
           </el-popover>
         </div>
       </div>
-<!--      {{ filteredPositions }}-->
       <el-row class="session-items-container">
         <div v-for="position in filteredPositions">
         <div v-if="position.country_id === 1" class="list-item" @click="dialogMentor(position)">
@@ -239,8 +239,10 @@
             id: 4
           }
         ],
+        range_sep: "",
         checkedFilters: ['MENTOR AVAILABLE', 'BOOKED SESSIONS','ATTENDED SESSIONS','NO SHOW SESSIONS'],
-        value1: ''
+        value1: '',
+        currentDate: ''
       }
     },
     computed: {
@@ -248,13 +250,24 @@
         return this.positions.filter(position => this.checkedFilters.includes(position.name));
       }
     },
+    created: function() {
+      this.getDate()
+    },
     methods: {
+      getDate() {
+        // var currentDate = new Date();
+        this.currentDate = new Date().toJSON().slice(0,10).replace(/-/g,'-');
+      },
       dialogMentor(position) {
-        console.log(position)
         this.dialogItem = true
       },
       handleDatePick() {
-        console.log(this.value1)
+        if(this.value1 === null) {
+          this.range_sep = ''
+        } else {
+         this.range_sep = '-'
+        }
+
       }
     }
   }
