@@ -661,6 +661,14 @@ label.el-checkbox.filter-checkbox.is-bordered span.el-checkbox__inner {
     width: 100%;
 }
 
+.right-detail-sub-session {
+    display: inline-block;
+    color: rgba(255, 255, 255, 0.77);
+    padding: 13px 0 0 0;
+    font-size: 18px;
+}
+
+
 
 /*media query*/
 
@@ -785,5 +793,10 @@ label.el-checkbox.filter-checkbox.is-bordered span.el-checkbox__inner {
     }
     #dialogSearch input.el-input__inner {
         background-color: transparent !important;
+    }
+
+    #sessionProfiledialog .el-dialog {
+        width: 100% !important;
+        margin-top: 0 !important;
     }
 }

@@ -98,8 +98,8 @@
         </el-col>
         <el-col :sm="16" :md="18" :lg="18" :xl="18" class="full-height index-col-right">
           <!--                <div class="grid-content bg-purple-dark">asdasd</div>-->
-          <content-component :selected="passData" ></content-component>
-          <session-component></session-component>
+          <content-component :selected="passData"></content-component>
+          <session-component :selected="passData"></session-component>
         </el-col>
       </el-col>
 

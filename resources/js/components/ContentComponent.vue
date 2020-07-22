@@ -21,7 +21,7 @@
       id="dialogProfile"
       :visible.sync="dialogProfile"
       top="3%"
-      width="40%">
+      width="60%">
       <div style="float:left; padding: 8px;">
         <el-avatar :size="60" :src="selected.pic" class="dbl-border">
           <img :src="selected.pic"/>

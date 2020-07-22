@@ -107,43 +107,40 @@
       </el-row>
     </el-col>
     <el-dialog
-      title="Biography"
+      id="sessionProfiledialog"
+      :title="profileTitle"
       :visible.sync="dialogItem"
       width="40%">
-      <!--      <div style="float:left; padding: 8px;">-->
-      <!--        <el-avatar :size="60" :src="selected.pic" class="dbl-border">-->
-      <!--          <img :src="selected.pic"/>-->
-      <!--        </el-avatar>-->
-      <!--      </div>-->
-      <!--      <div style="display: inline-block; width: 70%; padding-left: 15px;">-->
-      <!--        <div class="right-detail-header">{{ selected.name }}</div>-->
-      <!--        <div class="right-detail-btnprofile" @click="showInfo()"><i class="fas fa-info"></i></div>-->
-      <!--        <div class="right-list-sub">-->
-      <!--          <div style="display: inline-block; float: left;">-->
-      <!--            <el-image-->
-      <!--              style="width: 24px; height: 24px"-->
-      <!--              :src="selected.flag"-->
-      <!--              :fit="fit">-->
-      <!--            </el-image>-->
-      <!--          </div>-->
-      <!--          <div class="right-detail-sub">{{ selected.address }}</div>-->
-      <!--        </div>-->
-      <!--      </div>-->
-      <!--      <div style="display: block; padding: 20px;">-->
-      <!--        <div style="color:#fff; font-weight: bold">Experience</div>-->
-      <!--        <span style="color:#fff">{{ selected.profile }}</span>-->
-      <!--      </div>-->
-      <!--      <div style="display: block; padding: 20px;">-->
-      <!--        <div style="color:#fff; font-weight: bold">Markets Traded</div>-->
-      <!--        <span style="color:#fff">{{ selected.profile }}</span>-->
-      <!--      </div>-->
-      <!--      <div style="display: block; padding: 20px;">-->
-      <!--        <div style="color:#fff; font-weight: bold">Style</div>-->
-      <!--        <span style="color:#fff">{{ selected.profile }}</span>-->
-      <!--      </div>-->
-      <span slot="footer" class="dialog-footer">
-    <el-button @click="dialogItem = false" type="success">Close</el-button>
-  </span>
+      <el-row>
+        <div style="float:left; padding: 8px;">
+          <el-avatar :size="60" :src="selected.pic" class="dbl-border">
+            <img :src="selected.pic"/>
+          </el-avatar>
+        </div>
+        <div style="display: inline-block; width: 70%; padding-left: 15px;">
+          <div class="right-detail-header">{{ selected.first_name }}</div>
+          <div class="right-list-sub">
+            <div style="display: inline-block; float: left; margin-left: -15px;">
+              <country-flag :country='selected.country_code' size='normal'/>
+            </div>
+            <div class="right-detail-sub-session">{{ selected.country }}</div>
+          </div>
+        </div>
+      <el-col :span="24">
+        <div style="display: block; padding: 20px;">
+          <span><i class="far fa-clock"></i> 09:00 TUESDAY 9/15 <el-button size="small" class="btn-buy-session" type="primary" style="margin-left: 20px;">In English</el-button></span>
+        </div>
+        <div style="display: block; padding: 20px;">
+          <span><i class="fa fa-map-marker" aria-hidden="true"></i> Abbey House, 12-13, Charter , Leicester, LE1 3UD</span>
+        </div>
+        <div style="display: block; padding: 20px;">
+          <span>Attended<el-button size="small" class="btn-buy-session" type="primary"><i class="fa fa-headphones" aria-hidden="true" style="margin-left: 20px;"></i>Remotely</el-button></span>
+        </div>
+      </el-col>
+      </el-row>
+        <span slot="footer" class="dialog-footer">
+        <el-button @click="dialogItem = false" type="success">Close</el-button>
+      </span>
     </el-dialog>
   </el-col>
 </template>
@@ -151,6 +148,12 @@
 <script>
   export default {
     name: 'SessionsComponent',
+    props: {
+      selected: {
+        required: true,
+        type: Object
+      }
+    },
     data() {
       return {
         startdate: '2020-6-27',
@@ -242,7 +245,8 @@
         range_sep: "",
         checkedFilters: ['MENTOR AVAILABLE', 'BOOKED SESSIONS','ATTENDED SESSIONS','NO SHOW SESSIONS'],
         value1: '',
-        currentDate: ''
+        currentDate: '',
+        profileTitle: ''
       }
     },
     computed: {
@@ -259,6 +263,10 @@
         this.currentDate = new Date().toJSON().slice(0,10).replace(/-/g,'-');
       },
       dialogMentor(position) {
+        console.log(position)
+        if(position.name = 'MENTOR AVAILABLE') {
+          this.profileTitle = 'Your Attended Session'
+        }
         this.dialogItem = true
       },
       handleDatePick() {
@@ -274,5 +282,8 @@
 </script>
 
 <style scoped>
-
+ .right-list-sub {
+   display: inline-block;
+   margin-left: 30px;
+ }
 </style>
