@@ -661,6 +661,14 @@ label.el-checkbox.filter-checkbox.is-bordered span.el-checkbox__inner {
     width: 100%;
 }
 
+.right-detail-sub-session {
+    display: inline-block;
+    color: rgba(255, 255, 255, 0.77);
+    padding: 13px 0 0 0;
+    font-size: 18px;
+}
+
+
 
 /*media query*/
 
@@ -735,6 +743,7 @@ label.el-checkbox.filter-checkbox.is-bordered span.el-checkbox__inner {
         display: block;
         margin-left: 20px;
         margin-top: 10px;
+        margin-right: -50px !important;
     }
 
     .el-table td {
@@ -776,5 +785,18 @@ label.el-checkbox.filter-checkbox.is-bordered span.el-checkbox__inner {
     #dialogProfile .el-dialog {
         margin-top: 0 !important;
         width: 100% !important;
+    }
+
+    #dialogSearch .el-dialog {
+        width: 80% !important;
+        margin-top: 5% !important;
+    }
+    #dialogSearch input.el-input__inner {
+        background-color: transparent !important;
+    }
+
+    #sessionProfiledialog .el-dialog {
+        width: 100% !important;
+        margin-top: 0 !important;
     }
 }
