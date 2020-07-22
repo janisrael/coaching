@@ -4,6 +4,8 @@ namespace App\Repositories;
 
 use App\Repositories\Interfaces\CoachRepositoryInterface;
 use Faker\Factory;
+use learntotrade\salesforce\User;
+use learntotrade\salesforce\fields\UserFields;
 
 class CoachRepository implements CoachRepositoryInterface
 {
@@ -39,16 +41,58 @@ class CoachRepository implements CoachRepositoryInterface
 
                 $data['coaches'][] = $row;
             }
+        } else {
 
-            $opt = [];
+            $sf = resolve(User::class)->query(
+                array_values(config('api.sf_coaches')), 
+                [UserFields::BUSINESS_DIVISION.' != \'\'']
+            );
+    
+            if (count($sf)) {
+
+                $row = [];
+                
+                foreach ($sf['records'] as $field => $value) {
+                    foreach (config('api.sf_coaches') as $key => $val) {
+
+                        // Extract semicolon to array
+                        if (in_array($key, $api_options)) {
+                            $value[$val] = explode(';', $value[$val]);
+
+                            // Collect all given options
+                            if (count($value[$val])) {
+                                foreach ($value[$val] as $opt_key => $opt_val) {
+                                    if ($opt_val) {
+                                        $options[$key][] = $opt_val;
+                                    }  
+                                }
+                            }
+                        }
+
+                        $row[$field][$key] = $value[$val];
+                    }
+
+                    // Set Country Name by Country Code
+                    if (isset($value[UserFields::REGION])) {
+                        $country = locale_get_display_region('-'.$value[UserFields::REGION]);
+                    }
+                    $row[$field]['country'] = $country ?? '';
+                }
+
+                $data['coaches'] = $row;
+            }            
+        }
+
+        $opt = [];
+        if (count($options)) {
             foreach ($options as $key=>$option) {
                 if (in_array($key, $api_options)) {
                     $opt[$key] = array_unique($option);
                 }
             }
-
-            $data['options'] = $opt;
         }
+
+        $data['options'] = $opt;
 
         return $data;
     }

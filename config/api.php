@@ -1,5 +1,7 @@
 <?php
 
+$userFields = new learntotrade\salesforce\fields\UserFields;
+
 return [
 
     'person' => [
@@ -19,7 +21,27 @@ return [
         'style_summary' => 'paragraph',
         'country' => 'country',
         'country_code' => 'countryCode',
-        'languages' => ['English','Tagalog','Mandarin','Nemic','Jejemon']
+        'languages' => ['English','Tagalog','Mandarin','Nemic','Jejemon'],
+    ],
+
+    'sf_coaches' => [
+        'id' => 'Id',
+        'access_group' => $userFields::BUSINESS_DIVISION,
+        'first_name' => $userFields::FIRST_NAME,
+        'last_name' => $userFields::LAST_NAME,
+        'experience' => $userFields::EXPERIENCE,
+        'experience_summary' => $userFields::EXPERIENCE_SUMMARY,
+        'market_traded' => $userFields::MARKET_TRADED,
+        'market_traded_summary' => $userFields::MARKET_TRADED_SUMMARY,
+        'style' => $userFields::TRADING_STYLE,
+        'style_summary' => $userFields::TRADING_STYLE_SUMMARY,
+        'country_code' => $userFields::REGION,
+        'languages' => $userFields::LANGUAGES,
+
+        /* $userFields::EMAIL,
+        $userFields::AVATAR,
+        $userFields::BIO,
+        $userFields::BUSINESS_ROLE, */
     ],
 
     'schedule' => [
