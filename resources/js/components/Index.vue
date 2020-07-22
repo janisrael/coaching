@@ -57,9 +57,9 @@
                           Style -
                           <span v-for="st in scope.row.style">{{ st }}, </span>
                         </div>
-                        <div class="left-list-sub">
-                          <span v-for="lang in scope.row.languages">{{ lang }}, </span>
-                        </div>
+<!--                        <div class="left-list-sub">-->
+<!--                          <span v-for="lang in scope.row.languages">{{ lang }}, </span>-->
+<!--                        </div>-->
                       </span>
 
                       <span class="coaches-mobile">
@@ -103,7 +103,7 @@
         </el-col>
       </el-col>
 
-      <el-dialog id="b              g" title="Filter Settings" :visible.sync="filterDialog" top="3%">
+      <el-dialog id="dialogFilter" title="Filter Settings" :visible.sync="filterDialog" top="3%">
         <el-row>
           <el-col :span="24">
             <span style="float: right;"><el-link type="primary" style="color:#fff">Select All </el-link> | <el-link type="primary" style="color:#fff" @click="clear()"> Clear</el-link> </span>
@@ -159,20 +159,20 @@
 
       <!--      search modal for mobile-->
 
-      <el-dialog title="Search" :visible.sync="searchModal" top="0%" style="width: 100%; height: 100%;">
+      <el-dialog id="dialogSearch" title="Search" :visible.sync="searchModal" top="0%" style="width: 100%; height: 100%;">
         <el-row>
           <el-col :span="24" class="filter-blocks">
             <el-input
               size="small"
               placeholder="Search for Coach"
               clearable
-              v-model="search">
+              v-model="presearch">
               <i slot="prefix" class="el-input__icon el-icon-search"></i>
             </el-input>
           </el-col>
         </el-row>
         <span slot="footer" class="dialog-footer">
-        <el-button @click="searchModal = false" type="success">OK</el-button>
+        <el-button @click="searchCoach()" type="success">OK</el-button>
       </span>
       </el-dialog>
 
@@ -228,7 +228,8 @@
         val: 0,
         selectedTags: [],
         preselectedTags: [],
-        languages: []
+        languages: [],
+        presearch: ''
       }
     },
     computed: {
@@ -375,6 +376,10 @@
       },
       callsearchmodal() {
         this.searchModal = true
+      },
+      searchCoach() {
+        this.search = this.presearch
+        this.searchModal = false
       }
     }
   }

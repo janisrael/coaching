@@ -735,6 +735,7 @@ label.el-checkbox.filter-checkbox.is-bordered span.el-checkbox__inner {
         display: block;
         margin-left: 20px;
         margin-top: 10px;
+        margin-right: -50px !important;
     }
 
     .el-table td {
@@ -776,5 +777,13 @@ label.el-checkbox.filter-checkbox.is-bordered span.el-checkbox__inner {
     #dialogProfile .el-dialog {
         margin-top: 0 !important;
         width: 100% !important;
+    }
+
+    #dialogSearch .el-dialog {
+        width: 80% !important;
+        margin-top: 5% !important;
+    }
+    #dialogSearch input.el-input__inner {
+        background-color: transparent !important;
     }
 }
