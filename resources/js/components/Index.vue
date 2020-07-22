@@ -64,6 +64,17 @@
 
                       <span class="coaches-mobile">
                         <div class="left-list-sub">Experience - {{ scope.row.experience }} years</div>
+                        <!--                        <div class="left-list-sub">-->
+                        <!--                          Markets traded - -->
+                        <!--                          <span v-for="mt in scope.row.market_traded">{{ mt }}, </span>-->
+                        <!--                        </div>-->
+                        <!--                        <div class="left-list-sub">-->
+                        <!--                          Style - -->
+                        <!--                          <span v-for="st in scope.row.style">{{ st }}, </span>-->
+                        <!--                        </div>-->
+                        <!--                        <div class="left-list-sub">-->
+                        <!--                          <span v-for="lang in scope.row.languages">{{ lang }}, </span>-->
+                        <!--                        </div>-->
                       </span>
 
 
@@ -86,12 +97,13 @@
           </div>
         </el-col>
         <el-col :sm="16" :md="18" :lg="18" :xl="18" class="full-height index-col-right">
+          <!--                <div class="grid-content bg-purple-dark">asdasd</div>-->
           <content-component :selected="passData" ></content-component>
           <session-component></session-component>
         </el-col>
       </el-col>
 
-      <el-dialog id="dialogFilter" title="Filter Settings" :visible.sync="filterDialog" top="3%">
+      <el-dialog id="b              g" title="Filter Settings" :visible.sync="filterDialog" top="3%">
         <el-row>
           <el-col :span="24">
             <span style="float: right;"><el-link type="primary" style="color:#fff">Select All </el-link> | <el-link type="primary" style="color:#fff" @click="clear()"> Clear</el-link> </span>
@@ -175,6 +187,9 @@
   // import FilterComponent from './FilterComponent.vue'
   import SessionComponent from './SessionsComponent.vue'
 
+  const langOptions = ['Tagalog', 'English', 'Russian', 'Armenian', 'Chinese', 'Japanese','Korean','Vietnamese','Mandarin'];
+  const marketOptions = ['Forex', 'Stock Indices', 'Commodities'];
+  const styleOptions = ['End of Day', 'Intra-day', 'Scalper'];
   const bookingOptions = ['Youve booked this mentor before' , 'You havent booked this mentor before'];
   export default {
     name: 'Index',
@@ -197,8 +212,14 @@
         reset: [],
         filterDialog: false,
         searchModal: false,
+        checkboxGroup1: ['Forex'],
+        checkboxGroup2: ['End of Day'],
         checkboxGroup3: ['Youve booked this mentor before'],
+        checkboxGroup4: ['English'],
+        markets: marketOptions,
+        styles: styleOptions,
         books: bookingOptions,
+        langs: langOptions,
         ex_from: '',
         ex_to: '',
         range: '',
@@ -212,50 +233,67 @@
     },
     computed: {
       activeCards: function() {
-        if(this.selectedTags.length == 0) {
-          return this.coaches;
-        }
+        // this.selectedTags.push(this.value_range[0]);
         var activeCards = [];
         var filters = this.selectedTags;
         var start = this.final_range[0]
 
         var end = this.final_range[1]
-        console.log(this.final_range[0])
-        this.coaches.forEach(function(card) {
-
-          function cardContainsFilter(filter) {
-            // if(card.experience >= start && card.experience <= end) {
+        if(this.selectedTags.length == 0) {
+          if(this.final_range[0] === 0 && this.final_range[1] === 30){
+            return this.coaches;
+          } else {
+            this.coaches.forEach(function(card) {
+              if(card.experience >= start && card.experience <= end) {
+                activeCards.push(card)
+              }
+            })
+          }
+        } else {
+          this.coaches.forEach(function(card) {
+            function cardContainsFilter(filter) {
               card.languages.forEach(function(lang, index) {
-                if(lang === filter) {
-                  activeCards.push(card);
-                }
+                filters.forEach(function (fil) {
+                  if(lang === fil) {
+                    if(card.experience >= start && card.experience <= end) {
+                      activeCards.push(card);
+                    }
+                  }
+                })
               })
               card.market_traded.forEach(function(market, index) {
                 if(market === filter) {
-                  activeCards.push(card);
+                  if(card.experience >= start && card.experience <= end) {
+                    activeCards.push(card);
+                  }
                 }
               })
               card.style.forEach(function(style, index) {
                 if(style === filter) {
-                  activeCards.push(card);
+                  if(card.experience >= start && card.experience <= end) {
+                    activeCards.push(card);
+                  }
                 }
               })
-                // activeCards.push(card);
-              // }
             }
-          // }
-          if(filters.every(cardContainsFilter)) {
-            activeCards.push(card);
-          }
-        });
+            if(filters.every(cardContainsFilter)) {
+              activeCards.push(card);
+            }
+          });
+        }
         return activeCards;
       }
     },
     created: function() {
       this.loading = true
       this.read()
+      this.default()
     },
     methods: {
+      default() {
+        this.final_range[0] = this.value_range[0]
+        this.final_range[1] = this.value_range[1]
+      },
       setrange() {
         this.final_range[0] = this.value_range[0]
         this.final_range[1] = this.value_range[1]
@@ -267,6 +305,7 @@
         this.options = this.data.options
         this.coaches = this.data.coaches
         this.reset = this.coaches
+        console.log(this.activeCards)
         this.languages = this.options.languages
         setTimeout(() => this.loadDefault(this.data), 1)
       },
@@ -315,15 +354,24 @@
       },
       clear() {
         this.preselectedTags = []
-        this.value_range[0] = 0
-        this.value_range[1] = 30
+        this.value_range = [0,30]
       },
       handleFilter() {
+        // this.coaches = []
+        if(this.value_range[0] === '') {
+          this.value_range[0] = 0
+        }
+        if(this.value_range[1] === '') {
+          this.value_range[1] = 30
+        }
         this.selectedTags = []
+        this.reset = this.preselectedTags
         this.selectedTags = this.preselectedTags
         this.final_range[0] = this.value_range[0]
         this.final_range[1] = this.value_range[1]
         this.filterDialog = false
+        this.preselectedTags = []
+        this.preselectedTags = this.reset
       },
       callsearchmodal() {
         this.searchModal = true
