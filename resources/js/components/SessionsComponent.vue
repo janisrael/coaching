@@ -53,6 +53,7 @@
       </div>
       <el-row class="session-items-container">
         <div v-for="position in filteredPositions">
+        <transition name="el-fade-in">
         <div v-if="position.country_id === 1" class="list-item" @click="dialogMentor(position)">
           <div :class="['list-' + position.country_id, 'session-listitem']">
             <i class="far fa-clock"></i>
@@ -65,6 +66,7 @@
             <span>BOOK</span>
           </div>
         </div>
+
         <div v-if="position.country_id === 2" class="list-item" @click="dialogMentor(position)">
           <div :class="['list-' + position.country_id, 'session-listitem']">
             <i class="fa fa-calendar-check" aria-hidden="true"></i>
@@ -79,6 +81,7 @@
             <span>VIEW</span>
           </div>
         </div>
+
         <div v-if="position.country_id === 3" class="list-item" @click="dialogMentor(position)">
           <div :class="['list-' + position.country_id, 'session-listitem']">
             <i class="el-icon-circle-check"></i>
@@ -91,6 +94,7 @@
             <span>VIEW</span>
           </div>
         </div>
+
         <div v-if="position.country_id === 4" class="list-item" @click="dialogMentor(position)">
           <div :class="['list-' + position.country_id, 'session-listitem']">
             <i class="fa fa-ban" aria-hidden="true"></i>
@@ -103,6 +107,7 @@
             <span>VIEW</span>
           </div>
         </div>
+        </transition>
       </div>
       </el-row>
     </el-col>
@@ -118,12 +123,12 @@
           </el-avatar>
         </div>
         <div style="display: inline-block; width: 70%; padding-left: 15px;">
-          <div class="right-detail-header">{{ selected.first_name }}</div>
+          <div class="right-detail-header" style="width: 100%;">{{ selected.first_name }} {{ selected.first_name }}</div>
           <div class="right-list-sub">
             <div style="display: inline-block; float: left; margin-left: -15px;">
-              <country-flag v-if="selected.country_code !== null" :country='selected.country_code' size='normal'/>
+              <country-flag  v-if="selected.country_code !== null || selected.country_code !== ''" :country='selected.country_code' size='normal'/>
             </div>
-            <div class="right-detail-sub-session">{{ selected.country }}</div>
+            <div  v-if="selected.country !== null || selected.country !== ''" class="right-detail-sub-session">{{ selected.country }}</div>
           </div>
         </div>
       <el-col :span="24">
@@ -284,6 +289,18 @@
 <style scoped>
  .right-list-sub {
    display: inline-block;
-   margin-left: 30px;
+ }
+
+ .transition-box {
+   margin-bottom: 10px;
+   width: 200px;
+   height: 100px;
+   border-radius: 4px;
+   background-color: #409EFF;
+   text-align: center;
+   color: #fff;
+   padding: 40px 20px;
+   box-sizing: border-box;
+   margin-right: 20px;
  }
 </style>

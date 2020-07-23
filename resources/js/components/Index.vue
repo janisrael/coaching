@@ -44,7 +44,7 @@
                     </div>
                     <div style="display: inline-block; width: 79%; padding-left: 10px;">
                       <div class="flag-container">
-                        <country-flag v-if="scope.row.country_code !== null" :country='scope.row.country_code' size='normal'/>
+                        <country-flag v-if="scope.row.country_code !== null || scope.row.country_code !== ''" :country='scope.row.country_code' size='normal'/>
                       </div>
                       <div class="left-list-header">{{ scope.row.first_name }} {{ scope.row.last_name }}</div>
                       <span class="coaches-desktop">
@@ -90,8 +90,10 @@
                         </el-badge>
                       </div>
                     </div>
+
                   </template>
                 </el-table-column>
+
               </el-table>
             </div>
           </div>
@@ -393,6 +395,5 @@
   .full-height {
     height: 100vh;
   }
-
 </style>
 
