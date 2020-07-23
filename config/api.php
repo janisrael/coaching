@@ -22,7 +22,10 @@ return [
         'country' => 'country',
         'country_code' => 'countryCode',
         'languages' => ['English','Tagalog','Mandarin','Nemic','Jejemon'],
-        'avatar' => ''
+        'avatar' => '',
+        'email' => '',
+        'bio' => '',
+        'business_role' => '',
     ],
 
     'sf_coaches' => [
@@ -38,12 +41,10 @@ return [
         'style_summary' => $userFields::TRADING_STYLE_SUMMARY,
         'country_code' => $userFields::REGION,
         'languages' => $userFields::LANGUAGES,
-        'avatar' => $userFields::AVATAR
-
-        /* $userFields::EMAIL,
-        $userFields::AVATAR,
-        $userFields::BIO,
-        $userFields::BUSINESS_ROLE, */
+        'avatar' => $userFields::AVATAR,
+        'email' => $userFields::EMAIL,
+        'bio' => $userFields::BIO,
+        'business_role' => $userFields::BUSINESS_ROLE,
     ],
 
     'schedule' => [
