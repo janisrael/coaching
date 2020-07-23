@@ -30,7 +30,7 @@ class CoachRepository implements CoachRepositoryInterface
                 $faker->idNumber = $i;
                 
                 foreach ($api_coaches as $column => $value) {
-                    $row[$column] = is_array($value) ? $faker->randomElements($value, rand(1,2)) : $faker->{$value};
+                    $row[$column] = is_array($value) ? $faker->randomElements($value, rand(1,2)) : ($value ? $faker->{$value} : null);
                     
                     if (is_array($row[$column])) {
                         foreach ($row[$column] as $opt_key => $opt_val) {
