@@ -1,6 +1,6 @@
 <template>
   <el-col :span="24">
-    <span style="color: rgba(255, 255, 255, 0.7);">{{ filters.length }} sessions left to book</span>
+    <span style="color: rgba(255, 255, 255, 0.7);">{{ positions.length }} sessions left to book</span>
     <el-button size="small" class="btn-buy-session" type="primary" style="float:right;">BUY SESSIONS</el-button>
     <el-col :span="24">
       <div style="display: block;">
@@ -121,7 +121,7 @@
           <div class="right-detail-header">{{ selected.first_name }}</div>
           <div class="right-list-sub">
             <div style="display: inline-block; float: left; margin-left: -15px;">
-              <country-flag :country='selected.country_code' size='normal'/>
+              <country-flag v-if="selected.country_code !== null" :country='selected.country_code' size='normal'/>
             </div>
             <div class="right-detail-sub-session">{{ selected.country }}</div>
           </div>
@@ -134,7 +134,7 @@
           <span><i class="fa fa-map-marker" aria-hidden="true"></i> Abbey House, 12-13, Charter , Leicester, LE1 3UD</span>
         </div>
         <div style="display: block; padding: 20px;">
-          <span>Attended<el-button size="small" class="btn-buy-session" type="primary"><i class="fa fa-headphones" aria-hidden="true" style="margin-left: 20px;"></i>Remotely</el-button></span>
+          <span>Attended<el-button size="small" class="btn-buy-session" type="primary" style="margin-left: 20px;"><i class="fa fa-headphones" aria-hidden="true"></i>Remotely</el-button></span>
         </div>
       </el-col>
       </el-row>

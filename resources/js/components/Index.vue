@@ -44,7 +44,7 @@
                     </div>
                     <div style="display: inline-block; width: 79%; padding-left: 10px;">
                       <div class="flag-container">
-                        <country-flag :country='scope.row.country_code' size='normal'/>
+                        <country-flag v-if="scope.row.country_code !== null" :country='scope.row.country_code' size='normal'/>
                       </div>
                       <div class="left-list-header">{{ scope.row.first_name }} {{ scope.row.last_name }}</div>
                       <span class="coaches-desktop">
@@ -263,18 +263,22 @@
                 })
               })
               card.market_traded.forEach(function(market, index) {
-                if(market === filter) {
-                  if(card.experience >= start && card.experience <= end) {
-                    activeCards.push(card);
+                filters.forEach(function (fil) {
+                  if (market === fil) {
+                    if (card.experience >= start && card.experience <= end) {
+                      activeCards.push(card);
+                    }
                   }
-                }
+                })
               })
               card.style.forEach(function(style, index) {
-                if(style === filter) {
-                  if(card.experience >= start && card.experience <= end) {
-                    activeCards.push(card);
+                filters.forEach(function (fil) {
+                  if (style === fil) {
+                    if (card.experience >= start && card.experience <= end) {
+                      activeCards.push(card);
+                    }
                   }
-                }
+                })
               })
             }
             if(filters.every(cardContainsFilter)) {

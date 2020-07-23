@@ -11,7 +11,7 @@
       <div class="right-detail-btnprofile" @click="showInfo()"><i class="fas fa-info"></i></div>
       <div class="right-list-sub">
         <div style="display: inline-block; float: left; margin-left: -15px;">
-          <country-flag :country='selected.country_code' size='normal'/>
+          <country-flag v-if="selected.country_code !== null" :country='selected.country_code' size='normal'/>
         </div>
         <div class="right-detail-sub">{{ selected.country }}</div>
       </div>
@@ -31,7 +31,7 @@
         <div class="right-detail-header">{{ selected.first_name }} {{ selected.last_name }}</div>
         <div class="right-list-sub">
           <div style="display: inline-block; float: left; margin-left: -15px;">
-            <country-flag :country='selected.country_code' size='normal'/>
+            <country-flag v-if="selected.country_code !== null" :country='selected.country_code' size='normal'/>
           </div>
           <div class="right-detail-sub">{{ selected.country }}</div>
         </div>
