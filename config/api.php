@@ -22,6 +22,7 @@ return [
         'country' => 'country',
         'country_code' => 'countryCode',
         'languages' => ['English','Tagalog','Mandarin','Nemic','Jejemon'],
+        'avatar' => ''
     ],
 
     'sf_coaches' => [
@@ -37,6 +38,7 @@ return [
         'style_summary' => $userFields::TRADING_STYLE_SUMMARY,
         'country_code' => $userFields::REGION,
         'languages' => $userFields::LANGUAGES,
+        'avatar' => $userFields::AVATAR
 
         /* $userFields::EMAIL,
         $userFields::AVATAR,
