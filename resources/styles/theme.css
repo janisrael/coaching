@@ -709,11 +709,13 @@ div#sessionProfiledialog .el-dialog .el-dialog__body .dialog-body {
     display: block;
     font-size: 12px;
     padding: 5px 0;
-    /*font-size: 13px;*/
-    /*padding: 10px 0 0;*/
     color: rgba(255, 255, 255, 0.6);
 }
 
+.el-avatar>img {
+    height: auto !important;
+    width: 100% !important;
+}
 
 /*media query*/
 
