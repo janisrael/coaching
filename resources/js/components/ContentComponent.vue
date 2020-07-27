@@ -1,7 +1,7 @@
 <template>
   <div class="right-list-container">
     <div class="content-avatar-container">
-      <el-avatar :size="60" :src="selected.pic" class="dbl-border">
+      <el-avatar :size="60" :src="selected.avatar" class="dbl-border">
         <img :src="selected.pic"/>
       </el-avatar>
     </div>
@@ -11,9 +11,9 @@
       <div class="right-detail-btnprofile" @click="showInfo()"><i class="fas fa-info"></i></div>
       <div class="right-list-sub">
         <div style="display: inline-block; float: left; margin-left: -15px;">
-          <country-flag  v-if="selected.country_code !== null || selected.country_code !== ''" :country='selected.country_code' size='normal'/>
+          <country-flag  v-if="selected.country_code !== null || selected.country_code !== '' || selected.country_code !== 'undefined'" :country='selected.country_code' size='normal'/>
         </div>
-        <div  v-if="selected.country !== null || selected.country !== ''" class="right-detail-sub">{{ selected.country }}</div>
+        <div  v-if="selected.country !== null || selected.country !== '' || selected.country_code !== 'undefined'" class="right-detail-sub">{{ selected.country }}</div>
       </div>
     </div>
     <el-dialog
@@ -24,7 +24,7 @@
       width="60%">
       <div style="float:left; padding: 8px;">
         <el-avatar :size="60" :src="selected.pic" class="dbl-border">
-          <img :src="selected.pic"/>
+          <img :src="selected.avatar"/>
         </el-avatar>
       </div>
       <div style="display: inline-block; width: 70%; padding-left: 15px;">

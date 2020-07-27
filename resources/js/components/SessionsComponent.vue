@@ -57,8 +57,8 @@
         <div v-if="position.country_id === 1" class="list-item" @click="dialogMentor(position)">
           <div :class="['list-' + position.country_id, 'session-listitem']">
             <i class="far fa-clock"></i>
-            <el-avatar :size="60" src="https://empty" class="session-list-avatar">
-              <img src="https://cube.elemecdn.com/e/fd/0fc7d20532fdaf769a25683617711png.png"/>
+            <el-avatar :size="60" class="session-list-avatar">
+              <img :src="selected.avatar"/>
             </el-avatar>
             <span class="session-list-time">09:00 TUESDAY 9/15</span>
           </div>
@@ -70,8 +70,8 @@
         <div v-if="position.country_id === 2" class="list-item" @click="dialogMentor(position)">
           <div :class="['list-' + position.country_id, 'session-listitem']">
             <i class="fa fa-calendar-check" aria-hidden="true"></i>
-            <el-avatar :size="60" src="https://empty" class="session-list-avatar">
-              <img src="https://cube.elemecdn.com/e/fd/0fc7d20532fdaf769a25683617711png.png"/>
+            <el-avatar :size="60" class="session-list-avatar">
+              <img :src="selected.avatar"/>
             </el-avatar>
             <span class="session-list-time">09:00 TUESDAY 9/15</span>
             <span><i class="fas fa-headset"></i></span>
@@ -85,8 +85,8 @@
         <div v-if="position.country_id === 3" class="list-item" @click="dialogMentor(position)">
           <div :class="['list-' + position.country_id, 'session-listitem']">
             <i class="el-icon-circle-check"></i>
-            <el-avatar :size="60" src="https://empty" class="session-list-avatar">
-              <img src="https://cube.elemecdn.com/e/fd/0fc7d20532fdaf769a25683617711png.png"/>
+            <el-avatar :size="60" class="session-list-avatar">
+              <img :src="selected.avatar"/>
             </el-avatar>
             <span class="session-list-time">09:00 TUESDAY 9/15</span>
           </div>
@@ -99,7 +99,7 @@
           <div :class="['list-' + position.country_id, 'session-listitem']">
             <i class="fa fa-ban" aria-hidden="true"></i>
             <el-avatar :size="60" src="https://empty" class="session-list-avatar">
-              <img src="https://cube.elemecdn.com/e/fd/0fc7d20532fdaf769a25683617711png.png"/>
+              <img :src="selected.avatar"/>
             </el-avatar>
             <span class="session-list-time">09:00 TUESDAY 9/15</span>
           </div>

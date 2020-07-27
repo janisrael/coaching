@@ -205,6 +205,19 @@ span.dbl-border.el-avatar.el-avatar--circle {
     display: inline-block;
 }
 
+
+.transition-box {
+    margin-bottom: 10px;
+    width: 200px;
+    height: 100px;
+    border-radius: 4px;
+    background-color: #409EFF;
+    text-align: center;
+    color: #fff;
+    padding: 40px 20px;
+    box-sizing: border-box;
+    margin-right: 20px;
+}
 .right-detail-sub {
     display: inline-block;
     color: rgba(255, 255, 255, 0.77);
@@ -633,7 +646,8 @@ label.el-checkbox.filter-checkbox.is-bordered span.el-checkbox__inner {
 }
 
 .coaches-list-icons {
-    float:right; margin-top: 0px;
+    float:right;
+    margin-top: 10px;
 }
 
 .coaches-search-btn {

@@ -39,7 +39,7 @@
                   <template slot-scope="scope">
                     <div class="avatar-wrapper">
                       <el-avatar :size="60" :src="scope.row.pic" class="dbl-border">
-                        <img :src="scope.row.pic"/>
+                        <img src="scope.row.avatar"/>
                       </el-avatar>
                     </div>
                     <div style="display: inline-block; width: 79%; padding-left: 10px;">
@@ -395,5 +395,7 @@
   .full-height {
     height: 100vh;
   }
+
+
 </style>
 
