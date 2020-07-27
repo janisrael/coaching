@@ -57,7 +57,7 @@ class CoachRepository implements CoachRepositoryInterface
 
                         // Extract semicolon to array
                         if (in_array($key, $api_options)) {
-                            $value[$val] = explode(';', $value[$val]);
+                            $value[$val] = array_filter(explode(';', $value[$val]));
 
                             // Collect all given options
                             if (count($value[$val])) {
@@ -73,7 +73,7 @@ class CoachRepository implements CoachRepositoryInterface
                     }
 
                     // Set Country Name by Country Code
-                    $country = '';
+                    $country = null;
                     if (isset($value[UserFields::COACH_COUNTRY])) {
                         $country = __('country.'.$value[UserFields::COACH_COUNTRY]);
                     }
