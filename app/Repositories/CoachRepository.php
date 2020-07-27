@@ -73,8 +73,8 @@ class CoachRepository implements CoachRepositoryInterface
                     }
 
                     // Set Country Name by Country Code
-                    if (isset($value[UserFields::REGION])) {
-                        $country = locale_get_display_region('-'.$value[UserFields::REGION]);
+                    if (isset($value[UserFields::COACH_COUNTRY])) {
+                        $country = __('country.'.$value[UserFields::COACH_COUNTRY]);
                     }
                     $row[$field]['country'] = $country ?? '';
                 }
