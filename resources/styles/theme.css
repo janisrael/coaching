@@ -44,10 +44,8 @@ th.el-table_1_column_1.is-leaf {
 .flag-container {
     display: inline-block;
     float: right;
-    /* background-color: red; */
-    /*overflow: hidden;*/
-    /*width: 30px !important;*/
-    /*height: 21px !important;*/
+    margin-right: -20px;
+    margin-top: -10px;
 }
 
 
@@ -247,14 +245,22 @@ span.dbl-border.el-avatar.el-avatar--circle {
 .right-list-container {
     display: inline-block;
     width: 80%;
-    padding: 15px 0 25px;
+    padding: 15px 0 15px;
 }
 
 .btn-buy-session {
     background-color: transparent !important;
     color: #9ecaff !important;
     border-color: #9ecaff !important;
+    transition: 0.3s;
 }
+
+.btn-buy-session:hover {
+    background-color: rgba(140, 175, 227, 0.30196078431372547) !important;
+    color: #9ecaff !important;
+    border-color: #9ecaff !important;
+}
+
 
 .session-listitem {
     padding: 10px;
@@ -670,7 +676,7 @@ label.el-checkbox.filter-checkbox.is-bordered span.el-checkbox__inner {
 
 .session-items-container {
     display: block;
-    overflow-x: scroll;
+    overflow-y: scroll;
     height: 550px;
     width: 100%;
 }
@@ -682,6 +688,31 @@ label.el-checkbox.filter-checkbox.is-bordered span.el-checkbox__inner {
     font-size: 18px;
 }
 
+div#sessionProfiledialog .el-dialog .el-dialog__header {
+    display: none !important;
+}
+div#sessionProfiledialog .el-dialog .el-dialog__body {
+    padding: 0px !important;
+}
+
+.dialog-header {
+    padding: 25px !important;
+    background-color: #55769a;
+    font-size: 19px;
+    text-align: center;
+}
+div#sessionProfiledialog .el-dialog .el-dialog__body .dialog-body {
+    padding: 30px !important;
+}
+
+.info-legend {
+    display: block;
+    font-size: 12px;
+    padding: 5px 0;
+    /*font-size: 13px;*/
+    /*padding: 10px 0 0;*/
+    color: rgba(255, 255, 255, 0.6);
+}
 
 
 /*media query*/
@@ -767,6 +798,14 @@ label.el-checkbox.filter-checkbox.is-bordered span.el-checkbox__inner {
 
     .btn-buy-session {
         padding: 5px 8px !important;
+    }
+
+
+
+    .btn-buy-session:hover {
+        background: #3a8ee6 !important;
+        border-color: #3a8ee6;
+        color: #FFF;
     }
 
     .coaches-search-desktop {

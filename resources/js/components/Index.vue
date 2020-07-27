@@ -38,24 +38,41 @@
                 <el-table-column>
                   <template slot-scope="scope">
                     <div class="avatar-wrapper">
-                      <el-avatar :size="60" :src="scope.row.pic" class="dbl-border">
-                        <img src="scope.row.avatar"/>
+                      <el-avatar :size="60" :src="scope.row.avatar" class="dbl-border">
+                        <img v-if="scope.row.avatar === null || scope.row.avatar === 'null'" :src="default_image"/>
+                        <img v-else :src="scope.row.avatar"/>
                       </el-avatar>
+<!--                      <el-avatar v-if="scope.row.avatar === null" :size="60" :src="scope.row.avatar" class="dbl-border">-->
+<!--                        <img v-if="scope.row.avatar === null || scope.row.avatar === 'null'" :src="default_image"/>-->
+<!--                      </el-avatar>-->
+<!--                      <el-avatar v-else :size="60" :src="scope.row.avatar" class="dbl-border">-->
+<!--                        <img v-if="scope.row.avatar.includes('dropbox')" :src="default_image"/>-->
+<!--                        <img v-else :src="scope.row.avatar"/>-->
+<!--                      </el-avatar>-->
                     </div>
                     <div style="display: inline-block; width: 79%; padding-left: 10px;">
                       <div class="flag-container">
-                        <country-flag v-if="scope.row.country_code !== null || scope.row.country_code !== ''" :country='scope.row.country_code' size='normal'/>
+                        <country-flag v-if="scope.row.country_code === null" country='' size='normal'/>
+                        <country-flag v-else :country='scope.row.country_code' size='normal'/>
                       </div>
                       <div class="left-list-header">{{ scope.row.first_name }} {{ scope.row.last_name }}</div>
                       <span class="coaches-desktop">
-                        <div class="left-list-sub">Experience - {{ scope.row.experience }} years</div>
                         <div class="left-list-sub">
-                          Markets traded -
-                          <span v-for="mt in scope.row.market_traded">{{ mt }}, </span>
+                           <span style="color: rgb(169, 169, 169);">Experience - </span>
+                            <span v-if="scope.row.experience > 0">{{ scope.row.experience }} years</span>
+                            <span v-else>0</span>
                         </div>
                         <div class="left-list-sub">
-                          Style -
-                          <span v-for="st in scope.row.style">{{ st }}, </span>
+                          <span style="color: rgb(169, 169, 169);">Markets traded -</span>
+                          <span v-for="(mt, index) in scope.row.market_traded" style="display: inline-block">
+                            <span>{{mt}}</span><span v-if="index+1 < scope.row.market_traded.length">,  </span>
+                          </span>
+                        </div>
+                        <div class="left-list-sub">
+                          <span style="color: rgb(169, 169, 169);">Style - </span>
+                          <span v-for="(st, index) in scope.row.style" style="display: inline-block">
+                            <span>{{st}}</span><span v-if="index+1 < scope.row.style.length">, </span>
+                          </span>
                         </div>
 <!--                        <div class="left-list-sub">-->
 <!--                          <span v-for="lang in scope.row.languages">{{ lang }}, </span>-->
@@ -64,17 +81,6 @@
 
                       <span class="coaches-mobile">
                         <div class="left-list-sub">Experience - {{ scope.row.experience }} years</div>
-                        <!--                        <div class="left-list-sub">-->
-                        <!--                          Markets traded - -->
-                        <!--                          <span v-for="mt in scope.row.market_traded">{{ mt }}, </span>-->
-                        <!--                        </div>-->
-                        <!--                        <div class="left-list-sub">-->
-                        <!--                          Style - -->
-                        <!--                          <span v-for="st in scope.row.style">{{ st }}, </span>-->
-                        <!--                        </div>-->
-                        <!--                        <div class="left-list-sub">-->
-                        <!--                          <span v-for="lang in scope.row.languages">{{ lang }}, </span>-->
-                        <!--                        </div>-->
                       </span>
 
 
@@ -98,9 +104,10 @@
             </div>
           </div>
         </el-col>
-        <el-col :sm="16" :md="18" :lg="18" :xl="18" class="full-height index-col-right">
+        <el-col :sm="16" :md="18" :lg="18" :xl="18" class="full-height index-col-right" style="background-image: url('../../images/background.jpg');
+    background-size: cover;">
           <!--                <div class="grid-content bg-purple-dark">asdasd</div>-->
-          <content-component :selected="passData"></content-component>
+          <content-component v-if="loading === false" :selected="passData"></content-component>
           <session-component :selected="passData"></session-component>
         </el-col>
       </el-col>
@@ -231,7 +238,8 @@
         selectedTags: [],
         preselectedTags: [],
         languages: [],
-        presearch: ''
+        presearch: '',
+        default_image: '../../images/default-avatar.jpg'
       }
     },
     computed: {
@@ -294,13 +302,13 @@
     created: function() {
       this.loading = true
       this.read()
-      this.default()
+      this.setrange()
     },
     methods: {
-      default() {
-        this.final_range[0] = this.value_range[0]
-        this.final_range[1] = this.value_range[1]
-      },
+      // default() {
+      //   this.final_range[0] = this.value_range[0]
+      //   this.final_range[1] = this.value_range[1]
+      // },
       setrange() {
         this.final_range[0] = this.value_range[0]
         this.final_range[1] = this.value_range[1]
@@ -312,7 +320,6 @@
         this.options = this.data.options
         this.coaches = this.data.coaches
         this.reset = this.coaches
-        console.log(this.activeCards)
         this.languages = this.options.languages
         setTimeout(() => this.loadDefault(this.data), 1)
       },

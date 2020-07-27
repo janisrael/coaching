@@ -1,6 +1,6 @@
 <template>
   <el-col :span="24">
-    <span style="color: rgba(255, 255, 255, 0.7);">{{ positions.length }} sessions left to book</span>
+    <span style="color: rgba(255, 255, 255, 0.7); padding-top: 12px; display: inline-block;">{{ positions.length }} sessions left to book</span>
     <el-button size="small" class="btn-buy-session" type="primary" style="float:right;">BUY SESSIONS</el-button>
     <el-col :span="24">
       <div style="display: block;">
@@ -42,11 +42,24 @@
           </el-popover>
           <el-popover
             placement="top-start"
-            title="Title"
-            width="500"
+            width="700"
             trigger="click"
             content="this is content, this is content, this is content">
-            <div style="color:#fff">this is a test</div>
+            <div style="color:#fff">
+              <div>
+                <span class="info-legend"><span style="color: #b8e986; width: 25%; display: inline-block;"><i class="far fa-clock"></i> MENTOR AVAILABLE </span><span>These are available sessions you can book for the mentor you have selected</span></span>
+              </div>
+              <div>
+                <span class="info-legend"><span style="color: #b5e5fe; width: 25%; display: inline-block;"><i class="fa fa-calendar-check" aria-hidden="true"></i> BOOKED SESSIONS </span><span>These are the upcomming sessions you have booked.</span></span>
+              </div>
+              <div>
+                <span class="info-legend"><span style="color: #ffcd50; width: 25%; display: inline-block;"><i class="el-icon-circle-check"></i> ATTENDED SESSIONS </span><span>These are sessions you have attended to date.</span></span>
+              </div>
+              <div>
+                <span class="info-legend"><span style="color: #f96b6c; width: 25%; display: inline-block;"><i class="fa fa-ban" aria-hidden="true"></i> NO SHOW SESSIONS </span><span>These are sessions you forgot to attend or failed to cancel with 24+ hours notice.</span></span>
+              </div>
+              <span class="info-legend">N.B. to filter the viwed sessions, select/deselect the session type on the key.</span>
+            </div>
             <span slot="reference" class="session-info"><i class="fas fa-info"></i></span>
           </el-popover>
         </div>
@@ -54,56 +67,56 @@
       <el-row class="session-items-container">
         <div v-for="position in filteredPositions">
         <transition name="el-fade-in">
-        <div v-if="position.country_id === 1" class="list-item" @click="dialogMentor(position)">
-          <div :class="['list-' + position.country_id, 'session-listitem']">
+        <div v-if="position.session_type === 1" class="list-item" @click="dialogMentor(position)">
+          <div :class="['list-' + position.session_type, 'session-listitem']">
             <i class="far fa-clock"></i>
-            <el-avatar :size="60" class="session-list-avatar">
+            <el-avatar :size="60" :src="selected.avatar" class="session-list-avatar">
               <img :src="selected.avatar"/>
             </el-avatar>
             <span class="session-list-time">09:00 TUESDAY 9/15</span>
           </div>
-          <div v-if="position.country_id === 1" :class="['list-' + position.country_id, 'list-item-btn']">
+          <div v-if="position.session_type === 1" :class="['list-' + position.session_type, 'list-item-btn']">
             <span>BOOK</span>
           </div>
         </div>
 
-        <div v-if="position.country_id === 2" class="list-item" @click="dialogMentor(position)">
-          <div :class="['list-' + position.country_id, 'session-listitem']">
+        <div v-if="position.session_type === 2" class="list-item" @click="dialogMentor(position)">
+          <div :class="['list-' + position.session_type, 'session-listitem']">
             <i class="fa fa-calendar-check" aria-hidden="true"></i>
-            <el-avatar :size="60" class="session-list-avatar">
+            <el-avatar :size="60" :src="selected.avatar" class="session-list-avatar">
               <img :src="selected.avatar"/>
             </el-avatar>
             <span class="session-list-time">09:00 TUESDAY 9/15</span>
             <span><i class="fas fa-headset"></i></span>
             <div style="float:right; display: inline-block;font-size: 14px;" @click="alert('test')"><i class="fas fa-calendar-plus" style="margin-right:10px;"></i>CALENDAR</div>
           </div>
-          <div v-if="position.country_id === 2" :class="['list-' + position.country_id, 'list-item-btn']">
+          <div v-if="position.session_type === 2" :class="['list-' + position.session_type, 'list-item-btn']">
             <span>VIEW</span>
           </div>
         </div>
 
-        <div v-if="position.country_id === 3" class="list-item" @click="dialogMentor(position)">
-          <div :class="['list-' + position.country_id, 'session-listitem']">
+        <div v-if="position.session_type === 3" class="list-item" @click="dialogMentor(position)">
+          <div :class="['list-' + position.session_type, 'session-listitem']">
             <i class="el-icon-circle-check"></i>
-            <el-avatar :size="60" class="session-list-avatar">
+            <el-avatar :size="60" :src="selected.avatar" class="session-list-avatar">
               <img :src="selected.avatar"/>
             </el-avatar>
             <span class="session-list-time">09:00 TUESDAY 9/15</span>
           </div>
-          <div v-if="position.country_id === 3" :class="['list-' + position.country_id, 'list-item-btn']">
+          <div v-if="position.session_type === 3" :class="['list-' + position.session_type, 'list-item-btn']">
             <span>VIEW</span>
           </div>
         </div>
 
-        <div v-if="position.country_id === 4" class="list-item" @click="dialogMentor(position)">
-          <div :class="['list-' + position.country_id, 'session-listitem']">
+        <div v-if="position.session_type === 4" class="list-item" @click="dialogMentor(position)">
+          <div :class="['list-' + position.session_type, 'session-listitem']">
             <i class="fa fa-ban" aria-hidden="true"></i>
-            <el-avatar :size="60" src="https://empty" class="session-list-avatar">
+            <el-avatar :size="60" :src="selected.avatar" class="session-list-avatar">
               <img :src="selected.avatar"/>
             </el-avatar>
             <span class="session-list-time">09:00 TUESDAY 9/15</span>
           </div>
-          <div v-if="position.country_id === 4" :class="['list-' + position.country_id, 'list-item-btn']">
+          <div v-if="position.session_type === 4" :class="['list-' + position.session_type, 'list-item-btn']">
             <span>VIEW</span>
           </div>
         </div>
@@ -116,10 +129,19 @@
       :title="profileTitle"
       :visible.sync="dialogItem"
       width="40%">
-      <el-row>
+      <div class="dialog-header">
+        <span>
+          <span v-if="session_type === 1" style="color: #b8e986;"><i class="far fa-clock"></i></span>
+          <span v-if="session_type === 2" style="color: #b5e5fe;"><i class="fa fa-calendar-check" aria-hidden="true"></i></span>
+          <span v-if="session_type === 3" style="color: #ffcd50;"><i class="el-icon-circle-check"></i></span>
+          <span v-if="session_type === 4" style="color: #f96b6c;"><i class="fa fa-ban" aria-hidden="true"></i></span>
+        {{ profileTitle }}
+        </span>
+      </div>
+      <el-row class="dialog-body">
         <div style="float:left; padding: 8px;">
-          <el-avatar :size="60" :src="selected.pic" class="dbl-border">
-            <img :src="selected.pic"/>
+          <el-avatar :size="60" :src="selected.avatar" class="dbl-border">
+            <img :src="selected.avatar"/>
           </el-avatar>
         </div>
         <div style="display: inline-block; width: 70%; padding-left: 15px;">
@@ -144,7 +166,7 @@
       </el-col>
       </el-row>
         <span slot="footer" class="dialog-footer">
-        <el-button @click="dialogItem = false" type="success">Close</el-button>
+        <el-button @click="handleClose()" type="success">Close</el-button>
       </span>
     </el-dialog>
   </el-col>
@@ -166,63 +188,63 @@
         positions: [
           {
             name: "MENTOR AVAILABLE",
-            country_id: 1,
+            session_type: 1,
           },
           {
             name: "BOOKED SESSIONS",
-            country_id: 2,
+            session_type: 2,
           },
           {
             name: "BOOKED SESSIONS",
-            country_id: 2,
+            session_type: 2,
           },
           {
             name: "BOOKED SESSIONS",
-            country_id: 2,
+            session_type: 2,
           },
           {
             name: "BOOKED SESSIONS",
-            country_id: 2,
+            session_type: 2,
           },
           {
             name: "BOOKED SESSIONS",
-            country_id: 2,
+            session_type: 2,
           },
           {
             name: "ATTENDED SESSIONS",
-            country_id: 3,
+            session_type: 3,
           },
           {
             name: "ATTENDED SESSIONS",
-            country_id: 3,
+            session_type: 3,
           },
           {
             name: "ATTENDED SESSIONS",
-            country_id: 3,
+            session_type: 3,
           },
           {
             name: "ATTENDED SESSIONS",
-            country_id: 3,
+            session_type: 3,
           },
           {
             name: "ATTENDED SESSIONS",
-            country_id: 3,
+            session_type: 3,
           },
           {
             name: "NO SHOW SESSIONS",
-            country_id: 4,
+            session_type: 4,
           },
           {
             name: "NO SHOW SESSIONS",
-            country_id: 4,
+            session_type: 4,
           },
           {
             name: "NO SHOW SESSIONS",
-            country_id: 4,
+            session_type: 4,
           },
           {
             name: "NO SHOW SESSIONS",
-            country_id: 4,
+            session_type: 4,
           }
         ],
         filters: [
@@ -251,7 +273,8 @@
         checkedFilters: ['MENTOR AVAILABLE', 'BOOKED SESSIONS','ATTENDED SESSIONS','NO SHOW SESSIONS'],
         value1: '',
         currentDate: '',
-        profileTitle: ''
+        profileTitle: '',
+        session_type: ''
       }
     },
     computed: {
@@ -263,14 +286,34 @@
       this.getDate()
     },
     methods: {
+      handleClose() {
+        this.session_type = ''
+        this.profileTitle = ''
+        this.dialogItem = false
+      },
       getDate() {
         // var currentDate = new Date();
         this.currentDate = new Date().toJSON().slice(0,10).replace(/-/g,'-');
       },
       dialogMentor(position) {
-        console.log(position)
-        if(position.name = 'MENTOR AVAILABLE') {
+        this.session_type = ''
+        this.profileTitle = ''
+        console.log(position.session_type)
+        if(position.session_type === 1) {
           this.profileTitle = 'Your Attended Session'
+          this.session_type = position.session_type
+        }
+        if(position.session_type === 2) {
+          this.profileTitle = 'Your Booked Session'
+          this.session_type = position.session_type
+        }
+        if(position.session_type === 3) {
+          this.profileTitle = 'Your Attended Session'
+          this.session_type = position.session_type
+        }
+        if(position.session_type === 4) {
+          this.profileTitle = 'Your no show Session'
+          this.session_type = position.session_type
         }
         this.dialogItem = true
       },
@@ -303,4 +346,5 @@
    box-sizing: border-box;
    margin-right: 20px;
  }
+
 </style>
