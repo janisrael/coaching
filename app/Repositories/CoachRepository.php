@@ -73,10 +73,11 @@ class CoachRepository implements CoachRepositoryInterface
                     }
 
                     // Set Country Name by Country Code
+                    $country = '';
                     if (isset($value[UserFields::COACH_COUNTRY])) {
                         $country = __('country.'.$value[UserFields::COACH_COUNTRY]);
                     }
-                    $row[$field]['country'] = $country ?? '';
+                    $row[$field]['country'] = $country;
                 }
 
                 $data['coaches'] = $row;
