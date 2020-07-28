@@ -135,7 +135,7 @@ label#id-4 span {
 .list-item-btn {
     padding: 10px;
     border-radius: 3px;
-    margin-bottom: 10px;
+    /*margin-bottom: 10px;*/
     color: #fff;
     width: 6%;
     display: inline-block;
@@ -264,7 +264,8 @@ span.dbl-border.el-avatar.el-avatar--circle {
 
 .session-listitem {
     padding: 10px;
-    width: 89%;
+    border-right: 2px solid #283b5c !important;
+    /*width: 89%;*/
     display: inline-block;
     border-radius: 3px;
 }
@@ -276,9 +277,14 @@ span.dbl-border.el-avatar.el-avatar--circle {
 
 .session-list-time {
     font-size: 14px;
-    margin-left: 40px;
+    /*margin-left: 40px;*/
     margin-right: 10px;
+    display: inline-block;
 
+}
+
+.session-list-time-calendar {
+    float: right;
 }
 
 span.session-list-avatar.el-avatar.el-avatar--circle {
@@ -677,7 +683,7 @@ label.el-checkbox.filter-checkbox.is-bordered span.el-checkbox__inner {
 .session-items-container {
     display: block;
     overflow-y: scroll;
-    height: 550px;
+    height: 70vh;
     width: 100%;
 }
 
@@ -719,11 +725,37 @@ div#sessionProfiledialog .el-dialog .el-dialog__body .dialog-body {
 
 /*media query*/
 
+@media only screen and (min-width: 1301px) and (max-width: 1463px) {
+    .el-checkbox__label {
+        font-size: 11px !important;
+    }
+}
+
+@media only screen and (min-width: 813px) and (max-width: 1300px) {
+    .el-checkbox__label {
+        font-size: 11px !important;
+    }
+
+    .mobile-session-filter {
+        display: block !important;
+    }
+
+    div.desktop-session-filter {
+        display: none !important;
+    }
+
+}
+
 @media only screen and (min-width: 450px) and (max-width: 812px) {
     .index-col-left {
         width: 40% !important;
     }
-
+    .session-list-time {
+        display: inline-block;
+        font-size: 12px;
+        /* margin-left: 40px; */
+         margin-right: 0px;
+    }
     .index-col-right {
         width: 60% !important;
         padding: 10px
@@ -743,7 +775,11 @@ div#sessionProfiledialog .el-dialog .el-dialog__body .dialog-body {
 
     span.dbl-border.el-avatar.el-avatar--circle {
         width: 40px !important;
-        height: 40px !important;
+        height:40px !important;
+    }
+
+    .session-list-time-calendar span {
+        display: none;
     }
 
     .right-detail-btnprofile {
@@ -763,11 +799,12 @@ div#sessionProfiledialog .el-dialog .el-dialog__body .dialog-body {
     }
 
     .session-listitem {
-        width: 80% !important;
+        /*width: 80% !important;*/
+        border-right: 2px solid #283b5c !important;
     }
 
     .list-item-btn {
-        width: 9%;
+        /*width: 9%;*/
     }
 
     .el-date-editor.el-range-editor.el-input__inner.el-date-editor--daterange.el-range-editor--mini {
@@ -853,5 +890,45 @@ div#sessionProfiledialog .el-dialog .el-dialog__body .dialog-body {
     #sessionProfiledialog .el-dialog {
         width: 100% !important;
         margin-top: 0 !important;
+    }
+
+    #id-1 {
+        background-color: #6e8e6a;
+        border-radius: 3px;
+        padding: 0 3px !important;
+    }
+
+    #id-2 {
+        background-color: #5e7aa4;
+        border-radius: 3px;
+        padding: 0 3px !important;
+    }
+
+    #id-3 {
+        background-color: #917c4e;
+        border-radius: 3px;
+        padding: 0 3px !important;
+    }
+
+    #id-4 {
+        background-color: #92505e;
+        border-radius: 3px;
+        padding: 0 3px !important;
+    }
+
+    .session-items-container {
+        height: 60vh !important;
+    }
+}
+
+@media only screen and (max-width: 640px) {
+
+    span.dbl-border.el-avatar.el-avatar--circle {
+        width: 30px !important;
+        height:30px !important;
+    }
+
+    .session-items-container {
+        height: 200px !important;
     }
 }

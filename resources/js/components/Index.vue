@@ -2,7 +2,7 @@
   <div class="row full-height">
     <el-row class="">
       <el-col :span="24" >
-        <el-col :sm="8" :md="6" :lg="6" :xl="6" class="full-height index-col-left">
+        <el-col :xs="12" :sm="7" :md="8" :lg="6" :xl="6" class="full-height index-col-left">
           <el-col :span="24" style="padding: 10px;" class="coaches-search-desktop">
             <div style="width: 88%; display: inline-block;">
               <el-input
@@ -37,7 +37,7 @@
                 style="width: 100%; cursor: pointer">
                 <el-table-column>
                   <template slot-scope="scope">
-                    <div class="avatar-wrapper">
+                    <el-col :xs="4" :sm="5" :md="5" :lg="5" :xl="5" class="avatar-wrapper">
                       <el-avatar :size="60" :src="scope.row.avatar" class="dbl-border">
                         <img v-if="scope.row.avatar === null || scope.row.avatar === 'null'" :src="default_image"/>
                         <img v-else :src="scope.row.avatar"/>
@@ -49,8 +49,8 @@
 <!--                        <img v-if="scope.row.avatar.includes('dropbox')" :src="default_image"/>-->
 <!--                        <img v-else :src="scope.row.avatar"/>-->
 <!--                      </el-avatar>-->
-                    </div>
-                    <div style="display: inline-block; width: 79%; padding-left: 10px;">
+                    </el-col>
+                    <el-col :xs="20" :sm="19" :md="19" :lg="19" :xl="19" style="display: inline-block; padding-left: 10px;">
                       <div class="flag-container">
                         <country-flag v-if="scope.row.country_code === null" country='' size='normal'/>
                         <country-flag v-else :country='scope.row.country_code' size='normal'/>
@@ -95,7 +95,7 @@
                           <i class="fa fa-ban left-list-badge-icon" aria-hidden="true" style="color: #92505f"></i>
                         </el-badge>
                       </div>
-                    </div>
+                    </el-col>
 
                   </template>
                 </el-table-column>
@@ -104,8 +104,7 @@
             </div>
           </div>
         </el-col>
-        <el-col :sm="16" :md="18" :lg="18" :xl="18" class="full-height index-col-right" style="background-image: url('../../images/background.jpg');
-    background-size: cover;">
+        <el-col :xs="12" :sm="17" :md="16" :lg="18" :xl="18" class="full-height index-col-right" style="background-image: url('../../images/background.jpg'); background-size: cover;">
           <!--                <div class="grid-content bg-purple-dark">asdasd</div>-->
           <content-component v-if="loading === false" :selected="passData"></content-component>
           <session-component :selected="passData"></session-component>
@@ -358,7 +357,7 @@
           }
 
         });
-        console.log("init-scroll: " + $(".nav-next").scrollLeft());
+        // console.log("init-scroll: " + $(".nav-next").scrollLeft());
         $(".nav-next").on("click", function () {
           $(".cata-sub-nav").animate({ scrollLeft: "+=460" }, 200);
         });

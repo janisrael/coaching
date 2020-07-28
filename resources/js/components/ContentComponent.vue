@@ -1,13 +1,13 @@
 <template>
   <div class="right-list-container">
-    <div class="content-avatar-container">
+    <el-col :xs="4" :sm="4" :md="4" :lg="2" :xl="2" class="content-avatar-container">
       <el-avatar :size="60" :src="selected.avatar" class="dbl-border">
         <img v-if="selected.avatar === null || selected.avatar === 'null'" :src="default_image"/>
         <img v-else :src="selected.avatar"/>
       </el-avatar>
-    </div>
+    </el-col>
 <!--    {{ selected }}-->
-    <div class="content-coaches-name">
+    <el-col :xs="20" :sm="20" :md="20" :lg="22" :xl="22" class="content-coaches-name">
       <div class="right-detail-header">{{ selected.first_name }} {{ selected.last_name }}</div>
       <div class="right-detail-btnprofile" @click="showInfo()"><i class="fas fa-info"></i></div>
       <div class="right-list-sub">
@@ -18,7 +18,7 @@
         <div  v-if="selected.country === null" class="right-detail-sub">No Specified Country</div>
         <div  v-else class="right-detail-sub">{{ selected.country }}</div>
       </div>
-    </div>
+    </el-col>
     <el-dialog
       title="Biography"
       id="dialogProfile"

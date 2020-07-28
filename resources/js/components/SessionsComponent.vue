@@ -64,65 +64,65 @@
           </el-popover>
         </div>
       </div>
-      <el-row class="session-items-container">
+      <el-col :span="24" class="session-items-container">
         <div v-for="position in filteredPositions">
         <transition name="el-fade-in">
         <div v-if="position.session_type === 1" class="list-item" @click="dialogMentor(position)">
-          <div :class="['list-' + position.session_type, 'session-listitem']">
+          <el-col :xs="18" :sm="19" :md="20" :lg="22" :xl="22" :class="['list-' + position.session_type, 'session-listitem']">
             <i class="far fa-clock"></i>
             <el-avatar :size="60" :src="selected.avatar" class="session-list-avatar">
               <img :src="selected.avatar"/>
             </el-avatar>
             <span class="session-list-time">09:00 TUESDAY 9/15</span>
-          </div>
-          <div v-if="position.session_type === 1" :class="['list-' + position.session_type, 'list-item-btn']">
+          </el-col>
+          <el-col :xs="6" :sm="5" :md="4" :lg="2" :xl="2" v-if="position.session_type === 1" :class="['list-' + position.session_type, 'list-item-btn']">
             <span>BOOK</span>
-          </div>
+          </el-col>
         </div>
 
         <div v-if="position.session_type === 2" class="list-item" @click="dialogMentor(position)">
-          <div :class="['list-' + position.session_type, 'session-listitem']">
+          <el-col :xs="18" :sm="19" :md="20" :lg="22" :xl="22" :class="['list-' + position.session_type, 'session-listitem']">
             <i class="fa fa-calendar-check" aria-hidden="true"></i>
             <el-avatar :size="60" :src="selected.avatar" class="session-list-avatar">
               <img :src="selected.avatar"/>
             </el-avatar>
             <span class="session-list-time">09:00 TUESDAY 9/15</span>
             <span><i class="fas fa-headset"></i></span>
-            <div style="float:right; display: inline-block;font-size: 14px;" @click="alert('test')"><i class="fas fa-calendar-plus" style="margin-right:10px;"></i>CALENDAR</div>
-          </div>
-          <div v-if="position.session_type === 2" :class="['list-' + position.session_type, 'list-item-btn']">
+            <div class="session-list-time session-list-time-calendar" @click="alert('test')"><i class="fas fa-calendar-plus" style="margin-right:10px;"></i><span class="session-calendar-caption">CALENDAR</span></div>
+          </el-col>
+          <el-col :xs="6" :sm="5" :md="4" :lg="2" :xl="2" v-if="position.session_type === 2" :class="['list-' + position.session_type, 'list-item-btn']">
             <span>VIEW</span>
-          </div>
+          </el-col>
         </div>
 
         <div v-if="position.session_type === 3" class="list-item" @click="dialogMentor(position)">
-          <div :class="['list-' + position.session_type, 'session-listitem']">
+          <el-col :xs="18" :sm="19" :md="20" :lg="22" :xl="22" :class="['list-' + position.session_type, 'session-listitem']">
             <i class="el-icon-circle-check"></i>
             <el-avatar :size="60" :src="selected.avatar" class="session-list-avatar">
               <img :src="selected.avatar"/>
             </el-avatar>
             <span class="session-list-time">09:00 TUESDAY 9/15</span>
-          </div>
-          <div v-if="position.session_type === 3" :class="['list-' + position.session_type, 'list-item-btn']">
+          </el-col>
+          <el-col :xs="6" :sm="5" :md="4" :lg="2" :xl="2" v-if="position.session_type === 3" :class="['list-' + position.session_type, 'list-item-btn']">
             <span>VIEW</span>
-          </div>
+          </el-col>
         </div>
 
         <div v-if="position.session_type === 4" class="list-item" @click="dialogMentor(position)">
-          <div :class="['list-' + position.session_type, 'session-listitem']">
+          <el-col :xs="18" :sm="19" :md="20" :lg="22" :xl="22" :class="['list-' + position.session_type, 'session-listitem']">
             <i class="fa fa-ban" aria-hidden="true"></i>
             <el-avatar :size="60" :src="selected.avatar" class="session-list-avatar">
               <img :src="selected.avatar"/>
             </el-avatar>
             <span class="session-list-time">09:00 TUESDAY 9/15</span>
-          </div>
-          <div v-if="position.session_type === 4" :class="['list-' + position.session_type, 'list-item-btn']">
+          </el-col>
+          <el-col :xs="6" :sm="5" :md="4" :lg="2" :xl="2" v-if="position.session_type === 4" :class="['list-' + position.session_type, 'list-item-btn']">
             <span>VIEW</span>
-          </div>
+          </el-col>
         </div>
         </transition>
       </div>
-      </el-row>
+      </el-col>
     </el-col>
     <el-dialog
       id="sessionProfiledialog"
