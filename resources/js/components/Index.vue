@@ -104,10 +104,10 @@
             </div>
           </div>
         </el-col>
-        <el-col :xs="12" :sm="17" :md="16" :lg="18" :xl="18" class="full-height index-col-right" style="background-image: url('../../images/background.jpg'); background-size: cover;">
+        <el-col v-loading="loading" element-loading-text="Loading..." element-loading-spinner="el-icon-loading" element-loading-background="rgba(0, 0, 0, 0.8)" :xs="12" :sm="17" :md="16" :lg="18" :xl="18" class="full-height index-col-right" style="background-image: url('../../images/background.jpg'); background-size: cover;">
           <!--                <div class="grid-content bg-purple-dark">asdasd</div>-->
           <content-component v-if="loading === false" :selected="passData"></content-component>
-          <session-component :selected="passData"></session-component>
+          <session-component v-if="loading === false" :selected="for_sessiondata"></session-component>
         </el-col>
       </el-col>
 
@@ -195,9 +195,6 @@
   // import FilterComponent from './FilterComponent.vue'
   import SessionComponent from './SessionsComponent.vue'
 
-  const langOptions = ['Tagalog', 'English', 'Russian', 'Armenian', 'Chinese', 'Japanese','Korean','Vietnamese','Mandarin'];
-  const marketOptions = ['Forex', 'Stock Indices', 'Commodities'];
-  const styleOptions = ['End of Day', 'Intra-day', 'Scalper'];
   const bookingOptions = ['Youve booked this mentor before' , 'You havent booked this mentor before'];
   export default {
     name: 'Index',
@@ -224,10 +221,7 @@
         checkboxGroup2: ['End of Day'],
         checkboxGroup3: ['Youve booked this mentor before'],
         checkboxGroup4: ['English'],
-        markets: marketOptions,
-        styles: styleOptions,
         books: bookingOptions,
-        langs: langOptions,
         ex_from: '',
         ex_to: '',
         range: '',
@@ -238,7 +232,8 @@
         preselectedTags: [],
         languages: [],
         presearch: '',
-        default_image: '../../images/default-avatar.jpg'
+        default_image: '../../images/default-avatar.jpg',
+        for_sessiondata: {}
       }
     },
     computed: {
@@ -316,6 +311,7 @@
         const res = await fetch('/api/v1/coaches');
         const data = await res.json();
         this.data = data.data;
+        this.for_sessiondata = this.data
         this.options = this.data.options
         this.coaches = this.data.coaches
         this.reset = this.coaches
