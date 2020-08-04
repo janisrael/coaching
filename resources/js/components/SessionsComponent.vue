@@ -233,18 +233,18 @@
         dialogItem: false,
         positions: [
           {
-            name: "MENTOR AVAILABLE",
-            session_type: 1,
-            user_id: '00520000002qtmXAAQ',
-            date: '2020-08-08',
-            availability_type: ['Can do either','Remote only','In-house only','Group']
-          },
-          {
             name: "BOOKED SESSIONS",
             session_type: 2,
             user_id: '00520000002qtm3AAA',
             date: '2020-08-03',
             availability_type: ['Group']
+          },
+          {
+            name: "MENTOR AVAILABLE",
+            session_type: 1,
+            user_id: '00520000002qtmXAAQ',
+            date: '2020-08-08',
+            availability_type: ['Can do either','Remote only','In-house only','Group']
           },
           {
             name: "BOOKED SESSIONS",
@@ -386,7 +386,7 @@
         } else {
           if(this.datefilter.length > 1) {
             var xx = this.new_collections.filter(position => this.checkedFilters.includes(position.schedules.name));
-            return xx.filter(position => (this.date_collections[0] < position.schedules.date) && (this.date_collections[1] > position.schedules.date))
+            return xx.filter(position => (this.date_collections[0] <= position.schedules.date) && (this.date_collections[1] >= position.schedules.date))
           }
           return this.new_collections.filter(position => this.checkedFilters.includes(position.schedules.name));
         }
