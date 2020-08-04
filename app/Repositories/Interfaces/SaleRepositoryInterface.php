@@ -2,7 +2,7 @@
 
 namespace App\Repositories\Interfaces;
 
-interface CoachRepositoryInterface
+interface SaleRepositoryInterface
 {
     public function all(): array;
 
