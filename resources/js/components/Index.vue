@@ -39,8 +39,8 @@
                   <template slot-scope="scope">
                     <el-col :xs="4" :sm="5" :md="5" :lg="5" :xl="5" class="avatar-wrapper">
                       <el-avatar :size="60" :src="scope.row.avatar" class="dbl-border">
-                        <img v-if="scope.row.avatar === null || scope.row.avatar === 'null'" :src="default_image"/>
-                        <img v-else :src="scope.row.avatar"/>
+                        <img v-if="scope.row.coach_image === null || scope.row.coach_image === 'null'" :src="default_image"/>
+                        <img v-else :src="scope.row.coach_image"/>
                       </el-avatar>
 <!--                      <el-avatar v-if="scope.row.avatar === null" :size="60" :src="scope.row.avatar" class="dbl-border">-->
 <!--                        <img v-if="scope.row.avatar === null || scope.row.avatar === 'null'" :src="default_image"/>-->
@@ -104,10 +104,9 @@
             </div>
           </div>
         </el-col>
-        <el-col v-loading="loading" element-loading-text="Loading..." element-loading-spinner="el-icon-loading" element-loading-background="rgba(0, 0, 0, 0.8)" :xs="12" :sm="17" :md="16" :lg="18" :xl="18" class="full-height index-col-right" style="background-image: url('../../images/background.jpg'); background-size: cover;">
-          <!--                <div class="grid-content bg-purple-dark">asdasd</div>-->
-          <content-component v-if="loading === false" :selected="passData"></content-component>
-          <session-component v-if="loading === false" :selected="for_sessiondata"></session-component>
+        <el-col :xs="12" :sm="17" :md="16" :lg="18" :xl="18" class="full-height index-col-right" style="background-image: url('../../images/background.jpg'); background-size: cover;">
+            <content-component v-if="loading === false" :selected="passData"></content-component>
+            <session-component :selected="for_sessiondata"></session-component>
         </el-col>
       </el-col>
 
@@ -134,7 +133,7 @@
                     v-model="value_range"
                     range
                     show-stops
-                    :max="30"
+                    :max="100"
                   @change="setrange()">
                   </el-slider>
                 </div>
@@ -225,7 +224,7 @@
         ex_from: '',
         ex_to: '',
         range: '',
-        value_range: [0,30],
+        value_range: [0,100],
         final_range: [],
         val: 0,
         selectedTags: [],
@@ -245,7 +244,7 @@
 
         var end = this.final_range[1]
         if(this.selectedTags.length == 0) {
-          if(this.final_range[0] === 0 && this.final_range[1] === 30){
+          if(this.final_range[0] === 0 && this.final_range[1] === 100){
             return this.coaches;
           } else {
             this.coaches.forEach(function(card) {
@@ -363,7 +362,7 @@
       },
       clear() {
         this.preselectedTags = []
-        this.value_range = [0,30]
+        this.value_range = [0,100]
       },
       handleFilter() {
         // this.coaches = []
@@ -371,7 +370,7 @@
           this.value_range[0] = 0
         }
         if(this.value_range[1] === '') {
-          this.value_range[1] = 30
+          this.value_range[1] = 100
         }
         this.selectedTags = []
         this.reset = this.preselectedTags

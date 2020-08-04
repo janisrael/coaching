@@ -65,48 +65,48 @@ label#id-4 span {
     color: #f96b6c !important;
 }
 
-.list-1 {
+.list-Pending {
     background-color: #6e8e6a !important;
     transition: 0.3s;
 }
-.list-2 {
+.list-Booked {
     background-color: #5e7aa4 !important;
     transition: 0.3s;
 }
-.list-3 {
+.list-Attended {
     background-color: #917c4e !important;
     transition: 0.3s;
 }
-.list-4 {
+.list-Cancelled {
     background-color: #92505e !important;
     transition: 0.3s;
 }
 
-.list-item:hover .list-1.session-listitem, .list-item.hover .list-1.session-listitem {
+.list-item:hover .list-Pending.session-listitem, .list-item.hover .list-Pending.session-listitem {
     background: #91b98c !important;
 }
-.list-item:hover .list-1.list-item-btn, .list-item.hover .list-1.list-item-btn {
+.list-item:hover .list-Pending.list-item-btn, .list-item.hover .list-Pending.list-item-btn {
     background: #91b98c !important;
 }
 
-.list-item:hover .list-2.session-listitem, .list-item.hover .list-2.session-listitem {
+.list-item:hover .list-Booked.session-listitem, .list-item.hover .list-Booked.session-listitem {
     background: #7495c7  !important;
 }
-.list-item:hover .list-2.list-item-btn, .list-item.hover .list-2.list-item-btn {
+.list-item:hover .list-Booked.list-item-btn, .list-item.hover .list-Booked.list-item-btn {
     background: #7495c7 !important;
 }
 
-.list-item:hover .list-3.session-listitem, .list-item.hover .list-3.session-listitem {
+.list-item:hover .list-Attended.session-listitem, .list-item.hover .list-Attended.session-listitem {
     background: #bba167  !important;
 }
-.list-item:hover .list-3.list-item-btn, .list-item.hover .list-3.list-item-btn {
+.list-item:hover .list-Attended.list-item-btn, .list-item.hover .list-Attended.list-item-btn {
     background: #bba167 !important;
 }
 
-.list-item:hover .list-4.session-listitem, .list-item.hover .list-4.session-listitem {
+.list-item:hover .list-Cancelled.session-listitem, .list-item.hover .list-Cancelled.session-listitem {
     background: #b36374  !important;
 }
-.list-item:hover .list-4.list-item-btn, .list-item.hover .list-4.list-item-btn {
+.list-item:hover .list-Cancelled.list-item-btn, .list-item.hover .list-Cancelled.list-item-btn {
     background: #b36374 !important;
 }
 
@@ -240,6 +240,14 @@ span.dbl-border.el-avatar.el-avatar--circle {
 .right-detail-btnprofile:hover {
     color: #bfdcff;
     border-color: #bfdcff;
+}
+
+#alertBookSession {
+    background-color: rgba(255, 111, 111, 0.15) !important;
+    color: rgb(255, 255, 255) !important;
+    width: 70% !important;
+    float:left !important;
+    border: 1px solid #ff3e3e !important;
 }
 
 .right-list-container {
