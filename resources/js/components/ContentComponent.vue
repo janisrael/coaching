@@ -1,6 +1,7 @@
 <template>
   <div class="right-list-container">
     <el-col :xs="4" :sm="4" :md="4" :lg="2" :xl="2" class="content-avatar-container">
+
       <el-avatar :size="60" :src="selected.coach_image" class="dbl-border">
         <img v-if="selected.coach_image === null || selected.coach_image === 'null'" :src="default_image"/>
         <img v-else :src="selected.coach_image"/>
@@ -17,6 +18,7 @@
         <div  v-if="selected.country === null" class="right-detail-sub">No Specified Country</div>
         <div  v-else class="right-detail-sub">{{ selected.country }}</div>
       </div>
+<!--      {{ selected.id }}-->
     </el-col>
     <el-dialog
       title="Biography"

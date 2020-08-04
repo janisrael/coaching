@@ -95,7 +95,6 @@
             <span>BOOK</span>
           </el-col>
         </div>
-
         <div v-if="position.schedules.status === 'Booked'" class="list-item" @click="dialogMentor(position)">
           <el-col :xs="18" :sm="19" :md="20" :lg="22" :xl="22" :class="['list-' + position.schedules.status, 'session-listitem']">
             <span style="width: 15px; display: inline-block"><i class="fa fa-calendar-check" aria-hidden="true"></i></span>
@@ -268,6 +267,10 @@
       selected: {
         required: true,
         type: Object
+      },
+      user_id: {
+        required: true,
+        type: String
       }
     },
     data() {
@@ -317,7 +320,7 @@
     },
     computed: {
       filteredPositions () {
-        console.log(this.date_collections)
+        // console.log(this.date_collections)
         if(this.datefilter === '' || this.datefilter === null) {
             return this.new_collections.filter(position => this.checkedFilters.includes(position.schedules.status));
         } else {
@@ -331,26 +334,13 @@
     },
     created: function() {
       this.loading = true
-      console.log('start',this.selected)
-
+      // console.log('start',this.selected)
       this.session_data = this.selected.coaches
-
-
       this.read()
       this.getDate()
-
     },
     methods: {
-      async read() {
-        this.loading = true
-        const res = await fetch('/api/v1/coaches/schedule');
-        const data = await res.json();
-        this.data = data.data;
-        this.schedules = this.data.schedules
-        this.coaches = this.selected.coaches
-        console.log(this.schedules, 's')
-        console.log(this.coaches,'x')
-        // this.mapData()
+      mapData() {
         var collections = []
         var new_collections = []
         var coach = this.coaches
@@ -358,6 +348,8 @@
         var allcollections = []
         var dates = []
         var days = []
+        var user_id = this.user_id
+        var value_collection = []
         sched.forEach(function(value, index) {
           coach.forEach(function(coachvalue, index) {
             if(value.coach_id === coachvalue.id) {
@@ -390,64 +382,35 @@
           }
           value['day'] = day_of_week
           dates.push(value.date)
-          allcollections = { coaches: collections, schedules: value}
-          new_collections.push(allcollections)
+          var status = value.status
+          // console.log('asdasdasda')
+          if(status === 'Pending') {
+            if(value.coach_id === user_id) {
+              allcollections = { coaches: collections, schedules: value}
+              new_collections.push(allcollections)
+            }
+          } else {
+            allcollections = { coaches: collections, schedules: value}
+            new_collections.push(allcollections)
+          }
+
         })
         this.date_collections = dates
         this.new_collections = new_collections
-        console.log(new_collections)
+        this.$emit('change', this.new_collections)
         this.loading = false
       },
-      // mapData() {
-      //   var collections = []
-      //   var new_collections = []
-      //   var coach = this.selected.coaches
-      //   var sched = this.schedules
-      //   console.log('session coach', coach)
-      //   console.log('session sched', sched)
-      //   var allcollections = []
-      //   var dates = []
-      //   var days = []
-      //   sched.forEach(function(value, index) {
-      //     coach.forEach(function(coachvalue, index) {
-      //       if(value.coach_id === coachvalue.id) {
-      //         collections = coachvalue
-      //       }
-      //     })
-      //     var newday = new Date(value.date)
-      //     var day = newday.getDay()
-      //     var day_of_week = ''
-      //     if(day === 1) {
-      //       day_of_week = 'MONDAY'
-      //     }
-      //     if(day === 2) {
-      //       day_of_week = 'TUESDAY'
-      //     }
-      //     if(day === 3) {
-      //       day_of_week = 'WEDNESDAY'
-      //     }
-      //     if(day === 4) {
-      //       day_of_week = 'THURSDAY'
-      //     }
-      //     if(day === 5) {
-      //       day_of_week = 'FRIDAY'
-      //     }
-      //     if(day === 6) {
-      //       day_of_week = 'SATURDAY'
-      //     }
-      //     if(day === 7) {
-      //       day_of_week = 'SUNDAY'
-      //     }
-      //     value['day'] = day_of_week
-      //     dates.push(value.date)
-      //     allcollections = { coaches: collections, schedules: value}
-      //     new_collections.push(allcollections)
-      //   })
-      //   this.date_collections = dates
-      //   this.new_collections = new_collections
-      //   console.log(new_collections)
-      //   this.loading = false
-      // },
+      async read() {
+        this.loading = true
+        const res = await fetch('/api/v1/coaches/schedule');
+        const data = await res.json();
+        this.data = data.data;
+        this.schedules = this.data.schedules
+        this.coaches = this.selected.coaches
+        // console.log(this.schedules, 's')
+        // console.log(this.coaches,'x')
+        this.mapData()
+      },
       handleClose() {
         this.session_type = ''
         this.profileTitle = ''

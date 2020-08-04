@@ -168,7 +168,13 @@ label#id-4 span {
     padding: 0 !important;
     border: none !important;
 }
-
+tr.el-table__row.current-row.this-is-active .coaches-list-icons {
+    /*display: block !important;*/
+    visibility: visible;
+}
+.coaches-list-icons {
+    visibility: hidden;
+}
 .el-input__inner {
     border: 1px solid rgba(220, 223, 230, 0.35) !important;
     color: #d6d6d6 !important;
