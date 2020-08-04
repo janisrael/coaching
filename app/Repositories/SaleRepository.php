@@ -2,12 +2,12 @@
 
 namespace App\Repositories;
 
-use App\Repositories\Interfaces\ScheduleRepositoryInterface;
+use App\Repositories\Interfaces\SaleRepositoryInterface;
 use Faker\Factory;
 use learntotrade\salesforce\CoachingSession;
 use learntotrade\salesforce\fields\CoachingSessionFields;
 
-class ScheduleRepository implements ScheduleRepositoryInterface
+class SaleRepository implements SaleRepositoryInterface
 {
     private $result = [];
 
