@@ -39,16 +39,9 @@
                   <template slot-scope="scope">
                     <el-col :xs="4" :sm="5" :md="5" :lg="5" :xl="5" class="avatar-wrapper">
                       <el-avatar :size="60" :src="scope.row.avatar" class="dbl-border">
-                        <img v-if="scope.row.avatar === null || scope.row.avatar === 'null'" :src="default_image"/>
-                        <img v-else :src="scope.row.avatar"/>
+                        <img v-if="scope.row.coach_image === null || scope.row.coach_image === 'null'" :src="default_image"/>
+                        <img v-else :src="scope.row.coach_image"/>
                       </el-avatar>
-<!--                      <el-avatar v-if="scope.row.avatar === null" :size="60" :src="scope.row.avatar" class="dbl-border">-->
-<!--                        <img v-if="scope.row.avatar === null || scope.row.avatar === 'null'" :src="default_image"/>-->
-<!--                      </el-avatar>-->
-<!--                      <el-avatar v-else :size="60" :src="scope.row.avatar" class="dbl-border">-->
-<!--                        <img v-if="scope.row.avatar.includes('dropbox')" :src="default_image"/>-->
-<!--                        <img v-else :src="scope.row.avatar"/>-->
-<!--                      </el-avatar>-->
                     </el-col>
                     <el-col :xs="20" :sm="19" :md="19" :lg="19" :xl="19" style="display: inline-block; padding-left: 10px;">
                       <div class="flag-container">
@@ -74,16 +67,10 @@
                             <span>{{st}}</span><span v-if="index+1 < scope.row.style.length">, </span>
                           </span>
                         </div>
-<!--                        <div class="left-list-sub">-->
-<!--                          <span v-for="lang in scope.row.languages">{{ lang }}, </span>-->
-<!--                        </div>-->
                       </span>
-
                       <span class="coaches-mobile">
                         <div class="left-list-sub">Experience - {{ scope.row.experience }} years</div>
                       </span>
-
-
                       <div class="coaches-list-icons">
                         <el-badge :value="1" class="item">
                           <i class="fa fa-calendar-check left-list-badge-icon" aria-hidden="true" style="color: #617da5"></i>
@@ -96,7 +83,6 @@
                         </el-badge>
                       </div>
                     </el-col>
-
                   </template>
                 </el-table-column>
 
@@ -104,10 +90,9 @@
             </div>
           </div>
         </el-col>
-        <el-col v-loading="loading" element-loading-text="Loading..." element-loading-spinner="el-icon-loading" element-loading-background="rgba(0, 0, 0, 0.8)" :xs="12" :sm="17" :md="16" :lg="18" :xl="18" class="full-height index-col-right" style="background-image: url('../../images/background.jpg'); background-size: cover;">
-          <!--                <div class="grid-content bg-purple-dark">asdasd</div>-->
+        <el-col :xs="12" :sm="17" :md="16" :lg="18" :xl="18" class="full-height index-col-right" style="background-image: url('../../images/background.jpg'); background-size: cover;">
           <content-component v-if="loading === false" :selected="passData"></content-component>
-          <session-component v-if="loading === false" :selected="for_sessiondata"></session-component>
+          <session-component :selected="for_sessiondata"></session-component>
         </el-col>
       </el-col>
 
@@ -134,7 +119,7 @@
                     v-model="value_range"
                     range
                     show-stops
-                    :max="30"
+                    :max="100"
                   @change="setrange()">
                   </el-slider>
                 </div>
@@ -164,9 +149,7 @@
         <el-button @click="handleFilter()" type="success">Update</el-button>
       </span>
       </el-dialog>
-
       <!--      search modal for mobile-->
-
       <el-dialog id="dialogSearch" title="Search" :visible.sync="searchModal" top="0%" style="width: 100%; height: 100%;">
         <el-row>
           <el-col :span="24" class="filter-blocks">
@@ -183,9 +166,7 @@
         <el-button @click="searchCoach()" type="success">OK</el-button>
       </span>
       </el-dialog>
-
     </el-row>
-    <!--    <component ref="modalComponent" :is="importComponent" :selected="selected" @clear="clear()"/>-->
   </div>
 
 </template>
@@ -225,7 +206,7 @@
         ex_from: '',
         ex_to: '',
         range: '',
-        value_range: [0,30],
+        value_range: [0,100],
         final_range: [],
         val: 0,
         selectedTags: [],
@@ -238,14 +219,13 @@
     },
     computed: {
       activeCards: function() {
-        // this.selectedTags.push(this.value_range[0]);
         var activeCards = [];
         var filters = this.selectedTags;
         var start = this.final_range[0]
 
         var end = this.final_range[1]
-        if(this.selectedTags.length == 0) {
-          if(this.final_range[0] === 0 && this.final_range[1] === 30){
+        if(this.selectedTags.length === 0) {
+          if(this.final_range[0] === 0 && this.final_range[1] === 100){
             return this.coaches;
           } else {
             this.coaches.forEach(function(card) {
@@ -299,10 +279,6 @@
       this.setrange()
     },
     methods: {
-      // default() {
-      //   this.final_range[0] = this.value_range[0]
-      //   this.final_range[1] = this.value_range[1]
-      // },
       setrange() {
         this.final_range[0] = this.value_range[0]
         this.final_range[1] = this.value_range[1]
@@ -328,14 +304,7 @@
       callFilter() {
         this.reset = this.selectedTags
         this.filterDialog = true
-        // this.importComponent = FilterComponent
-        // this.selected = this.options
-        // setTimeout(() => this.ex_callmodal(), 1)
-        // this.dialogFormVisible = true
       },
-      // ex_callmodal() {
-      //   this.$refs.modalComponent.show()
-      // },
       left() {
         $(".cata-sub-nav").on("scroll", function () {
           this.val = $(this).scrollLeft();
@@ -353,7 +322,6 @@
           }
 
         });
-        // console.log("init-scroll: " + $(".nav-next").scrollLeft());
         $(".nav-next").on("click", function () {
           $(".cata-sub-nav").animate({ scrollLeft: "+=460" }, 200);
         });
@@ -363,15 +331,14 @@
       },
       clear() {
         this.preselectedTags = []
-        this.value_range = [0,30]
+        this.value_range = [0,100]
       },
       handleFilter() {
-        // this.coaches = []
         if(this.value_range[0] === '') {
           this.value_range[0] = 0
         }
         if(this.value_range[1] === '') {
-          this.value_range[1] = 30
+          this.value_range[1] = 100
         }
         this.selectedTags = []
         this.reset = this.preselectedTags
