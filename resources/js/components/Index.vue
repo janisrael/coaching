@@ -287,7 +287,6 @@
         const res = await fetch('/api/v1/coaches');
         const data = await res.json();
         this.data = data.data;
-        this.for_sessiondata = this.data
         this.options = this.data.options
         this.coaches = this.data.coaches
         this.reset = this.coaches
@@ -296,6 +295,7 @@
       },
       loadDefault(data) {
         this.getSummary(data.coaches[0])
+        this.for_sessiondata = this.data
         this.loading = false
       },
       getSummary(row) {

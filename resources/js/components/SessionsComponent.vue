@@ -330,8 +330,12 @@
       }
     },
     created: function() {
-      this.session_data = this.selected.coaches
       this.loading = true
+      console.log('start',this.selected)
+
+      this.session_data = this.selected.coaches
+
+
       this.read()
       this.getDate()
 
@@ -343,14 +347,13 @@
         const data = await res.json();
         this.data = data.data;
         this.schedules = this.data.schedules
-        this.coaches = this.data.coaches
-        this.loading = false
-        this.mapData()
-      },
-      mapData() {
+        this.coaches = this.selected.coaches
+        console.log(this.schedules, 's')
+        console.log(this.coaches,'x')
+        // this.mapData()
         var collections = []
         var new_collections = []
-        var coach = this.selected.coaches
+        var coach = this.coaches
         var sched = this.schedules
         var allcollections = []
         var dates = []
@@ -395,6 +398,56 @@
         console.log(new_collections)
         this.loading = false
       },
+      // mapData() {
+      //   var collections = []
+      //   var new_collections = []
+      //   var coach = this.selected.coaches
+      //   var sched = this.schedules
+      //   console.log('session coach', coach)
+      //   console.log('session sched', sched)
+      //   var allcollections = []
+      //   var dates = []
+      //   var days = []
+      //   sched.forEach(function(value, index) {
+      //     coach.forEach(function(coachvalue, index) {
+      //       if(value.coach_id === coachvalue.id) {
+      //         collections = coachvalue
+      //       }
+      //     })
+      //     var newday = new Date(value.date)
+      //     var day = newday.getDay()
+      //     var day_of_week = ''
+      //     if(day === 1) {
+      //       day_of_week = 'MONDAY'
+      //     }
+      //     if(day === 2) {
+      //       day_of_week = 'TUESDAY'
+      //     }
+      //     if(day === 3) {
+      //       day_of_week = 'WEDNESDAY'
+      //     }
+      //     if(day === 4) {
+      //       day_of_week = 'THURSDAY'
+      //     }
+      //     if(day === 5) {
+      //       day_of_week = 'FRIDAY'
+      //     }
+      //     if(day === 6) {
+      //       day_of_week = 'SATURDAY'
+      //     }
+      //     if(day === 7) {
+      //       day_of_week = 'SUNDAY'
+      //     }
+      //     value['day'] = day_of_week
+      //     dates.push(value.date)
+      //     allcollections = { coaches: collections, schedules: value}
+      //     new_collections.push(allcollections)
+      //   })
+      //   this.date_collections = dates
+      //   this.new_collections = new_collections
+      //   console.log(new_collections)
+      //   this.loading = false
+      // },
       handleClose() {
         this.session_type = ''
         this.profileTitle = ''
