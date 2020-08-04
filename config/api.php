@@ -57,19 +57,6 @@ return [
         'region' => $userFields::REGION,
     ],
 
-    'schedule' => [
-        'id' => 'idNumber',
-        'date' => '',
-        'start_time' => '',
-        'end_time' => '',
-        'status' => ['Pending', 'Booked', 'Attended', 'Cancelled'],
-        'availability_type' => ['Can do either', 'Remote Only', 'In-house only', 'Group'],
-        'coach_id' => '',
-        'location' => ['Inhouse', 'Remote'],
-        'sale_id' => '',
-        'customer_name' => ''
-    ],
-
     'sf_schedule' => [
         'id' => 'Id',
         'date' => $coachingSessionFields::DATE,
@@ -82,20 +69,6 @@ return [
         'sale_id' => $coachingSessionFields::SALE,
         'customer_name' => $coachingSessionFields::CUSTOMER_NAME,
         'zoom_url' => $coachingSessionFields::ZOOM_URL,
-    ],
-
-    'sale' => [
-        'id' => 'idNumber',
-        'customer' => '',
-        'date' => '', 
-        'record_type_id' => '',
-        'product' => '',
-        'sessions' => '',
-        'sessions_remaining' => '',
-        'sessions_booked' => '',
-        'sessions_cancelled' => '',
-        'sessions_recredited' => '',
-        'sessions_expiry' => '',
     ],
 
     'sf_sale' => [

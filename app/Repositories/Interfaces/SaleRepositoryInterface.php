@@ -9,6 +9,4 @@ interface SaleRepositoryInterface
     public function dummy(): void;
     
     public function live(): void;
-
-    public function getResult(): array;
 }

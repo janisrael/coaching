@@ -37,14 +37,6 @@ class ScheduleRepository implements ScheduleRepositoryInterface
         ];
     }
 
-    public function dummy(): void
-    {
-        $this->result = [
-            'data' => [],
-            'options' => [],
-        ];
-    }
-
     public function live(): void
     {
         $data = [];
@@ -56,8 +48,6 @@ class ScheduleRepository implements ScheduleRepositoryInterface
         );
 
         if (count($sf)) {
-
-            $row = [];
             foreach ($sf['records'] as $field => $value) {
                 foreach (config('api.sf_schedule') as $key => $val) {
 
@@ -74,15 +64,22 @@ class ScheduleRepository implements ScheduleRepositoryInterface
                             }
                         }
                     }
-                    $row[$field][$key] = $value[$val];
+                    $data[$field][$key] = $value[$val];
                 }
             }
-            $data = $row;
         }
 
         $this->result = [
             'data' => $data,
             'options' => $options,
+        ];
+    }
+
+    public function dummy(): void
+    {
+        $this->result = [
+            'data' => [],
+            'options' => [],
         ];
     }
 

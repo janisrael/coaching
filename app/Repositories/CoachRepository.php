@@ -81,9 +81,6 @@ class CoachRepository implements CoachRepositoryInterface
         );
 
         if (count($sf)) {
-
-            $row = [];
-            
             foreach ($sf['records'] as $field => $value) {
                 foreach (config('api.sf_coaches') as $key => $val) {
 
@@ -101,7 +98,7 @@ class CoachRepository implements CoachRepositoryInterface
                         }
                     }
 
-                    $row[$field][$key] = $value[$val];
+                    $data[$field][$key] = $value[$val];
                 }
 
                 // Set Country Name by Country Code
@@ -109,10 +106,8 @@ class CoachRepository implements CoachRepositoryInterface
                 if (isset($value[UserFields::COACH_COUNTRY])) {
                     $country = __('country.'.$value[UserFields::COACH_COUNTRY]);
                 }
-                $row[$field]['country'] = $country;
+                $data[$field]['country'] = $country;
             }
-
-            $data = $row;
         }
 
         $this->result = [
