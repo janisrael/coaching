@@ -6,15 +6,19 @@
       <div style="display: block;">
         <div v-for="filter in filters" style="display: inline-block;">
           <div class="desktop-session-filter">
-          <el-checkbox :id="'id-' + filter.id" :value="filter.name" v-model="checkedFilters" :class="['obj-' + filter.id]" :label="filter.name">
+          <el-checkbox :id="'id-' + filter.id" :value="filter.tag" v-model="checkedFilters" :class="['obj-' + filter.id]" :label="filter.tag">
+            <span v-if="filter.tag === 'Pending'">MENTOR AVAILABLE</span>
+            <span v-if="filter.tag === 'Booked'">BOOKED SESSIONS</span>
+            <span v-if="filter.tag === 'Attended'">ATTENDED SESSIONS</span>
+            <span v-if="filter.tag === 'Cancelled'">NO SHOW SESSIONS</span>
           </el-checkbox>
           </div>
           <div class="mobile-session-filter">
-            <el-checkbox :id="'id-' + filter.id" :value="filter.name" v-model="checkedFilters" :class="['obj-' + filter.id]" :label="filter.name">
-              <span v-if="filter.name === 'MENTOR AVAILABLE'"><i class="far fa-clock"></i></span>
-              <span v-if="filter.name === 'BOOKED SESSIONS'"><i class="fa fa-calendar-check" aria-hidden="true"></i></span>
-              <span v-if="filter.name === 'ATTENDED SESSIONS'"><i class="el-icon-circle-check"></i></span>
-              <span v-if="filter.name === 'NO SHOW SESSIONS'"> <i class="fa fa-ban" aria-hidden="true"></i></span>
+            <el-checkbox :id="'id-' + filter.id" :value="filter.tag" v-model="checkedFilters" :class="['obj-' + filter.id]" :label="filter.name">
+              <span v-if="filter.tag === 'Pending'"><i class="far fa-clock"></i></span>
+              <span v-if="filter.tag === 'Booked'"><i class="fa fa-calendar-check" aria-hidden="true"></i></span>
+              <span v-if="filter.tag === 'Attended'"><i class="el-icon-circle-check"></i></span>
+              <span v-if="filter.tag === 'Cancelled'"> <i class="fa fa-ban" aria-hidden="true"></i></span>
             </el-checkbox>
           </div>
         </div>
@@ -138,7 +142,7 @@
       id="sessionProfiledialog"
       :title="profileTitle"
       :visible.sync="dialogItem"
-      width="40%">
+      width="45%">
       <div class="dialog-header">
         <span>
           <span v-if="session_type === 1" style="color: #b8e986;"><i class="far fa-clock"></i></span>
@@ -199,12 +203,19 @@
           </div>
         </el-col>
       </el-row>
-        <span slot="footer" class="dialog-footer">
+      <span slot="footer" class="dialog-footer">
         <span v-if="session_type === 1">
           <el-link @click="handleClose()" style="color: #fff; margin-right: 20px;">Cancel</el-link>
           <el-button @click="handleClose()" size="small" type="success">Confirm</el-button>
         </span>
         <span v-else-if="session_type === 2">
+          <el-alert
+            id="alertBookSession"
+            title="To cancel a session you must give at least 24 hours notice."
+            type="warning"
+            show-icon
+            style="width: 70%; float:left;">
+          </el-alert>
           <el-link @click="handleClose()" style="color: #fff; margin-right: 20px;">Delete Booking</el-link>
           <el-button @click="handleClose()" size="small" type="success">Update</el-button>
         </span>
@@ -237,131 +248,146 @@
             session_type: 2,
             user_id: '00520000002qtm3AAA',
             date: '2020-08-03',
-            availability_type: ['Group']
+            availability_type: ['Group'],
+            status: 'Booked'
           },
           {
             name: "MENTOR AVAILABLE",
             session_type: 1,
             user_id: '00520000002qtmXAAQ',
             date: '2020-08-08',
-            availability_type: ['Can do either','Remote only','In-house only','Group']
+            availability_type: ['Can do either','Remote only','In-house only','Group'],
+            status: 'Pending'
           },
           {
             name: "BOOKED SESSIONS",
             session_type: 2,
             user_id: '0050Q000004EkGZQA0',
             date: '2020-08-08',
-            availability_type: ['In-house only','Group']
+            availability_type: ['In-house only','Group'],
+            status: 'Booked'
           },
           {
             name: "BOOKED SESSIONS",
             session_type: 2,
             user_id: '0050Q000004EkGZQA0',
             date: '2020-08-08',
-            availability_type: ['Can do either','Remote only','In-house only','Group']
+            availability_type: ['Can do either','Remote only','In-house only','Group'],
+            status: 'Booked'
           },
           {
             name: "BOOKED SESSIONS",
             session_type: 2,
             user_id: '0050Q000004EkGZQA0',
             date: '2020-08-08',
-            availability_type: ['Can do either']
+            availability_type: ['Can do either'],
+            status: 'Booked'
           },
           {
             name: "BOOKED SESSIONS",
             session_type: 2,
             user_id: '0050Q000004EkGZQA0',
             date: '2020-08-08',
-            availability_type: ['In-house only']
+            availability_type: ['In-house only'],
+            status: 'Booked'
           },
           {
             name: "ATTENDED SESSIONS",
             session_type: 3,
             user_id: '0050Q000004EkGZQA0',
             date: '2020-08-09',
-            availability_type: ['Can do either','Remote only','In-house only','Group']
+            availability_type: ['Can do either','Remote only','In-house only','Group'],
+            status: 'Attended'
           },
           {
             name: "ATTENDED SESSIONS",
             session_type: 3,
             user_id: '0050Q000004EkGZQA0',
             date: '2020-08-08',
-            availability_type: ['Remote only']
+            availability_type: ['Remote only'],
+            status: 'Attended'
           },
           {
             name: "ATTENDED SESSIONS",
             session_type: 3,
             user_id: '0050Q000004EkGZQA0',
             date: '2020-08-08',
-            availability_type: ['In-house only']
+            availability_type: ['In-house only'],
+            status: 'Attended'
           },
           {
             name: "ATTENDED SESSIONS",
             session_type: 3,
             user_id: '00520000002qtmUAAQ',
             date: '2020-08-10',
-            availability_type: ['In-house only']
+            availability_type: ['In-house only'],
+            status: 'Attended'
           },
           {
             name: "ATTENDED SESSIONS",
             session_type: 3,
             user_id: '0050Q000004EkGZQA0',
             date: '2020-08-08',
-            availability_type: ['In-house only']
+            availability_type: ['In-house only'],
+            status: 'Attended'
           },
           {
             name: "NO SHOW SESSIONS",
             session_type: 4,
             user_id: '0050Q000004EkGZQA0',
             date: '2020-08-08',
-            availability_type: ['Can do either','Remote only','In-house only','Group']
+            availability_type: ['Can do either','Remote only','In-house only','Group'],
+            status: 'Cancelled'
           },
           {
             name: "NO SHOW SESSIONS",
             session_type: 4,
             user_id: '0050Q000004EkGZQA0',
             date: '2020-08-08',
-            availability_type: ['Can do either','Remote only','In-house only','Group']
+            availability_type: ['Can do either','Remote only','In-house only','Group'],
+            status: 'Cancelled'
           },
           {
             name: "NO SHOW SESSIONS",
             session_type: 4,
             user_id: '0050Q000004EkGZQA0',
             date: '2020-08-08',
-            availability_type: ['Group']
+            availability_type: ['Group'],
+            status: 'Cancelled'
           },
           {
             name: "NO SHOW SESSIONS",
             session_type: 4,
             user_id: '005w00000049dvgAAA',
             date: '2020-08-29',
-            availability_type: ['Group']
+            availability_type: ['Group'],
+            status: 'Cancelled'
           }
         ],
         filters: [
           {
             name: 'MENTOR AVAILABLE',
-            tag: 'mentor',
+            tag: 'Pending',
             id: 1
           },
           {
             name: 'BOOKED SESSIONS',
-            tag: 'booked',
+            tag: 'Booked',
             id: 2
           },
           {
             name: 'ATTENDED SESSIONS',
-            tag: 'attended',
+            tag: 'Attended',
             id: 3
           },
           {
             name: 'NO SHOW SESSIONS',
-            tag: 'noshow',
+            tag: 'Cancelled',
             id: 4
           }
         ],
         range_sep: "",
-        checkedFilters: ['MENTOR AVAILABLE', 'BOOKED SESSIONS','ATTENDED SESSIONS','NO SHOW SESSIONS'],
+        checkedFilters: ['Pending', 'Booked','Attended','Cancelled'],
         datefilter: ['2020-8-29'],
         currentDate: '',
         profileTitle: '',
@@ -382,13 +408,13 @@
       filteredPositions () {
         console.log(this.date_collections)
         if(this.datefilter === '' || this.datefilter === null) {
-            return this.new_collections.filter(position => this.checkedFilters.includes(position.schedules.name));
+            return this.new_collections.filter(position => this.checkedFilters.includes(position.schedules.status));
         } else {
           if(this.datefilter.length > 1) {
-            var xx = this.new_collections.filter(position => this.checkedFilters.includes(position.schedules.name));
-            return xx.filter(position => (this.date_collections[0] <= position.schedules.date) && (this.date_collections[1] >= position.schedules.date))
+            var data = this.new_collections.filter(position => this.checkedFilters.includes(position.schedules.status));
+            return data.filter(position => (this.date_collections[0] <= position.schedules.date) && (this.date_collections[1] >= position.schedules.date))
           }
-          return this.new_collections.filter(position => this.checkedFilters.includes(position.schedules.name));
+          return this.new_collections.filter(position => this.checkedFilters.includes(position.schedules.status));
         }
       }
     },
@@ -468,18 +494,15 @@
 
       },
       checkDate: function(){
-
         if(this.datefilter === null) {
           this.range_sep = ''
         } else {
-          var xx = []
-          xx.push(this.$moment(this.datefilter[0]).format('YYYY-MM-DD'))
-          xx.push(this.$moment(this.datefilter[1]).format('YYYY-MM-DD'))
+          var data = []
+          data.push(this.$moment(this.datefilter[0]).format('YYYY-MM-DD'))
+          data.push(this.$moment(this.datefilter[1]).format('YYYY-MM-DD'))
           this.date_collections = xx
           this.range_sep = '-'
         }
-
-
       }
     }
   }

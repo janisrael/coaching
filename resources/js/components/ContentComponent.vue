@@ -32,7 +32,7 @@
         </el-avatar>
       </div>
       <div style="display: inline-block; width: 70%; padding-left: 15px;">
-        <div class="right-detail-header">{{ selected.first_name }} {{ selected.last_name }}</div>
+        <div class="right-detail-header" style="color: #fff !important;">{{ selected.first_name }} {{ selected.last_name }}</div>
         <div class="right-list-sub">
           <div style="display: inline-block; float: left; margin-left: -15px;">
             <country-flag v-if="selected.country_code === null" country='' size='normal'/>
@@ -44,7 +44,7 @@
       </div>
       <div style="display: block; padding: 20px;">
         <div class="info-head">Experience</div>
-        <span class="info-sub">{{ selected.experience_summary }}</span>
+        <span class="info-sub">{{ getPostBody(selected.experience_summary) }}</span>
       </div>
       <div style="display: block; padding: 20px; padding-bottom: 10px;">
         <div class="info-head">Markets Traded</div>
@@ -80,6 +80,14 @@
       }
     },
     methods: {
+      getPostBody (post) {
+        let body = this.stripTags(post);
+
+        return body.length > 300 ? body.substring(0, 300) + '... Read more' : body;
+      },
+      stripTags (text) {
+        return text.replace(/(<([^>]+)>)/ig, '');
+      },
       showInfo() {
         this.dialogProfile = true
         console.log(this.selected.profile)

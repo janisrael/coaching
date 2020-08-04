@@ -134,7 +134,7 @@
                     v-model="value_range"
                     range
                     show-stops
-                    :max="30"
+                    :max="100"
                   @change="setrange()">
                   </el-slider>
                 </div>
@@ -225,7 +225,7 @@
         ex_from: '',
         ex_to: '',
         range: '',
-        value_range: [0,30],
+        value_range: [0,100],
         final_range: [],
         val: 0,
         selectedTags: [],
@@ -245,7 +245,7 @@
 
         var end = this.final_range[1]
         if(this.selectedTags.length == 0) {
-          if(this.final_range[0] === 0 && this.final_range[1] === 30){
+          if(this.final_range[0] === 0 && this.final_range[1] === 100){
             return this.coaches;
           } else {
             this.coaches.forEach(function(card) {
@@ -363,7 +363,7 @@
       },
       clear() {
         this.preselectedTags = []
-        this.value_range = [0,30]
+        this.value_range = [0,100]
       },
       handleFilter() {
         // this.coaches = []
@@ -371,7 +371,7 @@
           this.value_range[0] = 0
         }
         if(this.value_range[1] === '') {
-          this.value_range[1] = 30
+          this.value_range[1] = 100
         }
         this.selectedTags = []
         this.reset = this.preselectedTags

@@ -242,6 +242,14 @@ span.dbl-border.el-avatar.el-avatar--circle {
     border-color: #bfdcff;
 }
 
+#alertBookSession {
+    background-color: rgba(255, 111, 111, 0.15) !important;
+    color: rgb(255, 255, 255) !important;
+    width: 70% !important;
+    float:left !important;
+    border: 1px solid #ff3e3e !important;
+}
+
 .right-list-container {
     display: inline-block;
     width: 80%;
