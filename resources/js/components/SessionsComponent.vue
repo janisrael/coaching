@@ -14,7 +14,7 @@
           </el-checkbox>
           </div>
           <div class="mobile-session-filter">
-            <el-checkbox :id="'id-' + filter.id" :value="filter.tag" v-model="checkedFilters" :class="['obj-' + filter.id]" :label="filter.name">
+            <el-checkbox :id="'id-' + filter.id" :value="filter.tag" v-model="checkedFilters" :class="['obj-' + filter.id]" :label="filter.tag">
               <span v-if="filter.tag === 'Pending'"><i class="far fa-clock"></i></span>
               <span v-if="filter.tag === 'Booked'"><i class="fa fa-calendar-check" aria-hidden="true"></i></span>
               <span v-if="filter.tag === 'Attended'"><i class="el-icon-circle-check"></i></span>
@@ -68,30 +68,18 @@
           </el-popover>
         </div>
       </div>
-      <el-col :span="24" class="session-items-container">
+      <el-col v-loading="loading" element-loading-text="Loading Schedules..." element-loading-spinner="el-icon-loading" element-loading-background="rgba(0, 0, 0, 0.21)":span="24" class="session-items-container">
         <div v-for="position in filteredPositions">
         <transition name="el-fade-in">
-        <div v-if="position.schedules.session_type === 1" class="list-item" @click="dialogMentor(position)">
-          <el-col :xs="18" :sm="19" :md="20" :lg="22" :xl="22" :class="['list-' + position.schedules.session_type, 'session-listitem']">
+        <div v-if="position.schedules.status === 'Pending'" class="list-item" @click="dialogMentor(position)">
+          <el-col :xs="18" :sm="19" :md="20" :lg="22" :xl="22" :class="['list-' + position.schedules.status, 'session-listitem']">
             <span style="width: 15px; display: inline-block"><i class="far fa-clock"></i></span>
-            <el-avatar :size="60" :src="position.coaches.avatar" class="session-list-avatar">
-              <img :src="position.coaches.avatar"/>
+            <el-avatar :size="60" :src="position.coaches.coach_image" class="session-list-avatar">
+              <img :src="position.coaches.coach_image"/>
             </el-avatar>
-            <span class="session-list-time">{{ position.schedules.date }}</span>
-          </el-col>
-          <el-col :xs="6" :sm="5" :md="4" :lg="2" :xl="2" v-if="position.schedules.session_type === 1" :class="['list-' + position.schedules.session_type, 'list-item-btn']">
-            <span>BOOK</span>
-          </el-col>
-        </div>
-
-        <div v-if="position.schedules.session_type === 2" class="list-item" @click="dialogMentor(position)">
-          <el-col :xs="18" :sm="19" :md="20" :lg="22" :xl="22" :class="['list-' + position.schedules.session_type, 'session-listitem']">
-            <span style="width: 15px; display: inline-block"><i class="fa fa-calendar-check" aria-hidden="true"></i></span>
-            <el-avatar :size="60" :src="position.coaches.avatar" class="session-list-avatar">
-              <img :src="selected.coaches.avatar"/>
-            </el-avatar>
-<!--            {{ position.schedules.availability_type }}-->
-            <span class="session-list-time">{{ position.schedules.date }}</span>
+            <span class="session-list-time">
+              {{ position.schedules.start_time }}  {{ position.schedules.day}}  {{ position.schedules.date}}
+            </span>
             <span v-if="position.schedules.availability_type.includes('Can do either')">
               <span><i class="fas fa-headset" style="font-size: 14px"></i></span>
               <span><i class="fa fa-user" style="font-size: 14px"></i></span>
@@ -102,35 +90,84 @@
               <span v-if="position.schedules.availability_type.includes('In-house only')"><i class="fa fa-user" style="font-size: 14px"></i></span>
               <span v-if="position.schedules.availability_type.includes('Group')"><i class="fa fa-users" style="font-size: 14px"></i></span>
             </span>
-            <div class="session-list-time session-list-time-calendar" @click="alert('test')"><i class="fas fa-calendar-plus" style="margin-right:10px;"></i><span class="session-calendar-caption">CALENDAR</span></div>
           </el-col>
-          <el-col :xs="6" :sm="5" :md="4" :lg="2" :xl="2" v-if="position.schedules.session_type === 2" :class="['list-' + position.schedules.session_type, 'list-item-btn']">
+          <el-col :xs="6" :sm="5" :md="4" :lg="2" :xl="2" v-if="position.schedules.status === 'Pending'" :class="['list-' + position.schedules.status, 'list-item-btn']">
+            <span>BOOK</span>
+          </el-col>
+        </div>
+
+        <div v-if="position.schedules.status === 'Booked'" class="list-item" @click="dialogMentor(position)">
+          <el-col :xs="18" :sm="19" :md="20" :lg="22" :xl="22" :class="['list-' + position.schedules.status, 'session-listitem']">
+            <span style="width: 15px; display: inline-block"><i class="fa fa-calendar-check" aria-hidden="true"></i></span>
+            <el-avatar :size="60" :src="position.coaches.coach_image" class="session-list-avatar">
+              <img :src="selected.coaches.coach_image"/>
+            </el-avatar>
+            <span class="session-list-time">
+               {{ position.schedules.start_time }}  {{ position.schedules.day}}  {{ position.schedules.date}}
+            </span>
+            <span v-if="position.schedules.availability_type.includes('Can do either')">
+              <span><i class="fas fa-headset" style="font-size: 14px"></i></span>
+              <span><i class="fa fa-user" style="font-size: 14px"></i></span>
+              <span><i class="fa fa-users" style="font-size: 14px"></i></span>
+            </span>
+            <span v-else>
+              <span v-if="position.schedules.availability_type.includes('Remote only')"><i class="fas fa-headset" style="font-size: 14px"></i></span>
+              <span v-if="position.schedules.availability_type.includes('In-house only')"><i class="fa fa-user" style="font-size: 14px"></i></span>
+              <span v-if="position.schedules.availability_type.includes('Group')"><i class="fa fa-users" style="font-size: 14px"></i></span>
+            </span>
+<!--            <div class="session-list-time session-list-time-calendar" @click="alert('test')"><i class="fas fa-calendar-plus" style="margin-right:10px;"></i><span class="session-calendar-caption">CALENDAR</span></div>-->
+          </el-col>
+          <el-col :xs="6" :sm="5" :md="4" :lg="2" :xl="2" v-if="position.schedules.status === 'Booked'" :class="['list-' + position.schedules.status, 'list-item-btn']">
             <span>VIEW</span>
           </el-col>
         </div>
 
-        <div v-if="position.schedules.session_type === 3" class="list-item" @click="dialogMentor(position)">
-          <el-col :xs="18" :sm="19" :md="20" :lg="22" :xl="22" :class="['list-' + position.schedules.session_type, 'session-listitem']">
+        <div v-if="position.schedules.status === 'Attended'" class="list-item" @click="dialogMentor(position)">
+          <el-col :xs="18" :sm="19" :md="20" :lg="22" :xl="22" :class="['list-' + position.schedules.status, 'session-listitem']">
             <span style="width: 15px; display: inline-block"> <i class="el-icon-circle-check"></i></span>
-            <el-avatar :size="60" :src="position.coaches.avatar" class="session-list-avatar">
-              <img :src="position.coaches.avatar"/>
+            <el-avatar :size="60" :src="position.coaches.coach_image" class="session-list-avatar">
+              <img :src="position.coaches.coach_image"/>
             </el-avatar>
-            <span class="session-list-time">{{ position.schedules.date }}</span>
+            <span class="session-list-time">
+             {{ position.schedules.start_time }}  {{ position.schedules.day}}  {{ position.schedules.date}}
+            </span>
+            <span v-if="position.schedules.availability_type.includes('Can do either')">
+              <span><i class="fas fa-headset" style="font-size: 14px"></i></span>
+              <span><i class="fa fa-user" style="font-size: 14px"></i></span>
+              <span><i class="fa fa-users" style="font-size: 14px"></i></span>
+            </span>
+            <span v-else>
+              <span v-if="position.schedules.availability_type.includes('Remote only')"><i class="fas fa-headset" style="font-size: 14px"></i></span>
+              <span v-if="position.schedules.availability_type.includes('In-house only')"><i class="fa fa-user" style="font-size: 14px"></i></span>
+              <span v-if="position.schedules.availability_type.includes('Group')"><i class="fa fa-users" style="font-size: 14px"></i></span>
+            </span>
           </el-col>
-          <el-col :xs="6" :sm="5" :md="4" :lg="2" :xl="2" v-if="position.schedules.session_type === 3" :class="['list-' + position.schedules.session_type, 'list-item-btn']">
+          <el-col :xs="6" :sm="5" :md="4" :lg="2" :xl="2" v-if="position.schedules.status === 'Attended'" :class="['list-' + position.schedules.status, 'list-item-btn']">
             <span>VIEW</span>
           </el-col>
         </div>
 
-        <div v-if="position.schedules.session_type === 4" class="list-item" @click="dialogMentor(position)">
-          <el-col :xs="18" :sm="19" :md="20" :lg="22" :xl="22" :class="['list-' + position.schedules.session_type, 'session-listitem']">
+        <div v-if="position.schedules.status === 'Attended'" class="list-item" @click="dialogMentor(position)">
+          <el-col :xs="18" :sm="19" :md="20" :lg="22" :xl="22" :class="['list-' + position.schedules.status, 'session-listitem']">
             <span style="width: 15px; display: inline-block"><i class="fa fa-ban" aria-hidden="true"></i></span>
-            <el-avatar :size="60" :src="position.coaches.avatar" class="session-list-avatar">
-              <img :src="position.coaches.avatar"/>
+            <el-avatar :size="60" :src="position.coaches.coach_image" class="session-list-avatar">
+              <img :src="position.coaches.coach_image"/>
             </el-avatar>
-            <span class="session-list-time">{{ position.schedules.date }}</span>
+            <span class="session-list-time">
+               {{ position.schedules.start_time }}  {{ position.schedules.day}}  {{ position.schedules.date}}
+            </span>
+            <span v-if="position.schedules.availability_type.includes('Can do either')">
+              <span><i class="fas fa-headset" style="font-size: 14px"></i></span>
+              <span><i class="fa fa-user" style="font-size: 14px"></i></span>
+              <span><i class="fa fa-users" style="font-size: 14px"></i></span>
+            </span>
+            <span v-else>
+              <span v-if="position.schedules.availability_type.includes('Remote only')"><i class="fas fa-headset" style="font-size: 14px"></i></span>
+              <span v-if="position.schedules.availability_type.includes('In-house only')"><i class="fa fa-user" style="font-size: 14px"></i></span>
+              <span v-if="position.schedules.availability_type.includes('Group')"><i class="fa fa-users" style="font-size: 14px"></i></span>
+            </span>
           </el-col>
-          <el-col :xs="6" :sm="5" :md="4" :lg="2" :xl="2" v-if="position.schedules.session_type === 4" :class="['list-' + position.schedules.session_type, 'list-item-btn']">
+          <el-col :xs="6" :sm="5" :md="4" :lg="2" :xl="2" v-if="position.schedules.status === 'Attended'" :class="['list-' + position.schedules.status, 'list-item-btn']">
             <span>VIEW</span>
           </el-col>
         </div>
@@ -155,8 +192,8 @@
       <el-row class="dialog-body">
         <el-col :span="4">
           <div style="float:left; padding: 8px;">
-            <el-avatar :size="80" :src="schedule_profile.avatar" class="dbl-border">
-              <img :src="schedule_profile.avatar"/>
+            <el-avatar :size="80" :src="schedule_profile.coach_image" class="dbl-border">
+              <img :src="schedule_profile.coach_image"/>
             </el-avatar>
           </div>
         </el-col>
@@ -170,45 +207,42 @@
               <div  v-if="schedule_profile.country !== null || schedule_profile.country !== ''" class="right-detail-sub-session">{{ schedule_profile.country }}</div>
             </div>
           </div>
-          <!--          {{ schedule_profile.languages }}-->
           <div style="display: block; padding: 10px;">
-            <span><i class="far fa-clock"></i> {{ schedule_details.date }} <el-button size="small" class="btn-buy-session" type="primary" style="margin-left: 20px;">In English</el-button></span>
+            <span><i class="far fa-clock"></i>
+            {{ schedule_details.day}}  {{ schedule_details.date}}  {{ schedule_details.start_time }} - {{ schedule_details.end_time }}
+              <el-button size="small" class="btn-buy-session" type="primary" style="margin-left: 20px;">In English</el-button></span>
           </div>
           <div style="display: block; padding: 10px;">
             <span><i class="fa fa-map-marker" aria-hidden="true"></i> {{ schedule_profile.country }}</span>
           </div>
           <div style="display: block; padding: 10px;">
-            <span v-if="session_type === 2">Attended
-            <!--              <span v-if="schedule_details.availability_type.includes('Can do either')">asdad</span>-->
-            <span v-if="avail_data.includes('Can do either')">
-                <el-button size="small" class="btn-buy-session" type="primary"><i class="fas fa-headset"></i> Remote Only</el-button>
-                <el-button size="small" class="btn-buy-session" type="primary"><i class="fa fa-user"></i> In-house Only</el-button>
-                <el-button size="small" class="btn-buy-session" type="primary"><i class="fa fa-users"></i> Group</el-button>
-            </span>
-            <span v-else>
-              <el-button v-if="avail_data.includes('Remote only')" size="small" class="btn-buy-session" type="primary">
-                <span><i class="fas fa-headset"></i> Remote Only</span>
-              </el-button>
-              <el-button v-if="avail_data.includes('In-house only')" size="small" class="btn-buy-session" type="primary">
-                <span><i class="fa fa-user"></i> In-house Only</span>
-              </el-button>
-              <el-button v-if="avail_data.includes('Group')" size="small" class="btn-buy-session" type="primary">
-                <span><i class="fa fa-users"></i> Group</span>
-              </el-button>
-            </span>
-<!--              <el-button size="small" class="btn-buy-session" type="primary" style="margin-left: 20px;">-->
-<!--              <i class="fa fa-headphones" aria-hidden="true"></i> Remotely</el-button><el-button size="small" class="btn-buy-session" type="primary" style="margin-left: 20px;"><i class="fa fa-user" aria-hidden="true"></i> In Person-->
-<!--              </el-button>-->
+            <span>Attended
+              <span v-if="avail_data.includes('Can do either')">
+                  <el-button size="small" class="btn-buy-session" type="primary"><i class="fas fa-headset"></i> Remote Only</el-button>
+                  <el-button size="small" class="btn-buy-session" type="primary"><i class="fa fa-user"></i> In-house Only</el-button>
+                  <el-button size="small" class="btn-buy-session" type="primary"><i class="fa fa-users"></i> Group</el-button>
+              </span>
+              <span v-else>
+                <el-button v-if="avail_data.includes('Remote only')" size="small" class="btn-buy-session" type="primary">
+                  <span><i class="fas fa-headset"></i> Remote Only</span>
+                </el-button>
+                <el-button v-if="avail_data.includes('In-house only')" size="small" class="btn-buy-session" type="primary">
+                  <span><i class="fa fa-user"></i> In-house Only</span>
+                </el-button>
+                <el-button v-if="avail_data.includes('Group')" size="small" class="btn-buy-session" type="primary">
+                  <span><i class="fa fa-users"></i> Group</span>
+                </el-button>
+              </span>
             </span>
           </div>
         </el-col>
       </el-row>
       <span slot="footer" class="dialog-footer">
-        <span v-if="session_type === 1">
+        <span v-if="session_type === 'Pending'">
           <el-link @click="handleClose()" style="color: #fff; margin-right: 20px;">Cancel</el-link>
           <el-button @click="handleClose()" size="small" type="success">Confirm</el-button>
         </span>
-        <span v-else-if="session_type === 2">
+        <span v-else-if="session_type === 'Booked'">
           <el-alert
             id="alertBookSession"
             title="To cancel a session you must give at least 24 hours notice."
@@ -222,7 +256,6 @@
         <span v-else>
           <el-button @click="handleClose()" size="small" type="success">Close</el-button>
         </span>
-<!--        <el-button @click="handleClose()" type="success">Close</el-button>-->
       </span>
     </el-dialog>
   </el-col>
@@ -240,130 +273,7 @@
     data() {
       return {
         loading: false,
-        startdate: '2020-6-27',
         dialogItem: false,
-        positions: [
-          {
-            name: "BOOKED SESSIONS",
-            session_type: 2,
-            user_id: '00520000002qtm3AAA',
-            date: '2020-08-03',
-            availability_type: ['Group'],
-            status: 'Booked'
-          },
-          {
-            name: "MENTOR AVAILABLE",
-            session_type: 1,
-            user_id: '00520000002qtmXAAQ',
-            date: '2020-08-08',
-            availability_type: ['Can do either','Remote only','In-house only','Group'],
-            status: 'Pending'
-          },
-          {
-            name: "BOOKED SESSIONS",
-            session_type: 2,
-            user_id: '0050Q000004EkGZQA0',
-            date: '2020-08-08',
-            availability_type: ['In-house only','Group'],
-            status: 'Booked'
-          },
-          {
-            name: "BOOKED SESSIONS",
-            session_type: 2,
-            user_id: '0050Q000004EkGZQA0',
-            date: '2020-08-08',
-            availability_type: ['Can do either','Remote only','In-house only','Group'],
-            status: 'Booked'
-          },
-          {
-            name: "BOOKED SESSIONS",
-            session_type: 2,
-            user_id: '0050Q000004EkGZQA0',
-            date: '2020-08-08',
-            availability_type: ['Can do either'],
-            status: 'Booked'
-          },
-          {
-            name: "BOOKED SESSIONS",
-            session_type: 2,
-            user_id: '0050Q000004EkGZQA0',
-            date: '2020-08-08',
-            availability_type: ['In-house only'],
-            status: 'Booked'
-          },
-          {
-            name: "ATTENDED SESSIONS",
-            session_type: 3,
-            user_id: '0050Q000004EkGZQA0',
-            date: '2020-08-09',
-            availability_type: ['Can do either','Remote only','In-house only','Group'],
-            status: 'Attended'
-          },
-          {
-            name: "ATTENDED SESSIONS",
-            session_type: 3,
-            user_id: '0050Q000004EkGZQA0',
-            date: '2020-08-08',
-            availability_type: ['Remote only'],
-            status: 'Attended'
-          },
-          {
-            name: "ATTENDED SESSIONS",
-            session_type: 3,
-            user_id: '0050Q000004EkGZQA0',
-            date: '2020-08-08',
-            availability_type: ['In-house only'],
-            status: 'Attended'
-          },
-          {
-            name: "ATTENDED SESSIONS",
-            session_type: 3,
-            user_id: '00520000002qtmUAAQ',
-            date: '2020-08-10',
-            availability_type: ['In-house only'],
-            status: 'Attended'
-          },
-          {
-            name: "ATTENDED SESSIONS",
-            session_type: 3,
-            user_id: '0050Q000004EkGZQA0',
-            date: '2020-08-08',
-            availability_type: ['In-house only'],
-            status: 'Attended'
-          },
-          {
-            name: "NO SHOW SESSIONS",
-            session_type: 4,
-            user_id: '0050Q000004EkGZQA0',
-            date: '2020-08-08',
-            availability_type: ['Can do either','Remote only','In-house only','Group'],
-            status: 'Cancelled'
-          },
-          {
-            name: "NO SHOW SESSIONS",
-            session_type: 4,
-            user_id: '0050Q000004EkGZQA0',
-            date: '2020-08-08',
-            availability_type: ['Can do either','Remote only','In-house only','Group'],
-            status: 'Cancelled'
-          },
-          {
-            name: "NO SHOW SESSIONS",
-            session_type: 4,
-            user_id: '0050Q000004EkGZQA0',
-            date: '2020-08-08',
-            availability_type: ['Group'],
-            status: 'Cancelled'
-          },
-          {
-            name: "NO SHOW SESSIONS",
-            session_type: 4,
-            user_id: '005w00000049dvgAAA',
-            date: '2020-08-29',
-            availability_type: ['Group'],
-            status: 'Cancelled'
-          }
-        ],
         filters: [
           {
             name: 'MENTOR AVAILABLE',
@@ -388,7 +298,7 @@
         ],
         range_sep: "",
         checkedFilters: ['Pending', 'Booked','Attended','Cancelled'],
-        datefilter: ['2020-8-29'],
+        datefilter: [],
         currentDate: '',
         profileTitle: '',
         session_type: '',
@@ -396,12 +306,13 @@
         new_collections: [],
         schedule_profile: {},
         schedule_details: {},
-        fromdate: "",
-        todate: "",
         date_collections: [],
         now: new Date().toJSON().slice(0,10).replace(/-/g,'-'),
         checkboxAvail: [],
-        avail_data: []
+        avail_data: [],
+        data:{},
+        schedules: [],
+        coaches: {}
       }
     },
     computed: {
@@ -421,30 +332,67 @@
     created: function() {
       this.session_data = this.selected.coaches
       this.loading = true
+      this.read()
       this.getDate()
-      this.mapData()
+
     },
     methods: {
+      async read() {
+        this.loading = true
+        const res = await fetch('/api/v1/coaches/schedule');
+        const data = await res.json();
+        this.data = data.data;
+        this.schedules = this.data.schedules
+        this.coaches = this.data.coaches
+        this.loading = false
+        this.mapData()
+      },
       mapData() {
         var collections = []
         var new_collections = []
         var coach = this.selected.coaches
-        var sched = this.positions
+        var sched = this.schedules
         var allcollections = []
         var dates = []
+        var days = []
         sched.forEach(function(value, index) {
           coach.forEach(function(coachvalue, index) {
-            if(value.user_id === coachvalue.id) {
+            if(value.coach_id === coachvalue.id) {
               collections = coachvalue
             }
           })
+          var newday = new Date(value.date)
+          var day = newday.getDay()
+          var day_of_week = ''
+          if(day === 1) {
+            day_of_week = 'MONDAY'
+          }
+          if(day === 2) {
+            day_of_week = 'TUESDAY'
+          }
+          if(day === 3) {
+            day_of_week = 'WEDNESDAY'
+          }
+          if(day === 4) {
+            day_of_week = 'THURSDAY'
+          }
+          if(day === 5) {
+            day_of_week = 'FRIDAY'
+          }
+          if(day === 6) {
+            day_of_week = 'SATURDAY'
+          }
+          if(day === 7) {
+            day_of_week = 'SUNDAY'
+          }
+          value['day'] = day_of_week
           dates.push(value.date)
           allcollections = { coaches: collections, schedules: value}
           new_collections.push(allcollections)
         })
         this.date_collections = dates
         this.new_collections = new_collections
-        // console.log(new_collections)
+        console.log(new_collections)
         this.loading = false
       },
       handleClose() {
@@ -453,7 +401,6 @@
         this.dialogItem = false
       },
       getDate() {
-        // var currentDate = new Date();
         this.currentDate = new Date().toJSON().slice(0,10).replace(/-/g,'-');
       },
       dialogMentor(position) {
@@ -462,36 +409,23 @@
         this.schedule_profile = position.coaches
         this.schedule_details = position.schedules
         this.avail_data = position.schedules.availability_type
-        if(position.schedules.session_type === 1) {
+        if(position.schedules.status === 'Pending') {
           this.profileTitle = 'Mentor available, book session'
-          this.session_type = position.schedules.session_type
+          this.session_type = position.schedules.status
         }
-        if(position.schedules.session_type === 2) {
+        if(position.schedules.status === 'Booked') {
           this.profileTitle = 'Your Booked Session'
-          this.session_type = position.schedules.session_type
+          this.session_type = position.schedules.status
         }
-        if(position.schedules.session_type === 3) {
+        if(position.schedules.status === 'Attended') {
           this.profileTitle = 'Your Attended Session'
-          this.session_type = position.schedules.session_type
+          this.session_type = position.schedules.status
         }
-        if(position.schedules.session_type === 4) {
+        if(position.schedules.status === 'Cancelled') {
           this.profileTitle = 'Your no show Session'
-          this.session_type = position.schedules.session_type
+          this.session_type = position.schedules.status
         }
         this.dialogItem = true
-      },
-      handleDatePick() {
-        // var ex = '2020-8-4'
-        // var first_date = this.$moment(this.datefilter[0]).format('YYYY-MM-DD')
-        // var second_date = this.$moment(this.datefilter[1]).format('YYYY-MM-DD')
-        // this.fromdate = first_date
-        // this.todate = second_date
-        if(this.datefilter === null) {
-          this.range_sep = ''
-        } else {
-         this.range_sep = '-'
-        }
-
       },
       checkDate: function(){
         if(this.datefilter === null) {
@@ -500,7 +434,7 @@
           var data = []
           data.push(this.$moment(this.datefilter[0]).format('YYYY-MM-DD'))
           data.push(this.$moment(this.datefilter[1]).format('YYYY-MM-DD'))
-          this.date_collections = xx
+          this.date_collections = data
           this.range_sep = '-'
         }
       }

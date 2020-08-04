@@ -1,12 +1,11 @@
 <template>
   <div class="right-list-container">
     <el-col :xs="4" :sm="4" :md="4" :lg="2" :xl="2" class="content-avatar-container">
-      <el-avatar :size="60" :src="selected.avatar" class="dbl-border">
-        <img v-if="selected.avatar === null || selected.avatar === 'null'" :src="default_image"/>
-        <img v-else :src="selected.avatar"/>
+      <el-avatar :size="60" :src="selected.coach_image" class="dbl-border">
+        <img v-if="selected.coach_image === null || selected.coach_image === 'null'" :src="default_image"/>
+        <img v-else :src="selected.coach_image"/>
       </el-avatar>
     </el-col>
-<!--    {{ selected }}-->
     <el-col :xs="20" :sm="20" :md="20" :lg="22" :xl="22" class="content-coaches-name">
       <div class="right-detail-header">{{ selected.first_name }} {{ selected.last_name }}</div>
       <div class="right-detail-btnprofile" @click="showInfo()"><i class="fas fa-info"></i></div>
@@ -26,9 +25,9 @@
       top="3%"
       width="60%">
       <div style="float:left; padding: 8px;">
-        <el-avatar :size="60" :src="selected.avatar" class="dbl-border">
-          <img v-if="selected.avatar === null || selected.avatar === 'null'" :src="default_image"/>
-          <img v-else :src="selected.avatar"/>
+        <el-avatar :size="60" :src="selected.coach_image" class="dbl-border">
+          <img v-if="selected.avatcoach_imagear === null || selected.coach_image === 'null'" :src="default_image"/>
+          <img v-else :src="selected.coach_image"/>
         </el-avatar>
       </div>
       <div style="display: inline-block; width: 70%; padding-left: 15px;">
@@ -44,15 +43,15 @@
       </div>
       <div style="display: block; padding: 20px;">
         <div class="info-head">Experience</div>
-        <span class="info-sub">{{ getPostBody(selected.experience_summary) }}</span>
+        <span class="info-sub sum_experience">{{ getPostBody(selected.experience_summary) }}</span>
       </div>
       <div style="display: block; padding: 20px; padding-bottom: 10px;">
         <div class="info-head">Markets Traded</div>
-        <span class="info-sub">{{ selected.market_traded_summary }}</span>
+        <span class="info-sub sum_experience">{{ selected.market_traded_summary }}</span>
       </div>
       <div style="display: block; padding: 20px; padding-bottom: 10px;">
         <div class="info-head">Style</div>
-        <span class="info-sub">{{ selected.style_summary }}</span>
+        <span class="info-sub sum_experience">{{ selected.style_summary }}</span>
       </div>
       <span slot="footer" class="dialog-footer">
     <el-button @click="dialogProfile = false" type="success">Close</el-button>
