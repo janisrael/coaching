@@ -216,7 +216,7 @@
             <span><i class="fa fa-map-marker" aria-hidden="true"></i> {{ schedule_profile.country }}</span>
           </div>
           <div style="display: block; padding: 10px;">
-            <span>Attended
+            <span>Attend
               <span v-if="avail_data.includes('Can do either')">
                   <el-button size="small" class="btn-buy-session" type="primary"><i class="fas fa-headset"></i> Remote Only</el-button>
                   <el-button size="small" class="btn-buy-session" type="primary"><i class="fa fa-user"></i> In-house Only</el-button>
