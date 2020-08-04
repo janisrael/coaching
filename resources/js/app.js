@@ -29,9 +29,11 @@ import locale from 'element-ui/lib/locale/lang/en'
 // import { faSpinner } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import CountryFlag from 'vue-country-flag'
+import VueMoment from 'vue-moment'
 // import MultiFiltersPlugin from './MultiFilters' // <-- THIS
 
 Vue.use(ElementUI, { locale })
+Vue.use(VueMoment)
 // Vue.use(MultiFiltersPlugin); // <-- THIS
 // library.add(faSpinner)
 
