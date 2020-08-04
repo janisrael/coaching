@@ -78,7 +78,7 @@
               <img :src="position.coaches.coach_image"/>
             </el-avatar>
             <span class="session-list-time">
-              {{ position.schedules.start_time }}  {{ position.schedules.day}}  {{ position.schedules.date}}
+              {{ position.schedules.start_time }}  {{ position.schedules.day}}  {{ $moment(position.schedules.date).format('MM/DD')}}
             </span>
             <span v-if="position.schedules.availability_type.includes('Can do either')">
               <span><i class="fas fa-headset" style="font-size: 14px"></i></span>
@@ -103,7 +103,7 @@
               <img :src="selected.coaches.coach_image"/>
             </el-avatar>
             <span class="session-list-time">
-               {{ position.schedules.start_time }}  {{ position.schedules.day}}  {{ position.schedules.date}}
+               {{ position.schedules.start_time }}  {{ position.schedules.day}}  {{ $moment(position.schedules.date).format('MM/DD')}}
             </span>
             <span v-if="position.schedules.availability_type.includes('Can do either')">
               <span><i class="fas fa-headset" style="font-size: 14px"></i></span>
@@ -129,7 +129,7 @@
               <img :src="position.coaches.coach_image"/>
             </el-avatar>
             <span class="session-list-time">
-             {{ position.schedules.start_time }}  {{ position.schedules.day}}  {{ position.schedules.date}}
+             {{ position.schedules.start_time }}  {{ position.schedules.day}}  {{ $moment(position.schedules.date).format('MM/DD')}}
             </span>
             <span v-if="position.schedules.availability_type.includes('Can do either')">
               <span><i class="fas fa-headset" style="font-size: 14px"></i></span>
@@ -154,7 +154,7 @@
               <img :src="position.coaches.coach_image"/>
             </el-avatar>
             <span class="session-list-time">
-               {{ position.schedules.start_time }}  {{ position.schedules.day}}  {{ position.schedules.date}}
+               {{ position.schedules.start_time }}  {{ position.schedules.day}}  {{ $moment(position.schedules.date).format('MM/DD')}}
             </span>
             <span v-if="position.schedules.availability_type.includes('Can do either')">
               <span><i class="fas fa-headset" style="font-size: 14px"></i></span>
@@ -209,7 +209,7 @@
           </div>
           <div style="display: block; padding: 10px;">
             <span><i class="far fa-clock"></i>
-            {{ schedule_details.day}}  {{ schedule_details.date}}  {{ schedule_details.start_time }} - {{ schedule_details.end_time }}
+            {{ schedule_details.day}}  {{ $moment(schedule_details.date).format('MM/DD')}}  {{ schedule_details.start_time }} - {{ schedule_details.end_time }}
               <el-button size="small" class="btn-buy-session" type="primary" style="margin-left: 20px;">In English</el-button></span>
           </div>
           <div style="display: block; padding: 10px;">
