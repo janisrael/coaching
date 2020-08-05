@@ -29,6 +29,7 @@
                 :data="activeCards.filter(data => !search || data.last_name.toLowerCase().includes(search.toLowerCase()) || data.first_name.toLowerCase().includes(search.toLowerCase()))"
                 ref="singleTable"
                 id="tablecoaches"
+                :row-class-name="coachesRowClassName"
                 element-loading-text="Loading..."
                 element-loading-spinner="el-icon-loading"
                 element-loading-background="rgba(0, 0, 0, 0.21)"
@@ -72,13 +73,13 @@
                         <div class="left-list-sub">Experience - {{ scope.row.experience }} years</div>
                       </span>
                       <div class="coaches-list-icons">
-                        <el-badge :value="1" class="item">
+                        <el-badge :value="booked" class="item">
                           <i class="fa fa-calendar-check left-list-badge-icon" aria-hidden="true" style="color: #617da5"></i>
                         </el-badge>
-                        <el-badge :value="1" class="item">
+                        <el-badge :value="attended" class="item">
                           <i class="el-icon-circle-check left-list-badge-icon" style="color: #92804f"></i>
                         </el-badge>
-                        <el-badge :value="1" class="item">
+                        <el-badge :value="cancelled" class="item">
                           <i class="fa fa-ban left-list-badge-icon" aria-hidden="true" style="color: #92505f"></i>
                         </el-badge>
                       </div>
@@ -92,7 +93,7 @@
         </el-col>
         <el-col :xs="12" :sm="17" :md="16" :lg="18" :xl="18" class="full-height index-col-right" style="background-image: url('../../images/background.jpg'); background-size: cover;">
           <content-component v-if="loading === false" :selected="passData"></content-component>
-          <session-component :selected="for_sessiondata"></session-component>
+          <session-component ref="sessionComponent" :selected="for_sessiondata" :user_id="coach_id" @change="backData($event)"></session-component>
         </el-col>
       </el-col>
 
@@ -214,7 +215,12 @@
         languages: [],
         presearch: '',
         default_image: '../../images/default-avatar.jpg',
-        for_sessiondata: {}
+        for_sessiondata: {},
+        coach_id: '',
+        ex: {},
+        booked: 0,
+        attended: 0,
+        cancelled: 0
       }
     },
     computed: {
@@ -279,6 +285,30 @@
       this.setrange()
     },
     methods: {
+      coachesRowClassName(index) {
+        return 'this-is-active'
+      },
+      backData(value) {
+        console.log(value)
+        var booked = 0
+        var attended = 0
+        var cancelled = 0
+        value.forEach(function(value, index) {
+          if(value.schedules.status === 'Booked') {
+            booked = booked + 1
+          }
+          if(value.schedules.status === 'Attended') {
+            attended = attended + 1
+          }
+          if(value.schedules.status === 'Cancelled') {
+            cancelled = cancelled + 1
+          }
+        })
+        this.booked = booked
+        this.attended = attended
+        this.cancelled = cancelled
+        console.log(this.booked)
+      },
       setrange() {
         this.final_range[0] = this.value_range[0]
         this.final_range[1] = this.value_range[1]
@@ -295,11 +325,17 @@
       },
       loadDefault(data) {
         this.getSummary(data.coaches[0])
+        this.$refs.singleTable.setCurrentRow(this.coaches[0])
         this.for_sessiondata = this.data
         this.loading = false
       },
-      getSummary(row) {
+      getSummary(row, index) {
         this.passData = row
+        this.coach_id = row.id
+        setTimeout(() => this.ex_call_session(), 1)
+      },
+      ex_call_session() {
+        this.$refs.sessionComponent.mapData()
       },
       callFilter() {
         this.reset = this.selectedTags
