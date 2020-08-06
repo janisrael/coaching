@@ -5,6 +5,7 @@ namespace App\Repositories;
 use App\Repositories\Interfaces\CoachRepositoryInterface;
 use Faker\Factory;
 use learntotrade\salesforce\User;
+use learntotrade\salesforce\Person;
 use learntotrade\salesforce\fields\UserFields;
 
 class CoachRepository implements CoachRepositoryInterface
@@ -75,6 +76,13 @@ class CoachRepository implements CoachRepositoryInterface
         $data = [];
         $options = [];
 
+        // For Temporary 
+        $businessDivision = 'Smart Charts';
+
+        // Waiting to update Salesforce API
+        // $person = resolve(Person::class)->get(auth()->guard('portal')->user()->salesforce_token);
+        // $businessDivision = $person[PersonFields::BUSINESS_DIVISION];
+        
         $sf = resolve(User::class)->query(
             array_values(config('api.sf_coaches')), 
             [UserFields::BUSINESS_DIVISION.' != \'\'']
@@ -101,12 +109,18 @@ class CoachRepository implements CoachRepositoryInterface
                     $data[$field][$key] = $value[$val];
                 }
 
-                // Set Country Name by Country Code
-                $country = null;
-                if (isset($value[UserFields::COACH_COUNTRY])) {
-                    $country = __('country.'.$value[UserFields::COACH_COUNTRY]);
+                if (isset($data[$field]['access_group']) and !in_array($businessDivision, $data[$field]['access_group'])) {
+                    unset($data[$field]);
                 }
-                $data[$field]['country'] = $country;
+
+                if (isset($data[$field])) {
+                    // Set Country Name by Country Code
+                    $country = null;
+                    if (isset($value[UserFields::COACH_COUNTRY])) {
+                        $country = __('country.'.$value[UserFields::COACH_COUNTRY]);
+                    }
+                    $data[$field]['country'] = $country;
+                }
             }
         }
 

@@ -10,9 +10,9 @@ Route::group(['namespace' => 'Coaching\V1'], function () {
 
     Route::group(['prefix' => 'api/v1'], function () {
     
-        Route::get('customer', 'AccountController@person');
+        Route::get('account', 'AccountController@person');
     
-        Route::get('customer/credits', 'AccountController@credits');
+        Route::get('account/sales', 'AccountController@sales');
 
         Route::get('coaches', 'CoachController@all');
         

@@ -34,7 +34,7 @@ class SaleRepository implements SaleRepositoryInterface
 
         $sf = resolve(Sale::class)->query(
             array_values(config('api.sf_sale')),
-            ['Customer_Name__c = \''.auth()->guard('portal')->user()->salesforce_token.'\'']
+            [SaleFields::CUSTOMER.' = \''.auth()->guard('portal')->user()->salesforce_token.'\'']
         );
 
         if (count($sf)) {

@@ -36,7 +36,7 @@ class AccountController extends Controller
      * 
      * @return json
      */
-    public function credits()
+    public function sales()
     {
         $data = $this->saleRepository->all();
 
