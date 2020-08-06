@@ -131,6 +131,18 @@ label#id-4 span {
     width: 100%;
     display: inline-block;
 }
+span.el-radio__inner {
+    display: none !important;
+
+}
+
+.el-radio.is-bordered.is-checked{
+    border-color: #9ecaff !important;
+}
+
+span.el-radio__label {
+    color:#fff !important;
+}
 
 .list-item-btn {
     padding: 10px;
@@ -141,6 +153,13 @@ label#id-4 span {
     display: inline-block;
     text-align: center;
     cursor: pointer;
+}
+
+.fade-enter-active, .fade-leave-active {
+    transition: opacity 1s;
+}
+.fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */ {
+    opacity: 0;
 }
 
 

@@ -1,12 +1,12 @@
 <template>
   <div class="right-list-container">
     <el-col :xs="4" :sm="4" :md="4" :lg="2" :xl="2" class="content-avatar-container">
-
       <el-avatar :size="60" :src="selected.coach_image" class="dbl-border">
         <img v-if="selected.coach_image === null || selected.coach_image === 'null'" :src="default_image"/>
         <img v-else :src="selected.coach_image"/>
       </el-avatar>
     </el-col>
+
     <el-col :xs="20" :sm="20" :md="20" :lg="22" :xl="22" class="content-coaches-name">
       <div class="right-detail-header">{{ selected.first_name }} {{ selected.last_name }}</div>
       <div class="right-detail-btnprofile" @click="showInfo()"><i class="fas fa-info"></i></div>
@@ -39,13 +39,13 @@
             <country-flag v-if="selected.country_code === null" country='' size='normal'/>
             <country-flag v-else :country='selected.country_code' size='normal'/>
           </div>
-          <div v-if="selected.country === null || selected.country === ''" class="right-detail-sub">No Specified Country</div>
+          <div v-if="selected.country === null || selected.country === '' || selected.country === undefined" class="right-detail-sub">No Specified Country</div>
           <div v-else class="right-detail-sub">{{ selected.country }}</div>
         </div>
       </div>
       <div style="display: block; padding: 20px;">
         <div class="info-head">Experience</div>
-        <span class="info-sub sum_experience">{{ getPostBody(selected.experience_summary) }}</span>
+        <span class="info-sub sum_experience">{{ selected.experience_summary }}</span>
       </div>
       <div style="display: block; padding: 20px; padding-bottom: 10px;">
         <div class="info-head">Markets Traded</div>
