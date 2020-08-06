@@ -69,104 +69,104 @@
         </div>
       </div>
       <el-col v-loading="loading" element-loading-text="Loading Schedules..." element-loading-spinner="el-icon-loading" element-loading-background="rgba(0, 0, 0, 0.21)":span="24" class="session-items-container">
-        <div v-for="position in filteredPositions">
+        <div v-for="position in even(filteredPositions)">
         <transition name="el-fade-in">
-        <div v-if="position.schedules.status === 'Pending'" class="list-item" @click="dialogMentor(position)">
-          <el-col :xs="18" :sm="19" :md="20" :lg="22" :xl="22" :class="['list-' + position.schedules.status, 'session-listitem']">
+        <div v-if="position.status === 'Pending'" class="list-item" @click="dialogMentor(position)">
+          <el-col :xs="18" :sm="19" :md="20" :lg="22" :xl="22" :class="['list-' + position.status, 'session-listitem']">
             <span style="width: 15px; display: inline-block"><i class="far fa-clock"></i></span>
-            <el-avatar :size="60" :src="position.coaches.coach_image" class="session-list-avatar">
-              <img :src="position.coaches.coach_image"/>
+            <el-avatar :size="60" :src="position.coach_image" class="session-list-avatar">
+              <img :src="position.coach_image"/>
             </el-avatar>
             <span class="session-list-time">
-              {{ position.schedules.start_time }}  {{ position.schedules.day}}  {{ $moment(position.schedules.date).format('MM/DD')}}
+              {{ position.start_time }}  {{ $moment(position.date).format('dddd') }}  {{ $moment(position.date).format('MM/DD')}}
             </span>
-            <span v-if="position.schedules.availability_type.includes('Can do either')">
+            <span v-if="position.availability_type.includes('Can do either')">
               <span><i class="fas fa-headset" style="font-size: 14px"></i></span>
               <span><i class="fa fa-user" style="font-size: 14px"></i></span>
               <span><i class="fa fa-users" style="font-size: 14px"></i></span>
             </span>
             <span v-else>
-              <span v-if="position.schedules.availability_type.includes('Remote only')"><i class="fas fa-headset" style="font-size: 14px"></i></span>
-              <span v-if="position.schedules.availability_type.includes('In-house only')"><i class="fa fa-user" style="font-size: 14px"></i></span>
-              <span v-if="position.schedules.availability_type.includes('Group')"><i class="fa fa-users" style="font-size: 14px"></i></span>
+              <span v-if="position.availability_type.includes('Remote only')"><i class="fas fa-headset" style="font-size: 14px"></i></span>
+              <span v-if="position.availability_type.includes('In-house only')"><i class="fa fa-user" style="font-size: 14px"></i></span>
+              <span v-if="position.availability_type.includes('Group')"><i class="fa fa-users" style="font-size: 14px"></i></span>
             </span>
           </el-col>
-          <el-col :xs="6" :sm="5" :md="4" :lg="2" :xl="2" v-if="position.schedules.status === 'Pending'" :class="['list-' + position.schedules.status, 'list-item-btn']">
+          <el-col :xs="6" :sm="5" :md="4" :lg="2" :xl="2" v-if="position.status === 'Pending'" :class="['list-' + position.status, 'list-item-btn']">
             <span>BOOK</span>
           </el-col>
         </div>
-        <div v-if="position.schedules.status === 'Booked'" class="list-item" @click="dialogMentor(position)">
-          <el-col :xs="18" :sm="19" :md="20" :lg="22" :xl="22" :class="['list-' + position.schedules.status, 'session-listitem']">
+        <div v-if="position.status === 'Booked'" class="list-item" @click="dialogMentor(position)">
+          <el-col :xs="18" :sm="19" :md="20" :lg="22" :xl="22" :class="['list-' + position.status, 'session-listitem']">
             <span style="width: 15px; display: inline-block"><i class="fa fa-calendar-check" aria-hidden="true"></i></span>
-            <el-avatar :size="60" :src="position.coaches.coach_image" class="session-list-avatar">
-              <img :src="selected.coaches.coach_image"/>
+            <el-avatar :size="60" :src="position.coach_image" class="session-list-avatar">
+              <img :src="selected.coach_image"/>
             </el-avatar>
             <span class="session-list-time">
-               {{ position.schedules.start_time }}  {{ position.schedules.day}}  {{ $moment(position.schedules.date).format('MM/DD')}}
+               {{ position.start_time }}  {{ $moment(position.date).format('dddd') }}  {{ $moment(position.date).format('MM/DD')}}
             </span>
-            <span v-if="position.schedules.availability_type.includes('Can do either')">
+            <span v-if="position.availability_type.includes('Can do either')">
               <span><i class="fas fa-headset" style="font-size: 14px"></i></span>
               <span><i class="fa fa-user" style="font-size: 14px"></i></span>
               <span><i class="fa fa-users" style="font-size: 14px"></i></span>
             </span>
             <span v-else>
-              <span v-if="position.schedules.availability_type.includes('Remote only')"><i class="fas fa-headset" style="font-size: 14px"></i></span>
-              <span v-if="position.schedules.availability_type.includes('In-house only')"><i class="fa fa-user" style="font-size: 14px"></i></span>
-              <span v-if="position.schedules.availability_type.includes('Group')"><i class="fa fa-users" style="font-size: 14px"></i></span>
+              <span v-if="position.availability_type.includes('Remote only')"><i class="fas fa-headset" style="font-size: 14px"></i></span>
+              <span v-if="position.availability_type.includes('In-house only')"><i class="fa fa-user" style="font-size: 14px"></i></span>
+              <span v-if="position.availability_type.includes('Group')"><i class="fa fa-users" style="font-size: 14px"></i></span>
             </span>
 <!--            <div class="session-list-time session-list-time-calendar" @click="alert('test')"><i class="fas fa-calendar-plus" style="margin-right:10px;"></i><span class="session-calendar-caption">CALENDAR</span></div>-->
           </el-col>
-          <el-col :xs="6" :sm="5" :md="4" :lg="2" :xl="2" v-if="position.schedules.status === 'Booked'" :class="['list-' + position.schedules.status, 'list-item-btn']">
+          <el-col :xs="6" :sm="5" :md="4" :lg="2" :xl="2" v-if="position.status === 'Booked'" :class="['list-' + position.status, 'list-item-btn']">
             <span>VIEW</span>
           </el-col>
         </div>
 
-        <div v-if="position.schedules.status === 'Attended'" class="list-item" @click="dialogMentor(position)">
-          <el-col :xs="18" :sm="19" :md="20" :lg="22" :xl="22" :class="['list-' + position.schedules.status, 'session-listitem']">
+        <div v-if="position.status === 'Attended'" class="list-item" @click="dialogMentor(position)">
+          <el-col :xs="18" :sm="19" :md="20" :lg="22" :xl="22" :class="['list-' + position.status, 'session-listitem']">
             <span style="width: 15px; display: inline-block"> <i class="el-icon-circle-check"></i></span>
-            <el-avatar :size="60" :src="position.coaches.coach_image" class="session-list-avatar">
-              <img :src="position.coaches.coach_image"/>
+            <el-avatar :size="60" :src="position.coach_image" class="session-list-avatar">
+              <img :src="position.coach_image"/>
             </el-avatar>
             <span class="session-list-time">
-             {{ position.schedules.start_time }}  {{ position.schedules.day}}  {{ $moment(position.schedules.date).format('MM/DD')}}
+             {{ position.start_time }}  {{ $moment(position.date).format('dddd') }}  {{ $moment(position.date).format('MM/DD')}}
             </span>
-            <span v-if="position.schedules.availability_type.includes('Can do either')">
+            <span v-if="position.availability_type.includes('Can do either')">
               <span><i class="fas fa-headset" style="font-size: 14px"></i></span>
               <span><i class="fa fa-user" style="font-size: 14px"></i></span>
               <span><i class="fa fa-users" style="font-size: 14px"></i></span>
             </span>
             <span v-else>
-              <span v-if="position.schedules.availability_type.includes('Remote only')"><i class="fas fa-headset" style="font-size: 14px"></i></span>
-              <span v-if="position.schedules.availability_type.includes('In-house only')"><i class="fa fa-user" style="font-size: 14px"></i></span>
-              <span v-if="position.schedules.availability_type.includes('Group')"><i class="fa fa-users" style="font-size: 14px"></i></span>
+              <span v-if="position.availability_type.includes('Remote only')"><i class="fas fa-headset" style="font-size: 14px"></i></span>
+              <span v-if="position.availability_type.includes('In-house only')"><i class="fa fa-user" style="font-size: 14px"></i></span>
+              <span v-if="position.availability_type.includes('Group')"><i class="fa fa-users" style="font-size: 14px"></i></span>
             </span>
           </el-col>
-          <el-col :xs="6" :sm="5" :md="4" :lg="2" :xl="2" v-if="position.schedules.status === 'Attended'" :class="['list-' + position.schedules.status, 'list-item-btn']">
+          <el-col :xs="6" :sm="5" :md="4" :lg="2" :xl="2" v-if="position.status === 'Attended'" :class="['list-' + position.status, 'list-item-btn']">
             <span>VIEW</span>
           </el-col>
         </div>
 
-        <div v-if="position.schedules.status === 'Attended'" class="list-item" @click="dialogMentor(position)">
-          <el-col :xs="18" :sm="19" :md="20" :lg="22" :xl="22" :class="['list-' + position.schedules.status, 'session-listitem']">
+        <div v-if="position.status === 'Attended'" class="list-item" @click="dialogMentor(position)">
+          <el-col :xs="18" :sm="19" :md="20" :lg="22" :xl="22" :class="['list-' + position.status, 'session-listitem']">
             <span style="width: 15px; display: inline-block"><i class="fa fa-ban" aria-hidden="true"></i></span>
-            <el-avatar :size="60" :src="position.coaches.coach_image" class="session-list-avatar">
-              <img :src="position.coaches.coach_image"/>
+            <el-avatar :size="60" :src="position.coach_image" class="session-list-avatar">
+              <img :src="position.coach_image"/>
             </el-avatar>
             <span class="session-list-time">
-               {{ position.schedules.start_time }}  {{ position.schedules.day}}  {{ $moment(position.schedules.date).format('MM/DD')}}
+               {{ position.start_time }}  {{ $moment(position.date).format('dddd') }}  {{ $moment(position.date).format('MM/DD')}}
             </span>
-            <span v-if="position.schedules.availability_type.includes('Can do either')">
+            <span v-if="position.availability_type.includes('Can do either')">
               <span><i class="fas fa-headset" style="font-size: 14px"></i></span>
               <span><i class="fa fa-user" style="font-size: 14px"></i></span>
               <span><i class="fa fa-users" style="font-size: 14px"></i></span>
             </span>
             <span v-else>
-              <span v-if="position.schedules.availability_type.includes('Remote only')"><i class="fas fa-headset" style="font-size: 14px"></i></span>
-              <span v-if="position.schedules.availability_type.includes('In-house only')"><i class="fa fa-user" style="font-size: 14px"></i></span>
-              <span v-if="position.schedules.availability_type.includes('Group')"><i class="fa fa-users" style="font-size: 14px"></i></span>
+              <span v-if="position.availability_type.includes('Remote only')"><i class="fas fa-headset" style="font-size: 14px"></i></span>
+              <span v-if="position.availability_type.includes('In-house only')"><i class="fa fa-user" style="font-size: 14px"></i></span>
+              <span v-if="position.availability_type.includes('Group')"><i class="fa fa-users" style="font-size: 14px"></i></span>
             </span>
           </el-col>
-          <el-col :xs="6" :sm="5" :md="4" :lg="2" :xl="2" v-if="position.schedules.status === 'Attended'" :class="['list-' + position.schedules.status, 'list-item-btn']">
+          <el-col :xs="6" :sm="5" :md="4" :lg="2" :xl="2" v-if="position.status === 'Attended'" :class="['list-' + position.status, 'list-item-btn']">
             <span>VIEW</span>
           </el-col>
         </div>
@@ -191,19 +191,20 @@
       <el-row class="dialog-body">
         <el-col :span="4">
           <div style="float:left; padding: 8px;">
-            <el-avatar :size="80" :src="schedule_profile.coach_image" class="dbl-border">
-              <img :src="schedule_profile.coach_image"/>
+            <el-avatar :size="80" :src="schedule_details.coach_image" class="dbl-border">
+              <img :src="schedule_details.coach_image"/>
             </el-avatar>
           </div>
         </el-col>
         <el-col :span="20">
           <div style="display: inline-block; width: 80%; padding-left: 15px;">
-            <div class="right-detail-header">{{ schedule_profile.first_name }} {{ schedule_profile.last_name }}</div>
+            <div class="right-detail-header">{{ schedule_details.first_name }} {{ schedule_details.last_name }}</div>
             <div class="right-list-sub">
               <div style="display: inline-block; float: left; margin-left: -15px;">
-                <country-flag  v-if="schedule_profile.country_code !== null || schedule_profile.country_code !== ''" :country='schedule_profile.country_code' size='normal'/>
+                <country-flag  v-if="schedule_details.country_code !== null || schedule_details.country_code !== ''" :country='schedule_details.country_code' size='normal'/>
               </div>
-              <div  v-if="schedule_profile.country !== null || schedule_profile.country !== ''" class="right-detail-sub-session">{{ schedule_profile.country }}</div>
+              <div v-if="schedule_details.country !== null || schedule_details.country !== '' || schedule_details.country !== 'null'" class="right-detail-sub-session">{{ schedule_details.country }}</div>
+              <div v-else class="right-detail-sub-session"> No Country Specified </div>
             </div>
           </div>
           <div style="display: block; padding: 10px;">
@@ -212,7 +213,8 @@
               <el-button size="small" class="btn-buy-session" type="primary" style="margin-left: 20px;">In English</el-button></span>
           </div>
           <div style="display: block; padding: 10px;">
-            <span><i class="fa fa-map-marker" aria-hidden="true"></i> {{ schedule_profile.country }}</span>
+            <span v-if="schedule_details.country !== null || schedule_details.country !== '' || schedule_details.country !== 'null'"><i class="fa fa-map-marker" aria-hidden="true"></i> {{ schedule_details.country }}</span>
+            <span v-else><i class="fa fa-map-marker" aria-hidden="true"></i> No Country Specified</span>
           </div>
           <div style="display: block; padding: 10px;">
             <span>Attend
@@ -266,7 +268,7 @@
     props: {
       selected: {
         required: true,
-        type: Object
+        type: Array
       },
       user_id: {
         required: true,
@@ -320,96 +322,27 @@
     },
     computed: {
       filteredPositions () {
-        // console.log(this.date_collections)
         if(this.datefilter === '' || this.datefilter === null) {
-            return this.new_collections.filter(position => this.checkedFilters.includes(position.schedules.status));
+            return this.selected.filter(position => this.checkedFilters.includes(position.status));
         } else {
           if(this.datefilter.length > 1) {
-            var data = this.new_collections.filter(position => this.checkedFilters.includes(position.schedules.status));
-            return data.filter(position => (this.date_collections[0] <= position.schedules.date) && (this.date_collections[1] >= position.schedules.date))
+            var data = this.selected.filter(position => this.checkedFilters.includes(position.status));
+            return data.filter(position => (this.date_collections[0] <= position.date) && (this.date_collections[1] >= position.date))
           }
-          return this.new_collections.filter(position => this.checkedFilters.includes(position.schedules.status));
+          return this.selected.filter(position => this.checkedFilters.includes(position.status));
         }
       }
     },
     created: function() {
       this.loading = true
-      // console.log('start',this.selected)
       this.session_data = this.selected.coaches
-      this.read()
       this.getDate()
     },
     methods: {
-      mapData() {
-        var collections = []
-        var new_collections = []
-        var coach = this.coaches
-        var sched = this.schedules
-        var allcollections = []
-        var dates = []
-        var days = []
-        var user_id = this.user_id
-        var value_collection = []
-        sched.forEach(function(value, index) {
-          coach.forEach(function(coachvalue, index) {
-            if(value.coach_id === coachvalue.id) {
-              collections = coachvalue
-            }
-          })
-          var newday = new Date(value.date)
-          var day = newday.getDay()
-          var day_of_week = ''
-          if(day === 1) {
-            day_of_week = 'MONDAY'
-          }
-          if(day === 2) {
-            day_of_week = 'TUESDAY'
-          }
-          if(day === 3) {
-            day_of_week = 'WEDNESDAY'
-          }
-          if(day === 4) {
-            day_of_week = 'THURSDAY'
-          }
-          if(day === 5) {
-            day_of_week = 'FRIDAY'
-          }
-          if(day === 6) {
-            day_of_week = 'SATURDAY'
-          }
-          if(day === 7) {
-            day_of_week = 'SUNDAY'
-          }
-          value['day'] = day_of_week
-          dates.push(value.date)
-          var status = value.status
-          // console.log('asdasdasda')
-          if(status === 'Pending') {
-            if(value.coach_id === user_id) {
-              allcollections = { coaches: collections, schedules: value}
-              new_collections.push(allcollections)
-            }
-          } else {
-            allcollections = { coaches: collections, schedules: value}
-            new_collections.push(allcollections)
-          }
-
-        })
-        this.date_collections = dates
-        this.new_collections = new_collections
-        this.$emit('change', this.new_collections)
-        this.loading = false
-      },
-      async read() {
-        this.loading = true
-        const res = await fetch('/api/v1/coaches/schedule');
-        const data = await res.json();
-        this.data = data.data;
-        this.schedules = this.data.schedules
-        this.coaches = this.selected.coaches
-        // console.log(this.schedules, 's')
-        // console.log(this.coaches,'x')
-        this.mapData()
+      even: function(arr) {
+        return arr.slice().sort(function(a, b) {
+          return a.date - b.date;
+        });
       },
       handleClose() {
         this.session_type = ''
@@ -418,28 +351,29 @@
       },
       getDate() {
         this.currentDate = new Date().toJSON().slice(0,10).replace(/-/g,'-');
+        this.loading = false
       },
       dialogMentor(position) {
         this.session_type = ''
         this.profileTitle = ''
-        this.schedule_profile = position.coaches
-        this.schedule_details = position.schedules
-        this.avail_data = position.schedules.availability_type
-        if(position.schedules.status === 'Pending') {
+        // this.schedule_profile = position.coaches
+        this.schedule_details = position
+        this.avail_data = position.availability_type
+        if(position.status === 'Pending') {
           this.profileTitle = 'Mentor available, book session'
-          this.session_type = position.schedules.status
+          this.session_type = position.status
         }
-        if(position.schedules.status === 'Booked') {
+        if(position.status === 'Booked') {
           this.profileTitle = 'Your Booked Session'
-          this.session_type = position.schedules.status
+          this.session_type = position.status
         }
-        if(position.schedules.status === 'Attended') {
+        if(position.status === 'Attended') {
           this.profileTitle = 'Your Attended Session'
-          this.session_type = position.schedules.status
+          this.session_type = position.status
         }
-        if(position.schedules.status === 'Cancelled') {
+        if(position.status === 'Cancelled') {
           this.profileTitle = 'Your no show Session'
-          this.session_type = position.schedules.status
+          this.session_type = position.status
         }
         this.dialogItem = true
       },
