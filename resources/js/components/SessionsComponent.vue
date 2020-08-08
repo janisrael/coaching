@@ -203,8 +203,8 @@
               <div style="display: inline-block; float: left; margin-left: -15px;">
                 <country-flag  v-if="schedule_details.country_code !== null || schedule_details.country_code !== ''" :country='schedule_details.country_code' size='normal'/>
               </div>
-              <div v-if="schedule_details.country !== null || schedule_details.country !== '' || schedule_details.country !== 'null'" class="right-detail-sub-session">{{ schedule_details.country }}</div>
-              <div v-else class="right-detail-sub-session"> No Country Specified </div>
+<!--              <div v-if="schedule_details.country !== null || schedule_details.country !== '' || schedule_details.country !== 'null'" class="right-detail-sub-session">{{ schedule_details.country }}</div>-->
+              <div class="right-detail-sub-session"> {{ country_to_show }} </div>
             </div>
           </div>
           <div style="display: block; padding: 10px;">
@@ -213,8 +213,8 @@
               <el-button size="small" class="btn-buy-session" type="primary" style="margin-left: 20px;">In English</el-button></span>
           </div>
           <div style="display: block; padding: 10px;">
-            <span v-if="schedule_details.country !== null || schedule_details.country !== '' || schedule_details.country !== 'null'"><i class="fa fa-map-marker" aria-hidden="true"></i> {{ schedule_details.country }}</span>
-            <span v-else><i class="fa fa-map-marker" aria-hidden="true"></i> No Country Specified</span>
+<!--            <span v-if="schedule_details.country !== null || schedule_details.country !== '' || schedule_details.country !== 'null'"><i class="fa fa-map-marker" aria-hidden="true"></i> {{ schedule_details.country }}</span>-->
+            <span><i class="fa fa-map-marker" aria-hidden="true"></i> {{ country_to_show }}</span>
           </div>
           <div style="display: block; padding: 10px;">
             <span>Attend
@@ -317,7 +317,8 @@
         avail_data: [],
         data:{},
         schedules: [],
-        coaches: {}
+        coaches: {},
+        country_to_show: ''
       }
     },
     computed: {
@@ -357,6 +358,13 @@
         this.session_type = ''
         this.profileTitle = ''
         // this.schedule_profile = position.coaches
+        // if(position.country === Null) {
+
+        if ((typeof (position.country) === 'undefined' || (position.country === null))) {
+          this.country_to_show = 'No Specified Country'
+        } else {
+          this.country_to_show = position.country
+        }
         this.schedule_details = position
         this.avail_data = position.availability_type
         if(position.status === 'Pending') {

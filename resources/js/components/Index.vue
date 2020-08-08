@@ -92,7 +92,7 @@
           </div>
         </el-col>
         <el-col :xs="12" :sm="17" :md="16" :lg="18" :xl="18" class="full-height index-col-right" style="background-image: url('../../images/background.jpg'); background-size: cover;">
-          <content-component :selected="passData"></content-component>
+          <content-component v-if="loading === false" :selected="passData"></content-component>
           <session-component v-if="loading === false" ref="sessionComponent" :selected="for_sessiondata" :user_id="coach_id" @change="backData($event)"></session-component>
         </el-col>
       </el-col>
@@ -228,7 +228,8 @@
         attended: 0,
         cancelled: 0,
         filter_booked: true,
-        booked_options: 'Youve booked this mentor before'
+        booked_options: 'Youve booked this mentor before',
+        datas: {}
       }
     },
     computed: {
@@ -315,52 +316,53 @@
       },
       async read() {
         this.loading = true
-        // Promise.all([
-        //   fetch('/api/v1/coaches').then(res => res.ok && res.json() || Promise.reject(res)),
-        //   fetch('/api/v1/coaches/schedule').then(res => res.ok && res.json() || Promise.reject(res))
-        // ]).then(data => {
-        //   // handle data array here
-        // })
-        const rescoach = await fetch('/api/v1/coaches');
-        const datacoach = await rescoach.json();
-        const ressched = await fetch('/api/v1/coaches/schedule');
-        const datasched = await ressched.json();
-        this.datacoach = datacoach.data;
-        this.datasched = datasched.data;
-        this.options = this.datacoach.options
-        var coachesraw = this.datacoach.coaches
-        this.schedules = this.datasched.schedules
-        var schedraw = this.schedules
-        var hasbooked = false
-        coachesraw.forEach(function (value, index) {
-          schedraw.forEach(function (val, index) {
-            if(val.status !== 'Pending') {
-              hasbooked = true
-            }
-          })
-          value['has_booked'] = hasbooked
-        })
-        this.coaches = coachesraw
-        this.$refs.singleTable.setCurrentRow(this.coaches[0])
-        this.user_id = this.coaches[0].id
-        var scheds = schedraw
-        var coach = coachesraw
+        // fetching data in all promise
+        Promise.all([
+          await fetch('/api/v1/coaches').then(res => res.ok && res.json() || Promise.reject(res)),
+          await fetch('/api/v1/coaches/schedule').then(res => res.ok && res.json() || Promise.reject(res))
+        ]).then(data => {
+          // const rescoach = await fetch('/api/v1/coaches');
+          // const datacoach = await rescoach.json();
+          // const ressched = await fetch('/api/v1/coaches/schedule');
+          // const datasched = await ressched.json();
+          this.datacoach = data[0].data;
+          this.datasched = data[1].data
 
-        var user_id = this.user_id
-        let arr1 = scheds.filter(function (sched) {
-          return (sched.status === 'Pending' && sched.coach_id === user_id) || (sched.status !== 'Pending');
-        });
-        // let arr1 = filteredsced
-        let arr2 = coach
-        const mergeById = (a1, a2) =>
-          a1.map(itm => ({
-            ...a2.find((item) => (item.id === itm.coach_id) && item),
-            ...itm
-          }));
-        this.new_collections = mergeById(arr1, arr2);
-        this.reset = this.coaches
-        this.languages = this.options.languages
-        setTimeout(() => this.loadDefault(this.datacoach), 1)
+          this.options = this.datacoach.options
+          var coachesraw = this.datacoach.coaches
+          this.schedules = this.datasched.schedules
+          var schedraw = this.schedules
+          var hasbooked = false
+          coachesraw.forEach(function (value, index) {
+            schedraw.forEach(function (val, index) {
+              if(val.status !== 'Pending') {
+                hasbooked = true
+              }
+            })
+            value['has_booked'] = hasbooked
+          })
+          this.coaches = coachesraw
+          this.$refs.singleTable.setCurrentRow(this.coaches[0])
+          this.user_id = this.coaches[0].id
+          var scheds = schedraw
+          var coach = coachesraw
+
+          var user_id = this.user_id
+          let arr1 = scheds.filter(function (sched) {
+            return (sched.status === 'Pending' && sched.coach_id === user_id) || (sched.status !== 'Pending');
+          });
+          // let arr1 = filteredsced
+          let arr2 = coach
+          const mergeById = (a1, a2) =>
+            a1.map(itm => ({
+              ...a2.find((item) => (item.id === itm.coach_id) && item),
+              ...itm
+            }));
+          this.new_collections = mergeById(arr1, arr2);
+          this.reset = this.coaches
+          this.languages = this.options.languages
+          setTimeout(() => this.loadDefault(this.datacoach), 1)
+        })
       },
       loadDefault(data) {
         this.getSummary(data.coaches[0])

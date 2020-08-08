@@ -15,7 +15,7 @@
           <country-flag v-if="selected.country_code === null" country='' size='normal'/>
           <country-flag v-else :country='selected.country_code' size='normal'/>
         </div>
-        <div  v-if="selected.country === null" class="right-detail-sub">No Specified Country</div>
+        <div  v-if="selected.country === null || selected.country === '' || selected.country === undefined" class="right-detail-sub">No Specified Country</div>
         <div  v-else class="right-detail-sub">{{ selected.country }}</div>
       </div>
 <!--      {{ selected.id }}-->
