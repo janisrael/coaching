@@ -10,7 +10,7 @@ window.Vue = require('vue');
 
 import '../../resources/styles/theme.css';
 import '@fortawesome/fontawesome-free/css/all.css'
-import '@fortawesome/fontawesome-free/js/all.js'
+// import '@fortawesome/fontawesome-free/js/all.js'
 /**
  * The following block of code may be used to automatically register your
  * Vue components. It will recursively scan this directory for the Vue

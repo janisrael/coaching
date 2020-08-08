@@ -227,8 +227,8 @@
         booked: 0,
         attended: 0,
         cancelled: 0,
-        filter_booked: true,
-        booked_options: 'Youve booked this mentor before',
+        filter_booked: false,
+        booked_options: 'You havent booked this mentor before',
         datas: {}
       }
     },
@@ -330,24 +330,29 @@
 
           this.options = this.datacoach.options
           var coachesraw = this.datacoach.coaches
+
+          var user_id = coachesraw[0].id
+          // var user_id = this.user_id
+
           this.schedules = this.datasched.schedules
           var schedraw = this.schedules
           var hasbooked = false
           coachesraw.forEach(function (value, index) {
             schedraw.forEach(function (val, index) {
-              if(val.status !== 'Pending') {
+              if(val.status !== 'Pending' && value.coach_id === user_id) {
                 hasbooked = true
               }
             })
             value['has_booked'] = hasbooked
           })
+
           this.coaches = coachesraw
+          console.log(this.coaches)
           this.$refs.singleTable.setCurrentRow(this.coaches[0])
-          this.user_id = this.coaches[0].id
+          // this.user_id = this.coaches[0].id
           var scheds = schedraw
           var coach = coachesraw
 
-          var user_id = this.user_id
           let arr1 = scheds.filter(function (sched) {
             return (sched.status === 'Pending' && sched.coach_id === user_id) || (sched.status !== 'Pending');
           });
@@ -437,6 +442,7 @@
       },
       clear() {
         this.preselectedTags = []
+        this.booked_options = 'You havent booked this mentor before'
         this.value_range = [0,100]
       },
       handleFilter() {

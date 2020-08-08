@@ -323,17 +323,13 @@
     },
     computed: {
       filteredPositions () {
-        this.loading = true
         if(this.datefilter === '' || this.datefilter === null) {
-          this.loading = false
             return this.selected.filter(position => this.checkedFilters.includes(position.status));
         } else {
           if(this.datefilter.length > 1) {
             var data = this.selected.filter(position => this.checkedFilters.includes(position.status));
-            this.loading = false
             return data.filter(position => (this.date_collections[0] <= position.date) && (this.date_collections[1] >= position.date))
           }
-          this.loading = false
           return this.selected.filter(position => this.checkedFilters.includes(position.status));
         }
       }
