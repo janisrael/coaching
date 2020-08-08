@@ -209,7 +209,7 @@
           </div>
           <div style="display: block; padding: 10px;">
             <span><i class="far fa-clock"></i>
-            {{ schedule_details.day}}  {{ $moment(schedule_details.date).format('MM/DD')}}  {{ schedule_details.start_time }} - {{ schedule_details.end_time }}
+            {{ $moment(schedule_details.date).format('dddd') }}   {{ $moment(schedule_details.date).format('MM/DD')}}  {{ schedule_details.start_time }} - {{ schedule_details.end_time }}
               <el-button size="small" class="btn-buy-session" type="primary" style="margin-left: 20px;">In English</el-button></span>
           </div>
           <div style="display: block; padding: 10px;">
