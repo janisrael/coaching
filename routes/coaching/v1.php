@@ -10,12 +10,12 @@ Route::group(['namespace' => 'Coaching\V1'], function () {
 
     Route::group(['prefix' => 'api/v1'], function () {
     
-        Route::get('person', 'AccountController@person');
+        Route::get('account', 'AccountController@person');
+    
+        Route::get('account/sales', 'AccountController@sales');
 
         Route::get('coaches', 'CoachController@all');
         
         Route::get('coaches/schedule/{date_from?}/{date_to?}', 'CoachController@schedule');
-        
-        Route::get('coaches/sale', 'CoachController@sale');
     });
 });

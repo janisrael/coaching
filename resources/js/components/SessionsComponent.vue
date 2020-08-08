@@ -203,7 +203,7 @@
               <div style="display: inline-block; float: left; margin-left: -15px;">
                 <country-flag  v-if="schedule_details.country_code !== null || schedule_details.country_code !== ''" :country='schedule_details.country_code' size='normal'/>
               </div>
-<!--              <div v-if="schedule_details.country !== null || schedule_details.country !== '' || schedule_details.country !== 'null'" class="right-detail-sub-session">{{ schedule_details.country }}</div>-->
+              <!--              <div v-if="schedule_details.country !== null || schedule_details.country !== '' || schedule_details.country !== 'null'" class="right-detail-sub-session">{{ schedule_details.country }}</div>-->
               <div class="right-detail-sub-session"> {{ country_to_show }} </div>
             </div>
           </div>
@@ -213,7 +213,7 @@
               <el-button size="small" class="btn-buy-session" type="primary" style="margin-left: 20px;">In English</el-button></span>
           </div>
           <div style="display: block; padding: 10px;">
-<!--            <span v-if="schedule_details.country !== null || schedule_details.country !== '' || schedule_details.country !== 'null'"><i class="fa fa-map-marker" aria-hidden="true"></i> {{ schedule_details.country }}</span>-->
+            <!--            <span v-if="schedule_details.country !== null || schedule_details.country !== '' || schedule_details.country !== 'null'"><i class="fa fa-map-marker" aria-hidden="true"></i> {{ schedule_details.country }}</span>-->
             <span><i class="fa fa-map-marker" aria-hidden="true"></i> {{ country_to_show }}</span>
           </div>
           <div style="display: block; padding: 10px;">
@@ -323,13 +323,17 @@
     },
     computed: {
       filteredPositions () {
+        this.loading = true
         if(this.datefilter === '' || this.datefilter === null) {
+          this.loading = false
             return this.selected.filter(position => this.checkedFilters.includes(position.status));
         } else {
           if(this.datefilter.length > 1) {
             var data = this.selected.filter(position => this.checkedFilters.includes(position.status));
+            this.loading = false
             return data.filter(position => (this.date_collections[0] <= position.date) && (this.date_collections[1] >= position.date))
           }
+          this.loading = false
           return this.selected.filter(position => this.checkedFilters.includes(position.status));
         }
       }
@@ -358,8 +362,6 @@
         this.session_type = ''
         this.profileTitle = ''
         // this.schedule_profile = position.coaches
-        // if(position.country === Null) {
-
         if ((typeof (position.country) === 'undefined' || (position.country === null))) {
           this.country_to_show = 'No Specified Country'
         } else {

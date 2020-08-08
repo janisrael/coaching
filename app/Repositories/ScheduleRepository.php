@@ -6,6 +6,9 @@ use App\Repositories\Interfaces\ScheduleRepositoryInterface;
 use Faker\Factory;
 use learntotrade\salesforce\CoachingSession;
 use learntotrade\salesforce\fields\CoachingSessionFields;
+use learntotrade\salesforce\Person;
+use learntotrade\salesforce\fields\PersonFields;
+use Carbon\Carbon;
 
 class ScheduleRepository implements ScheduleRepositoryInterface
 {
@@ -37,18 +40,12 @@ class ScheduleRepository implements ScheduleRepositoryInterface
         ];
     }
 
-    public function dummy(): void
-    {
-        $this->result = [
-            'data' => [],
-            'options' => [],
-        ];
-    }
-
     public function live(): void
     {
         $data = [];
         $options = [];
+
+        $person = resolve(Person::class)->get(auth()->guard('portal')->user()->salesforce_token);
 
         $sf = resolve(CoachingSession::class)->query(
             array_values(config('api.sf_schedule')),
@@ -56,8 +53,6 @@ class ScheduleRepository implements ScheduleRepositoryInterface
         );
 
         if (count($sf)) {
-
-            $row = [];
             foreach ($sf['records'] as $field => $value) {
                 foreach (config('api.sf_schedule') as $key => $val) {
 
@@ -74,15 +69,34 @@ class ScheduleRepository implements ScheduleRepositoryInterface
                             }
                         }
                     }
-                    $row[$field][$key] = $value[$val];
+                    $data[$field][$key] = $value[$val];
                 }
+                
+                $start = Carbon::createFromFormat('Y-m-d h:i', $data[$field]['date'] . ' ' . $data[$field]['start_time'], 'UTC');
+                $start->setTimezone($person[PersonFields::TIMEZONE]);
+                $start = explode(' ', $start->format('Y-m-d h:i'));
+                
+                $end = Carbon::createFromFormat('Y-m-d h:i', $data[$field]['date'] . ' ' . $data[$field]['end_time'], 'UTC');
+                $end->setTimezone($person[PersonFields::TIMEZONE]);
+                $end = explode(' ', $end->format('Y-m-d h:i'));
+
+                $data[$field]['converted_date'] = $start[0];
+                $data[$field]['converted_start_time'] = $start[1];
+                $data[$field]['converted_end_time'] = $end[1];
             }
-            $data = $row;
         }
 
         $this->result = [
             'data' => $data,
             'options' => $options,
+        ];
+    }
+
+    public function dummy(): void
+    {
+        $this->result = [
+            'data' => [],
+            'options' => [],
         ];
     }
 

@@ -4,26 +4,19 @@ namespace App\Http\Controllers\Coaching\V1;
 
 use App\Repositories\Interfaces\CoachRepositoryInterface;
 use App\Repositories\Interfaces\ScheduleRepositoryInterface;
-use App\Repositories\Interfaces\SaleRepositoryInterface;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\CoachResource;
 use App\Http\Resources\ScheduleResource;
-use App\Http\Resources\SaleResource;
 
 class CoachController extends Controller
 {
     private $coachRepository;
     private $scheduleRepository;
-    private $saleRepository;
 
-    public function __construct(
-        CoachRepositoryInterface $coachRepository, 
-        ScheduleRepositoryInterface $scheduleRepository,
-        SaleRepositoryInterface $saleRepository
-    ){
+    public function __construct(CoachRepositoryInterface $coachRepository, ScheduleRepositoryInterface $scheduleRepository)
+    {
         $this->coachRepository = $coachRepository;
         $this->scheduleRepository = $scheduleRepository;
-        $this->saleRepository = $saleRepository;
     }
 
     /**
@@ -50,17 +43,5 @@ class CoachController extends Controller
         }
 
         return ScheduleResource::collection(collect($data));
-    }
-    
-    /**
-     * Get All Coaches Sale
-     * 
-     * @return json
-     */
-    public function sale()
-    {
-        $data = $this->saleRepository->all();
-
-        return SaleResource::collection(collect($data));
     }
 }

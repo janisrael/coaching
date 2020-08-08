@@ -387,13 +387,13 @@
         var countAttended = 0;
         var countCancelled = 0;
         datares.forEach(function (value, index) {
-          if(value.status === 'Booked') {
+          if(value.status === 'Booked' && value.coach_id === user_id) {
             countBooked++;
           }
-          if(value.status === 'Attended') {
+          if(value.status === 'Attended' && value.coach_id === user_id) {
             countAttended++;
           }
-          if(value.status === 'Cancelled') {
+          if(value.status === 'Cancelled' && value.coach_id === user_id) {
             countCancelled++;
           }
         })
