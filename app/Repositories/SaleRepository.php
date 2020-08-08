@@ -3,15 +3,12 @@
 namespace App\Repositories;
 
 use App\Repositories\Interfaces\SaleRepositoryInterface;
-use Faker\Factory;
 use learntotrade\salesforce\Sale;
 use learntotrade\salesforce\fields\SaleFields;
 
 class SaleRepository implements SaleRepositoryInterface
 {
     private $result = [];
-
-    private $api_options = [];
 
     public function all(): array
     {
@@ -22,15 +19,12 @@ class SaleRepository implements SaleRepositoryInterface
             $this->live();
         }
 
-        return [
-            'sales' => $this->result['data']
-        ];
+        return $this->result;
     }
 
     public function live(): void
     {
         $data = [];
-        $options = [];
 
         $sfCustomer = auth()->guard('portal')->check() ? 
                       [SaleFields::CUSTOMER.' = \''.auth()->guard('portal')->user()->salesforce_token.'\''] : 
@@ -52,19 +46,14 @@ class SaleRepository implements SaleRepositoryInterface
         }
 
         $this->result = [
-            'data' => $data
+            'sales' => $data,
         ];
     }
 
     public function dummy(): void
     {
         $this->result = [
-            'data' => [],
+            'sales' => [],
         ];
-    }
-
-    public function getResult(): array
-    {
-        return $this->result;
     }
 }

@@ -28,18 +28,70 @@ class CoachRepository implements CoachRepositoryInterface
             $this->live();
         }
 
-        $opt = [];
         if (count($this->result['options'])) {
-            foreach ($this->result['options'] as $key=>$option) {
+            $options = $this->result['options'];
+            foreach ($options as $key => $option) {
                 if (in_array($key, $this->api_options)) {
-                    $opt[$key] = array_unique($option);
+                    $this->result['options'][$key] = array_unique($option);
                 }
             }
         }
 
-        return [
-            'coaches' => $this->result['data'],
-            'options' => $opt
+        return $this->result;
+    }
+
+    public function live(): void
+    {
+        $data = [];
+        $options = [];
+
+        // For Temporary 
+        $businessDivision = 'Smart Charts';
+
+        // Waiting to update Salesforce API
+        // $person = resolve(Person::class)->get(auth()->guard('portal')->user()->salesforce_token);
+        // $businessDivision = $person[PersonFields::BUSINESS_DIVISION];
+        
+        $sf = resolve(User::class)->query(
+            array_values(config('api.sf_coaches')), 
+            [UserFields::BUSINESS_DIVISION.' != \'\'']
+        );
+
+        if (count($sf)) {
+            foreach ($sf['records'] as $field => $value) {
+                foreach (config('api.sf_coaches') as $key => $val) {
+                    if (in_array($key, $this->api_options)) {
+                        $value[$val] = array_filter(explode(';', $value[$val]));
+                        
+                        if (count($value[$val])) {
+                            foreach ($value[$val] as $opt_key => $opt_val) {
+                                if ($opt_val) {
+                                    $options[$key][] = $opt_val;
+                                }  
+                            }
+                        }
+                    }
+                    $data[$field][$key] = $value[$val];
+                }
+
+                if (isset($data[$field]['access_group']) and 
+                    !in_array($businessDivision, $data[$field]['access_group'])) {
+                    unset($data[$field]);
+                }
+
+                if (isset($data[$field])) {
+                    $country = null;
+                    if (isset($value[UserFields::COACH_COUNTRY])) {
+                        $country = __('country.'.$value[UserFields::COACH_COUNTRY]);
+                    }
+                    $data[$field]['country'] = $country;
+                }
+            }
+        }
+
+        $this->result = [
+            'coaches' => $data,
+            'options' => $options,
         ];
     }
 
@@ -66,72 +118,8 @@ class CoachRepository implements CoachRepositoryInterface
         }
 
         $this->result = [
-            'data' => $data,
+            'coaches' => $data,
             'options' => $options,
         ];
-    }
-
-    public function live(): void
-    {
-        $data = [];
-        $options = [];
-
-        // For Temporary 
-        $businessDivision = 'Smart Charts';
-
-        // Waiting to update Salesforce API
-        // $person = resolve(Person::class)->get(auth()->guard('portal')->user()->salesforce_token);
-        // $businessDivision = $person[PersonFields::BUSINESS_DIVISION];
-        
-        $sf = resolve(User::class)->query(
-            array_values(config('api.sf_coaches')), 
-            [UserFields::BUSINESS_DIVISION.' != \'\'']
-        );
-
-        if (count($sf)) {
-            foreach ($sf['records'] as $field => $value) {
-                foreach (config('api.sf_coaches') as $key => $val) {
-
-                    // Extract semicolon to array
-                    if (in_array($key, $this->api_options)) {
-                        $value[$val] = array_filter(explode(';', $value[$val]));
-
-                        // Collect all given options
-                        if (count($value[$val])) {
-                            foreach ($value[$val] as $opt_key => $opt_val) {
-                                if ($opt_val) {
-                                    $options[$key][] = $opt_val;
-                                }  
-                            }
-                        }
-                    }
-
-                    $data[$field][$key] = $value[$val];
-                }
-
-                if (isset($data[$field]['access_group']) and !in_array($businessDivision, $data[$field]['access_group'])) {
-                    unset($data[$field]);
-                }
-
-                if (isset($data[$field])) {
-                    // Set Country Name by Country Code
-                    $country = null;
-                    if (isset($value[UserFields::COACH_COUNTRY])) {
-                        $country = __('country.'.$value[UserFields::COACH_COUNTRY]);
-                    }
-                    $data[$field]['country'] = $country;
-                }
-            }
-        }
-
-        $this->result = [
-            'data' => $data,
-            'options' => $options,
-        ];
-    }
-
-    public function getResult(): array
-    {
-        return $this->result;
     }
 }
