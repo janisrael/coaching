@@ -32,9 +32,13 @@ class SaleRepository implements SaleRepositoryInterface
         $data = [];
         $options = [];
 
+        $sfCustomer = auth()->guard('portal')->check() ? 
+                      [SaleFields::CUSTOMER.' = \''.auth()->guard('portal')->user()->salesforce_token.'\''] : 
+                      [SaleFields::DATE.' >= '.date('Y-m-d')];
+
         $sf = resolve(Sale::class)->query(
             array_values(config('api.sf_sale')),
-            [SaleFields::CUSTOMER.' = \''.auth()->guard('portal')->user()->salesforce_token.'\'']
+            $sfCustomer
         );
 
         if (count($sf)) {

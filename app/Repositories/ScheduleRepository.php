@@ -45,7 +45,9 @@ class ScheduleRepository implements ScheduleRepositoryInterface
         $data = [];
         $options = [];
 
-        $person = resolve(Person::class)->get(auth()->guard('portal')->user()->salesforce_token);
+        if (auth()->guard('portal')->check()) {
+            $person = resolve(Person::class)->get(auth()->guard('portal')->user()->salesforce_token);
+        }
 
         $sf = resolve(CoachingSession::class)->query(
             array_values(config('api.sf_schedule')),
@@ -72,14 +74,18 @@ class ScheduleRepository implements ScheduleRepositoryInterface
                     $data[$field][$key] = $value[$val];
                 }
                 
-                $start = Carbon::createFromFormat('Y-m-d h:i', $data[$field]['date'] . ' ' . $data[$field]['start_time'], 'UTC');
-                $start->setTimezone($person[PersonFields::TIMEZONE]);
-                $start = explode(' ', $start->format('Y-m-d h:i'));
-                
-                $end = Carbon::createFromFormat('Y-m-d h:i', $data[$field]['date'] . ' ' . $data[$field]['end_time'], 'UTC');
-                $end->setTimezone($person[PersonFields::TIMEZONE]);
-                $end = explode(' ', $end->format('Y-m-d h:i'));
 
+                $start = Carbon::createFromFormat('Y-m-d h:i', $data[$field]['date'] . ' ' . $data[$field]['start_time'], 'UTC');
+                $end = Carbon::createFromFormat('Y-m-d h:i', $data[$field]['date'] . ' ' . $data[$field]['end_time'], 'UTC');
+
+                if (isset($person)) {
+                    $start->setTimezone($person[PersonFields::TIMEZONE]);
+                    $end->setTimezone($person[PersonFields::TIMEZONE]);
+                }
+
+                $start = explode(' ', $start->format('Y-m-d h:i'));
+                $end = explode(' ', $end->format('Y-m-d h:i'));
+                
                 $data[$field]['converted_date'] = $start[0];
                 $data[$field]['converted_start_time'] = $start[1];
                 $data[$field]['converted_end_time'] = $end[1];
