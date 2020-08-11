@@ -93,7 +93,7 @@
         </el-col>
         <el-col :xs="12" :sm="17" :md="16" :lg="18" :xl="18" class="full-height index-col-right" style="background-image: url('../../images/background.jpg'); background-size: cover;">
           <content-component v-if="loading === false" :selected="passData"></content-component>
-          <session-component v-if="loading === false" ref="sessionComponent" :selected="for_sessiondata" :user_id="coach_id" @change="backData($event)"></session-component>
+          <session-component v-if="loading === false" ref="sessionComponent" :selected="for_sessiondata" :user_id="coach_id" :sales="datasales" @change="backData($event)"></session-component>
         </el-col>
       </el-col>
 
@@ -199,6 +199,7 @@
         datasched: [],
         datamerge: [],
         schedules: [],
+        datasales: [],
         new_collections: [],
         user_id: '',
         options: [],
@@ -319,15 +320,17 @@
         // fetching data in all promise
         Promise.all([
           await fetch('/api/v1/coaches').then(res => res.ok && res.json() || Promise.reject(res)),
-          await fetch('/api/v1/coaches/schedule').then(res => res.ok && res.json() || Promise.reject(res))
+          await fetch('/api/v1/coaches/schedule').then(res => res.ok && res.json() || Promise.reject(res)),
+          await fetch('/api/v1/account/sales').then(res => res.ok && res.json() || Promise.reject(res))
         ]).then(data => {
           // const rescoach = await fetch('/api/v1/coaches');
           // const datacoach = await rescoach.json();
           // const ressched = await fetch('/api/v1/coaches/schedule');
           // const datasched = await ressched.json();
-          this.datacoach = data[0].data;
+          this.datacoach = data[0].data
           this.datasched = data[1].data
-
+          this.datasales = data[2].data
+          // this.datasched = this.dummyschedules
           this.options = this.datacoach.options
           var coachesraw = this.datacoach.coaches
 
@@ -335,11 +338,12 @@
           // var user_id = this.user_id
 
           this.schedules = this.datasched.schedules
+          // this.schedules = this.dummyschedules // dummy
           var schedraw = this.schedules
           var hasbooked = false
           coachesraw.forEach(function (value, index) {
             schedraw.forEach(function (val, index) {
-              if(val.status !== 'Pending' && value.coach_id === user_id) {
+              if(val.status !== 'Pending' && value.id === val.coach_id) {
                 hasbooked = true
               }
             })
@@ -356,7 +360,7 @@
           let arr1 = scheds.filter(function (sched) {
             return (sched.status === 'Pending' && sched.coach_id === user_id) || (sched.status !== 'Pending');
           });
-          // let arr1 = filteredsced
+          // let arr1 = filtered
           let arr2 = coach
           const mergeById = (a1, a2) =>
             a1.map(itm => ({
