@@ -50,7 +50,7 @@ class CoachRepository implements CoachRepositoryInterface
 
         // Waiting to update Salesforce API
         // $person = resolve(Person::class)->get(auth()->guard('portal')->user()->salesforce_token);
-        // $businessDivision = $person[PersonFields::BUSINESS_DIVISION];
+        // $businessDivision = $person[PersonFields::CUSTOMER_GROUP] == 'SC2' ? 'Smart Charts' : 'Learn To Trade';
         
         $sf = resolve(User::class)->query(
             array_values(config('api.sf_coaches')), 

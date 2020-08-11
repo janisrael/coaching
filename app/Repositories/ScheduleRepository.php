@@ -8,6 +8,9 @@ use learntotrade\salesforce\fields\CoachingSessionFields;
 use learntotrade\salesforce\Person;
 use learntotrade\salesforce\fields\PersonFields;
 use Carbon\Carbon;
+use learntotrade\salesforce\Sale;
+use learntotrade\salesforce\fields\SaleFields;
+use Illuminate\Support\Arr;
 
 class ScheduleRepository implements ScheduleRepositoryInterface
 {
@@ -29,13 +32,23 @@ class ScheduleRepository implements ScheduleRepositoryInterface
     {
         $data = [];
 
+        $where = 'Date__c >= '.date('Y-m-d');
+
         if (auth()->guard('portal')->check()) {
-            $person = resolve(Person::class)->get(auth()->guard('portal')->user()->salesforce_token);
+            $salesforceToken = auth()->guard('portal')->user()->salesforce_token;
+            
+            $person = resolve(Person::class)->get($salesforceToken);
+            
+            $sale = resolve(Sale::class)->query(['Id'], [SaleFields::CUSTOMER.' = \''.$salesforceToken.'\'']);
+            $saleId = Arr::pluck($sale['records'], 'Id');
+            
+            $where .= ' and (' . CoachingSessionFields::SALE . ' IN (\'' . implode('\',\'', $saleId) . '\') or ' . 
+                      CoachingSessionFields::STATUS . ' = \'Pending\')';
         }
 
         $sf = resolve(CoachingSession::class)->query(
             array_values(config('api.sf_schedule')),
-            ['Date__c >= '.date('Y-m-d')]
+            [$where]
         );
 
         if (count($sf)) {
