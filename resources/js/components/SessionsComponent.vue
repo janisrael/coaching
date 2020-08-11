@@ -1,5 +1,11 @@
 <template>
   <el-col :span="24">
+    <div v-if="!noMore" class="arrowDown" @click="scrollToElement({behavior: 'smooth'})">
+      <i class="fa fa-angle-down" aria-hidden="true"></i>
+    </div>
+    <div v-if="noMore && this.selected.legnth > 16" class="arrowDown" @click="scrollToTop({behavior: 'smooth'})">
+      <i class="fa fa-angle-up" aria-hidden="true"></i>
+    </div>
     <span style="color: rgba(255, 255, 255, 0.7); padding-top: 12px; display: inline-block;">{{ sales.computed_credits.total_available }} sessions left to book</span>
     <el-button size="small" class="btn-buy-session" type="primary" style="float:right;">BUY SESSIONS</el-button>
     <el-col :span="24">
@@ -69,7 +75,7 @@
         </div>
       </div>
       <el-col v-loading="loading" element-loading-text="Loading Schedules..." element-loading-spinner="el-icon-loading" element-loading-background="rgba(0, 0, 0, 0.21)":span="24" class="session-items-container">
-        <div v-for="position in even(filteredPositions)">
+        <div v-for="(position, index) in even(filteredPositions)" :key="index" :class="['sessions-item-' + index]">
         <transition name="el-fade-in">
         <div v-if="position.status === 'Pending'" class="list-item" @click="dialogMentor(position)">
           <el-col :xs="18" :sm="19" :md="20" :lg="22" :xl="22" :class="['list-' + position.status, 'session-listitem']">
@@ -172,6 +178,8 @@
         </div>
         </transition>
       </div>
+        <p v-if="count_loading">Loading...</p>
+<!--        <p v-if="noMore">No more</p>-->
       </el-col>
     </el-col>
     <el-dialog
@@ -322,24 +330,36 @@
         data:{},
         schedules: [],
         coaches: {},
-        country_to_show: ''
+        country_to_show: '',
+        max_count: this.selected.length,
+        count: 16,
+        count_loading: false,
+        session_collection: []
       }
     },
     computed: {
       filteredPositions () {
         if(this.datefilter === '' || this.datefilter === null) {
-            return this.selected.filter(position => this.checkedFilters.includes(position.status));
+            return this.session_collection.filter(position => this.checkedFilters.includes(position.status));
         } else {
           if(this.datefilter.length > 1) {
-            var data = this.selected.filter(position => this.checkedFilters.includes(position.status));
+            var data = this.session_collection.filter(position => this.checkedFilters.includes(position.status));
             return data.filter(position => (this.date_collections[0] <= position.date) && (this.date_collections[1] >= position.date))
           }
-          return this.selected.filter(position => this.checkedFilters.includes(position.status));
+          return this.session_collection.filter(position => this.checkedFilters.includes(position.status));
         }
+      },
+      noMore () {
+        return this.count >= this.selected.length
+      },
+      disabled () {
+        return this.count_loading || this.noMore
       }
     },
     created: function() {
       this.loading = true
+      this.session_collection = this.selected.slice(0, this.count)
+      console.log('collection',this.session_collection)
       this.session_data = this.selected.coaches
       this.getDate()
     },
@@ -348,6 +368,28 @@
         return arr.slice().sort(function(a, b) {
           return a.date - b.date;
         });
+      },
+      scrollToTop(options) {
+        const el = this.$el.getElementsByClassName('sessions-item-0')[0];
+        if (el) {
+          el.scrollIntoView(options);
+        }
+      },
+      scrollToElement(options) {
+        this.count_loading = true
+        var thisclass = 'sessions-item-' + this.count
+        setTimeout(() => {
+          this.count += 16
+          this.session_collection = this.selected.slice(0, this.count)
+          this.count_loading = false
+        }, 100)
+        setTimeout(() => this.ex_call_movescroll(options, thisclass), 100)
+      },
+      ex_call_movescroll(options, thisclass) {
+        const el = this.$el.getElementsByClassName(thisclass)[0];
+        if (el) {
+          el.scrollIntoView(options);
+        }
       },
       handleClose() {
         this.session_type = ''

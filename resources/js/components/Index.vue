@@ -330,7 +330,7 @@
           this.datacoach = data[0].data
           this.datasched = data[1].data
           this.datasales = data[2].data
-
+          // this.datasched = this.dummyschedules
           this.options = this.datacoach.options
           var coachesraw = this.datacoach.coaches
 
@@ -338,6 +338,7 @@
           // var user_id = this.user_id
 
           this.schedules = this.datasched.schedules
+          // this.schedules = this.dummyschedules // dummy
           var schedraw = this.schedules
           var hasbooked = false
           coachesraw.forEach(function (value, index) {
