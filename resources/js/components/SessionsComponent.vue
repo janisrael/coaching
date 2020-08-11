@@ -1,6 +1,6 @@
 <template>
   <el-col :span="24">
-    <span style="color: rgba(255, 255, 255, 0.7); padding-top: 12px; display: inline-block;">{{ filteredPositions.length }} sessions left to book</span>
+    <span style="color: rgba(255, 255, 255, 0.7); padding-top: 12px; display: inline-block;">{{ sales.computed_credits.total_available }} sessions left to book</span>
     <el-button size="small" class="btn-buy-session" type="primary" style="float:right;">BUY SESSIONS</el-button>
     <el-col :span="24">
       <div style="display: block;">
@@ -273,6 +273,10 @@
       user_id: {
         required: true,
         type: String
+      },
+      sales: {
+        required: true,
+        type: Object
       }
     },
     data() {
