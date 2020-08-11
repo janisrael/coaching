@@ -351,7 +351,6 @@
           })
 
           this.coaches = coachesraw
-          console.log(this.coaches)
           this.$refs.singleTable.setCurrentRow(this.coaches[0])
           // this.user_id = this.coaches[0].id
           var scheds = schedraw
@@ -368,6 +367,7 @@
               ...itm
             }));
           this.new_collections = mergeById(arr1, arr2);
+          console.log('merge', this.new_collections)
           this.reset = this.coaches
           this.languages = this.options.languages
           setTimeout(() => this.loadDefault(this.datacoach), 1)
@@ -414,7 +414,7 @@
         setTimeout(() => this.ex_call_session(), 1)
       },
       ex_call_session() {
-        // this.$refs.sessionComponent.mapData()
+        this.$refs.sessionComponent.assignme()
       },
       callFilter() {
         this.reset = this.selectedTags

@@ -101,7 +101,8 @@
             <span>BOOK</span>
           </el-col>
         </div>
-        <div v-if="position.status === 'Booked'" class="list-item" @click="dialogMentor(position)">
+        <div v-if="position.status === 'Booked'" class="list-item">
+          <div @click="dialogMentor(position)" style="display: block;">
           <el-col :xs="18" :sm="19" :md="20" :lg="22" :xl="22" :class="['list-' + position.status, 'session-listitem']">
             <span style="width: 15px; display: inline-block"><i class="fa fa-calendar-check" aria-hidden="true"></i></span>
             <el-avatar :size="60" :src="position.coach_image" class="session-list-avatar">
@@ -120,11 +121,12 @@
               <span v-if="position.availability_type.includes('In-house only')"><i class="fa fa-user" style="font-size: 14px"></i></span>
               <span v-if="position.availability_type.includes('Group')"><i class="fa fa-users" style="font-size: 14px"></i></span>
             </span>
-<!--            <div class="session-list-time session-list-time-calendar" @click="alert('test')"><i class="fas fa-calendar-plus" style="margin-right:10px;"></i><span class="session-calendar-caption">CALENDAR</span></div>-->
+            <div class="session-list-time session-list-time-calendar"><i class="fas fa-calendar-plus" style="margin-right:10px;"></i><span class="session-calendar-caption">CALENDAR</span></div>
           </el-col>
-          <el-col :xs="6" :sm="5" :md="4" :lg="2" :xl="2" v-if="position.status === 'Booked'" :class="['list-' + position.status, 'list-item-btn']">
+          <el-col :xs="6" :sm="5" :md="4" :lg="2" :xl="2" v-if="position.status === 'Booked'" :class="['list-' + position.status, 'list-item-btn']" @click="dialogMentor(position)">
             <span>VIEW</span>
           </el-col>
+          </div>
         </div>
 
         <div v-if="position.status === 'Attended'" class="list-item" @click="dialogMentor(position)">
@@ -334,7 +336,7 @@
         max_count: this.selected.length,
         count: 16,
         count_loading: false,
-        session_collection: []
+        session_collection: this.selected.slice(0, this.count)
       }
     },
     computed: {
@@ -356,10 +358,13 @@
         return this.count_loading || this.noMore
       }
     },
+    mounted: function() {
+      // this.session_collection = this.selected.slice(0, this.count)
+    },
     created: function() {
       this.loading = true
-      this.session_collection = this.selected.slice(0, this.count)
-      console.log('collection',this.session_collection)
+      // this.session_collection = this.selected.slice(0, this.count)
+      // console.log('collection',this.session_collection)
       this.session_data = this.selected.coaches
       this.getDate()
     },
@@ -374,6 +379,9 @@
         if (el) {
           el.scrollIntoView(options);
         }
+      },
+      assignme() {
+        this.session_collection = this.selected.slice(0, this.count)
       },
       scrollToElement(options) {
         this.count_loading = true
