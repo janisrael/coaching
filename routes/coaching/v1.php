@@ -17,5 +17,9 @@ Route::group(['namespace' => 'Coaching\V1'], function () {
         Route::get('coaches', 'CoachController@all');
         
         Route::get('coaches/schedule/{date_from?}/{date_to?}', 'CoachController@schedule');
+
+        Route::post('coaching-session/book', 'CoachingSessionController@book');
+
+        Route::post('coaching-session/cancel', 'CoachingSessionController@cancel');
     });
 });

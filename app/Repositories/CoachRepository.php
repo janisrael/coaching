@@ -7,6 +7,7 @@ use Faker\Factory;
 use learntotrade\salesforce\User;
 use learntotrade\salesforce\Person;
 use learntotrade\salesforce\fields\UserFields;
+use learntotrade\salesforce\fields\PersonFields;
 
 class CoachRepository implements CoachRepositoryInterface
 {
@@ -45,12 +46,11 @@ class CoachRepository implements CoachRepositoryInterface
         $data = [];
         $options = [];
 
-        // For Temporary 
+        // Default
         $businessDivision = 'Smart Charts';
 
-        // Waiting to update Salesforce API
         // $person = resolve(Person::class)->get(auth()->guard('portal')->user()->salesforce_token);
-        // $businessDivision = $person[PersonFields::CUSTOMER_GROUP] == 'SC2' ? 'Smart Charts' : 'Learn To Trade';
+        // $businessDivision = $person[PersonFields::CUSTOMER_GROUP];
         
         $sf = resolve(User::class)->query(
             array_values(config('api.sf_coaches')), 

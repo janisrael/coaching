@@ -22,6 +22,19 @@ class SaleRepository implements SaleRepositoryInterface
         return $this->result;
     }
 
+    public function computedCredits(array $data): array
+    {
+        $total = collect($data);
+
+        return [
+            'total_credits' => $total->sum('sessions'),
+            'total_available' => $total->where('sessions_expiry', '>', now())->sum('sessions_remaining'),
+            'total_expired' => $total->where('sessions_expiry', '<', now())->sum('sessions_remaining'),
+            'total_refunded' => $total->sum('sessions_recredited'),
+            'total_cancelled' => $total->sum('sessions_cancelled'),
+        ];
+    }
+
     public function live(): void
     {
         $data = [];
