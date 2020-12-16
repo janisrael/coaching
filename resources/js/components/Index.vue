@@ -93,7 +93,7 @@
         </el-col>
         <el-col :xs="12" :sm="17" :md="16" :lg="18" :xl="18" class="full-height index-col-right" style="background-image: url('../../images/background.jpg'); background-size: cover;">
           <content-component v-if="loading === false" :selected="passData"></content-component>
-          <session-component v-if="loading === false" ref="sessionComponent" :selected="for_sessiondata" :user_id="coach_id" :sales="datasales" @change="backData($event)"></session-component>
+          <session-component v-if="loading === false" ref="sessionComponent" :selected="for_sessiondata" :user_id="coach_id" :sales="datasales" @change="backData($event)" @reload="reloadData(value)"></session-component>
         </el-col>
       </el-col>
 
@@ -228,9 +228,12 @@
         booked: 0,
         attended: 0,
         cancelled: 0,
-        filter_booked: false,
-        booked_options: 'You havent booked this mentor before',
-        datas: {}
+        filter_booked: true,
+        // booked_options: 'You havent booked this mentor before',
+        booked_options: 'Youve booked this mentor before',
+        datas: {},
+        value: [],
+        selected_id: ''
       }
     },
     computed: {
@@ -292,6 +295,10 @@
       coachesRowClassName(index) {
         return 'this-is-active'
       },
+      reloadData(value) {
+        this.schedules = value
+        this.getSummary()
+      },
       backData(value) {
         var booked = 0
         var attended = 0
@@ -328,6 +335,7 @@
           // const ressched = await fetch('/api/v1/coaches/schedule');
           // const datasched = await ressched.json();
           this.datacoach = data[0].data
+          console.log(this.datacoach,'datacoach')
           this.datasched = data[1].data
           this.datasales = data[2].data
           // this.datasched = this.dummyschedules
@@ -379,9 +387,13 @@
       },
       getSummary(row, index) {
         this.passData = row
+        if(row) {
+          this.selected_id = row.id
+        }
         var scheds = this.schedules
         var coach = this.coaches
-        var user_id = row.id
+
+        var user_id = this.selected_id
         let arr1 = scheds.filter(function (sched) {
           return (sched.status === 'Pending' && sched.coach_id === user_id) || (sched.status !== 'Pending');
         });
@@ -411,6 +423,7 @@
         this.Cancelled = countCancelled
         this.datamerge = datares
         this.for_sessiondata = this.datamerge
+        console.log(this.for_sessiondata,'for_session')
         setTimeout(() => this.ex_call_session(), 1)
       },
       ex_call_session() {

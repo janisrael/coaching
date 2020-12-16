@@ -30,16 +30,19 @@ import locale from 'element-ui/lib/locale/lang/en'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import CountryFlag from 'vue-country-flag'
 import VueMoment from 'vue-moment'
+// import Loading from 'vue-loading-overlay';
 // import MultiFiltersPlugin from './MultiFilters' // <-- THIS
 
 Vue.use(ElementUI, { locale })
 Vue.use(VueMoment)
+// Vue.use(Loading);
 // Vue.use(MultiFiltersPlugin); // <-- THIS
 // library.add(faSpinner)
 
 Vue.component('country-flag', CountryFlag)
 Vue.component('font-awesome-icon', FontAwesomeIcon)
 Vue.component('Index', require('./components/Index.vue').default);
+// Vue.component('loader', require('@C/Loader.vue'));
 
 /**
  * Next, we will create a fresh Vue application instance and attach it to

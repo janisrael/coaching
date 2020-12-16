@@ -1,5 +1,12 @@
 <template>
   <el-col :span="24">
+    <loading
+        :active.sync="loading"
+        :can-cancel="false"
+        :is-full-page="fullPage"
+        :background-color="bg_color"
+        :color="icon_color"
+    ></loading>
     <div v-if="!noMore" class="arrowDown" @click="scrollToElement({behavior: 'smooth'})">
       <i class="fa fa-angle-down" aria-hidden="true"></i>
     </div>
@@ -226,6 +233,7 @@
             <!--            <span v-if="schedule_details.country !== null || schedule_details.country !== '' || schedule_details.country !== 'null'"><i class="fa fa-map-marker" aria-hidden="true"></i> {{ schedule_details.country }}</span>-->
             <span><i class="fa fa-map-marker" aria-hidden="true"></i> {{ country_to_show }}</span>
           </div>
+<!--          {{ schedule_details }}-->
           <div style="display: block; padding: 10px;">
             <span>Attend
               <span v-if="avail_data.includes('Can do either')">
@@ -251,7 +259,7 @@
       <span slot="footer" class="dialog-footer">
         <span v-if="session_type === 'Pending'">
           <el-link @click="handleClose()" style="color: #fff; margin-right: 20px;">Cancel</el-link>
-          <el-button @click="handleClose()" size="small" type="success">Confirm</el-button>
+          <el-button @click="handleBook(schedule_details)" size="small" type="success">Confirm</el-button>
         </span>
         <span v-else-if="session_type === 'Booked'">
           <el-alert
@@ -273,8 +281,15 @@
 </template>
 
 <script>
+  import { Notification } from 'element-ui';
+  import Loading from "vue-loading-overlay";
+  import "vue-loading-overlay/dist/vue-loading.css";
   export default {
     name: 'SessionsComponent',
+    components: {
+      // ModalReview,
+      Loading,
+    },
     props: {
       selected: {
         required: true,
@@ -292,6 +307,9 @@
     data() {
       return {
         loading: false,
+        bg_color: '#000',
+        icon_color: '#fff',
+        fullPage: true,
         dialogItem: false,
         filters: [
           {
@@ -363,6 +381,7 @@
     },
     created: function() {
       this.loading = true
+      console.log(this.session_collection,'collections')
       // this.session_collection = this.selected.slice(0, this.count)
       // console.log('collection',this.session_collection)
       this.session_data = this.selected.coaches
@@ -373,6 +392,39 @@
         return arr.slice().sort(function(a, b) {
           return a.date - b.date;
         });
+      },
+      handleBook(value) {
+        console.log(value,'value')
+        this.loading = true
+        let url = "/api/v1/coaching-session/book";
+        axios.post(url,
+            {
+              schedule_id: value.id
+            })
+            .then(response => {
+              console.log(value.id, 'id')
+              console.log(response, 'response')
+              if(response.data.data.status === 'success') {
+                console.log(response.data.data.status,'success')
+                Notification.success({
+                  title: 'Success',
+                  message: 'Schedule successfully booked',
+                  duration: 4 * 1000
+                })
+                this.session_collection = []
+                this.session_collection = response.data.data.schedules
+                this.loading = false
+                this.dialogItem = false
+                // this.$emit('reload', response.data.data.schedules)
+              } else {
+
+              }
+            })
+            .catch(error => {
+              console.log(error)
+              this.loading = false
+              // this.isLoading = false
+            })
       },
       scrollToTop(options) {
         const el = this.$el.getElementsByClassName('sessions-item-0')[0];
