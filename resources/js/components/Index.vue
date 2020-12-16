@@ -387,13 +387,13 @@
       },
       getSummary(row, index) {
         this.passData = row
-        if(row) {
-          this.selected_id = row.id
-        }
+        // if(row) {
+        //   this.selected_id = row.id
+        // }
         var scheds = this.schedules
         var coach = this.coaches
 
-        var user_id = this.selected_id
+        var user_id = row.id
         let arr1 = scheds.filter(function (sched) {
           return (sched.status === 'Pending' && sched.coach_id === user_id) || (sched.status !== 'Pending');
         });
