@@ -387,13 +387,13 @@
       },
       getSummary(row, index) {
         this.passData = row
-        // if(row) {
-        //   this.selected_id = row.id
-        // }
+        if(row) {
+          this.selected_id = row.id
+        }
         var scheds = this.schedules
         var coach = this.coaches
 
-        var user_id = row.id
+        var user_id = this.selected_id
         let arr1 = scheds.filter(function (sched) {
           return (sched.status === 'Pending' && sched.coach_id === user_id) || (sched.status !== 'Pending');
         });
@@ -423,6 +423,7 @@
         this.Cancelled = countCancelled
         this.datamerge = datares
         this.for_sessiondata = this.datamerge
+        console.log(this.for_sessiondata,'for_session')
         setTimeout(() => this.ex_call_session(), 1)
       },
       ex_call_session() {

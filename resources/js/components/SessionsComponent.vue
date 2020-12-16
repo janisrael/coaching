@@ -402,7 +402,7 @@
               schedule_id: value.id
             })
             .then(response => {
-              this.loading = false
+              console.log(value.id, 'id')
               console.log(response, 'response')
               if(response.data.data.status === 'success') {
                 console.log(response.data.data.status,'success')
@@ -411,8 +411,11 @@
                   message: 'Schedule successfully booked',
                   duration: 4 * 1000
                 })
+                this.session_collection = []
+                this.session_collection = response.data.data.schedules
+                this.loading = false
                 this.dialogItem = false
-                this.$emit('reload', response.data.data.schedules)
+                // this.$emit('reload', response.data.data.schedules)
               } else {
 
               }
