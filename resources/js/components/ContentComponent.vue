@@ -1,14 +1,16 @@
 <template>
   <div class="right-list-container">
-    <el-col :xs="4" :sm="4" :md="4" :lg="2" :xl="2" class="content-avatar-container">
-      <el-avatar :size="60" :src="selected.coach_image" class="dbl-border">
-        <img v-if="selected.coach_image === null || selected.coach_image === 'null'" :src="default_image"/>
-        <img v-else :src="selected.coach_image"/>
-      </el-avatar>
+    <el-col :xs="4" :sm="4" :md="4" :lg="2" :xl="2" class="content-avatar-container" @click="showInfo()" style="cursor: pointer;">
+      <div @click="showInfo()" style="cursor: pointer; display: block; width: 100%; height: 100%;">
+        <el-avatar :size="60" :src="selected.coach_image" class="dbl-border">
+          <img v-if="selected.coach_image === null || selected.coach_image === 'null'" :src="default_image"/>
+          <img v-else :src="selected.coach_image"/>
+        </el-avatar>
+      </div>
     </el-col>
 
     <el-col :xs="20" :sm="20" :md="20" :lg="22" :xl="22" class="content-coaches-name">
-      <div class="right-detail-header">{{ selected.first_name }} {{ selected.last_name }}</div>
+      <div class="right-detail-header" @click="showInfo()" style="cursor: pointer;">{{ selected.first_name }} {{ selected.last_name }}</div>
       <div class="right-detail-btnprofile" @click="showInfo()"><i class="fas fa-info"></i></div>
       <div class="right-list-sub">
         <div style="display: inline-block; float: left; margin-left: -15px;">
@@ -63,37 +65,37 @@
 </template>
 
 <script>
-  export default {
-    name: 'ContentComponent',
-    props: {
-      selected: {
-        required: true,
-        type: Object
-      }
-    },
-    data() {
-      return {
-        handleClose: '',
-        fit: 'contain',
-        dialogProfile: false,
-        default_image: '../../images/default-avatar.jpg'
-      }
-    },
-    methods: {
-      getPostBody (post) {
-        let body = this.stripTags(post);
+export default {
+  name: 'ContentComponent',
+  props: {
+    selected: {
+      required: true,
+      type: Object
+    }
+  },
+  data() {
+    return {
+      handleClose: '',
+      fit: 'contain',
+      dialogProfile: false,
+      default_image: '../../images/default-avatar.jpg'
+    }
+  },
+  methods: {
+    getPostBody (post) {
+      let body = this.stripTags(post);
 
-        return body.length > 300 ? body.substring(0, 300) + '... Read more' : body;
-      },
-      stripTags (text) {
-        return text.replace(/(<([^>]+)>)/ig, '');
-      },
-      showInfo() {
-        this.dialogProfile = true
-        console.log(this.selected.profile)
-      }
+      return body.length > 300 ? body.substring(0, 300) + '... Read more' : body;
+    },
+    stripTags (text) {
+      return text.replace(/(<([^>]+)>)/ig, '');
+    },
+    showInfo() {
+      this.dialogProfile = true
+      console.log(this.selected.profile)
     }
   }
+}
 </script>
 
 <style scoped>

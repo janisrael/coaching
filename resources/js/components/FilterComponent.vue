@@ -1,134 +1,101 @@
 <template>
-  <div>
-    <el-dialog title="Filter Settings" :visible.sync="filterDialog" top="3%">
-      <el-row>
-        <el-col :span="24">
-          <span style="float: right;"><el-link type="primary" style="color:#fff">Select All </el-link> | <el-link type="primary" style="color:#fff" @click="clear()"> Clear</el-link> </span>
-        </el-col>
-        <el-col :span="24" class="filter-blocks">
-          <span class="filter-title">LANGUAGE</span>
-          <div class="cata-sub-nav">
-            <div class="nav-prev arrow" @click="left()"><i class="el-icon-arrow-left"></i></div>
-            <el-checkbox v-model="checkboxGroup4" v-for="lang in selected.languages" class="filter-checkbox" size="small" :label="lang" :key="lang" border>{{ lang }}</el-checkbox>
-            <div class="nav-next arrow" style="" @click="left()"><i class="el-icon-arrow-right"></i></div>
+  <div class="right-list-container">
+    <el-col :xs="4" :sm="4" :md="4" :lg="2" :xl="2" class="content-avatar-container" @click="showInfo()" style="cursor: pointer;">
+      <div @click="showInfo()" style="cursor: pointer; display: block; width: 100%; height: 100%;">
+        <el-avatar :size="60" :src="selected.coach_image" class="dbl-border">
+          <img v-if="selected.coach_image === null || selected.coach_image === 'null'" :src="default_image"/>
+          <img v-else :src="selected.coach_image"/>
+        </el-avatar>
+      </div>
+    </el-col>
+
+    <el-col :xs="20" :sm="20" :md="20" :lg="22" :xl="22" class="content-coaches-name">
+      <div class="right-detail-header" @click="showInfo()" style="cursor: pointer;">{{ selected.first_name }} {{ selected.last_name }}</div>
+      <div class="right-detail-btnprofile" @click="showInfo()"><i class="fas fa-info"></i></div>
+      <div class="right-list-sub">
+        <div style="display: inline-block; float: left; margin-left: -15px;">
+          <country-flag v-if="selected.country_code === null" country='' size='normal'/>
+          <country-flag v-else :country='selected.country_code' size='normal'/>
+        </div>
+        <div  v-if="selected.country === null || selected.country === '' || selected.country === undefined" class="right-detail-sub">No Specified Country</div>
+        <div  v-else class="right-detail-sub">{{ selected.country }}</div>
+      </div>
+    </el-col>
+    <el-dialog
+      title="Biography"
+      id="dialogProfile"
+      :visible.sync="dialogProfile"
+      top="3%"
+      width="60%">
+      <div style="float:left; padding: 8px;">
+        <el-avatar :size="60" :src="selected.coach_image" class="dbl-border">
+          <img v-if="selected.avatcoach_imagear === null || selected.coach_image === 'null'" :src="default_image"/>
+          <img v-else :src="selected.coach_image"/>
+        </el-avatar>
+      </div>
+      <div style="display: inline-block; width: 70%; padding-left: 15px;">
+        <div class="right-detail-header" style="color: #fff !important;">{{ selected.first_name }} {{ selected.last_name }}</div>
+        <div class="right-list-sub">
+          <div style="display: inline-block; float: left; margin-left: -15px;">
+            <country-flag v-if="selected.country_code === null" country='' size='normal'/>
+            <country-flag v-else :country='selected.country_code' size='normal'/>
           </div>
-        </el-col>
-        <el-col :span="24" class="filter-blocks">
-          <span class="filter-title">EXPERIENCE</span>
-          <div>
-            <el-col :span="24">
-              <span style="display: inline-block !important;"><span style="color: rgba(255, 255, 255, 0.52);">FROM </span><el-input v-model="ex_from" class="input-default" size="mini" clearable style="width: 15%"></el-input>  Years  &nbsp; &nbsp; &nbsp; <span style="color: rgba(255, 255, 255, 0.52);">TO</span>  <el-input v-model="ex_to" class="input-default" size="mini" clearable style="width: 15%"></el-input> Years</span>
-              <div class="block">
-                <el-slider
-                  v-model="value"
-                  range
-                  show-stops
-                  :max="30">
-                </el-slider>
-              </div>
-            </el-col>
-          </div>
-        </el-col>
-        <el-col :span="24" class="filter-blocks">
-          <span class="filter-title">MARKET</span>
-          <div>
-            <el-checkbox v-model="checkboxGroup1" v-for="market in selected.market_traded" class="filter-checkbox" size="small" :label="market" :key="market" border>{{ market}}</el-checkbox>
-          </div>
-        </el-col>
-        <el-col :span="24" class="filter-blocks">
-          <span class="filter-title">STYLE</span>
-          <div>
-            <el-checkbox v-model="checkboxGroup2" v-for="style in selected.style" class="filter-checkbox" size="small" :label="style" :key="style" border>{{ style }}</el-checkbox>
-          </div>
-        </el-col>
-        <el-col :span="24" class="filter-blocks">
-          <span class="filter-title">BOOKINGS</span>
-          <div>
-            <el-checkbox v-model="checkboxGroup3" v-for="book in books" class="filter-checkbox" size="small" :label="book" :key="book" border>{{ book }}</el-checkbox>
-          </div>
-        </el-col>
-      </el-row>
+          <div v-if="selected.country === null || selected.country === '' || selected.country === undefined" class="right-detail-sub">No Specified Country</div>
+          <div v-else class="right-detail-sub">{{ selected.country }}</div>
+        </div>
+      </div>
+      <div style="display: block; padding: 20px;">
+        <div class="info-head">Experience</div>
+        <span class="info-sub sum_experience">{{ selected.experience_summary }}</span>
+      </div>
+      <div style="display: block; padding: 20px; padding-bottom: 10px;">
+        <div class="info-head">Markets Traded</div>
+        <span class="info-sub sum_experience">{{ selected.market_traded_summary }}</span>
+      </div>
+      <div style="display: block; padding: 20px; padding-bottom: 10px;">
+        <div class="info-head">Style</div>
+        <span class="info-sub sum_experience">{{ selected.style_summary }}</span>
+      </div>
       <span slot="footer" class="dialog-footer">
-        <el-button @click="filterDialog = false" type="success">Update</el-button>
-      </span>
+    <el-button @click="dialogProfile = false" type="success">Close</el-button>
+  </span>
     </el-dialog>
 
   </div>
 </template>
 
 <script>
+export default {
+  name: 'ContentComponent',
+  props: {
+    selected: {
+      required: true,
+      type: Object
+    }
+  },
+  data() {
+    return {
+      handleClose: '',
+      fit: 'contain',
+      dialogProfile: false,
+      default_image: '../../images/default-avatar.jpg'
+    }
+  },
+  methods: {
+    getPostBody (post) {
+      let body = this.stripTags(post);
 
-  const langOptions = ['Tagalog', 'English', 'Russian', 'Armenian', 'Chinese', 'Japanese','Korean','Vietnamese','Mandarin'];
-  const marketOptions = ['Forex', 'Stock Indices', 'Commodities'];
-  const styleOptions = ['End of Day', 'Intra-day', 'Scalper'];
-  const bookingOptions = ['Youve booked this mentor before' , 'You havent booked this mentor before'];
-  export default {
-    name: 'FilterComponent',
-    props: {
-      selected: {
-        required: true,
-        type: Object
-      }
+      return body.length > 300 ? body.substring(0, 300) + '... Read more' : body;
     },
-    data() {
-      return {
-        search: '',
-        filterDialog: false,
-        checkboxGroup1: ['Forex'],
-        checkboxGroup2: ['End of Day'],
-        checkboxGroup3: ['Youve booked this mentor before'],
-        checkboxGroup4: ['English'],
-        markets: marketOptions,
-        styles: styleOptions,
-        books: bookingOptions,
-        langs: langOptions,
-        ex_from: '',
-        ex_to: '',
-        range: '',
-        value: 0,
-        val: 0
-      }
+    stripTags (text) {
+      return text.replace(/(<([^>]+)>)/ig, '');
     },
-    methods: {
-      left() {
-        $(".cata-sub-nav").on("scroll", function () {
-          this.val = $(this).scrollLeft();
-
-          if ($(this).scrollLeft() + $(this).innerWidth() >= $(this)[0].scrollWidth) {
-            $(".nav-next").hide();
-          } else {
-            $(".nav-next").show();
-          }
-
-          if (this.val == 0) {
-            $(".nav-prev").hide();
-          } else {
-            $(".nav-prev").show();
-          }
-
-        });
-        console.log("init-scroll: " + $(".nav-next").scrollLeft());
-        $(".nav-next").on("click", function () {
-          $(".cata-sub-nav").animate({ scrollLeft: "+=460" }, 200);
-        });
-        $(".nav-prev").on("click", function () {
-          $(".cata-sub-nav").animate({ scrollLeft: "-=460" }, 200);
-        });
-      },
-      clear() {
-        this.checkboxGroup1 = []
-        this.checkboxGroup2 = []
-        this.checkboxGroup3 = []
-        this.checkboxGroup4 = []
-      },
-      show() {
-        this.filterDialog = true
-      },
-      close() {
-        this.filterDialog = false
-      }
+    showInfo() {
+      this.dialogProfile = true
+      console.log(this.selected.profile)
     }
   }
+}
 </script>
 
 <style scoped>
