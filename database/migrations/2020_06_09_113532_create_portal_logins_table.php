@@ -14,7 +14,7 @@ class CreatePortalLoginsTable extends Migration
     public function up()
     {
         Schema::create('portal_logins', function (Blueprint $table) {
-            $table->id();
+            $table->bigIncrements('id');
             $table->integer('portal_user_id')->unsigned();
             $table->text('portal_user_details')->nullable();
             $table->string('api_token', 191)->unique();

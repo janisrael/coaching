@@ -1,8 +1,5 @@
 <?php
 
-use Illuminate\Support\Facades\Route;
-use Illuminate\Support\Facades\Log;
-
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -14,18 +11,17 @@ use Illuminate\Support\Facades\Log;
 |
 */
 
+// Login Portal
+Route::get('/', 'Auth\PortalLoginController@loginPortal');
+Route::get('logout', 'Auth\PortalLoginController@logout');
+
 // Portal Session
-//Route::middleware('auth:portal')->group(function () {
+Route::group(['middleware' => 'portal.auth:portal'], function () {
     
-    // DEBUG
-    Route::any('/', function () {
-        Log::info('------------------');
-        Log::info('Method: ' . request()->method());
-        Log::info('URL: ' . request()->fullUrl());
-        Log::info(request()->all());
-        return view('welcome');
-    });
-//});
+    require 'coaching/v1.php';
+    
+    # require 'coaching/v2.php';
+});
 
 
 // Console Webtool 
@@ -38,7 +34,7 @@ Route::group(['prefix' => 'console'], function () {
 
     Route::middleware(['auth', 'verified'])->namespace('Console')->group(function () {
         
-        Route::get('/', 'DashboardController@index')->name('home');
+        Route::get('/', 'DashboardController@index')->name('dashboard');
         
         //
     });

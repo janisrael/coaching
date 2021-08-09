@@ -39,7 +39,7 @@ return [
     |
     */
 
-    'debug' => (bool) env('APP_DEBUG', false),
+    'debug' => env('APP_DEBUG', false),
 
     /*
     |--------------------------------------------------------------------------
@@ -83,7 +83,17 @@ return [
 
     'lifetime' => env('SESSION_TIMEOUT', 120),
 
+    'auth_user_portal' => env('PORTAL_ENABLE_AUTH'),
+
     'portal_url' => env('PORTAL_URL'),
+
+    'portal_session_url' => env('PORTAL_SESSION_URL'),
+
+    'coaching_url' => env('APP_URL') . '/' . env('DEFAULT_COACHING_VERSION', 'v1'),
+
+    'enable_api_dummy_data' => env('API_ENABLE_DUMMY_DATA'),
+
+    'total_dummy_data' => env('API_TOTAL_DUMMY_DATA'),
 
     /*
     |--------------------------------------------------------------------------
@@ -178,6 +188,11 @@ return [
         Illuminate\Validation\ValidationServiceProvider::class,
         Illuminate\View\ViewServiceProvider::class,
 
+        /**
+         * Salesforce plugin
+         */
+        learntotrade\salesforce\SalesforceServiceProvider::class,
+
         /*
          * Package Service Providers...
          */
@@ -189,9 +204,10 @@ return [
         App\Providers\AuthServiceProvider::class,
         // App\Providers\BroadcastServiceProvider::class,
         App\Providers\EventServiceProvider::class,
+        App\Providers\TelescopeServiceProvider::class,
         App\Providers\HorizonServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
-        App\Providers\TelescopeServiceProvider::class,
+        App\Providers\RepositoryServiceProvider::class,
 
     ],
 
@@ -225,7 +241,6 @@ return [
         'File' => Illuminate\Support\Facades\File::class,
         'Gate' => Illuminate\Support\Facades\Gate::class,
         'Hash' => Illuminate\Support\Facades\Hash::class,
-        'Http' => Illuminate\Support\Facades\Http::class,
         'Lang' => Illuminate\Support\Facades\Lang::class,
         'Log' => Illuminate\Support\Facades\Log::class,
         'Mail' => Illuminate\Support\Facades\Mail::class,

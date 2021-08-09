@@ -78,6 +78,7 @@ return [
     'middleware' => [
         'web',
         Authorize::class,
+        'auth:web'
     ],
 
     /*
@@ -92,7 +93,7 @@ return [
     */
 
     'ignore_paths' => [
-        'nova-api*',
+        //
     ],
 
     'ignore_commands' => [

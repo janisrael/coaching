@@ -41,16 +41,15 @@ return [
             'provider' => 'users',
         ],
 
+        'portal' => [
+            'driver' => 'session',
+            'provider' => 'portal_logins',
+        ],
+
         'api' => [
             'driver' => 'token',
             'provider' => 'users',
             'hash' => false,
-        ],
-
-        'portal' => [
-            'driver' => 'token',
-            'provider' => 'potal_logins',
-            'hash' => true,
         ],
     ],
 
@@ -77,10 +76,9 @@ return [
             'model' => App\Models\User::class,
         ],
 
-        'potal_logins' => [
-            'driver' => 'database',
-            'table' => 'potal_logins',
-            'expire' => 60,
+        'portal_logins' => [
+            'driver' => 'eloquent',
+            'model' => App\Models\PortalLogin::class,
         ],
 
         // 'users' => [
