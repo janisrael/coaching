@@ -36,11 +36,11 @@ class CoachController extends Controller
      */
     public function schedule($date_from=null, $date_to=null)
     {
-        $data = $this->scheduleRepository->all();
-
         if (!is_null($date_from) and !is_null($date_to)) {
-            $data = $this->scheduleRepository->getByDate($date_from, $date_to);
+            $this->scheduleRepository->setDate($date_from, $date_to);
         }
+
+        $data = $this->scheduleRepository->all();
 
         return ScheduleResource::collection(collect($data));
     }

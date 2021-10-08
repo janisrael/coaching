@@ -16,6 +16,8 @@ class ScheduleRepository implements ScheduleRepositoryInterface
 {
     private $result = [];
 
+    private $scheduleDate = [];
+
     public function all(): array
     {
         if (config('app.enable_api_dummy_data')) {
@@ -35,7 +37,7 @@ class ScheduleRepository implements ScheduleRepositoryInterface
         $coach = resolve(CoachRepositoryInterface::class)->all();
         $coaches = Arr::pluck($coach['coaches'], 'country_code', 'id');
 
-        $where = 'Date__c >= '.date('Y-m-d');
+        $where = [CoachingSessionFields::DATE . ' >= '.date('Y-m-d')];
 
         if (auth()->guard('portal')->check()) {
             $salesforceToken = auth()->guard('portal')->user()->salesforce_token;
@@ -45,13 +47,18 @@ class ScheduleRepository implements ScheduleRepositoryInterface
             $sale = resolve(SaleRepositoryInterface::class)->all();
             $saleId = Arr::pluck($sale['sales'], 'id');
             
-            $where = CoachingSessionFields::SALE . ' IN (\'' . implode('\',\'', $saleId) . '\') or ' . 
-                     CoachingSessionFields::STATUS . ' = \'Pending\'';
+            $where = ['(' . CoachingSessionFields::SALE . ' IN (\'' . implode('\',\'', $saleId) . '\') or ' . 
+                            CoachingSessionFields::STATUS . ' = \'Pending\')'];
+
+            if (! empty($this->scheduleDate)) {
+                $where[] = CoachingSessionFields::DATE . ' >= '.$this->scheduleDate['from'].' and ' .
+                            CoachingSessionFields::DATE . ' <= '.$this->scheduleDate['to'];
+            }
         }
 
         $sf = resolve(CoachingSession::class)->query(
             array_values(config('api.sf_schedule')),
-            [$where]
+            $where
         );
 
         if (count($sf)) {
@@ -92,6 +99,14 @@ class ScheduleRepository implements ScheduleRepositoryInterface
     {
         $this->result = [
             'schedules' => [],
+        ];
+    }
+
+    public function setDate($dateFrom, $dateTo): void
+    {
+        $this->scheduleDate = [
+            'from' => $dateFrom,
+            'to' => $dateTo
         ];
     }
 }
