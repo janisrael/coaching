@@ -74,10 +74,10 @@ class CoachRepository implements CoachRepositoryInterface
                     $data[$field][$key] = $value[$val];
                 }
 
-                if (isset($data[$field]['access_group']) and 
+                /* if (isset($data[$field]['access_group']) and 
                     !in_array($businessDivision, $data[$field]['access_group'])) {
                     unset($data[$field]);
-                }
+                } */
 
                 if (isset($data[$field])) {
                     $country = null;

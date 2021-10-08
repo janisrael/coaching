@@ -62,8 +62,8 @@ class ScheduleRepository implements ScheduleRepositoryInterface
 
                 if (isset($coaches[$data[$field]['coach_id']])) {
                     $coachTimezone = \DateTimeZone::listIdentifiers(\DateTimeZone::PER_COUNTRY, $coaches[$data[$field]['coach_id']])[0];
-                    $start = Carbon::createFromFormat('Y-m-d h:i', $data[$field]['date'] . ' ' . $data[$field]['start_time'], $coachTimezone);
-                    $end = Carbon::createFromFormat('Y-m-d h:i', $data[$field]['date'] . ' ' . $data[$field]['end_time'], $coachTimezone);
+                    $start = Carbon::createFromFormat('Y-m-d H:i', $data[$field]['date'] . ' ' . $data[$field]['start_time'], $coachTimezone);
+                    $end = Carbon::createFromFormat('Y-m-d H:i', $data[$field]['date'] . ' ' . $data[$field]['end_time'], $coachTimezone);
 
                     if (isset($person)) {
                         $start->setTimezone($person[PersonFields::TIMEZONE]);
