@@ -9,4 +9,6 @@ interface ScheduleRepositoryInterface
     public function dummy(): void;
     
     public function live(): void;
+    
+    public function setDate($dateFrom, $dateTo): void;
 }

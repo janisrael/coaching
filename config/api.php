@@ -52,8 +52,8 @@ return [
         'coach_image' => $userFields::COACH_IMAGE,
         'email' => $userFields::EMAIL,
         'bio' => $userFields::BIO,
-        'business_role' => $userFields::BUSINESS_ROLE,
-        'speaker_image' => $userFields::AVATAR,
+        // 'business_role' => $userFields::BUSINESS_ROLE,
+        // 'speaker_image' => $userFields::AVATAR,
         'region' => $userFields::REGION,
     ],
 
@@ -68,7 +68,7 @@ return [
         'location' => $coachingSessionFields::LOCATION,
         'sale_id' => $coachingSessionFields::SALE,
         'customer_name' => $coachingSessionFields::CUSTOMER_NAME,
-        'zoom_url' => $coachingSessionFields::ZOOM_URL,
+        // 'zoom_url' => $coachingSessionFields::ZOOM_URL,
     ],
 
     'sf_sale' => [
