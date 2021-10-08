@@ -41,7 +41,7 @@
         methods: {
             onShare() {
                 this.$emit('setShareValue', { value: true })
-                this.$notify({
+                this.$notify.success({
                     title: 'Success',
                     message: 'Live Account Shared!',
                     type: 'success'

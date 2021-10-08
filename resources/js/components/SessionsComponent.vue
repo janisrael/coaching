@@ -400,6 +400,16 @@ export default {
     handleBook(value) {
       console.log(value,'value')
       this.loading = true
+      // let total_a_credits = 0
+      let total_a_credits = this.sales.computed_credits.total_available
+      if(total_a_credits === 0) {
+        this.$notify.error({
+          title: 'Unable to Book!',
+          message: 'No Available Credits!',
+        });
+        this.loading = false
+        return
+      }
       let url = "/api/v1/coaching-session/book";
       axios.post(url,
         {

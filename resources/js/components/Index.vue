@@ -367,7 +367,8 @@ export default {
       // fetching data in all promise
       Promise.all([
         await fetch('/api/v1/coaches').then(res => res.ok && res.json() || Promise.reject(res)),
-        await fetch(sched_api + '/' + date1 + '/' + date2).then(res => res.ok && res.json() || Promise.reject(res)),
+        // await fetch(sched_api + '/' + date1 + '/' + date2).then(res => res.ok && res.json() || Promise.reject(res)),
+        await fetch(sched_api).then(res => res.ok && res.json() || Promise.reject(res)),
         await fetch('/api/v1/account/sales').then(res => res.ok && res.json() || Promise.reject(res))
       ]).then(data => {
         // const rescoach = await fetch('/api/v1/coaches');
