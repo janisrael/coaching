@@ -44,8 +44,8 @@
         "preferred-install": "dist",
         "sort-packages": true,
         "platform": {
-          "ext-pcntl": "7.3",
-          "ext-posix": "7.3"
+            "ext-pcntl": "7.3",
+            "ext-posix": "7.3"
         }
     },
     "extra": {
@@ -62,8 +62,8 @@
             "database/factories"
         ],
         "files": [
-           "app/Helpers/Functions/Global.php"
-       ]
+            "app/Helpers/Functions/Global.php"
+        ]
     },
     "autoload-dev": {
         "psr-4": {

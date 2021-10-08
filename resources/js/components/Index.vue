@@ -8,7 +8,7 @@
               <el-input
                 id="searchBar"
                 size="small"
-                placeholder="Search for Coach"
+                placeholder="Search for Mentor"
                 clearable
                 v-model="search">
                 <i slot="prefix" class="el-input__icon el-icon-search"></i>
@@ -121,7 +121,7 @@
                     range
                     show-stops
                     :max="100"
-                  @change="setrange()">
+                    @change="setrange()">
                   </el-slider>
                 </div>
               </el-col>
@@ -144,7 +144,7 @@
             <div>
               <el-radio v-model="booked_options" label="Youve booked this mentor before" value="1" border size="medium">Youve booked this mentor before</el-radio>
               <el-radio v-model="booked_options" label="You havent booked this mentor before" value="2" border size="medium">You havent booked this mentor before</el-radio>
-<!--              <el-checkbox v-model="checkboxGroup3" v-for="book in books" class="filter-checkbox" size="small" :label="book" :key="book" border>{{ book }}</el-checkbox>-->
+              <!--              <el-checkbox v-model="checkboxGroup3" v-for="book in books" class="filter-checkbox" size="small" :label="book" :key="book" border>{{ book }}</el-checkbox>-->
             </div>
           </el-col>
         </el-row>
@@ -158,7 +158,7 @@
           <el-col :span="24" class="filter-blocks">
             <el-input
               size="small"
-              placeholder="Search for Coach"
+              placeholder="Search for Mentor"
               clearable
               v-model="presearch">
               <i slot="prefix" class="el-input__icon el-icon-search"></i>
@@ -175,94 +175,95 @@
 </template>
 
 <script>
-  import ContentComponent from './ContentComponent.vue'
-  // import FilterComponent from './FilterComponent.vue'
-  import SessionComponent from './SessionsComponent.vue'
+import ContentComponent from './ContentComponent.vue'
+// import FilterComponent from './FilterComponent.vue'
+import SessionComponent from './SessionsComponent.vue'
 
-  export default {
-    name: 'Index',
-    components: {
-      ContentComponent,
-      SessionComponent
-    },
-    data() {
-      return {
-        loading: false,
-        importComponent: null,
-        dialogFormVisible: false,
-        selected: '',
-        passData: {},
-        fit: 'contain',
-        search: '',
-        data: [],
-        datacoach: [],
-        datasched: [],
-        datamerge: [],
-        schedules: [],
-        datasales: [],
-        new_collections: [],
-        user_id: '',
-        options: [],
-        coaches: [],
-        reset: [],
-        filterDialog: false,
-        searchModal: false,
-        checkboxGroup1: ['Forex'],
-        checkboxGroup2: ['End of Day'],
-        checkboxGroup3: ['Youve booked this mentor before'],
-        checkboxGroup4: ['English'],
-        ex_from: '',
-        ex_to: '',
-        range: '',
-        value_range: [0,100],
-        final_range: [],
-        val: 0,
-        selectedTags: [],
-        preselectedTags: [],
-        languages: [],
-        presearch: '',
-        default_image: '../../images/default-avatar.jpg',
-        for_sessiondata: [],
-        coach_id: '',
-        ex: {},
-        booked: 0,
-        attended: 0,
-        cancelled: 0,
-        filter_booked: true,
-        // booked_options: 'You havent booked this mentor before',
-        booked_options: 'Youve booked this mentor before',
-        datas: {},
-        value: [],
-        selected_id: ''
-      }
-    },
-    computed: {
-      activeCards: function() {
-        var activeCards = [];
-        var filters = this.selectedTags;
-        var start = this.final_range[0]
-        var end = this.final_range[1]
-        var filter_booked = this.filter_booked
-        // if(this.booked_options === 'You havent booked this mentor before') {
-        //   filter_booked = false
-        // // } else {
-        //   filter_booked = this.filter_booked
-        // }
-        if(this.selectedTags.length === 0) {
+export default {
+  name: 'Index',
+  components: {
+    ContentComponent,
+    SessionComponent
+  },
+  data() {
+    return {
+      loading: false,
+      importComponent: null,
+      dialogFormVisible: false,
+      selected: '',
+      passData: {},
+      fit: 'contain',
+      search: '',
+      data: [],
+      datacoach: [],
+      datasched: [],
+      datamerge: [],
+      schedules: [],
+      datasales: [],
+      new_collections: [],
+      user_id: '',
+      options: [],
+      coaches: [],
+      reset: [],
+      filterDialog: false,
+      searchModal: false,
+      checkboxGroup1: ['Forex'],
+      checkboxGroup2: ['End of Day'],
+      checkboxGroup3: ['Youve booked this mentor before'],
+      checkboxGroup4: ['English'],
+      ex_from: '',
+      ex_to: '',
+      range: '',
+      value_range: [0,100],
+      final_range: [],
+      val: 0,
+      selectedTags: [],
+      preselectedTags: [],
+      languages: [],
+      presearch: '',
+      default_image: '../../images/default-avatar.jpg',
+      for_sessiondata: [],
+      coach_id: '',
+      ex: {},
+      booked: 0,
+      attended: 0,
+      cancelled: 0,
+      filter_booked: true,
+      // booked_options: 'You havent booked this mentor before',
+      booked_options: 'Youve booked this mentor before',
+      datas: {},
+      value: [],
+      selected_id: ''
+    }
+  },
+  computed: {
+    activeCards: function() {
+      var activeCards = [];
+      var filters = this.selectedTags;
+      var start = this.final_range[0]
+      var end = this.final_range[1]
+      var filter_booked = this.filter_booked
+      // if(this.booked_options === 'You havent booked this mentor before') {
+      //   filter_booked = false
+      // // } else {
+      //   filter_booked = this.filter_booked
+      // }
+      if(this.selectedTags.length === 0) {
 
-          if(this.final_range[0] === 0 && this.final_range[1] === 100){
-            var coaches = this.coaches
+        if(this.final_range[0] === 0 && this.final_range[1] === 100){
+          var coaches = this.coaches
 
-            return coaches.filter(el => (el.has_booked === filter_booked));;
-          } else {
-            this.coaches.forEach(function(card) {
-              if(card.experience >= start && card.experience <= end)  {
-                activeCards.push(card)
-              }
-            })
-          }
+          return coaches.filter(el => (el.has_booked === filter_booked));;
         } else {
           this.coaches.forEach(function(card) {
+            if(card.experience >= start && card.experience <= end)  {
+              activeCards.push(card)
+            }
+          })
+        }
+      } else {
+        this.coaches
+          .forEach(function(card) {
             function cardContainsFilter(filter) {
               let lang = card.languages
               let markets = card.market_traded
@@ -282,223 +283,223 @@
               activeCards.push(card);
             }
           });
-        }
-        return activeCards;
       }
+      return activeCards;
+    }
+  },
+  created: function() {
+    this.loading = true
+    this.read()
+    this.setrange()
+  },
+  methods: {
+    coachesRowClassName(index) {
+      return 'this-is-active'
     },
-    created: function() {
-      this.loading = true
-      this.read()
-      this.setrange()
+    reloadData(value) {
+      this.schedules = value
+      this.getSummary()
     },
-    methods: {
-      coachesRowClassName(index) {
-        return 'this-is-active'
-      },
-      reloadData(value) {
-        this.schedules = value
-        this.getSummary()
-      },
-      backData(value) {
-        var booked = 0
-        var attended = 0
-        var cancelled = 0
-        value.forEach(function(value, index) {
-          if(value.status === 'Booked') {
-            booked = booked + 1
-          }
-          if(value.status === 'Attended') {
-            attended = attended + 1
-          }
-          if(value.status === 'Cancelled') {
-            cancelled = cancelled + 1
-          }
-        })
-        this.booked = booked
-        this.attended = attended
-        this.cancelled = cancelled
-      },
-      setrange() {
-        this.final_range[0] = this.value_range[0]
-        this.final_range[1] = this.value_range[1]
-      },
-      async read() {
-        this.loading = true
-        // fetching data in all promise
-        Promise.all([
-          await fetch('/api/v1/coaches').then(res => res.ok && res.json() || Promise.reject(res)),
-          await fetch('/api/v1/coaches/schedule').then(res => res.ok && res.json() || Promise.reject(res)),
-          await fetch('/api/v1/account/sales').then(res => res.ok && res.json() || Promise.reject(res))
-        ]).then(data => {
-          // const rescoach = await fetch('/api/v1/coaches');
-          // const datacoach = await rescoach.json();
-          // const ressched = await fetch('/api/v1/coaches/schedule');
-          // const datasched = await ressched.json();
-          this.datacoach = data[0].data
-          console.log(this.datacoach,'datacoach')
-          this.datasched = data[1].data
-          this.datasales = data[2].data
-          // this.datasched = this.dummyschedules
-          this.options = this.datacoach.options
-          var coachesraw = this.datacoach.coaches
-
-          var user_id = coachesraw[0].id
-          // var user_id = this.user_id
-
-          this.schedules = this.datasched.schedules
-          // this.schedules = this.dummyschedules // dummy
-          var schedraw = this.schedules
-          var hasbooked = false
-          coachesraw.forEach(function (value, index) {
-            schedraw.forEach(function (val, index) {
-              if(val.status !== 'Pending' && value.id === val.coach_id) {
-                hasbooked = true
-              }
-            })
-            value['has_booked'] = hasbooked
-          })
-
-          this.coaches = coachesraw
-          this.$refs.singleTable.setCurrentRow(this.coaches[0])
-          // this.user_id = this.coaches[0].id
-          var scheds = schedraw
-          var coach = coachesraw
-
-          let arr1 = scheds.filter(function (sched) {
-            return (sched.status === 'Pending' && sched.coach_id === user_id) || (sched.status !== 'Pending');
-          });
-          // let arr1 = filtered
-          let arr2 = coach
-          const mergeById = (a1, a2) =>
-            a1.map(itm => ({
-              ...a2.find((item) => (item.id === itm.coach_id) && item),
-              ...itm
-            }));
-          this.new_collections = mergeById(arr1, arr2);
-          console.log('merge', this.new_collections)
-          this.reset = this.coaches
-          this.languages = this.options.languages
-          setTimeout(() => this.loadDefault(this.datacoach), 1)
-        })
-      },
-      loadDefault(data) {
-        this.getSummary(data.coaches[0])
-        this.loading = false
-      },
-      getSummary(row, index) {
-        this.passData = row
-        if(row) {
-          this.selected_id = row.id
+    backData(value) {
+      var booked = 0
+      var attended = 0
+      var cancelled = 0
+      value.forEach(function(value, index) {
+        if(value.status === 'Booked') {
+          booked = booked + 1
         }
-        var scheds = this.schedules
-        var coach = this.coaches
+        if(value.status === 'Attended') {
+          attended = attended + 1
+        }
+        if(value.status === 'Cancelled') {
+          cancelled = cancelled + 1
+        }
+      })
+      this.booked = booked
+      this.attended = attended
+      this.cancelled = cancelled
+    },
+    setrange() {
+      this.final_range[0] = this.value_range[0]
+      this.final_range[1] = this.value_range[1]
+    },
+    async read() {
+      this.loading = true
+      // fetching data in all promise
+      Promise.all([
+        await fetch('/api/v1/coaches').then(res => res.ok && res.json() || Promise.reject(res)),
+        await fetch('/api/v1/coaches/schedule').then(res => res.ok && res.json() || Promise.reject(res)),
+        await fetch('/api/v1/account/sales').then(res => res.ok && res.json() || Promise.reject(res))
+      ]).then(data => {
+        // const rescoach = await fetch('/api/v1/coaches');
+        // const datacoach = await rescoach.json();
+        // const ressched = await fetch('/api/v1/coaches/schedule');
+        // const datasched = await ressched.json();
+        this.datacoach = data[0].data
+        console.log(this.datacoach,'datacoach')
+        this.datasched = data[1].data
+        this.datasales = data[2].data
+        // this.datasched = this.dummyschedules
+        this.options = this.datacoach.options
+        var coachesraw = this.datacoach.coaches
 
-        var user_id = this.selected_id
+        var user_id = coachesraw[0].id
+        // var user_id = this.user_id
+
+        this.schedules = this.datasched.schedules
+        // this.schedules = this.dummyschedules // dummy
+        var schedraw = this.schedules
+        var hasbooked = false
+        coachesraw.forEach(function (value, index) {
+          schedraw.forEach(function (val, index) {
+            if(val.status !== 'Pending' && value.id === val.coach_id) {
+              hasbooked = true
+            }
+          })
+          value['has_booked'] = hasbooked
+        })
+
+        this.coaches = coachesraw
+        this.$refs.singleTable.setCurrentRow(this.coaches[0])
+        // this.user_id = this.coaches[0].id
+        var scheds = schedraw
+        var coach = coachesraw
+
         let arr1 = scheds.filter(function (sched) {
           return (sched.status === 'Pending' && sched.coach_id === user_id) || (sched.status !== 'Pending');
         });
+        // let arr1 = filtered
         let arr2 = coach
         const mergeById = (a1, a2) =>
           a1.map(itm => ({
             ...a2.find((item) => (item.id === itm.coach_id) && item),
             ...itm
           }));
-        var datares = mergeById(arr1, arr2)
-        var countBooked = 0;
-        var countAttended = 0;
-        var countCancelled = 0;
-        datares.forEach(function (value, index) {
-          if(value.status === 'Booked' && value.coach_id === user_id) {
-            countBooked++;
-          }
-          if(value.status === 'Attended' && value.coach_id === user_id) {
-            countAttended++;
-          }
-          if(value.status === 'Cancelled' && value.coach_id === user_id) {
-            countCancelled++;
-          }
-        })
-        this.booked = countBooked
-        this.Attended = countAttended
-        this.Cancelled = countCancelled
-        this.datamerge = datares
-        this.for_sessiondata = this.datamerge
-        console.log(this.for_sessiondata,'for_session')
-        setTimeout(() => this.ex_call_session(), 1)
-      },
-      ex_call_session() {
-        this.$refs.sessionComponent.assignme()
-      },
-      callFilter() {
-        this.reset = this.selectedTags
-        this.filterDialog = true
-      },
-      left() {
-        $(".cata-sub-nav").on("scroll", function () {
-          this.val = $(this).scrollLeft();
-
-          if ($(this).scrollLeft() + $(this).innerWidth() >= $(this)[0].scrollWidth) {
-            $(".nav-next").hide();
-          } else {
-            $(".nav-next").show();
-          }
-
-          if (this.val == 0) {
-            $(".nav-prev").hide();
-          } else {
-            $(".nav-prev").show();
-          }
-
-        });
-        $(".nav-next").on("click", function () {
-          $(".cata-sub-nav").animate({ scrollLeft: "+=460" }, 200);
-        });
-        $(".nav-prev").on("click", function () {
-          $(".cata-sub-nav").animate({ scrollLeft: "-=460" }, 200);
-        });
-      },
-      clear() {
-        this.preselectedTags = []
-        this.booked_options = 'You havent booked this mentor before'
-        this.value_range = [0,100]
-      },
-      handleFilter() {
-        if(this.value_range[0] === '') {
-          this.value_range[0] = 0
-        }
-        if(this.value_range[1] === '') {
-          this.value_range[1] = 100
-        }
-        this.selectedTags = []
-        this.reset = this.preselectedTags
-        this.selectedTags = this.preselectedTags
-        if(this.booked_options === 'You havent booked this mentor before') {
-          this.filter_booked = false
-        } else {
-          this.filter_booked = true
-        }
-        this.final_range[0] = this.value_range[0]
-        this.final_range[1] = this.value_range[1]
-        this.filterDialog = false
-        this.$refs.singleTable.setCurrentRow(this.coaches[0])
-        this.preselectedTags = []
-        this.preselectedTags = this.reset
-      },
-      callsearchmodal() {
-        this.searchModal = true
-      },
-      searchCoach() {
-        this.search = this.presearch
-        this.searchModal = false
+        this.new_collections = mergeById(arr1, arr2);
+        console.log('merge', this.new_collections)
+        this.reset = this.coaches
+        this.languages = this.options.languages
+        setTimeout(() => this.loadDefault(this.datacoach), 1)
+      })
+    },
+    loadDefault(data) {
+      this.getSummary(data.coaches[0])
+      this.loading = false
+    },
+    getSummary(row, index) {
+      this.passData = row
+      if(row) {
+        this.selected_id = row.id
       }
+      var scheds = this.schedules
+      var coach = this.coaches
+
+      var user_id = this.selected_id
+      let arr1 = scheds.filter(function (sched) {
+        return (sched.status === 'Pending' && sched.coach_id === user_id) || (sched.status !== 'Pending');
+      });
+      let arr2 = coach
+      const mergeById = (a1, a2) =>
+        a1.map(itm => ({
+          ...a2.find((item) => (item.id === itm.coach_id) && item),
+          ...itm
+        }));
+      var datares = mergeById(arr1, arr2)
+      var countBooked = 0;
+      var countAttended = 0;
+      var countCancelled = 0;
+      datares.forEach(function (value, index) {
+        if(value.status === 'Booked' && value.coach_id === user_id) {
+          countBooked++;
+        }
+        if(value.status === 'Attended' && value.coach_id === user_id) {
+          countAttended++;
+        }
+        if(value.status === 'Cancelled' && value.coach_id === user_id) {
+          countCancelled++;
+        }
+      })
+      this.booked = countBooked
+      this.Attended = countAttended
+      this.Cancelled = countCancelled
+      this.datamerge = datares
+      this.for_sessiondata = this.datamerge
+      console.log(this.for_sessiondata,'for_session')
+      setTimeout(() => this.ex_call_session(), 1)
+    },
+    ex_call_session() {
+      this.$refs.sessionComponent.assignme()
+    },
+    callFilter() {
+      this.reset = this.selectedTags
+      this.filterDialog = true
+    },
+    left() {
+      $(".cata-sub-nav").on("scroll", function () {
+        this.val = $(this).scrollLeft();
+
+        if ($(this).scrollLeft() + $(this).innerWidth() >= $(this)[0].scrollWidth) {
+          $(".nav-next").hide();
+        } else {
+          $(".nav-next").show();
+        }
+
+        if (this.val == 0) {
+          $(".nav-prev").hide();
+        } else {
+          $(".nav-prev").show();
+        }
+
+      });
+      $(".nav-next").on("click", function () {
+        $(".cata-sub-nav").animate({ scrollLeft: "+=460" }, 200);
+      });
+      $(".nav-prev").on("click", function () {
+        $(".cata-sub-nav").animate({ scrollLeft: "-=460" }, 200);
+      });
+    },
+    clear() {
+      this.preselectedTags = []
+      this.booked_options = 'You havent booked this mentor before'
+      this.value_range = [0,100]
+    },
+    handleFilter() {
+      if(this.value_range[0] === '') {
+        this.value_range[0] = 0
+      }
+      if(this.value_range[1] === '') {
+        this.value_range[1] = 100
+      }
+      this.selectedTags = []
+      this.reset = this.preselectedTags
+      this.selectedTags = this.preselectedTags
+      if(this.booked_options === 'You havent booked this mentor before') {
+        this.filter_booked = false
+      } else {
+        this.filter_booked = true
+      }
+      this.final_range[0] = this.value_range[0]
+      this.final_range[1] = this.value_range[1]
+      this.filterDialog = false
+      this.$refs.singleTable.setCurrentRow(this.coaches[0])
+      this.preselectedTags = []
+      this.preselectedTags = this.reset
+    },
+    callsearchmodal() {
+      this.searchModal = true
+    },
+    searchCoach() {
+      this.search = this.presearch
+      this.searchModal = false
     }
   }
+}
 </script>
 
 <style scoped>
-  .full-height {
-    height: 100vh;
-  }
+.full-height {
+  height: 100vh;
+}
 
 </style>
 
