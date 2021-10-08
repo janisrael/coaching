@@ -58,13 +58,13 @@
                         </div>
                         <div class="left-list-sub">
                           <span style="color: rgb(169, 169, 169);">Markets traded -</span>
-                          <span v-for="(mt, index) in scope.row.market_traded" style="display: inline-block">
+                          <span v-for="(mt, index) in scope.row.market_traded" :key="index" style="display: inline-block">
                             <span>{{mt}}</span><span v-if="index+1 < scope.row.market_traded.length">,  </span>
                           </span>
                         </div>
                         <div class="left-list-sub">
                           <span style="color: rgb(169, 169, 169);">Style - </span>
-                          <span v-for="(st, index) in scope.row.style" style="display: inline-block">
+                          <span v-for="(st, index) in scope.row.style" :key="index" style="display: inline-block">
                             <span>{{st}}</span><span v-if="index+1 < scope.row.style.length">, </span>
                           </span>
                         </div>
@@ -93,7 +93,7 @@
         </el-col>
         <el-col :xs="12" :sm="17" :md="16" :lg="18" :xl="18" class="full-height index-col-right" style="background-image: url('../../images/background.jpg'); background-size: cover;">
           <content-component v-if="loading === false" :selected="passData"></content-component>
-          <session-component v-if="loading === false" ref="sessionComponent" :selected="for_sessiondata" :user_id="coach_id" :sales="datasales" @change="backData($event)" @reload="reloadData(value)"></session-component>
+          <session-component v-if="loading === false" ref="sessionComponent" :selected="for_sessiondata" :user_id="coach_id" :sales="datasales" :ifshare="ifShare" @change="backData($event)" @reload="reloadData(value)" @showModal="showShareModal"></session-component>
         </el-col>
       </el-col>
 
@@ -169,6 +169,15 @@
         <el-button @click="searchCoach()" type="success">OK</el-button>
       </span>
       </el-dialog>
+      
+      <!-- dialog share read only live account -->
+      <component
+          ref="currentComponent"
+          :is="currentComponent"
+          :ifshare="ifShare"
+          @setShareValue="setShareValue"
+        />
+
     </el-row>
   </div>
 
@@ -178,16 +187,19 @@
 import ContentComponent from './ContentComponent.vue'
 // import FilterComponent from './FilterComponent.vue'
 import SessionComponent from './SessionsComponent.vue'
+import ShareModalComponent from './ShareModalComponent.vue'
 
 export default {
   name: 'Index',
   components: {
     ContentComponent,
-    SessionComponent
+    SessionComponent,
+    ShareModalComponent
   },
   data() {
     return {
       loading: false,
+      currentComponent: null,
       importComponent: null,
       dialogFormVisible: false,
       selected: '',
@@ -233,7 +245,8 @@ export default {
       booked_options: 'Youve booked this mentor before',
       datas: {},
       value: [],
-      selected_id: ''
+      selected_id: '',
+      ifShare: false
     }
   },
   computed: {
@@ -289,10 +302,33 @@ export default {
   },
   created: function() {
     this.loading = true
+
     this.read()
     this.setrange()
+
   },
   methods: {
+    setShareValue(value) {
+      if(value.value === true) {
+        this.ifShare = true
+      } else {
+        this.ifShare = false
+      }
+    },
+    showShareModal() {
+      this.currentComponent = null
+      if(this.ifShare === false) {
+       
+          this.currentComponent = ShareModalComponent
+          setTimeout(() => this.ex_call_modal(), 1);
+      } else {
+          this.currentComponent = null
+      }
+      
+    },
+    ex_call_modal() {
+      this.$refs.currentComponent.show();
+    },
     coachesRowClassName(index) {
       return 'this-is-active'
     },
@@ -325,10 +361,13 @@ export default {
     },
     async read() {
       this.loading = true
+      let sched_api = '/api/v1/coaches/schedule'
+      let date1 = '2021-10-11'
+      let date2 = '2021-10-11'
       // fetching data in all promise
       Promise.all([
         await fetch('/api/v1/coaches').then(res => res.ok && res.json() || Promise.reject(res)),
-        await fetch('/api/v1/coaches/schedule').then(res => res.ok && res.json() || Promise.reject(res)),
+        await fetch(sched_api + '/' + date1 + '/' + date2).then(res => res.ok && res.json() || Promise.reject(res)),
         await fetch('/api/v1/account/sales').then(res => res.ok && res.json() || Promise.reject(res))
       ]).then(data => {
         // const rescoach = await fetch('/api/v1/coaches');
@@ -336,7 +375,7 @@ export default {
         // const ressched = await fetch('/api/v1/coaches/schedule');
         // const datasched = await ressched.json();
         this.datacoach = data[0].data
-        console.log(this.datacoach,'datacoach')
+        // console.log(this.datacoach,'datacoach')
         this.datasched = data[1].data
         this.datasales = data[2].data
         // this.datasched = this.dummyschedules
@@ -376,9 +415,12 @@ export default {
             ...itm
           }));
         this.new_collections = mergeById(arr1, arr2);
-        console.log('merge', this.new_collections)
+        // console.log('merge', this.new_collections)
         this.reset = this.coaches
         this.languages = this.options.languages
+        if(this.ifShare === false) {
+            this.showShareModal()
+        }
         setTimeout(() => this.loadDefault(this.datacoach), 1)
       })
     },
@@ -424,7 +466,7 @@ export default {
       this.Cancelled = countCancelled
       this.datamerge = datares
       this.for_sessiondata = this.datamerge
-      console.log(this.for_sessiondata,'for_session')
+      // console.log(this.for_sessiondata,'for_session')
       setTimeout(() => this.ex_call_session(), 1)
     },
     ex_call_session() {
