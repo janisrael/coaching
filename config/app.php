@@ -89,6 +89,8 @@ return [
 
     'portal_session_url' => env('PORTAL_SESSION_URL'),
 
+    'portal_session_token_url' => env('PORTAL_SESSION_TOKEN_URL'),
+
     'coaching_url' => env('APP_URL') . '/' . env('DEFAULT_COACHING_VERSION', 'v1'),
 
     'enable_api_dummy_data' => env('API_ENABLE_DUMMY_DATA'),
