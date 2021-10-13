@@ -67,7 +67,7 @@
                 //     console.log(error)
                 //     // this.isLoading = false
                 //     })
-                console.log(response.data.data.status,'success')
+                // console.log(response.data.data.status,'success')
                 this.$emit('setShareValue', { value: true })
                 this.$notify.success({
                     title: 'Success',
