@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Auth;
 use App\Models\PortalLogin;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\ServerException;
+use GuzzleHttp\Exception\ClientException;
 
 class PortalLoginController extends Controller
 {
@@ -28,14 +29,46 @@ class PortalLoginController extends Controller
         $this->client = $client;
     }
 
+    public function sessionToken(Request $request, $token)
+    {
+        try {
+            $clientRequest = $this->client->post(config('app.portal_session_token_url'), [
+                'form_params' => [
+                    'code' => $token
+                ],
+            ]); 
+
+        } catch (ClientException $e) {
+            $response = $e->getResponse();
+            return [
+                'error_code' => $response->getStatusCode(),
+                'error_message' => $response->getBody()->getContents(),
+            ];
+        }
+
+        return $this->processLogin($request, $clientRequest);
+    }
+
     public function loginPortal(PortalLoginRequest $request)
     {
-        $url = config('app.portal_session_url').'?token='.$request->token;
-        
-        $clientRequest = $this->client->get($url); 
+        try {
+            $clientRequest = $this->client->get(config('app.portal_session_url').'?token='.$request->token);
 
+        } catch (ClientException $e) {
+            $response = $e->getResponse();
+            return [
+                'error_code' => $response->getStatusCode(),
+                'error_message' => $response->getBody()->getContents(),
+            ];
+        }
+
+        return $this->processLogin($request, $clientRequest);
+    }
+
+    private function processLogin($request, $clientRequest)
+    {
         $clientResponse = json_decode($clientRequest->getBody()->getContents());
-
+        
         $password = $clientResponse->user->id . $clientResponse->token . config('app.coaching_url');
 
         $portalSession = $this->portalLogin->updateOrCreate(
