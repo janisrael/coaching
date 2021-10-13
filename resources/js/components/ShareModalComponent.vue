@@ -40,13 +40,34 @@
         },
         methods: {
             onShare() {
-                this.$emit('setShareValue', { value: true })
-                this.$notify.success({
-                    title: 'Success',
-                    message: 'Live Account Shared!',
-                    type: 'success'
-                    });
-                this.dialogShare = false
+                let user_id = 123
+
+                let url = '"https://dev-api.smartchartsfx.com/v1/students/"' + user_id + '"/opt-data-sharing"'
+                axios.post(url)
+                    .then(response => {
+                    console.log(response, 'response')
+                    if(response.data.data.status === 'success') {
+                        console.log(response.data.data.status,'success')
+                        this.$emit('setShareValue', { value: true })
+                        this.$notify.success({
+                            title: 'Success',
+                            message: 'Live Account Shared!',
+                            type: 'success'
+                            });
+                        this.dialogShare = false
+                        // Notification.success({
+                        //     title: 'Success',
+                        //     message: 'Schedule successfully booked',
+                        //     duration: 4 * 1000
+                        // })
+                        // this.$emit('reload', response.data.data.schedules)
+                    }
+                    })
+                    .catch(error => {
+                    console.log(error)
+                    // this.isLoading = false
+                    })
+
             },
             show() {
                 this.dialogShare = true

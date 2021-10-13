@@ -402,14 +402,15 @@ export default {
       this.loading = true
       // let total_a_credits = 0
       let total_a_credits = this.sales.computed_credits.total_available
-      if(total_a_credits === 0) {
-        this.$notify.error({
-          title: 'Unable to Book!',
-          message: 'No Available Credits!',
-        });
-        this.loading = false
-        return
-      }
+      // console.log(this.sales.computed_credits.total_available)
+      // if(total_a_credits === 0) {
+      //   this.$notify.error({
+      //     title: 'Unable to Book!',
+      //     message: 'No Available Credits!',
+      //   });
+      //   this.loading = false
+      //   return
+      // }
       let url = "/api/v1/coaching-session/book";
       axios.post(url,
         {
@@ -431,7 +432,12 @@ export default {
             this.dialogItem = false
             // this.$emit('reload', response.data.data.schedules)
           } else {
-
+            Notification.error({
+              title: 'Error',
+              message: response.data.data.status,
+              duration: 4 * 1000
+            })
+             this.loading = false
           }
         })
         .catch(error => {
