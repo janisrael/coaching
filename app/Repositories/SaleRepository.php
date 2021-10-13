@@ -61,7 +61,7 @@ class SaleRepository implements SaleRepositoryInterface
 
         $this->result = [
             'sales' => $data,
-            'portal_user' => $portalUser,
+            'portal_user' => collect($portalUser->toArray())->except(['id', 'password']),
         ];
     }
 
