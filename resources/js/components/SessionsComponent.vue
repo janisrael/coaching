@@ -17,7 +17,7 @@
     <el-button size="small" class="btn-buy-session" type="primary" style="float:right; display: none;">BUY SESSIONS</el-button>
     <el-col :span="24">
       <div style="display: block;">
-        <div v-for="filter in filters" style="display: inline-block;">
+        <div v-for="(filter, i) in filters" :key="i" style="display: inline-block;">
           <div class="desktop-session-filter">
             <el-checkbox :id="'id-' + filter.id" :value="filter.tag" v-model="checkedFilters" :class="['obj-' + filter.id]" :label="filter.tag">
               <span v-if="filter.tag === 'Pending'">MENTOR AVAILABLE</span>
@@ -302,6 +302,10 @@ export default {
     sales: {
       required: true,
       type: Object
+    },
+    ifshare: {
+      required: true,
+      type: Boolean
     }
   },
   data() {
@@ -396,6 +400,16 @@ export default {
     handleBook(value) {
       console.log(value,'value')
       this.loading = true
+      // let total_a_credits = 0
+      let total_a_credits = this.sales.computed_credits.total_available
+      if(total_a_credits === 0) {
+        this.$notify.error({
+          title: 'Unable to Book!',
+          message: 'No Available Credits!',
+        });
+        this.loading = false
+        return
+      }
       let url = "/api/v1/coaching-session/book";
       axios.post(url,
         {
@@ -464,6 +478,11 @@ export default {
       this.session_type = ''
       this.profileTitle = ''
       // this.schedule_profile = position.coaches
+      if(this.ifshare === false) {
+          this.$emit('showModal', { value: false })
+          return
+      }
+
       if ((typeof (position.country) === 'undefined' || (position.country === null))) {
         this.country_to_show = 'No Specified Country'
       } else {
@@ -471,6 +490,7 @@ export default {
       }
       this.schedule_details = position
       this.avail_data = position.availability_type
+      
       if(position.status === 'Pending') {
         this.profileTitle = 'Mentor available, book session'
         this.session_type = position.status
