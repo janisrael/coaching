@@ -522,6 +522,8 @@ export default {
         var data = []
         data.push(this.$moment(this.datefilter[0]).format('YYYY-MM-DD'))
         data.push(this.$moment(this.datefilter[1]).format('YYYY-MM-DD'))
+
+        
         this.date_collections = data
         this.range_sep = '-'
       }

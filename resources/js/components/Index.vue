@@ -340,6 +340,7 @@ export default {
       var booked = 0
       var attended = 0
       var cancelled = 0
+      console.log(value,'value')
       value.forEach(function(value, index) {
         if(value.status === 'Booked') {
           booked = booked + 1
@@ -362,13 +363,15 @@ export default {
     async read() {
       this.loading = true
       let sched_api = '/api/v1/coaches/schedule'
-      let date1 = '2021-10-11'
-      let date2 = '2021-10-11'
+      let letcurrentDate = new Date().toJSON().slice(0,10).replace(/-/g,'-');
+      console.log(letcurrentDate)
+      let date1 = letcurrentDate
+      let date2 = letcurrentDate
       // fetching data in all promise
       Promise.all([
         await fetch('/api/v1/coaches').then(res => res.ok && res.json() || Promise.reject(res)),
-        // await fetch(sched_api + '/' + date1 + '/' + date2).then(res => res.ok && res.json() || Promise.reject(res)),
-        await fetch(sched_api).then(res => res.ok && res.json() || Promise.reject(res)),
+        await fetch(sched_api + '/' + date1 + '/' + date2).then(res => res.ok && res.json() || Promise.reject(res)),
+        // await fetch(sched_api).then(res => res.ok && res.json() || Promise.reject(res)),
         await fetch('/api/v1/account/sales').then(res => res.ok && res.json() || Promise.reject(res))
       ]).then(data => {
         // const rescoach = await fetch('/api/v1/coaches');
