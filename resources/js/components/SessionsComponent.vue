@@ -434,7 +434,7 @@ export default {
           } else {
             Notification.error({
               title: 'Error',
-              message: response.data.data.status,
+              message: response.data.data.message,
               duration: 4 * 1000
             })
              this.loading = false
