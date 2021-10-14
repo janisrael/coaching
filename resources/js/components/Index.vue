@@ -1,7 +1,12 @@
 <template>
   <div class="row full-height">
+
     <el-row class="">
       <el-col :span="24" >
+            <el-col v-if="loading" v-loading.fullscreen="loading" element-loading-text="Loading..." element-loading-background="rgba(0, 0, 0, 0.3)" element-loading-spinner="el-icon-loading" :span="24" style="height: 100vh; width: 100%; display: inline-block; background-color: rgba(0, 0, 0, .50); position: absolute; z-index: 99;">
+            
+
+            </el-col>
         <el-col :xs="12" :sm="7" :md="8" :lg="6" :xl="6" class="full-height index-col-left">
           <el-col :span="24" style="padding: 10px;" class="coaches-search-desktop">
             <div style="width: 88%; display: inline-block;">
@@ -25,7 +30,6 @@
           <div>
             <div class="grid-content bg-purple-dark">
               <el-table
-                v-loading="loading"
                 :data="activeCards.filter(data => !search || data.last_name.toLowerCase().includes(search.toLowerCase()) || data.first_name.toLowerCase().includes(search.toLowerCase()))"
                 ref="singleTable"
                 id="tablecoaches"
@@ -92,8 +96,8 @@
           </div>
         </el-col>
         <el-col :xs="12" :sm="17" :md="16" :lg="18" :xl="18" class="full-height index-col-right" style="background-image: url('../../images/background.jpg'); background-size: cover;">
-          <content-component v-if="loading === false" :selected="passData"></content-component>
-          <session-component v-if="loading === false" ref="sessionComponent" :selected="for_sessiondata" :user_id="coach_id" :sales="datasales" :ifshare="ifShare" @change="backData($event)" @reload="reloadData(value)" @showModal="showShareModal"></session-component>
+          <content-component v-if="loading === false" :selected="passData" @showModal="showShareModal" ></content-component>
+          <session-component v-if="loading === false" ref="sessionComponent" :selected="for_sessiondata" :user_id="coach_id" :sales="datasales" :ifshare="ifShare" @change="backData($event)" @reload="reloadData(value)" @showModal="showShareModal" @filterData="filterData"></session-component>
         </el-col>
       </el-col>
 
@@ -175,6 +179,7 @@
           ref="currentComponent"
           :is="currentComponent"
           :ifshare="ifShare"
+          :datasales="datasales"
           @setShareValue="setShareValue"
         />
 
@@ -199,6 +204,7 @@ export default {
   data() {
     return {
       loading: false,
+      // loadingSession: false,
       currentComponent: null,
       importComponent: null,
       dialogFormVisible: false,
@@ -340,6 +346,7 @@ export default {
       var booked = 0
       var attended = 0
       var cancelled = 0
+      console.log(value,'value')
       value.forEach(function(value, index) {
         if(value.status === 'Booked') {
           booked = booked + 1
@@ -359,31 +366,87 @@ export default {
       this.final_range[0] = this.value_range[0]
       this.final_range[1] = this.value_range[1]
     },
-    async read() {
+    filterData(value) {
       this.loading = true
       let sched_api = '/api/v1/coaches/schedule'
-      let date1 = '2021-10-11'
-      let date2 = '2021-10-11'
+      let letcurrentDate = new Date().toJSON().slice(0,10).replace(/-/g,'-');
+      let date1a = value.value[0]
+      let date2a = value.value[1]
+      let data = []
+
+      let coachesraw = this.datacoach.coaches
+      var user_id = coachesraw[0].id
+      let hasbooked = false
+      // let coachesraw = []
+      axios
+      .get(sched_api + '/' + date1a + '/' + date2a)
+      .then(response => {
+        data = response.data.data.schedules
+      this.schedules = data
+      console.log(response,'data')
+        // this.schedules = this.dummyschedules // dummy
+      
+        coachesraw.forEach(function (value, index) {
+          data.forEach(function (val, index) {
+            if(val.status !== 'Pending' && value.id === val.coach_id) {
+              hasbooked = true
+            }
+          })
+          value['has_booked'] = hasbooked
+        })
+        
+      var schedraw = this.schedules
+        var coach = coachesraw
+
+        let arr1 = schedraw.filter(function (sched) {
+          return (sched.status === 'Pending' && sched.coach_id === user_id) || (sched.status !== 'Pending');
+        });
+
+        let arr2 = coach
+        const mergeById = (a1, a2) =>
+          a1.map(itm => ({
+            ...a2.find((item) => (item.id === itm.coach_id) && item),
+            ...itm
+          }));
+        this.new_collections = []
+        this.new_collections = mergeById(arr1, arr2); // merge scheds to coach
+        //  this.loading = true
+        this.reset = this.coaches
+        setTimeout(() => this.loadDefault(this.datacoach), 1)
+        // this.loadingSession = false
+        
+      })
+      .catch(error => console.log(error))
+    },
+    async read(action) {
+      this.loading = true
+      let sched_api = '/api/v1/coaches/schedule'
+      let letcurrentDate = new Date().toJSON().slice(0,10).replace(/-/g,'-');
+
+      const today = new Date()
+      const tomorrow = new Date(today)
+      tomorrow.setDate(tomorrow.getDate() + 1)
+
+      let date1 = letcurrentDate
+      let date2 = tomorrow.toJSON().slice(0,10).replace(/-/g,'-');
       // fetching data in all promise
       Promise.all([
         await fetch('/api/v1/coaches').then(res => res.ok && res.json() || Promise.reject(res)),
-        // await fetch(sched_api + '/' + date1 + '/' + date2).then(res => res.ok && res.json() || Promise.reject(res)),
-        await fetch(sched_api).then(res => res.ok && res.json() || Promise.reject(res)),
+        await fetch(sched_api + '/' + date1 + '/' + date2).then(res => res.ok && res.json() || Promise.reject(res)),
+        // await fetch(sched_api).then(res => res.ok && res.json() || Promise.reject(res)),
         await fetch('/api/v1/account/sales').then(res => res.ok && res.json() || Promise.reject(res))
       ]).then(data => {
-        // const rescoach = await fetch('/api/v1/coaches');
-        // const datacoach = await rescoach.json();
-        // const ressched = await fetch('/api/v1/coaches/schedule');
-        // const datasched = await ressched.json();
+
         this.datacoach = data[0].data
         // console.log(this.datacoach,'datacoach')
-        this.datasched = data[1].data
+        this.datasched = data[1].data // schedules
         this.datasales = data[2].data
         // this.datasched = this.dummyschedules
         this.options = this.datacoach.options
         var coachesraw = this.datacoach.coaches
 
         var user_id = coachesraw[0].id
+        this.user_id = user_id
         // var user_id = this.user_id
 
         this.schedules = this.datasched.schedules
@@ -415,7 +478,7 @@ export default {
             ...a2.find((item) => (item.id === itm.coach_id) && item),
             ...itm
           }));
-        this.new_collections = mergeById(arr1, arr2);
+        this.new_collections = mergeById(arr1, arr2); // merge scheds to coach
         // console.log('merge', this.new_collections)
         this.reset = this.coaches
         this.languages = this.options.languages
@@ -466,6 +529,7 @@ export default {
       this.Attended = countAttended
       this.Cancelled = countCancelled
       this.datamerge = datares
+      this.for_sessiondata = []
       this.for_sessiondata = this.datamerge
       // console.log(this.for_sessiondata,'for_session')
       setTimeout(() => this.ex_call_session(), 1)

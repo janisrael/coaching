@@ -1,4 +1,5 @@
 <template>
+<div>
   <div class="right-list-container">
     <el-col :xs="4" :sm="4" :md="4" :lg="2" :xl="2" class="content-avatar-container" @click="showInfo()" style="cursor: pointer;">
       <div @click="showInfo()" style="cursor: pointer; display: block; width: 100%; height: 100%;">
@@ -20,48 +21,53 @@
         <div  v-if="selected.country === null || selected.country === '' || selected.country === undefined" class="right-detail-sub">No Specified Country</div>
         <div  v-else class="right-detail-sub">{{ selected.country }}</div>
       </div>
+      
     </el-col>
-    <el-dialog
-      title="Biography"
-      id="dialogProfile"
-      :visible.sync="dialogProfile"
-      top="3%"
-      width="60%">
-      <div style="float:left; padding: 8px;">
-        <el-avatar :size="60" :src="selected.coach_image" class="dbl-border">
-          <img v-if="selected.avatcoach_imagear === null || selected.coach_image === 'null'" :src="default_image"/>
-          <img v-else :src="selected.coach_image"/>
-        </el-avatar>
-      </div>
-      <div style="display: inline-block; width: 70%; padding-left: 15px;">
-        <div class="right-detail-header" style="color: #fff !important;">{{ selected.first_name }} {{ selected.last_name }}</div>
-        <div class="right-list-sub">
-          <div style="display: inline-block; float: left; margin-left: -15px;">
-            <country-flag v-if="selected.country_code === null" country='' size='normal'/>
-            <country-flag v-else :country='selected.country_code' size='normal'/>
-          </div>
-          <div v-if="selected.country === null || selected.country === '' || selected.country === undefined" class="right-detail-sub">No Specified Country</div>
-          <div v-else class="right-detail-sub">{{ selected.country }}</div>
+      <el-dialog
+        title="Biography"
+        id="dialogProfile"
+        :visible.sync="dialogProfile"
+        top="3%"
+        width="60%">
+        <div style="float:left; padding: 8px;">
+          <el-avatar :size="60" :src="selected.coach_image" class="dbl-border">
+            <img v-if="selected.avatcoach_imagear === null || selected.coach_image === 'null'" :src="default_image"/>
+            <img v-else :src="selected.coach_image"/>
+          </el-avatar>
         </div>
-      </div>
-      <div style="display: block; padding: 20px;">
-        <div class="info-head">Experience</div>
-        <span class="info-sub sum_experience">{{ selected.experience_summary }}</span>
-      </div>
-      <div style="display: block; padding: 20px; padding-bottom: 10px;">
-        <div class="info-head">Markets Traded</div>
-        <span class="info-sub sum_experience">{{ selected.market_traded_summary }}</span>
-      </div>
-      <div style="display: block; padding: 20px; padding-bottom: 10px;">
-        <div class="info-head">Style</div>
-        <span class="info-sub sum_experience">{{ selected.style_summary }}</span>
-      </div>
-      <span slot="footer" class="dialog-footer">
-    <el-button @click="dialogProfile = false" type="success">Close</el-button>
-  </span>
-    </el-dialog>
-
+        <div style="display: inline-block; width: 70%; padding-left: 15px;">
+          <div class="right-detail-header" style="color: #fff !important;">{{ selected.first_name }} {{ selected.last_name }}</div>
+          <div class="right-list-sub">
+            <div style="display: inline-block; float: left; margin-left: -15px;">
+              <country-flag v-if="selected.country_code === null" country='' size='normal'/>
+              <country-flag v-else :country='selected.country_code' size='normal'/>
+            </div>
+            <div v-if="selected.country === null || selected.country === '' || selected.country === undefined" class="right-detail-sub">No Specified Country</div>
+            <div v-else class="right-detail-sub">{{ selected.country }}</div>
+          </div>
+        </div>
+        <div style="display: block; padding: 20px;">
+          <div class="info-head">Experience</div>
+          <span class="info-sub sum_experience">{{ selected.experience_summary }}</span>
+        </div>
+        <div style="display: block; padding: 20px; padding-bottom: 10px;">
+          <div class="info-head">Markets Traded</div>
+          <span class="info-sub sum_experience">{{ selected.market_traded_summary }}</span>
+        </div>
+        <div style="display: block; padding: 20px; padding-bottom: 10px;">
+          <div class="info-head">Style</div>
+          <span class="info-sub sum_experience">{{ selected.style_summary }}</span>
+        </div>
+        <span slot="footer" class="dialog-footer">
+          <el-button @click="dialogProfile = false" type="success">Close</el-button>
+        </span>
+      </el-dialog>
+    
   </div>
+  <div @click="showModal()" style="display: inline-block; float:right; position: absolute; right: 30px; top: 80px; color: #fff; border: 1px solid #fff; border-radius: 50%; padding: 6px 7px; transform: rotate(44deg); cursor: pointer;">
+      <i class="fas fa-link"></i>
+  </div>
+</div>
 </template>
 
 <script>
@@ -93,6 +99,9 @@ export default {
     showInfo() {
       this.dialogProfile = true
       console.log(this.selected.profile)
+    },
+    showModal() {
+        this.$emit('showModal', { value: false })
     }
   }
 }
