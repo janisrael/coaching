@@ -698,6 +698,15 @@ label.el-checkbox.filter-checkbox.is-bordered span.el-checkbox__inner {
     display: block;
 }
 
+.desktop-session-filter span.el-checkbox__inner {
+    display: none !important;
+}
+
+label.el-checkbox.is-checked span.el-checkbox__label {
+    text-decoration: underline;
+    text-underline-offset: 3px;
+}
+
 .coaches-mobile {
     display: none;
 }

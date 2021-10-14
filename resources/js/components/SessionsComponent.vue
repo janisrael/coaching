@@ -20,10 +20,10 @@
         <div v-for="(filter, i) in filters" :key="i" style="display: inline-block;">
           <div class="desktop-session-filter">
             <el-checkbox :id="'id-' + filter.id" :value="filter.tag" v-model="checkedFilters" :class="['obj-' + filter.id]" :label="filter.tag">
-              <span v-if="filter.tag === 'Pending'">MENTOR AVAILABLE</span>
-              <span v-if="filter.tag === 'Booked'">BOOKED SESSIONS</span>
-              <span v-if="filter.tag === 'Attended'">ATTENDED SESSIONS</span>
-              <span v-if="filter.tag === 'Cancelled'">NO SHOW SESSIONS</span>
+              <span v-if="filter.tag === 'Pending'"><i class="far fa-clock"></i>  MENTOR AVAILABLE</span>
+              <span v-if="filter.tag === 'Booked'"><i class="fa fa-calendar-check" aria-hidden="true"></i>  BOOKED SESSIONS</span>
+              <span v-if="filter.tag === 'Attended'"><i class="el-icon-circle-check"></i>  ATTENDED SESSIONS</span>
+              <span v-if="filter.tag === 'Cancelled'"><i class="fa fa-ban" aria-hidden="true"></i>  NO SHOW SESSIONS</span>
             </el-checkbox>
           </div>
           <div class="mobile-session-filter">
@@ -35,7 +35,7 @@
             </el-checkbox>
           </div>
         </div>
-        <div class="session-daterange">
+        <div class="session-daterange" style="cursor: pointer;">
           <span class="demonstration">Date</span>
           <el-date-picker
             v-model="datefilter"
@@ -47,7 +47,8 @@
             :range-separator="range_sep"
             :start-placeholder="currentDate"
             end-placeholder=""
-            @change="checkDate()">
+            @change="checkDate()"
+            style="cursor: pointer;">
           </el-date-picker>
           <el-popover
             placement="bottom"
@@ -128,7 +129,7 @@
               <span v-if="position.availability_type.includes('In-house only')"><i class="fa fa-user" style="font-size: 14px"></i></span>
               <span v-if="position.availability_type.includes('Group')"><i class="fa fa-users" style="font-size: 14px"></i></span>
             </span>
-                  <div class="session-list-time session-list-time-calendar"><i class="fas fa-calendar-plus" style="margin-right:10px;"></i><span class="session-calendar-caption">CALENDAR</span></div>
+                  <!-- <div class="session-list-time session-list-time-calendar"><i class="fas fa-calendar-plus" style="margin-right:10px;"></i><span class="session-calendar-caption">CALENDAR</span></div> -->
                 </el-col>
                 <el-col :xs="6" :sm="5" :md="4" :lg="2" :xl="2" v-if="position.status === 'Booked'" :class="['list-' + position.status, 'list-item-btn']" @click="dialogMentor(position)">
                   <span>VIEW</span>
@@ -338,7 +339,8 @@ export default {
         }
       ],
       range_sep: "",
-      checkedFilters: ['Pending', 'Booked','Attended','Cancelled'],
+      // checkedFilters: ['Pending', 'Booked','Attended','Cancelled'],
+      checkedFilters: ['Pending', 'Booked'],
       datefilter: [],
       currentDate: '',
       profileTitle: '',
@@ -484,7 +486,7 @@ export default {
       this.session_type = ''
       this.profileTitle = ''
       // this.schedule_profile = position.coaches
-      if(this.ifshare === false) {
+      if(this.ifshare === false && position.status === 'Pending') {
           this.$emit('showModal', { value: false })
           return
       }
@@ -522,6 +524,10 @@ export default {
         var data = []
         data.push(this.$moment(this.datefilter[0]).format('YYYY-MM-DD'))
         data.push(this.$moment(this.datefilter[1]).format('YYYY-MM-DD'))
+
+        
+        this.$emit('filterData', { value: data })
+        
         this.date_collections = data
         this.range_sep = '-'
       }

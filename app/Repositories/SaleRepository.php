@@ -37,10 +37,11 @@ class SaleRepository implements SaleRepositoryInterface
 
     public function live(): void
     {
+        $portalUser = auth()->guard('portal')->user();
         $data = [];
 
         $sfCustomer = auth()->guard('portal')->check() ? 
-                      [SaleFields::CUSTOMER.' = \''.auth()->guard('portal')->user()->salesforce_token.'\''] : 
+                      [SaleFields::CUSTOMER.' = \''.$portalUser->salesforce_token.'\''] : 
                       [SaleFields::DATE.' >= '.date('Y-m-d')];
 
         $sf = resolve(Sale::class)->query(
@@ -60,6 +61,7 @@ class SaleRepository implements SaleRepositoryInterface
 
         $this->result = [
             'sales' => $data,
+            'portal_user' => collect($portalUser->toArray())->except(['id', 'password']),
         ];
     }
 

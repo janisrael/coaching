@@ -15,6 +15,9 @@
 Route::get('/', 'Auth\PortalLoginController@loginPortal');
 Route::get('logout', 'Auth\PortalLoginController@logout');
 
+// Session Token
+Route::get('session/token/{token}', 'Auth\PortalLoginController@sessionToken');
+
 // Portal Session
 Route::group(['middleware' => 'portal.auth:portal'], function () {
     
