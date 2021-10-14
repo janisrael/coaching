@@ -20,7 +20,7 @@
                     </span>
                     <span v-else>
                         <p style="color: rgba(255, 255, 255, .51);">To revoke your permission to share read-only account with Learn to Trade Ltd,</p>
-                        <p style="color: rgba(255, 255, 255, .51);">please email: <a href = "mailto: info@smartchartsfx.com">info@smartchartsfx.com</a>, if you revoke your permission to share your journal, you will no longer be able to book mentoring sessions.</p>
+                        <p style="color: rgba(255, 255, 255, .51); word-break: break-word;">please email: <a href = "mailto: info@smartchartsfx.com" style="color: #3a95ff;">info@smartchartsfx.com</a>, if you revoke your permission to share your journal, you will no longer be able to book mentoring sessions.</p>
                     </span>
                 </div>
                 <div style="display: inline-block; margin-top: 20px;margin-bottom: 20px;">
