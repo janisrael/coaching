@@ -328,7 +328,9 @@ export default {
           this.currentComponent = ShareModalComponent
           setTimeout(() => this.ex_call_modal(), 1);
       } else {
-          this.currentComponent = null
+          // this.currentComponent = null
+          this.currentComponent = ShareModalComponent
+          setTimeout(() => this.ex_call_modal(), 1);
       }
       
     },

@@ -101,7 +101,7 @@ export default {
       console.log(this.selected.profile)
     },
     showModal() {
-        this.$emit('showModal', { value: false })
+        this.$emit('showModal', { value: 'link' })
     }
   }
 }
