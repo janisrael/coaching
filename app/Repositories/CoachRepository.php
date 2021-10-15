@@ -20,6 +20,12 @@ class CoachRepository implements CoachRepositoryInterface
         'languages'
     ];
 
+    private $customer_group = [
+        'LTT' => 'Learn To Trade',
+        'SC2' => 'Smart Charts',
+        'LTT Legacy' => 'LTT Legacy',
+    ];
+
     public function all(): array
     {
         if (config('app.enable_api_dummy_data')) {
@@ -45,16 +51,16 @@ class CoachRepository implements CoachRepositoryInterface
     {
         $data = [];
         $options = [];
-
-        // Default
-        $businessDivision = 'Smart Charts';
-
-        // $person = resolve(Person::class)->get(auth()->guard('portal')->user()->salesforce_token);
-        // $businessDivision = $person[PersonFields::CUSTOMER_GROUP];
+        $person = resolve(Person::class)->get(auth()->guard('portal')->user()->salesforce_token);
+        $customerGroup = $this->customer_group[$person[PersonFields::CUSTOMER_GROUP]] ?? $this->customer_group['SC2'];
         
         $sf = resolve(User::class)->query(
             array_values(config('api.sf_coaches')), 
-            [UserFields::BUSINESS_DIVISION.' != \'\'']
+            [
+                UserFields::REGION.' = \''.$person[PersonFields::REGION].'\'',
+                UserFields::BUSINESS_DIVISION.' != \'\'',
+                //UserFields::CUSTOMER_TYPE.' = \''.$person[PersonFields::CUSTOMER_TYPE].'\'',
+            ]
         );
 
         if (count($sf)) {
@@ -74,10 +80,10 @@ class CoachRepository implements CoachRepositoryInterface
                     $data[$field][$key] = $value[$val];
                 }
 
-                /* if (isset($data[$field]['access_group']) and 
-                    !in_array($businessDivision, $data[$field]['access_group'])) {
+                if (isset($data[$field]['access_group']) and 
+                    !in_array($customerGroup, $data[$field]['access_group'])) {
                     unset($data[$field]);
-                } */
+                }
 
                 if (isset($data[$field])) {
                     $country = null;
