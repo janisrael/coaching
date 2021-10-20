@@ -5,6 +5,8 @@ namespace App\Repositories;
 use App\Repositories\Interfaces\SaleRepositoryInterface;
 use learntotrade\salesforce\Sale;
 use learntotrade\salesforce\fields\SaleFields;
+use learntotrade\salesforce\Person;
+use learntotrade\salesforce\fields\PersonFields;
 
 class SaleRepository implements SaleRepositoryInterface
 {
@@ -59,9 +61,15 @@ class SaleRepository implements SaleRepositoryInterface
             }
         }
 
+        $portal_user = $portalUser->toArray();
+        $person = resolve(Person::class)->get(auth()->guard('portal')->user()->salesforce_token);
+        $portal_user['customer_group'] = $person[PersonFields::CUSTOMER_GROUP];
+        $portal_user['customer_region'] = $person[PersonFields::REGION];
+        $portal_user['customer_type'] = $person[PersonFields::CUSTOMER_TYPE];
+
         $this->result = [
             'sales' => $data,
-            'portal_user' => collect($portalUser->toArray())->except(['id', 'password']),
+            'portal_user' => collect($portal_user)->except(['id', 'password']),
         ];
     }
 
