@@ -55,6 +55,8 @@ return [
         // 'business_role' => $userFields::BUSINESS_ROLE,
         // 'speaker_image' => $userFields::AVATAR,
         'region' => $userFields::REGION,
+        'front_end' => $userFields::CAN_COACH_FRONT_END,
+        'back_end' => $userFields::CAN_COACH_BACK_END,
     ],
 
     'sf_schedule' => [

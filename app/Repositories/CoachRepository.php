@@ -53,14 +53,21 @@ class CoachRepository implements CoachRepositoryInterface
         $options = [];
         $person = resolve(Person::class)->get(auth()->guard('portal')->user()->salesforce_token);
         $customerGroup = $this->customer_group[$person[PersonFields::CUSTOMER_GROUP]] ?? $this->customer_group['SC2'];
+
+        $customerType = [
+            'Front End' => UserFields::CAN_COACH_FRONT_END.' = true',
+            'Back End' => UserFields::CAN_COACH_BACK_END.' = true',
+        ];
         
+        $filterCoaches = [
+            UserFields::REGION.' = \''.$person[PersonFields::REGION].'\'',
+            UserFields::BUSINESS_DIVISION.' != \'\'',
+        ];
+        $filterCoaches[] = $customerType[$person[PersonFields::CUSTOMER_TYPE]];
+
         $sf = resolve(User::class)->query(
             array_values(config('api.sf_coaches')), 
-            [
-                UserFields::REGION.' = \''.$person[PersonFields::REGION].'\'',
-                UserFields::BUSINESS_DIVISION.' != \'\'',
-                //UserFields::CUSTOMER_TYPE.' = \''.$person[PersonFields::CUSTOMER_TYPE].'\'',
-            ]
+            $filterCoaches
         );
 
         if (count($sf)) {
