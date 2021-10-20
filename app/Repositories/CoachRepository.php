@@ -59,13 +59,18 @@ class CoachRepository implements CoachRepositoryInterface
             'Back End' => UserFields::CAN_COACH_BACK_END.' = true',
         ];
         
+        $filteredCoaches = [
+            UserFields::REGION.' = \''.$person[PersonFields::REGION].'\'',
+            UserFields::BUSINESS_DIVISION.' includes (\''.$customerGroup.'\')',
+        ];
+
+        if (! empty($person[PersonFields::CUSTOMER_TYPE])) {
+            $filteredCoaches[] = $customerType[$person[PersonFields::CUSTOMER_TYPE]];
+        }
+
         $sf = resolve(User::class)->query(
             array_values(config('api.sf_coaches')), 
-            [
-                UserFields::REGION.' = \''.$person[PersonFields::REGION].'\'',
-                UserFields::BUSINESS_DIVISION.' includes (\''.$customerGroup.'\')',
-                $customerType[$person[PersonFields::CUSTOMER_TYPE]]
-            ]
+            $filteredCoaches
         );
 
         if (count($sf)) {
