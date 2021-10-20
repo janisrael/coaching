@@ -85,5 +85,6 @@ return [
         'sessions_cancelled' => $saleFields::SESSIONS_CANCELLED,
         'sessions_recredited' => $saleFields::SESSIONS_RECREDITED,
         'sessions_expiry' => $saleFields::SESSIONS_EXPIRY,
+        'coach' => $saleFields::COACH,
     ]
 ];

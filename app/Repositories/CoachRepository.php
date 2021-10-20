@@ -59,15 +59,13 @@ class CoachRepository implements CoachRepositoryInterface
             'Back End' => UserFields::CAN_COACH_BACK_END.' = true',
         ];
         
-        $filterCoaches = [
-            UserFields::REGION.' = \''.$person[PersonFields::REGION].'\'',
-            UserFields::BUSINESS_DIVISION.' != \'\'',
-        ];
-        $filterCoaches[] = $customerType[$person[PersonFields::CUSTOMER_TYPE]];
-
         $sf = resolve(User::class)->query(
             array_values(config('api.sf_coaches')), 
-            $filterCoaches
+            [
+                UserFields::REGION.' = \''.$person[PersonFields::REGION].'\'',
+                UserFields::BUSINESS_DIVISION.' includes (\''.$customerGroup.'\')',
+                $customerType[$person[PersonFields::CUSTOMER_TYPE]]
+            ]
         );
 
         if (count($sf)) {
@@ -85,11 +83,6 @@ class CoachRepository implements CoachRepositoryInterface
                         }
                     }
                     $data[$field][$key] = $value[$val];
-                }
-
-                if (isset($data[$field]['access_group']) and 
-                    !in_array($customerGroup, $data[$field]['access_group'])) {
-                    unset($data[$field]);
                 }
 
                 if (isset($data[$field])) {
