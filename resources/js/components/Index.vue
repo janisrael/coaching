@@ -515,7 +515,7 @@ export default {
           value['has_booked'] = hasbooked
         })
 
-      var schedraw = this.schedules
+        var schedraw = this.schedules
         var coach = coachesraw
 
         let arr1 = schedraw.filter(function (sched) {
@@ -573,6 +573,7 @@ export default {
         let my_mentor = false
         let index_load = 0
         let count = 0
+        let coach = ''
         this.customer_group = this.datasales.portal_user.customer_group.toLowerCase()
 
         this.customer_type = this.datasales.portal_user.customer_type.toLowerCase()
@@ -603,6 +604,11 @@ export default {
             }
             value['my_mentor'] = my_mentor
           })
+        } else {
+          coachesraw.forEach((value, index) => {
+            my_mentor = true
+            value['my_mentor'] = my_mentor
+          })
         }
 
         var user_id = coachesraw[0].id
@@ -625,8 +631,8 @@ export default {
         this.coaches = coachesraw
         this.$refs.singleTable.setCurrentRow(this.coaches[index_load])
         // this.user_id = this.coaches[0].id
-        var scheds = schedraw
-        var coach = coachesraw
+        let scheds = schedraw
+        coach = coachesraw
 
         let arr1 = scheds.filter(function (sched) {
           return (sched.status === 'Pending' && sched.coach_id === user_id) || (sched.status !== 'Pending');

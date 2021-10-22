@@ -20,16 +20,10 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="f0bf9872-532e-4d96-b9a8-15a5d0973993" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/codeStyles/codeStyleConfig.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/Coaching.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/Coaching.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/php.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/php.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/composer.json" beforeDir="false" afterPath="$PROJECT_DIR$/composer.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/css/app.css" beforeDir="false" afterPath="$PROJECT_DIR$/public/css/app.css" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/public/js/app.js" beforeDir="false" afterPath="$PROJECT_DIR$/public/js/app.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/js/components/ContentComponent.vue" beforeDir="false" afterPath="$PROJECT_DIR$/resources/js/components/ContentComponent.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/js/components/FilterComponent.vue" beforeDir="false" afterPath="$PROJECT_DIR$/resources/js/components/FilterComponent.vue" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/resources/js/components/Index.vue" beforeDir="false" afterPath="$PROJECT_DIR$/resources/js/components/Index.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/js/components/SessionsComponent.vue" beforeDir="false" afterPath="$PROJECT_DIR$/resources/js/components/SessionsComponent.vue" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -39,48 +33,6 @@
   <component name="ComposerSettings" doNotAsk="true" synchronizationState="SYNCHRONIZE">
     <pharConfigPath>$PROJECT_DIR$/composer.json</pharConfigPath>
     <execution />
-  </component>
-  <component name="FindInProjectRecents">
-    <findStrings>
-      <find>session_data</find>
-      <find>value</find>
-      <find>dialogItem</find>
-      <find>scroll</find>
-      <find>value1</find>
-      <find>passDa</find>
-      <find>filter</find>
-      <find>filteredPositions</find>
-      <find>getDate</find>
-      <find>currentDate</find>
-      <find>date</find>
-      <find>checkedFilters</find>
-      <find>console.log</find>
-      <find>schedule_profile</find>
-      <find>sfromdate</find>
-      <find>fromdate</find>
-      <find>experie</find>
-      <find>[0]</find>
-      <find>now</find>
-      <find>lower</find>
-      <find>tolower</find>
-      <find>checkboxAvail</find>
-      <find>btn-buy-session</find>
-      <find>span.session-list-avatar.el-avatar.el-avatar--circle</find>
-      <find>.right-list-container</find>
-      <find>atte</find>
-      <find>replace</find>
-      <find>getPostBody</find>
-      <find>tag</find>
-      <find>30</find>
-    </findStrings>
-    <replaceStrings>
-      <replace>session_type</replace>
-      <replace>datefilter</replace>
-    </replaceStrings>
-    <dirStrings>
-      <dir>C:\Users\Israel\Documents\smartchart\Coaching\app</dir>
-      <dir>C:\Users\Israel\Documents\smartchart\Coaching\resources\js\components</dir>
-    </dirStrings>
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -272,6 +224,9 @@
       <workItem from="1596348918891" duration="812000" />
       <workItem from="1596465950757" duration="32139000" />
       <workItem from="1628518574214" duration="284000" />
+      <workItem from="1634636120329" duration="10784000" />
+      <workItem from="1634696646372" duration="36874000" />
+      <workItem from="1634893774685" duration="3887000" />
     </task>
     <servers />
   </component>
@@ -288,6 +243,31 @@
         </entry>
       </map>
     </option>
+    <option name="oldMeFiltersMigrated" value="true" />
+  </component>
+  <component name="WindowStateProjectService">
+    <state x="168" y="114" key="MergeDialog" timestamp="1634636316865">
+      <screen x="0" y="25" width="1680" height="1025" />
+    </state>
+    <state x="168" y="114" key="MergeDialog/0.25.1680.1025/1680.25.1920.1004@0.25.1680.1025" timestamp="1634636316865" />
+    <state x="478" y="303" key="MultipleFileMergeDialog" timestamp="1634636316990">
+      <screen x="0" y="25" width="1680" height="1025" />
+    </state>
+    <state x="478" y="303" key="MultipleFileMergeDialog/0.25.1680.1025/1680.25.1920.1004@0.25.1680.1025" timestamp="1634636316990" />
+    <state x="541" y="238" width="597" height="548" key="find.popup" timestamp="1634753367951">
+      <screen x="0" y="25" width="1680" height="974" />
+    </state>
+    <state x="541" y="238" width="597" height="548" key="find.popup/0.25.1680.974/1680.25.1600.875@0.25.1680.974" timestamp="1634753367951" />
+    <state x="2195" y="216" width="572" height="548" key="find.popup/0.25.1680.974/1680.25.1600.875@1680.25.1600.875" timestamp="1634748800639" />
+    <state x="541" y="238" width="597" height="548" key="find.popup/0.25.1680.974@0.25.1680.974" timestamp="1634654052867" />
+    <state x="505" y="234" key="run.anything.popup" timestamp="1634653259984">
+      <screen x="0" y="25" width="1680" height="974" />
+    </state>
+    <state x="505" y="234" key="run.anything.popup/0.25.1680.974@0.25.1680.974" timestamp="1634653259984" />
+    <state x="505" y="239" width="670" height="676" key="search.everywhere.popup" timestamp="1634699908212">
+      <screen x="0" y="25" width="1680" height="974" />
+    </state>
+    <state x="505" y="239" width="670" height="676" key="search.everywhere.popup/0.25.1680.974/1680.25.1600.875@0.25.1680.974" timestamp="1634699908212" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -296,6 +276,11 @@
           <url>file://$PROJECT_DIR$/resources/js/app.js</url>
           <line>29</line>
           <option name="timeStamp" value="1" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="php">
+          <url>file://$PROJECT_DIR$/app/Repositories/ScheduleRepository.php</url>
+          <line>4</line>
+          <option name="timeStamp" value="2" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
