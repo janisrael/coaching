@@ -125,6 +125,7 @@
                             </div>
                           </span>
                           <span class="coaches-mobile">
+
 <!--                            <div class="left-list-sub">Experience - {{ scope.row.experience }} years</div>-->
                           </span>
                           <div class="coaches-list-icons">
