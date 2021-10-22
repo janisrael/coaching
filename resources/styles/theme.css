@@ -32,11 +32,12 @@ th.el-table_1_column_1.is-leaf {
 }
 
 .el-table--enable-row-hover .el-table__body tr:hover>td {
-    background-color: #26395b !important;
+    /*background-color: #26395b !important;*/
+    background-color: rgba(255, 255, 255, .13) !important;
 }
 
 .el-table__body tr.current-row>td {
-    background-color: #26395b !important;
+    background-color: rgba(255, 255, 255, .13) !important;
 }
 
 .left-list-header {
@@ -228,6 +229,21 @@ button.el-button.plain {
     transition: 0.3s;
 }
 
+/*#tablecoaches td.el-table_1_column_1 {*/
+/*    padding: 0px !important;*/
+/*}*/
+
+/*#tablecoaches .el-table .cell {*/
+/*    padding: 0px !important;*/
+/*}*/
+.el-table .warning-row {
+    /*background: rgba(54, 54, 54, 1) !important*/
+    opacity: 0.3;
+}
+
+.list-item.active.class-disable {
+    cursor: not-allowed;
+}
 button.el-button.plain:hover {
     background-color: #293f5d !important
 
@@ -239,7 +255,9 @@ span.dbl-border.el-avatar.el-avatar--circle {
     /* box-shadow: 0 0 0 4px #817dd1, 0 0 0 4px #b551a9; */
     box-shadow: 0 0 0 5px #293f5d, 0 0 0 6px #9ecaff !important;
 }
-
+span.dbl-border-disable.el-avatar.el-avatar--circle {
+    box-shadow: 0 0 0 5px #3b3b3b, 0 0 0 6px #777777 !important;
+}
 
 
 /*right column*/

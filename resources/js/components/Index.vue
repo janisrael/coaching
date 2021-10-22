@@ -4,12 +4,12 @@
     <el-row class="">
       <el-col :span="24" >
             <el-col v-if="loading" v-loading.fullscreen="loading" element-loading-text="Loading..." element-loading-background="rgba(0, 0, 0, 0.3)" element-loading-spinner="el-icon-loading" :span="24" style="height: 100vh; width: 100%; display: inline-block; background-color: rgba(0, 0, 0, .50); position: absolute; z-index: 99;">
-            
+
 
             </el-col>
         <el-col :xs="12" :sm="7" :md="8" :lg="6" :xl="6" class="full-height index-col-left">
           <el-col :span="24" style="padding: 10px;" class="coaches-search-desktop">
-            <div style="width: 88%; display: inline-block;">
+            <div style="width: 100%; display: inline-block;">
               <el-input
                 id="searchBar"
                 size="small"
@@ -19,9 +19,9 @@
                 <i slot="prefix" class="el-input__icon el-icon-search"></i>
               </el-input>
             </div>
-            <div style="width: 10%; display: inline-block;">
-              <el-button type="primary" class="plain" plain size="small" @click="callFilter()"><i class="fas fa-sliders-h" aria-hidden="true" style="color: rgba(255, 255, 255, 0.68);"></i></el-button>
-            </div>
+<!--            <div style="width: 10%; display: inline-block;">-->
+<!--              <el-button type="primary" class="plain" plain size="small" @click="callFilter()"><i class="fas fa-sliders-h" aria-hidden="true" style="color: rgba(255, 255, 255, 0.68);"></i></el-button>-->
+<!--            </div>-->
           </el-col>
           <el-col :span="24" class="coaches-search-mobile" style="padding: 10px;">
             <el-button type="primary" class="plain" plain size="small" @click="callsearchmodal()"><i class="fa fa-search" aria-hidden="true" style="color: rgba(255, 255, 255, 0.68);"></i></el-button>
@@ -31,6 +31,7 @@
             <div class="grid-content bg-purple-dark">
               <el-table
                 :data="activeCards.filter(data => !search || data.last_name.toLowerCase().includes(search.toLowerCase()) || data.first_name.toLowerCase().includes(search.toLowerCase()))"
+                :default-sort = "{prop: 'my_mentor', order: 'descending'}"
                 ref="singleTable"
                 id="tablecoaches"
                 :row-class-name="coachesRowClassName"
@@ -40,54 +41,157 @@
                 highlight-current-row
                 @cell-click="getSummary"
                 style="width: 100%; cursor: pointer">
-                <el-table-column>
+                <el-table-column prop="my_mentor" style="padding: 0px;">
                   <template slot-scope="scope">
-                    <el-col :xs="4" :sm="5" :md="5" :lg="5" :xl="5" class="avatar-wrapper">
-                      <el-avatar :size="60" :src="scope.row.avatar" class="dbl-border">
-                        <img v-if="scope.row.coach_image === null || scope.row.coach_image === 'null'" :src="default_image"/>
-                        <img v-else :src="scope.row.coach_image"/>
-                      </el-avatar>
-                    </el-col>
-                    <el-col :xs="20" :sm="19" :md="19" :lg="19" :xl="19" style="display: inline-block; padding-left: 10px;">
-                      <div class="flag-container">
-                        <country-flag v-if="scope.row.country_code === null" country='' size='normal'/>
-                        <country-flag v-else :country='scope.row.country_code' size='normal'/>
-                      </div>
-                      <div class="left-list-header">{{ scope.row.first_name }} {{ scope.row.last_name }}</div>
-                      <span class="coaches-desktop">
-                        <div class="left-list-sub">
-                           <span style="color: rgb(169, 169, 169);">Experience - </span>
-                            <span v-if="scope.row.experience > 0">{{ scope.row.experience }} years</span>
-                            <span v-else>0</span>
-                        </div>
-                        <div class="left-list-sub">
-                          <span style="color: rgb(169, 169, 169);">Markets traded -</span>
-                          <span v-for="(mt, index) in scope.row.market_traded" :key="index" style="display: inline-block">
-                            <span>{{mt}}</span><span v-if="index+1 < scope.row.market_traded.length">,  </span>
+                    <span v-if="customer_group === 'ltt'" style="display: inline-block; width: 100%;">
+                      <span v-if="scope.row.my_mentor === true" style="display: inline-block; width: 100%; padding: 5px;">
+                        <el-col :xs="4" :sm="5" :md="5" :lg="5" :xl="5" class="avatar-wrapper">
+                          <el-avatar :size="60" :src="scope.row.avatar" class="dbl-border">
+                            <img v-if="scope.row.coach_image === null || scope.row.coach_image === 'null'" :src="default_image"/>
+                            <img v-else :src="scope.row.coach_image"/>
+                          </el-avatar>
+                        </el-col>
+                        <el-col :xs="20" :sm="19" :md="19" :lg="19" :xl="19" style="display: inline-block; padding-left: 10px;">
+                          <div class="flag-container">
+                            <country-flag v-if="scope.row.country_code === null" country='' size='normal'/>
+                            <country-flag v-else :country='scope.row.country_code' size='normal'/>
+                          </div>
+                          <div class="left-list-header">{{ scope.row.first_name }} {{ scope.row.last_name }}</div>
+                          <span class="coaches-desktop">
+                            <div class="left-list-sub">
+                               <span style="color: rgb(169, 169, 169);">Experience - </span>
+                                <span v-if="scope.row.experience > 0">{{ scope.row.experience }} years</span>
+                                <span v-else>0</span>
+                            </div>
+                            <div class="left-list-sub">
+                              <span style="color: rgb(169, 169, 169);">Markets traded -</span>
+                              <span v-for="(mt, index) in scope.row.market_traded" :key="index" style="display: inline-block">
+                                <span>{{mt}}</span><span v-if="index+1 < scope.row.market_traded.length">,  </span>
+                              </span>
+                            </div>
+                            <div class="left-list-sub">
+                              <span style="color: rgb(169, 169, 169);">Style - </span>
+                              <span v-for="(st, index) in scope.row.style" :key="index" style="display: inline-block">
+                                <span>{{st}}</span><span v-if="index+1 < scope.row.style.length">, </span>
+                              </span>
+                            </div>
                           </span>
-                        </div>
-                        <div class="left-list-sub">
-                          <span style="color: rgb(169, 169, 169);">Style - </span>
-                          <span v-for="(st, index) in scope.row.style" :key="index" style="display: inline-block">
-                            <span>{{st}}</span><span v-if="index+1 < scope.row.style.length">, </span>
+                          <span class="coaches-mobile">
+                            <div class="left-list-sub">Experience - {{ scope.row.experience }} years</div>
                           </span>
-                        </div>
+                          <div class="coaches-list-icons">
+                            <el-badge :value="booked" class="item">
+                              <i class="fa fa-calendar-check left-list-badge-icon" aria-hidden="true" style="color: #617da5"></i>
+                            </el-badge>
+                            <el-badge :value="attended" class="item">
+                              <i class="el-icon-circle-check left-list-badge-icon" style="color: #92804f"></i>
+                            </el-badge>
+                            <el-badge :value="cancelled" class="item">
+                              <i class="fa fa-ban left-list-badge-icon" aria-hidden="true" style="color: #92505f"></i>
+                            </el-badge>
+                          </div>
+                        </el-col>
                       </span>
-                      <span class="coaches-mobile">
-                        <div class="left-list-sub">Experience - {{ scope.row.experience }} years</div>
+                      <span v-else  style="display: inline-block; width: 100%; padding: 5px;">
+                        <el-col :xs="4" :sm="5" :md="5" :lg="5" :xl="5" class="avatar-wrapper">
+                          <el-avatar :size="60" :src="scope.row.avatar" class="dbl-border-disable">
+                            <img v-if="scope.row.coach_image === null || scope.row.coach_image === 'null'" :src="default_image" style="filter: grayscale(100%);"/>
+                            <img v-else :src="scope.row.coach_image" style="filter: grayscale(100%);"/>
+                          </el-avatar>
+                        </el-col>
+                        <el-col :xs="20" :sm="19" :md="19" :lg="19" :xl="19" style="display: inline-block; padding-left: 10px;">
+                          <div class="flag-container">
+                            <country-flag v-if="scope.row.country_code === null" country='' size='normal'/>
+                            <country-flag v-else :country='scope.row.country_code' size='normal'/>
+                          </div>
+                          <div class="left-list-header" style="color: #919191 !important;">{{ scope.row.first_name }} {{ scope.row.last_name }}</div>
+                          <span class="coaches-desktop">
+                            <div class="left-list-sub">
+                               <span style="color: rgb(169, 169, 169);">Experience - </span>
+                                <span v-if="scope.row.experience > 0">{{ scope.row.experience }} years</span>
+                                <span v-else>0</span>
+                            </div>
+                            <div class="left-list-sub">
+                              <span style="color: rgb(169, 169, 169);">Markets traded -</span>
+                              <span v-for="(mt, index) in scope.row.market_traded" :key="index" style="display: inline-block">
+                                <span>{{mt}}</span><span v-if="index+1 < scope.row.market_traded.length">,  </span>
+                              </span>
+                            </div>
+                            <div class="left-list-sub">
+                              <span style="color: rgb(169, 169, 169);">Style - </span>
+                              <span v-for="(st, index) in scope.row.style" :key="index" style="display: inline-block">
+                                <span>{{st}}</span><span v-if="index+1 < scope.row.style.length">, </span>
+                              </span>
+                            </div>
+                          </span>
+                          <span class="coaches-mobile">
+                            <div class="left-list-sub">Experience - {{ scope.row.experience }} years</div>
+                          </span>
+                          <div class="coaches-list-icons">
+                            <el-badge :value="booked" class="item">
+                              <i class="fa fa-calendar-check left-list-badge-icon" aria-hidden="true" style="color: #617da5"></i>
+                            </el-badge>
+                            <el-badge :value="attended" class="item">
+                              <i class="el-icon-circle-check left-list-badge-icon" style="color: #92804f"></i>
+                            </el-badge>
+                            <el-badge :value="cancelled" class="item">
+                              <i class="fa fa-ban left-list-badge-icon" aria-hidden="true" style="color: #92505f"></i>
+                            </el-badge>
+                          </div>
+                        </el-col>
                       </span>
-                      <div class="coaches-list-icons">
-                        <el-badge :value="booked" class="item">
-                          <i class="fa fa-calendar-check left-list-badge-icon" aria-hidden="true" style="color: #617da5"></i>
-                        </el-badge>
-                        <el-badge :value="attended" class="item">
-                          <i class="el-icon-circle-check left-list-badge-icon" style="color: #92804f"></i>
-                        </el-badge>
-                        <el-badge :value="cancelled" class="item">
-                          <i class="fa fa-ban left-list-badge-icon" aria-hidden="true" style="color: #92505f"></i>
-                        </el-badge>
-                      </div>
-                    </el-col>
+
+                    </span>
+                    <span v-else style="display: inline-block; width: 100%;">
+                      <span style="display: inline-block; width: 100%; padding: 5px;">
+                        <el-col :xs="4" :sm="5" :md="5" :lg="5" :xl="5" class="avatar-wrapper">
+                          <el-avatar :size="60" :src="scope.row.avatar" class="dbl-border">
+                            <img v-if="scope.row.coach_image === null || scope.row.coach_image === 'null'" :src="default_image"/>
+                            <img v-else :src="scope.row.coach_image"/>
+                          </el-avatar>
+                        </el-col>
+                        <el-col :xs="20" :sm="19" :md="19" :lg="19" :xl="19" style="display: inline-block; padding-left: 10px;">
+                          <div class="flag-container">
+                            <country-flag v-if="scope.row.country_code === null" country='' size='normal'/>
+                            <country-flag v-else :country='scope.row.country_code' size='normal'/>
+                          </div>
+                          <div class="left-list-header">{{ scope.row.first_name }} {{ scope.row.last_name }}</div>
+                          <span class="coaches-desktop">
+                            <div class="left-list-sub">
+                               <span style="color: rgb(169, 169, 169);">Experience - </span>
+                                <span v-if="scope.row.experience > 0">{{ scope.row.experience }} years</span>
+                                <span v-else>0</span>
+                            </div>
+                            <div class="left-list-sub">
+                              <span style="color: rgb(169, 169, 169);">Markets traded -</span>
+                              <span v-for="(mt, index) in scope.row.market_traded" :key="index" style="display: inline-block">
+                                <span>{{mt}}</span><span v-if="index+1 < scope.row.market_traded.length">,  </span>
+                              </span>
+                            </div>
+                            <div class="left-list-sub">
+                              <span style="color: rgb(169, 169, 169);">Style - </span>
+                              <span v-for="(st, index) in scope.row.style" :key="index" style="display: inline-block">
+                                <span>{{st}}</span><span v-if="index+1 < scope.row.style.length">, </span>
+                              </span>
+                            </div>
+                          </span>
+                          <span class="coaches-mobile">
+                            <div class="left-list-sub">Experience - {{ scope.row.experience }} years</div>
+                          </span>
+                          <div class="coaches-list-icons">
+                            <el-badge :value="booked" class="item">
+                              <i class="fa fa-calendar-check left-list-badge-icon" aria-hidden="true" style="color: #617da5"></i>
+                            </el-badge>
+                            <el-badge :value="attended" class="item">
+                              <i class="el-icon-circle-check left-list-badge-icon" style="color: #92804f"></i>
+                            </el-badge>
+                            <el-badge :value="cancelled" class="item">
+                              <i class="fa fa-ban left-list-badge-icon" aria-hidden="true" style="color: #92505f"></i>
+                            </el-badge>
+                          </div>
+                        </el-col>
+                      </span>
+                    </span>
                   </template>
                 </el-table-column>
 
@@ -97,7 +201,7 @@
         </el-col>
         <el-col :xs="12" :sm="17" :md="16" :lg="18" :xl="18" class="full-height index-col-right" style="background-image: url('../../images/background.jpg'); background-size: cover;">
           <content-component v-if="loading === false" :selected="passData" @showModal="showShareModal" ></content-component>
-          <session-component v-if="loading === false" ref="sessionComponent" :selected="for_sessiondata" :user_id="coach_id" :sales="datasales" :ifshare="ifShare" @change="backData($event)" @reload="reloadData(value)" @showModal="showShareModal" @filterData="filterData"></session-component>
+          <session-component v-if="loading === false" ref="sessionComponent" :selected="for_sessiondata" :user_id="coach_id" :sales="datasales" :ifshare="ifShare" :can_book="can_book" @change="backData($event)" @reload="reloadData(value)" @showModal="showShareModal" @filterData="filterData"></session-component>
         </el-col>
       </el-col>
 
@@ -173,7 +277,7 @@
         <el-button @click="searchCoach()" type="success">OK</el-button>
       </span>
       </el-dialog>
-      
+
       <!-- dialog share read only live account -->
       <component
           ref="currentComponent"
@@ -252,7 +356,11 @@ export default {
       datas: {},
       value: [],
       selected_id: '',
-      ifShare: false
+      ifShare: true,
+      customer_group: '',
+      customer_type: '',
+      index_load: 0,
+      can_book: false
     }
   },
   computed: {
@@ -324,7 +432,7 @@ export default {
     showShareModal() {
       this.currentComponent = null
       if(this.ifShare === false) {
-       
+
           this.currentComponent = ShareModalComponent
           setTimeout(() => this.ex_call_modal(), 1);
       } else {
@@ -332,13 +440,23 @@ export default {
           this.currentComponent = ShareModalComponent
           setTimeout(() => this.ex_call_modal(), 1);
       }
-      
+
     },
     ex_call_modal() {
       this.$refs.currentComponent.show();
     },
-    coachesRowClassName(index) {
-      return 'this-is-active'
+    coachesRowClassName({row, rowIndex}) {
+      if(this.customer_group.toLowerCase() === 'ltt') {
+        if (row.my_mentor === false) {
+          return 'warning-row';
+        }
+      }
+
+      if(rowIndex === 0) {
+        return 'this-is-active';
+      }
+
+
     },
     reloadData(value) {
       this.schedules = value
@@ -348,7 +466,7 @@ export default {
       var booked = 0
       var attended = 0
       var cancelled = 0
-      console.log(value,'value')
+      // console.log(value,'value')
       value.forEach(function(value, index) {
         if(value.status === 'Booked') {
           booked = booked + 1
@@ -385,9 +503,8 @@ export default {
       .then(response => {
         data = response.data.data.schedules
       this.schedules = data
-      console.log(response,'data')
         // this.schedules = this.dummyschedules // dummy
-      
+
         coachesraw.forEach(function (value, index) {
           data.forEach(function (val, index) {
             if(val.status !== 'Pending' && value.id === val.coach_id) {
@@ -396,7 +513,7 @@ export default {
           })
           value['has_booked'] = hasbooked
         })
-        
+
       var schedraw = this.schedules
         var coach = coachesraw
 
@@ -416,7 +533,7 @@ export default {
         this.reset = this.coaches
         setTimeout(() => this.loadDefault(this.datacoach), 1)
         // this.loadingSession = false
-        
+
       })
       .catch(error => console.log(error))
     },
@@ -440,12 +557,52 @@ export default {
       ]).then(data => {
 
         this.datacoach = data[0].data
-        // console.log(this.datacoach,'datacoach')
         this.datasched = data[1].data // schedules
         this.datasales = data[2].data
         // this.datasched = this.dummyschedules
+
+
         this.options = this.datacoach.options
         var coachesraw = this.datacoach.coaches
+
+        // filter mentors if user customer_group is learn to trade
+
+        let str_llt = 'LTT'
+        let mentor_id = this.datasales.sales[0].coach
+        let my_mentor = false
+        let index_load = 0
+        let count = 0
+        this.customer_group = this.datasales.portal_user.customer_group.toLowerCase()
+
+        this.customer_type = this.datasales.portal_user.customer_type.toLowerCase()
+
+        if(this.datasales.portal_user.customer_group.toLowerCase() === str_llt.toLowerCase()) {
+          coachesraw.forEach((value, index) => {
+            count = count + 1
+            if(value.id === mentor_id) {
+              if(this.customer_type.toLowerCase() === 'front end') {
+                if(value.front_end === true) {
+                  my_mentor = true
+                  if(count === 1) {
+                    index_load = index
+                    this.index_load = index
+                  }
+                }
+              } else {
+                if(value.back_end === true) {
+                  my_mentor = true
+                  if(count === 1) {
+                    index_load = index
+                    this.index_load = index
+                  }
+                }
+              }
+            } else {
+              my_mentor = false
+            }
+            value['my_mentor'] = my_mentor
+          })
+        }
 
         var user_id = coachesraw[0].id
         this.user_id = user_id
@@ -454,18 +611,18 @@ export default {
         this.schedules = this.datasched.schedules
         // this.schedules = this.dummyschedules // dummy
         var schedraw = this.schedules
-        var hasbooked = false
+        var hasbooked = true
         coachesraw.forEach(function (value, index) {
           schedraw.forEach(function (val, index) {
             if(val.status !== 'Pending' && value.id === val.coach_id) {
-              hasbooked = true
+              hasbooked = false
             }
           })
           value['has_booked'] = hasbooked
         })
 
         this.coaches = coachesraw
-        this.$refs.singleTable.setCurrentRow(this.coaches[0])
+        this.$refs.singleTable.setCurrentRow(this.coaches[index_load])
         // this.user_id = this.coaches[0].id
         var scheds = schedraw
         var coach = coachesraw
@@ -487,17 +644,23 @@ export default {
         if(this.ifShare === false) {
             this.showShareModal()
         }
-        setTimeout(() => this.loadDefault(this.datacoach), 1)
+        setTimeout(() => this.loadDefault(this.datacoach, index_load), 1)
       })
     },
-    loadDefault(data) {
-      this.getSummary(data.coaches[0])
+    loadDefault(data, index_load) {
+      this.getSummary(data.coaches[index_load])
       this.loading = false
     },
     getSummary(row, index) {
       this.passData = row
       if(row) {
         this.selected_id = row.id
+      }
+
+      if(this.customer_group.toLowerCase() === 'ltt') {
+        this.can_book = row.my_mentor
+      } else {
+        this.can_book = true
       }
       var scheds = this.schedules
       var coach = this.coaches
@@ -590,7 +753,8 @@ export default {
       this.final_range[0] = this.value_range[0]
       this.final_range[1] = this.value_range[1]
       this.filterDialog = false
-      this.$refs.singleTable.setCurrentRow(this.coaches[0])
+
+      this.$refs.singleTable.setCurrentRow(this.coaches[this.index_load])
       this.preselectedTags = []
       this.preselectedTags = this.reset
     },
@@ -609,6 +773,7 @@ export default {
 .full-height {
   height: 100vh;
 }
+
 
 </style>
 

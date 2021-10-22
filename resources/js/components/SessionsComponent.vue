@@ -83,9 +83,9 @@
         </div>
       </div>
       <el-col v-loading="loading" element-loading-text="Loading Schedules..." element-loading-spinner="el-icon-loading" element-loading-background="rgba(0, 0, 0, 0.21)":span="24" class="session-items-container">
-        <div v-for="(position, index) in even(filteredPositions)" :key="index" :class="['sessions-item-' + index]">
+        <div v-for="(position, index) in even(filteredPositions)" :key="index"  :class="['sessions-item-' + index]">
           <transition name="el-fade-in">
-            <div v-if="position.status === 'Pending'" class="list-item" @click="dialogMentor(position)">
+            <div v-if="position.status === 'Pending'" class="list-item" @click="dialogMentor(position)" v-bind:class="[{ active: !can_book }, disableClass]">
               <el-col :xs="18" :sm="19" :md="20" :lg="22" :xl="22" :class="['list-' + position.status, 'session-listitem']">
                 <span style="width: 15px; display: inline-block"><i class="far fa-clock"></i></span>
                 <el-avatar :size="60" :src="position.coach_image" class="session-list-avatar">
@@ -307,6 +307,10 @@ export default {
     ifshare: {
       required: true,
       type: Boolean
+    },
+    can_book: {
+      required: true,
+      type: Boolean
     }
   },
   data() {
@@ -360,7 +364,8 @@ export default {
       max_count: this.selected.length,
       count: 16,
       count_loading: false,
-      session_collection: this.selected.slice(0, this.count)
+      session_collection: this.selected.slice(0, this.count),
+      disableClass: 'class-disable'
     }
   },
   computed: {
@@ -387,7 +392,7 @@ export default {
   },
   created: function() {
     this.loading = true
-    console.log(this.session_collection,'collections')
+    // console.log(this.session_collection,'collections')
     // this.session_collection = this.selected.slice(0, this.count)
     // console.log('collection',this.session_collection)
     this.session_data = this.selected.coaches
@@ -400,7 +405,7 @@ export default {
       });
     },
     handleBook(value) {
-      console.log(value,'value')
+      // console.log(value,'value')
       this.loading = true
       // let total_a_credits = 0
       let total_a_credits = this.sales.computed_credits.total_available
@@ -419,10 +424,10 @@ export default {
           schedule_id: value.id
         })
         .then(response => {
-          console.log(value.id, 'id')
-          console.log(response, 'response')
+          // console.log(value.id, 'id')
+          // console.log(response, 'response')
           if(response.data.data.status === 'success') {
-            console.log(response.data.data.status,'success')
+            // console.log(response.data.data.status,'success')
             Notification.success({
               title: 'Success',
               message: 'Schedule successfully booked',
@@ -498,7 +503,7 @@ export default {
       }
       this.schedule_details = position
       this.avail_data = position.availability_type
-      
+
       if(position.status === 'Pending') {
         this.profileTitle = 'Mentor available, book session'
         this.session_type = position.status
@@ -515,7 +520,12 @@ export default {
         this.profileTitle = 'Your no show Session'
         this.session_type = position.status
       }
-      this.dialogItem = true
+      if(this.can_book === true) {
+        this.dialogItem = true
+      } else {
+        console.log('unable to book')
+      }
+
     },
     checkDate: function(){
       if(this.datefilter === null) {
@@ -525,9 +535,9 @@ export default {
         data.push(this.$moment(this.datefilter[0]).format('YYYY-MM-DD'))
         data.push(this.$moment(this.datefilter[1]).format('YYYY-MM-DD'))
 
-        
+
         this.$emit('filterData', { value: data })
-        
+
         this.date_collections = data
         this.range_sep = '-'
       }

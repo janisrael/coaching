@@ -8,9 +8,9 @@
             center>
             <div style="display: inline-block; width: 100%; text-align: center;">
                 <div style="display: inline-block;">
-                    
+
                     <i class="el-icon-warning-outline" style="color: #6e8e6a;font-size: 60px;transform: rotate(180deg);"></i>
-                
+
                     <h2 v-if="ifshare === false" style="font-weight: 300;word-break: break-word; padding: 0 40px;">Mentoring is one of the most important ways to develop your skillset as a trader. Our mentoring sessions are designed to review your live trading. To find out more, <span style="display: inline-block;color: #619fe7;text-decoration: underline;cursor: pointer;">watch this video.</span></h2>
                     <h2 v-else style="font-weight: 300;word-break: break-word; padding: 0 40px;">Your information is being shared</h2>
                 </div>
@@ -26,7 +26,7 @@
                 <div style="display: inline-block; margin-top: 20px;margin-bottom: 20px;">
                     <el-button v-if="ifshare === false" type="success" @click="onShare()">SHARE READ ONLY LIVE ACCOUNT</el-button>
                     <el-button v-if="ifshare === true" type="success" @click="dialogShare = false">OK</el-button>
-               
+
                 </div>
             </div>
             </el-dialog>
@@ -57,13 +57,18 @@
         },
         methods: {
             onShare() {
-                const token = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiI5NDlmYWI1Zi1hZmYyLTQ3OGQtODUzOS04MDAwNThkZjZiY2UiLCJqdGkiOiI5MDkzMWNlODc1MjE1MTBkMjk1Yzc4MTVhM2E0YzVjYzgwZTY3M2EwYTJjZmIwMWFmZTlkZTk0MGFhNDI3ZWE1MWJiY2M3MTNmZjZmMTNiMyIsImlhdCI6MTYzNDEzNTExNi43MTc1NjUsIm5iZiI6MTYzNDEzNTExNi43MTc1NjgsImV4cCI6MTY2NTY3MTExNi43MDcyNDQsInN1YiI6IiIsInNjb3BlcyI6W119.m0S8EYA1ZTM97lp0n726aprnvyy25vViDrKPNUfywq_ao05xDDbPG7FjbUOMMUoTAK8jDVOVyzr0ouK5seaBBd-BdnZu-Wby2W0ooBvlV7v0K3Y7oBOG9PBIO88HnocXw17hGS9SMbZKgIfTOqN_lLRaodGbAdrJgAYPfKEfhSzYKKL1FBXvFdL8lbTyZpPmJWUJZPPwSm2HCS_v42b7cdQkMqGkrcGx0OcciwadQv9yA2N_EGR_q4iSEp4rBurHPjSz9jp10fS1erEVxK2v8OvTVquD4EaLGubc2gmaMgKEETIzC8h6biUktUI0orMA5-gFi8ptEyRb_6TYStPAwx51mK1y3sADHmS9gus4PoquWXgPfVPDyAw0UWTL_A4HCgnYWfo0YQBuTSP0oEbnhFP3d9d4Avoo5Mc6RhU1CprtBqb6rd-LY625OXtcspKhTt1XLto_PWwvxiffoQf0uAeQS7hQIvxeGYsGWEGtj_JvaVejxArqKccHq8mnDY4WSKUotejQDsMoMq8nBvaPx9JSOwMzRLUQXlIxLXJp5ShxMrnHaW1PRe98xFpg3ftVF23pHxONk5BQ_k8Rt2ovnmcuIaoVBfoA7_r75SeitgMCo4bSTr0VtA5MCfZXSZ7GnriibX7SicWkVT2jLXDt3_EEb6BdOT2vVqwknHEmiRI'
+                const token = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiI5NDlmYWI1Zi1hZmYyLTQ3OGQtODUzOS04MDAwNThkZjZiY2UiLCJqdGkiOiIxNzg3MTNhMDdhNzRhYWUxYTllOTU5Mzc2ZGM3MTc5NDdlMWVhYzZiYjZiMTU1NzliOTllMDA5MmQ1Zjc0NWRiZjhmNzUyZjgwOTg0NzY4MyIsImlhdCI6MTYzNDc1MjYxNi4xNDI0MzYsIm5iZiI6MTYzNDc1MjYxNi4xNDI0NCwiZXhwIjoxNjY2Mjg4NjE2LjEyMDUzMSwic3ViIjoiMzNkYzYyOTMtNWZhNi00MWM5LThhNzctYzE2NzAyYmQ3NWI2Iiwic2NvcGVzIjpbXX0.qU8J7AoXXIDEcT93InnvEMsMyZnfA5sMdRSqC3o5TC4ZKl8i9v-3tNz05BYBS9X4b12ExTAcXGxCk-JSye_bAD1cYnZhxZ-JxQs8UlW5hsTm1Xy4srr5rmPwVLEiRFxczFt0pifS1MeMHM2xrBdIkrvrh7Omt_WyoD8fS7EywZmpc4gpkOOknorGiTk5xZMH-vfsEGov6zGWVWO6OA_Wty2g6HQGO0rDHtdZo83aCfQfQjTFjbV5AAZOurO4S1X04JQQSz3MLWUeNqgz60r3lz7Z4z4Em5xLlOYyCPeFW1q6HL1B1OWBgvaWRCAjImKuZvhel5gGRIpQ6aQOSqAfrKXmWcYGv0Y2W9269SJPjOxdxhg-Ir7sLQBW-DatJjGJD0FRQKxM9H3HMw9iojZGFFZUcqqbB7eP86n3HMvOcSvRxJ_e-kh_uR3YvxamdB1bVePpfWxm8jZO8zYO_Zn9otBVB1h_JiRav___V0R3lqAkJZsLQ6h3zgt1MYHaGdcVmJszrS-oZcpYRGZ_-8l_Zb86BT0febVTjYxhU4_CXiHz8lhJEb2OTfEvbsiFCgAnsIiGRul7yOt0qklZmn1nhclZRz1Xatk9N9w1tWtXt-QOM3mVO5F_m0BHUP_-MHF0MgvJdZr3rRdD5j3oUhU8XtGB4-LBXse6P3BerIpMgv0'
                 console.log(this.user_id, this.datasales)
                 let user_id = this.user_id = this.datasales.portal_user.portal_user_id
-                let url = 'https://dev-api.smartchartsfx.com/v1/students/' + user_id + '/opt-data-sharing'
+                let url = 'https://dev-api.smartchartsfx.com/v1/coaching/students/54/opt-data-sharing'
                 axios.post(url,
-                    { 
-                        headers: { 'Authorization' : `Bearer ${token}`}
+                    {
+                        Headers: {
+                          'Authorization': 'Bearer ' + token,
+                          'Accept': 'application/json',
+                          'Content-Type': 'application/json',
+                          'Cache-Control': 'no-cache'
+                        }
                     }
                  ).then(response => {
                     console.log(response, 'response')
