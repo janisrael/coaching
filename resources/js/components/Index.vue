@@ -577,7 +577,12 @@ export default {
         let my_mentor = false
         let index_load = 0
         let count = 0
-        this.customer_group = this.datasales.portal_user.customer_group.toLowerCase()
+        if(this.datasales.portal_user.customer_group) {
+          this.customer_group = this.datasales.portal_user.customer_group.toLowerCase()
+        } else {
+          this.customer_group = 'sc2'
+        }
+
 
         if(this.datasales.portal_user.customer_type) {
           this.customer_type = this.datasales.portal_user.customer_type.toLowerCase()
