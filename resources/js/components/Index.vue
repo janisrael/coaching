@@ -59,9 +59,9 @@
                           <div class="left-list-header">{{ scope.row.first_name }} {{ scope.row.last_name }}</div>
                           <span class="coaches-desktop">
                             <div class="left-list-sub">
-                               <span style="color: rgb(169, 169, 169);">Experience - </span>
-                                <span v-if="scope.row.experience > 0">{{ scope.row.experience }} years</span>
-                                <span v-else>0</span>
+<!--                                <span style="color: rgb(169, 169, 169);">Experience - </span>-->
+<!--                                <span v-if="scope.row.experience > 0">{{ scope.row.experience }} years</span>-->
+<!--                                <span v-else>0</span>-->
                             </div>
                             <div class="left-list-sub">
                               <span style="color: rgb(169, 169, 169);">Markets traded -</span>
@@ -77,7 +77,7 @@
                             </div>
                           </span>
                           <span class="coaches-mobile">
-                            <div class="left-list-sub">Experience - {{ scope.row.experience }} years</div>
+<!--                            <div class="left-list-sub">Experience - {{ scope.row.experience }} years</div>-->
                           </span>
                           <div class="coaches-list-icons">
                             <el-badge :value="booked" class="item">
@@ -107,9 +107,9 @@
                           <div class="left-list-header" style="color: #919191 !important;">{{ scope.row.first_name }} {{ scope.row.last_name }}</div>
                           <span class="coaches-desktop">
                             <div class="left-list-sub">
-                               <span style="color: rgb(169, 169, 169);">Experience - </span>
-                                <span v-if="scope.row.experience > 0">{{ scope.row.experience }} years</span>
-                                <span v-else>0</span>
+<!--                                <span style="color: rgb(169, 169, 169);">Experience - </span>-->
+<!--                                <span v-if="scope.row.experience > 0">{{ scope.row.experience }} years</span>-->
+<!--                                <span v-else>0</span>-->
                             </div>
                             <div class="left-list-sub">
                               <span style="color: rgb(169, 169, 169);">Markets traded -</span>
@@ -125,7 +125,7 @@
                             </div>
                           </span>
                           <span class="coaches-mobile">
-                            <div class="left-list-sub">Experience - {{ scope.row.experience }} years</div>
+<!--                            <div class="left-list-sub">Experience - {{ scope.row.experience }} years</div>-->
                           </span>
                           <div class="coaches-list-icons">
                             <el-badge :value="booked" class="item">
