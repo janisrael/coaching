@@ -568,7 +568,7 @@ export default {
 
         // filter mentors if user customer_group is learn to trade
 
-        let str_llt = 'LTT'
+        // let str_llt = 'ltt'
         let mentor_id = ''
         if(this.datasales.sales > 0) {
           mentor_id = this.datasales.sales[0].coach
@@ -579,10 +579,15 @@ export default {
         let count = 0
         this.customer_group = this.datasales.portal_user.customer_group.toLowerCase()
 
-        this.customer_type = this.datasales.portal_user.customer_type.toLowerCase()
+        if(this.datasales.portal_user.customer_type) {
+          this.customer_type = this.datasales.portal_user.customer_type.toLowerCase()
+        } else {
+          this.customer_type = 'front end'
+        }
+
 
         if(mentor_id !== '') {
-          if(this.datasales.portal_user.customer_group.toLowerCase() === str_llt.toLowerCase()) {
+          if(this.datasales.portal_user.customer_group.toLowerCase() === 'ltt') {
             coachesraw.forEach((value, index) => {
               count = count + 1
               if(value.id === mentor_id) {
