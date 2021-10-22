@@ -569,7 +569,11 @@ export default {
         // filter mentors if user customer_group is learn to trade
 
         let str_llt = 'LTT'
-        let mentor_id = this.datasales.sales[0].coach
+        let mentor_id = ''
+        if(this.datasales.sales > 0) {
+          mentor_id = this.datasales.sales[0].coach
+        }
+        console.log(mentor_id,'mentor_id')
         let my_mentor = false
         let index_load = 0
         let count = 0
@@ -577,34 +581,35 @@ export default {
 
         this.customer_type = this.datasales.portal_user.customer_type.toLowerCase()
 
-        if(this.datasales.portal_user.customer_group.toLowerCase() === str_llt.toLowerCase()) {
-          coachesraw.forEach((value, index) => {
-            count = count + 1
-            if(value.id === mentor_id) {
-              if(this.customer_type.toLowerCase() === 'front end') {
-                if(value.front_end === true) {
-                  my_mentor = true
-                  if(count === 1) {
-                    index_load = index
-                    this.index_load = index
+        if(mentor_id !== '') {
+          if(this.datasales.portal_user.customer_group.toLowerCase() === str_llt.toLowerCase()) {
+            coachesraw.forEach((value, index) => {
+              count = count + 1
+              if(value.id === mentor_id) {
+                if(this.customer_type.toLowerCase() === 'front end') {
+                  if(value.front_end === true) {
+                    my_mentor = true
+                    if(count === 1) {
+                      index_load = index
+                      this.index_load = index
+                    }
+                  }
+                } else {
+                  if(value.back_end === true) {
+                    my_mentor = true
+                    if(count === 1) {
+                      index_load = index
+                      this.index_load = index
+                    }
                   }
                 }
               } else {
-                if(value.back_end === true) {
-                  my_mentor = true
-                  if(count === 1) {
-                    index_load = index
-                    this.index_load = index
-                  }
-                }
+                my_mentor = false
               }
-            } else {
-              my_mentor = false
-            }
-            value['my_mentor'] = my_mentor
-          })
+              value['my_mentor'] = my_mentor
+            })
+          }
         }
-
         var user_id = coachesraw[0].id
         this.user_id = user_id
         // var user_id = this.user_id
