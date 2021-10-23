@@ -70,11 +70,12 @@
                   if(response.data.data) {
                     console.log(response.data.data.status,'success')
                     this.$emit('setShareValue', { value: true })
-                    this.$notify.success({
-                      title: 'Success',
-                      message: 'Live Account Shared!',
-                      type: 'success'
-                      });
+                    console.log('SHARE SUCCESS')
+                    // this.$notify.success({
+                    //   title: 'Success',
+                    //   message: 'Live Account Shared!',
+                    //   type: 'success'
+                    //   });
                     this.dialogShare = false
                   } else {
                     console.log('Unable to share!')
