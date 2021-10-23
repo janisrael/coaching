@@ -590,15 +590,13 @@ export default {
         // await fetch(sched_api).then(res => res.ok && res.json() || Promise.reject(res)),
         await fetch('/api/v1/account/sales').then(res => res.ok && res.json() || Promise.reject(res))
       ]).then(data => {
-
-        this.datacoach = data[0].data
+        this.datacoach = data[0].data // mentors
         this.datasched = data[1].data // schedules
-        this.datasales = data[2].data
+        this.datasales = data[2].data // sales
         // this.datasched = this.dummyschedules
 
-
         this.options = this.datacoach.options
-        var coachesraw = this.datacoach.coaches
+        let coachesraw = this.datacoach.coaches
 
         // filter mentors if user customer_group is learn to trade
         this.portal_user_id = this.datasales.portal_user.portal_user_id
@@ -607,7 +605,7 @@ export default {
         if(this.datasales.sales > 0) {
           mentor_id = this.datasales.sales[0].coach
         }
-        console.log(mentor_id,'mentor_id')
+
         let my_mentor = false
         let index_load = 0
         let count = 0
@@ -617,13 +615,11 @@ export default {
           this.customer_group = 'sc2'
         }
 
-
         if(this.datasales.portal_user.customer_type) {
           this.customer_type = this.datasales.portal_user.customer_type.toLowerCase()
         } else {
           this.customer_type = 'front end'
         }
-
 
         if(mentor_id !== '') {
           if(this.datasales.portal_user.customer_group.toLowerCase() === 'ltt') {
@@ -655,15 +651,15 @@ export default {
           }
         }
         var user_id = coachesraw[0].id
-        this.user_id = user_id
-        // var user_id = this.user_id
+        this.user_id = user_id // assign global user_id
 
-        this.schedules = this.datasched.schedules
-        // this.schedules = this.dummyschedules // dummy
+        this.schedules = this.datasched.schedules // assign schedules to global variables
         var schedraw = this.schedules
         var hasbooked = true
+
+        // check and determine if mentors has booked
         coachesraw.forEach(function (value, index) {
-          schedraw.forEach(function (val, index) {
+          schedraw.forEach(function (val, i) {
             if(val.status !== 'Pending' && value.id === val.coach_id) {
               hasbooked = false
             }
@@ -671,9 +667,8 @@ export default {
           value['has_booked'] = hasbooked
         })
 
-        this.coaches = coachesraw
+        this.coaches = coachesraw  // assign mentors to global variables
         this.$refs.singleTable.setCurrentRow(this.coaches[index_load])
-        // this.user_id = this.coaches[0].id
         var scheds = schedraw
         var coach = coachesraw
 
@@ -687,10 +682,10 @@ export default {
             ...a2.find((item) => (item.id === itm.coach_id) && item),
             ...itm
           }));
-        this.new_collections = mergeById(arr1, arr2); // merge scheds to coach
-        // console.log('merge', this.new_collections)
+        this.new_collections = mergeById(arr1, arr2); // merge arr1 (SCHEDULES) to arr2 (Coaches)
+
         this.reset = this.coaches
-        this.languages = this.options.languages
+        this.languages = this.options.languages // get all languages
         this.checkUser()
         setTimeout(() => this.loadDefault(this.datacoach, index_load), 1)
       })
