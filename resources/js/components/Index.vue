@@ -421,12 +421,11 @@ export default {
     this.loading = true
     this.read()
     this.setrange()
-
   },
   methods: {
     checkUser() {
       let user_id = this.portal_user_id
-      let url = '/api/v1/share'
+      let url = '/api/v1/check-student'
       axios.get(url,
         {
           params: {
@@ -435,16 +434,17 @@ export default {
         }
       ).then(response => {
         console.log(response, 'response')
-        if(response.data.data) {
-          console.log(response.data.data.status,'success')
+        if(response.data.is_student === true) {
           this.isStudent = true
           this.ifShare = true
-          this.$notify.success({
-            title: 'Success',
-            message: 'Live Account Shared!',
-            type: 'success'
-          });
+          console.log('active student')
+          // this.$notify.success({
+          //   title: 'Success',
+          //   message: 'Live Account Shared!',
+          //   type: 'success'
+          // });
         } else {
+          console.log('not-active')
           this.isStudent = false
           this.ifShare = false
         }
@@ -476,7 +476,6 @@ export default {
           this.currentComponent = ShareModalComponent
           setTimeout(() => this.ex_call_modal(), 1);
       }
-
     },
     ex_call_modal() {
       this.$refs.currentComponent.show();

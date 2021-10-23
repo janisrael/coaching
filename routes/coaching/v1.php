@@ -22,6 +22,8 @@ Route::group(['namespace' => 'Coaching\V1'], function () {
 
         Route::get('share', 'CoachController@share');
 
+        Route::get('check-student', 'CoachController@check');
+
         Route::post('coaching-session/cancel', 'CoachingSessionController@cancel');
     });
 });

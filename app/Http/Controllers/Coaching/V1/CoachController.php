@@ -85,4 +85,51 @@ class CoachController extends Controller
 
         return $response;
     }
+
+    /**
+     * check student
+     *
+     * @return JsonResponse
+     */
+    public function check(Request $request)
+    {
+        $user_portal_id = $request->id;
+        $token = config('api.student_token');
+        $apiURL = 'https://dev-api.app/v1/coaching/students/' .$user_portal_id;
+
+        $curl = curl_init($apiURL);
+
+        curl_setopt_array($curl, array(
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_HEADER => true,
+            CURLOPT_ENCODING => '',
+            CURLOPT_NOBODY => false,
+            CURLOPT_MAXREDIRS => 10,
+            CURLOPT_TIMEOUT => 10,
+            CURLOPT_FOLLOWLOCATION => true,
+            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+            CURLOPT_CUSTOMREQUEST => 'GET',
+            CURLOPT_HTTPHEADER => array(
+                'Authorization: Bearer ' .$token,
+                'Accept: application/json',
+                'Content-Type: application/json',
+                'Cache-Control: no-cache'
+            ),
+        ));
+
+        $output = curl_exec($curl);
+        $httpcode = curl_getinfo($curl, CURLINFO_HTTP_CODE);
+        curl_close($curl);
+
+        $status = false;
+        if($httpcode != 0) {
+            $status = true;
+        }
+        $response = [
+            'is_student' => $status,
+            'data' => $output
+        ];
+
+        return $response;
+    }
 }
