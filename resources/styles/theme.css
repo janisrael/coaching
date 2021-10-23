@@ -244,6 +244,7 @@ button.el-button.plain {
 .el-table .warning-row {
     /*background: rgba(54, 54, 54, 1) !important*/
     opacity: 0.5;
+    cursor: not-allowed;
 }
 
 .list-item.active.class-disable {

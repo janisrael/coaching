@@ -205,7 +205,7 @@
           </div>
         </el-col>
         <el-col :xs="12" :sm="17" :md="16" :lg="18" :xl="18" class="full-height index-col-right" style="background-image: url('../../images/background.jpg'); background-size: cover;">
-          <content-component v-if="loading === false" :selected="passData" @showModal="showShareModal" ></content-component>
+          <content-component v-if="loading === false" :selected="passData" :ifshare="ifShare" @showModal="showShareModal" ></content-component>
           <session-component v-if="loading === false" ref="sessionComponent" :selected="for_sessiondata" :user_id="coach_id" :sales="datasales" :ifshare="ifShare" :can_book="can_book" @change="backData($event)" @reload="reloadData(value)" @showModal="showShareModal" @filterData="filterData"></session-component>
         </el-col>
       </el-col>

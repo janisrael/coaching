@@ -64,7 +64,7 @@
       </el-dialog>
 
   </div>
-  <div @click="showModal()" style="display: inline-block; float:right; position: absolute; right: 30px; top: 80px; color: #fff; border: 1px solid #fff; border-radius: 50%; padding: 6px 7px; transform: rotate(44deg); cursor: pointer;">
+  <div v-if="ifshare === true" @click="showModal()" style="display: inline-block; float:right; position: absolute; right: 30px; top: 80px; color: #fff; border: 1px solid #fff; border-radius: 50%; padding: 6px 7px; transform: rotate(44deg); cursor: pointer;">
       <i class="fas fa-link"></i>
   </div>
 </div>
@@ -77,6 +77,10 @@ export default {
     selected: {
       required: false,
       type: Object
+    },
+    ifshare: {
+      required: true,
+      type: Boolean
     }
   },
   data() {
