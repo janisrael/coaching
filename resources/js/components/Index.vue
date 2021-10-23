@@ -3,10 +3,13 @@
 
     <el-row class="">
       <el-col :span="24" >
-            <el-col v-if="loading" v-loading.fullscreen="loading" element-loading-text="Loading..." element-loading-background="rgba(0, 0, 0, 0.3)" element-loading-spinner="el-icon-loading" :span="24" style="height: 100vh; width: 100%; display: inline-block; background-color: rgba(0, 0, 0, .50); position: absolute; z-index: 99;">
-
-
-            </el-col>
+        <loading
+          :active.sync="loading"
+          :can-cancel="false"
+          :is-full-page="fullPage"
+          :background-color="bg_color"
+          :color="icon_color"
+        ></loading>
         <el-col :xs="12" :sm="7" :md="8" :lg="6" :xl="6" class="full-height index-col-left">
           <el-col :span="24" style="padding: 10px;" class="coaches-search-desktop">
             <div style="width: 100%; display: inline-block;">
@@ -30,6 +33,7 @@
           <div>
             <div class="grid-content bg-purple-dark">
               <el-table
+                v-loading="loading_coach"
                 :data="activeCards.filter(data => !search || data.last_name.toLowerCase().includes(search.toLowerCase()) || data.first_name.toLowerCase().includes(search.toLowerCase()))"
                 :default-sort = "{prop: 'my_mentor', order: 'descending'}"
                 ref="singleTable"
@@ -159,9 +163,9 @@
                           <div class="left-list-header">{{ scope.row.first_name }} {{ scope.row.last_name }}</div>
                           <span class="coaches-desktop">
                             <div class="left-list-sub">
-                               <span style="color: rgb(169, 169, 169);">Experience - </span>
-                                <span v-if="scope.row.experience > 0">{{ scope.row.experience }} years</span>
-                                <span v-else>0</span>
+<!--                                <span style="color: rgb(169, 169, 169);">Experience - </span>-->
+<!--                                <span v-if="scope.row.experience > 0">{{ scope.row.experience }} years</span>-->
+<!--                                <span v-else>0</span>-->
                             </div>
                             <div class="left-list-sub">
                               <span style="color: rgb(169, 169, 169);">Markets traded -</span>
@@ -177,7 +181,7 @@
                             </div>
                           </span>
                           <span class="coaches-mobile">
-                            <div class="left-list-sub">Experience - {{ scope.row.experience }} years</div>
+<!--                            <div class="left-list-sub">Experience - {{ scope.row.experience }} years</div>-->
                           </span>
                           <div class="coaches-list-icons">
                             <el-badge :value="booked" class="item">
@@ -296,12 +300,14 @@
 <script>
 import ContentComponent from './ContentComponent.vue'
 // import FilterComponent from './FilterComponent.vue'
+import Loading from "vue-loading-overlay";
 import SessionComponent from './SessionsComponent.vue'
 import ShareModalComponent from './ShareModalComponent.vue'
 
 export default {
   name: 'Index',
   components: {
+    Loading,
     ContentComponent,
     SessionComponent,
     ShareModalComponent
@@ -309,6 +315,7 @@ export default {
   data() {
     return {
       loading: false,
+      loading_coach: false,
       // loadingSession: false,
       currentComponent: null,
       importComponent: null,
@@ -363,7 +370,10 @@ export default {
       index_load: 0,
       can_book: false,
       isStudent: false,
-      portal_user_id: 0
+      portal_user_id: 0,
+      fullPage: true,
+      bg_color: '#000',
+      icon_color: '#fff'
     }
   },
   computed: {
@@ -522,7 +532,7 @@ export default {
       this.final_range[1] = this.value_range[1]
     },
     filterData(value) {
-      this.loading = true
+      // this.loading = true
       let sched_api = '/api/v1/coaches/schedule'
       let letcurrentDate = new Date().toJSON().slice(0,10).replace(/-/g,'-');
       let date1a = value.value[0]
@@ -779,6 +789,7 @@ export default {
       this.value_range = [0,100]
     },
     handleFilter() {
+      this.loading_coach = true
       if(this.value_range[0] === '') {
         this.value_range[0] = 0
       }
@@ -800,6 +811,7 @@ export default {
       this.$refs.singleTable.setCurrentRow(this.coaches[this.index_load])
       this.preselectedTags = []
       this.preselectedTags = this.reset
+      this.loading_coach = false
     },
     callsearchmodal() {
       this.searchModal = true

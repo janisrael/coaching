@@ -1,12 +1,5 @@
 <template>
   <el-col :span="24">
-    <loading
-      :active.sync="loading"
-      :can-cancel="false"
-      :is-full-page="fullPage"
-      :background-color="bg_color"
-      :color="icon_color"
-    ></loading>
     <div v-if="!noMore" class="arrowDown" @click="scrollToElement({behavior: 'smooth'})">
       <i class="fa fa-angle-down" aria-hidden="true"></i>
     </div>
@@ -82,7 +75,7 @@
           </el-popover>
         </div>
       </div>
-      <el-col v-loading="loading" element-loading-text="Loading Schedules..." element-loading-spinner="el-icon-loading" element-loading-background="rgba(0, 0, 0, 0.21)":span="24" class="session-items-container">
+      <el-col v-loading="loading" element-loading-text="Loading Schedules..." element-loading-spinner="el-icon-loading" element-loading-background="rgba(0, 0, 0, 0.2)":span="24" class="session-items-container">
         <div v-for="(position, index) in even(filteredPositions)" :key="index"  :class="['sessions-item-' + index]">
           <transition name="el-fade-in">
             <div v-if="position.status === 'Pending'" class="list-item" @click="dialogMentor(position)" v-bind:class="[{ active: !can_book }, disableClass]">
@@ -390,6 +383,13 @@ export default {
   mounted: function() {
     // this.session_collection = this.selected.slice(0, this.count)
   },
+  watch: {
+    session_collection: function() {
+      if(this.session_collection) {
+        this.loading = false
+      }
+    }
+  },
   created: function() {
     this.loading = true
     // console.log(this.session_collection,'collections')
@@ -528,6 +528,7 @@ export default {
 
     },
     checkDate: function(){
+      this.loading = true
       if(this.datefilter === null) {
         this.range_sep = ''
       } else {
