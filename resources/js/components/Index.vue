@@ -478,7 +478,6 @@ export default {
     showShareModal() {
       this.currentComponent = null
       if(this.ifShare === false) {
-
           this.currentComponent = ShareModalComponent
           setTimeout(() => this.ex_call_modal(), 1);
       } else {

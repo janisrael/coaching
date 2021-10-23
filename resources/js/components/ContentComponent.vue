@@ -4,7 +4,7 @@
     <el-col :xs="4" :sm="4" :md="4" :lg="2" :xl="2" class="content-avatar-container" @click="showInfo()" style="cursor: pointer;">
       <div @click="showInfo()" style="cursor: pointer; display: block; width: 100%; height: 100%;">
         <el-avatar :size="60" :src="selected.coach_image" class="dbl-border">
-          <img v-if="selected.coach_image === null || selected.coach_image === 'null'" :src="default_image"/>
+          <img v-if="selected.coach_image === null || selected.coach_image === 'null' || selected.coach_image === undefined" :src="default_image"/>
           <img v-else :src="selected.coach_image"/>
         </el-avatar>
       </div>
@@ -21,7 +21,7 @@
         <div  v-if="selected.country === null || selected.country === '' || selected.country === undefined" class="right-detail-sub">No Specified Country</div>
         <div  v-else class="right-detail-sub">{{ selected.country }}</div>
       </div>
-      
+
     </el-col>
       <el-dialog
         title="Biography"
@@ -31,7 +31,7 @@
         width="60%">
         <div style="float:left; padding: 8px;">
           <el-avatar :size="60" :src="selected.coach_image" class="dbl-border">
-            <img v-if="selected.avatcoach_imagear === null || selected.coach_image === 'null'" :src="default_image"/>
+            <img v-if="selected.avatcoach_imagear === null || selected.coach_image === 'null' || selected.coach_image === undefined" :src="default_image"/>
             <img v-else :src="selected.coach_image"/>
           </el-avatar>
         </div>
@@ -62,7 +62,7 @@
           <el-button @click="dialogProfile = false" type="success">Close</el-button>
         </span>
       </el-dialog>
-    
+
   </div>
   <div @click="showModal()" style="display: inline-block; float:right; position: absolute; right: 30px; top: 80px; color: #fff; border: 1px solid #fff; border-radius: 50%; padding: 6px 7px; transform: rotate(44deg); cursor: pointer;">
       <i class="fas fa-link"></i>
@@ -75,7 +75,7 @@ export default {
   name: 'ContentComponent',
   props: {
     selected: {
-      required: true,
+      required: false,
       type: Object
     }
   },
