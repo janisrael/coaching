@@ -357,11 +357,13 @@ export default {
       datas: {},
       value: [],
       selected_id: '',
-      ifShare: true,
+      ifShare: false,
       customer_group: '',
       customer_type: '',
       index_load: 0,
-      can_book: false
+      can_book: false,
+      isStudent: false,
+      portal_user_id: 0
     }
   },
   computed: {
@@ -417,12 +419,45 @@ export default {
   },
   created: function() {
     this.loading = true
-
     this.read()
     this.setrange()
 
   },
   methods: {
+    checkUser() {
+      let user_id = this.portal_user_id
+      let url = '/api/v1/share'
+      axios.get(url,
+        {
+          params: {
+            'id': user_id
+          }
+        }
+      ).then(response => {
+        console.log(response, 'response')
+        if(response.data.data) {
+          console.log(response.data.data.status,'success')
+          this.isStudent = true
+          this.ifShare = true
+          this.$notify.success({
+            title: 'Success',
+            message: 'Live Account Shared!',
+            type: 'success'
+          });
+        } else {
+          this.isStudent = false
+          this.ifShare = false
+        }
+      }).catch(error => {
+          console.log(error)
+          this.isStudent = false
+          this.ifShare = false
+        })
+
+      if(this.ifShare === false) {
+        this.showShareModal()
+      }
+    },
     setShareValue(value) {
       if(value.value === true) {
         this.ifShare = true
@@ -567,7 +602,7 @@ export default {
         var coachesraw = this.datacoach.coaches
 
         // filter mentors if user customer_group is learn to trade
-
+        this.portal_user_id = this.datasales.portal_user.portal_user_id
         // let str_llt = 'ltt'
         let mentor_id = ''
         if(this.datasales.sales > 0) {
@@ -657,9 +692,7 @@ export default {
         // console.log('merge', this.new_collections)
         this.reset = this.coaches
         this.languages = this.options.languages
-        if(this.ifShare === false) {
-            this.showShareModal()
-        }
+        this.checkUser()
         setTimeout(() => this.loadDefault(this.datacoach, index_load), 1)
       })
     },

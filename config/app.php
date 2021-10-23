@@ -148,7 +148,7 @@ return [
     */
 
     'key' => env('APP_KEY'),
-
+    'student_token' => env('APP_STUDENT_TOKEN'),
     'cipher' => 'AES-256-CBC',
 
     /*
