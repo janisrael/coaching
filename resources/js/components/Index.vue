@@ -3,10 +3,13 @@
 
     <el-row class="">
       <el-col :span="24" >
-            <el-col v-if="loading" v-loading.fullscreen="loading" element-loading-text="Loading..." element-loading-background="rgba(0, 0, 0, 0.3)" element-loading-spinner="el-icon-loading" :span="24" style="height: 100vh; width: 100%; display: inline-block; background-color: rgba(0, 0, 0, .50); position: absolute; z-index: 99;">
-
-
-            </el-col>
+        <loading
+          :active.sync="loading"
+          :can-cancel="false"
+          :is-full-page="fullPage"
+          :background-color="bg_color"
+          :color="icon_color"
+        ></loading>
         <el-col :xs="12" :sm="7" :md="8" :lg="6" :xl="6" class="full-height index-col-left">
           <el-col :span="24" style="padding: 10px;" class="coaches-search-desktop">
             <div style="width: 100%; display: inline-block;">
@@ -30,6 +33,7 @@
           <div>
             <div class="grid-content bg-purple-dark">
               <el-table
+                v-loading="loading_coach"
                 :data="activeCards.filter(data => !search || data.last_name.toLowerCase().includes(search.toLowerCase()) || data.first_name.toLowerCase().includes(search.toLowerCase()))"
                 :default-sort = "{prop: 'my_mentor', order: 'descending'}"
                 ref="singleTable"
@@ -159,9 +163,9 @@
                           <div class="left-list-header">{{ scope.row.first_name }} {{ scope.row.last_name }}</div>
                           <span class="coaches-desktop">
                             <div class="left-list-sub">
-                               <span style="color: rgb(169, 169, 169);">Experience - </span>
-                                <span v-if="scope.row.experience > 0">{{ scope.row.experience }} years</span>
-                                <span v-else>0</span>
+<!--                                <span style="color: rgb(169, 169, 169);">Experience - </span>-->
+<!--                                <span v-if="scope.row.experience > 0">{{ scope.row.experience }} years</span>-->
+<!--                                <span v-else>0</span>-->
                             </div>
                             <div class="left-list-sub">
                               <span style="color: rgb(169, 169, 169);">Markets traded -</span>
@@ -177,7 +181,7 @@
                             </div>
                           </span>
                           <span class="coaches-mobile">
-                            <div class="left-list-sub">Experience - {{ scope.row.experience }} years</div>
+<!--                            <div class="left-list-sub">Experience - {{ scope.row.experience }} years</div>-->
                           </span>
                           <div class="coaches-list-icons">
                             <el-badge :value="booked" class="item">
@@ -201,7 +205,7 @@
           </div>
         </el-col>
         <el-col :xs="12" :sm="17" :md="16" :lg="18" :xl="18" class="full-height index-col-right" style="background-image: url('../../images/background.jpg'); background-size: cover;">
-          <content-component v-if="loading === false" :selected="passData" @showModal="showShareModal" ></content-component>
+          <content-component v-if="loading === false" :selected="passData" :ifshare="ifShare" @showModal="showShareModal" ></content-component>
           <session-component v-if="loading === false" ref="sessionComponent" :selected="for_sessiondata" :user_id="coach_id" :sales="datasales" :ifshare="ifShare" :can_book="can_book" @change="backData($event)" @reload="reloadData(value)" @showModal="showShareModal" @filterData="filterData"></session-component>
         </el-col>
       </el-col>
@@ -296,12 +300,14 @@
 <script>
 import ContentComponent from './ContentComponent.vue'
 // import FilterComponent from './FilterComponent.vue'
+import Loading from "vue-loading-overlay";
 import SessionComponent from './SessionsComponent.vue'
 import ShareModalComponent from './ShareModalComponent.vue'
 
 export default {
   name: 'Index',
   components: {
+    Loading,
     ContentComponent,
     SessionComponent,
     ShareModalComponent
@@ -309,6 +315,7 @@ export default {
   data() {
     return {
       loading: false,
+      loading_coach: false,
       // loadingSession: false,
       currentComponent: null,
       importComponent: null,
@@ -357,11 +364,16 @@ export default {
       datas: {},
       value: [],
       selected_id: '',
-      ifShare: true,
+      ifShare: false,
       customer_group: '',
       customer_type: '',
       index_load: 0,
-      can_book: false
+      can_book: false,
+      isStudent: false,
+      portal_user_id: 0,
+      fullPage: true,
+      bg_color: '#000',
+      icon_color: '#fff'
     }
   },
   computed: {
@@ -417,12 +429,45 @@ export default {
   },
   created: function() {
     this.loading = true
-
     this.read()
     this.setrange()
-
   },
   methods: {
+    checkUser() {
+      let user_id = this.portal_user_id
+      let url = '/api/v1/check-student'
+      axios.get(url,
+        {
+          params: {
+            'id': user_id
+          }
+        }
+      ).then(response => {
+        console.log(response, 'response')
+        if(response.data.is_student === true) {
+          this.isStudent = true
+          this.ifShare = true
+          console.log('active student')
+          // this.$notify.success({
+          //   title: 'Success',
+          //   message: 'Live Account Shared!',
+          //   type: 'success'
+          // });
+        } else {
+          console.log('not-active')
+          this.isStudent = false
+          this.ifShare = false
+        }
+      }).catch(error => {
+          console.log(error)
+          this.isStudent = false
+          this.ifShare = false
+        })
+
+      if(this.ifShare === false) {
+        this.showShareModal()
+      }
+    },
     setShareValue(value) {
       if(value.value === true) {
         this.ifShare = true
@@ -433,7 +478,6 @@ export default {
     showShareModal() {
       this.currentComponent = null
       if(this.ifShare === false) {
-
           this.currentComponent = ShareModalComponent
           setTimeout(() => this.ex_call_modal(), 1);
       } else {
@@ -441,7 +485,6 @@ export default {
           this.currentComponent = ShareModalComponent
           setTimeout(() => this.ex_call_modal(), 1);
       }
-
     },
     ex_call_modal() {
       this.$refs.currentComponent.show();
@@ -488,7 +531,7 @@ export default {
       this.final_range[1] = this.value_range[1]
     },
     filterData(value) {
-      this.loading = true
+      // this.loading = true
       let sched_api = '/api/v1/coaches/schedule'
       let letcurrentDate = new Date().toJSON().slice(0,10).replace(/-/g,'-');
       let date1a = value.value[0]
@@ -556,24 +599,22 @@ export default {
         // await fetch(sched_api).then(res => res.ok && res.json() || Promise.reject(res)),
         await fetch('/api/v1/account/sales').then(res => res.ok && res.json() || Promise.reject(res))
       ]).then(data => {
-
-        this.datacoach = data[0].data
+        this.datacoach = data[0].data // mentors
         this.datasched = data[1].data // schedules
-        this.datasales = data[2].data
+        this.datasales = data[2].data // sales
         // this.datasched = this.dummyschedules
 
-
         this.options = this.datacoach.options
-        var coachesraw = this.datacoach.coaches
+        let coachesraw = this.datacoach.coaches
 
         // filter mentors if user customer_group is learn to trade
-
+        this.portal_user_id = this.datasales.portal_user.portal_user_id
         // let str_llt = 'ltt'
         let mentor_id = ''
         if(this.datasales.sales > 0) {
           mentor_id = this.datasales.sales[0].coach
         }
-        console.log(mentor_id,'mentor_id')
+
         let my_mentor = false
         let index_load = 0
         let count = 0
@@ -583,13 +624,11 @@ export default {
           this.customer_group = 'sc2'
         }
 
-
         if(this.datasales.portal_user.customer_type) {
           this.customer_type = this.datasales.portal_user.customer_type.toLowerCase()
         } else {
           this.customer_type = 'front end'
         }
-
 
         if(mentor_id !== '') {
           if(this.datasales.portal_user.customer_group.toLowerCase() === 'ltt') {
@@ -621,15 +660,15 @@ export default {
           }
         }
         var user_id = coachesraw[0].id
-        this.user_id = user_id
-        // var user_id = this.user_id
+        this.user_id = user_id // assign global user_id
 
-        this.schedules = this.datasched.schedules
-        // this.schedules = this.dummyschedules // dummy
+        this.schedules = this.datasched.schedules // assign schedules to global variables
         var schedraw = this.schedules
         var hasbooked = true
+
+        // check and determine if mentors has booked
         coachesraw.forEach(function (value, index) {
-          schedraw.forEach(function (val, index) {
+          schedraw.forEach(function (val, i) {
             if(val.status !== 'Pending' && value.id === val.coach_id) {
               hasbooked = false
             }
@@ -637,9 +676,8 @@ export default {
           value['has_booked'] = hasbooked
         })
 
-        this.coaches = coachesraw
+        this.coaches = coachesraw  // assign mentors to global variables
         this.$refs.singleTable.setCurrentRow(this.coaches[index_load])
-        // this.user_id = this.coaches[0].id
         var scheds = schedraw
         var coach = coachesraw
 
@@ -653,13 +691,11 @@ export default {
             ...a2.find((item) => (item.id === itm.coach_id) && item),
             ...itm
           }));
-        this.new_collections = mergeById(arr1, arr2); // merge scheds to coach
-        // console.log('merge', this.new_collections)
+        this.new_collections = mergeById(arr1, arr2); // merge arr1 (SCHEDULES) to arr2 (Coaches)
+
         this.reset = this.coaches
-        this.languages = this.options.languages
-        if(this.ifShare === false) {
-            this.showShareModal()
-        }
+        this.languages = this.options.languages // get all languages
+        this.checkUser()
         setTimeout(() => this.loadDefault(this.datacoach, index_load), 1)
       })
     },
@@ -752,6 +788,7 @@ export default {
       this.value_range = [0,100]
     },
     handleFilter() {
+      this.loading_coach = true
       if(this.value_range[0] === '') {
         this.value_range[0] = 0
       }
@@ -773,6 +810,7 @@ export default {
       this.$refs.singleTable.setCurrentRow(this.coaches[this.index_load])
       this.preselectedTags = []
       this.preselectedTags = this.reset
+      this.loading_coach = false
     },
     callsearchmodal() {
       this.searchModal = true
