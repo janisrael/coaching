@@ -91,6 +91,8 @@ return [
 
     'portal_session_token_url' => env('PORTAL_SESSION_TOKEN_URL'),
 
+    'portal_instance_block' => explode(',', env('PORTAL_INSTANCE_BLOCK')),
+
     'coaching_url' => env('APP_URL') . '/' . env('DEFAULT_COACHING_VERSION', 'v1'),
 
     'enable_api_dummy_data' => env('API_ENABLE_DUMMY_DATA'),
@@ -149,6 +151,8 @@ return [
 
     'key' => env('APP_KEY'),
     'student_token' => env('APP_STUDENT_TOKEN'),
+    'share_url' => env('APP_SHARE_URL'),
+    'check_url' => env('APP_CHECK_URL'),
     'cipher' => 'AES-256-CBC',
 
     /*

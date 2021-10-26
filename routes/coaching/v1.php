@@ -8,7 +8,7 @@ Route::group(['namespace' => 'Coaching\V1'], function () {
         });
     });
 
-    Route::group(['prefix' => 'api/v1'], function () {
+    Route::group(['prefix' => 'api/v1', 'middleware' => 'portal.instance'], function () {
 
         Route::get('account', 'AccountController@person');
 
