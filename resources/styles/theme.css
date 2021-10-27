@@ -2,6 +2,10 @@ input#searchBar {
     background-color: transparent !important;
 }
 
+div#dialogInstance i.el-dialog__close.el-icon.el-icon-close, div#dialogInstance .el-dialog__header, div#dialogInstance .el-dialog__footer {
+    display: none !important;
+}
+
 div#dialogShare div.el-dialog__header {
     background-color: #4a6a8e !important;
     text-align: center;

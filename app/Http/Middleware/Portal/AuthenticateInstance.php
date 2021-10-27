@@ -15,14 +15,17 @@ class AuthenticateInstance
      */
     public function handle($request, Closure $next)
     {
-        if ($request->session()->has('portal_instance')) {
-            $portalnstace = explode('\\', session('portal_instance'));
-            return response()->json([
-                'error_code' => 403,
-                'error_message' => 'Unable to load ' . ($portalnstace[2] ?? session('portal_instance')) . ' instance environment.',
-            ], 200);
-        }
-
-        return $next($request);
+//        if ($request->session()->has('portal_instance')) {
+//            $portalnstace = explode('\\', session('portal_instance'));
+//            return response()->json([
+//                'error_code' => 403,
+//                'error_message' => 'Unable to load ' . ($portalnstace[2] ?? session('portal_instance')) . ' instance environment.',
+//            ], 200);
+//        }
+        return response()->json([
+            'error_code' => 403,
+            'error_message' => 'Unable to load instance environment.',
+        ], 200);
+//        return $next($request);
     }
 }

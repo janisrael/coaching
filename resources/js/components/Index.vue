@@ -283,6 +283,18 @@
       </span>
       </el-dialog>
 
+      <!-- Instance Modal-->
+      <el-dialog id="dialogInstance" title="Unauthorized Access" :visible.sync="instanceModal" :close-on-click-modal="false" top="15%" style="width: 100%; height: 100%;">
+        <el-row>
+          <el-col :span="24" class="filter-blocks">
+            <h1 style="text-align: center;"> {{ instance_message }}</h1>
+          </el-col>
+        </el-row>
+        <span slot="footer" class="dialog-footer">
+<!--        <el-button @click="instanceModal = false" type="success">Close</el-button>-->
+        </span>
+      </el-dialog>
+
       <!-- dialog share read only live account -->
       <component
           ref="currentComponent"
@@ -375,7 +387,9 @@ export default {
       bg_color: '#000',
       icon_color: '#fff',
       mentor_id: 0,
-      canbook: false
+      canbook: false,
+      instanceModal: false,
+      instance_message: ''
     }
   },
   computed: {
@@ -599,11 +613,20 @@ export default {
       let date2 = tomorrow.toJSON().slice(0,10).replace(/-/g,'-');
       // fetching data in all promise
       Promise.all([
-        await fetch('/api/v1/coaches').then(res => res.ok && res.json() || Promise.reject(res)),
+        await fetch('/api/v1/coaches').then(res =>
+          res.ok && res.json() || Promise.reject(res)),
         await fetch(sched_api + '/' + date1 + '/' + date2).then(res => res.ok && res.json() || Promise.reject(res)),
         // await fetch(sched_api).then(res => res.ok && res.json() || Promise.reject(res)),
         await fetch('/api/v1/account/sales').then(res => res.ok && res.json() || Promise.reject(res))
       ]).then(data => {
+        console.log(data[0])
+        if(data[0].error_code) {
+          this.loading = false
+          this.instanceModal = true
+          this.instance_message = data[0].error_message
+
+          return
+        }
         this.datacoach = data[0].data // mentors
         this.datasched = data[1].data // schedules
         this.datasales = data[2].data // sales
