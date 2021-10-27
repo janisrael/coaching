@@ -615,7 +615,9 @@ export default {
         this.portal_user_id = this.datasales.portal_user.portal_user_id
         // let str_llt = 'ltt'
         let mentor_id = ''
-        if(this.datasales.sales > 0) {
+
+        if(this.datasales.sales.length > 0) {
+          console.log('datasalse', this.datasales.sales.length)
           mentor_id = this.datasales.sales[0].coach
           this.mentor_id = mentor_id
         }
@@ -635,7 +637,8 @@ export default {
           this.customer_type = 'front end'
         }
 
-        if(mentor_id !== '') {
+        if(this.mentor_id !== 0 || this.mentor_id !== '' || this.mentor_id !== undefined) {
+          console.log(this.mentor_id, 'mentor_id')
           if(this.datasales.portal_user.customer_group.toLowerCase() === 'ltt') {
             coachesraw.forEach((value, index) => {
               count = count + 1
@@ -718,6 +721,10 @@ export default {
       this.loading = false
     },
     getSummary(row, index) {
+      if(row.my_mentor === false) {
+        console.log(row)
+        return
+      }
       this.passData = row
       if(row) {
         this.selected_id = row.id

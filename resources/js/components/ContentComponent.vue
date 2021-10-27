@@ -11,7 +11,8 @@
     </el-col>
 
     <el-col :xs="20" :sm="20" :md="20" :lg="22" :xl="22" class="content-coaches-name">
-      <div class="right-detail-header" @click="showInfo()" style="cursor: pointer;">{{ selected.first_name }} {{ selected.last_name }}</div>
+      <div v-if="selected.last_name" class="right-detail-header" @click="showInfo()" style="cursor: pointer;">{{ selected.first_name }} {{ selected.last_name }}</div>
+      <div v-else class="right-detail-header" @click="showInfo()" style="cursor: pointer;">No Selected Mentor</div>
       <div class="right-detail-btnprofile" @click="showInfo()"><i class="fas fa-info"></i></div>
       <div class="right-list-sub">
         <div style="display: inline-block; float: left; margin-left: -15px;">
