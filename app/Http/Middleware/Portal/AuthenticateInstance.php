@@ -19,7 +19,7 @@ class AuthenticateInstance
             $portalnstace = explode('\\', session('portal_instance'));
             return response()->json([
                 'error_code' => 403,
-                'error_message' => 'Unable to load ' . ($portalnstace[2] ?? session('portal_instance')) . ' instance environment.',
+                'error_message' => 'Unable to load ' . ($portalnstace[2] ?? session('portal_instance')) . ' environment.',
             ], 200);
         }
 
