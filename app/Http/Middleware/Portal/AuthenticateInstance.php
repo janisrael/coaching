@@ -16,9 +16,10 @@ class AuthenticateInstance
     public function handle($request, Closure $next)
     {
         if ($request->session()->has('portal_instance')) {
+            $portalnstace = explode('\\', session('portal_instance'));
             return response()->json([
                 'error_code' => 403,
-                'error_message' => 'Unable to load ' . session('portal_instance')->name . ' instance environment.',
+                'error_message' => 'Unable to load ' . ($portalnstace[2] ?? session('portal_instance')) . ' instance environment.',
             ], 200);
         }
 
