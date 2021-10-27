@@ -373,7 +373,8 @@ export default {
       portal_user_id: 0,
       fullPage: true,
       bg_color: '#000',
-      icon_color: '#fff'
+      icon_color: '#fff',
+      mentor_id: 0
     }
   },
   computed: {
@@ -455,18 +456,20 @@ export default {
           // });
         } else {
           console.log('not-active')
+          this.showShareModal()
           this.isStudent = false
           this.ifShare = false
         }
       }).catch(error => {
           console.log(error)
           this.isStudent = false
+        this.showShareModal()
           this.ifShare = false
         })
 
-      if(this.ifShare === false) {
-        this.showShareModal()
-      }
+      // if(this.ifShare === false) {
+      //
+      // }
     },
     setShareValue(value) {
       if(value.value === true) {
@@ -613,6 +616,7 @@ export default {
         let mentor_id = ''
         if(this.datasales.sales > 0) {
           mentor_id = this.datasales.sales[0].coach
+          this.mentor_id = mentor_id
         }
 
         let my_mentor = false
@@ -677,6 +681,10 @@ export default {
         })
 
         this.coaches = coachesraw  // assign mentors to global variables
+        let m_index = 0
+        this.coaches.forEach((value, index) => {
+            console.log(value, 'val = ', mentor_id)
+        })
         this.$refs.singleTable.setCurrentRow(this.coaches[index_load])
         var scheds = schedraw
         var coach = coachesraw
