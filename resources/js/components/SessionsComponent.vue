@@ -6,7 +6,7 @@
     <div v-if="noMore && this.selected.length > 16" class="arrowDown" @click="scrollToTop({behavior: 'smooth'})">
       <i class="fa fa-angle-up" aria-hidden="true"></i>
     </div>
-    <span style="color: rgba(255, 255, 255, 0.7); padding-top: 12px; display: inline-block;padding-left: 10px;">{{ sales.computed_credits.total_available }} sessions left to book }} --  {{ ifshare }}</span>
+    <span style="color: rgba(255, 255, 255, 0.7); padding-top: 12px; display: inline-block;padding-left: 10px;">{{ sales.computed_credits.total_available }} sessions left to book --  {{ ifshare }}</span>
     <el-button size="small" class="btn-buy-session" type="primary" style="float:right; display: none;">BUY SESSIONS</el-button>
     <el-col :span="24">
       <div style="display: block;">

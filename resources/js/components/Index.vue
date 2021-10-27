@@ -721,10 +721,12 @@ export default {
       this.loading = false
     },
     getSummary(row, index) {
-      if(row.my_mentor === false) {
-        console.log(row)
-        return
-      }
+      // if(row.my_mentor) {
+      //   if(row.my_mentor === false) {
+      //     console.log(row)
+      //     return
+      //   }
+      // }
       this.passData = row
       if(row) {
         this.selected_id = row.id
