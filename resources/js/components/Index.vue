@@ -205,8 +205,8 @@
           </div>
         </el-col>
         <el-col :xs="12" :sm="17" :md="16" :lg="18" :xl="18" class="full-height index-col-right" style="background-image: url('../../images/background.jpg'); background-size: cover;">
-          <content-component v-if="loading === false" :selected="passData" :ifshare="ifShare" @showModal="showShareModal" ></content-component>
-          <session-component v-if="loading === false" ref="sessionComponent" :selected="for_sessiondata" :user_id="coach_id" :sales="datasales" :ifshare="ifShare" :can_book="can_book" @change="backData($event)" @reload="reloadData(value)" @showModal="showShareModal" @filterData="filterData"></session-component>
+          <content-component v-if="loading === false" :selected="passData" :ifshare="ifShare" :canbook="canbook" @showModal="showShareModal" ></content-component>
+          <session-component v-if="loading === false" ref="sessionComponent" :selected="for_sessiondata" :canbook="canbook" :user_id="coach_id" :sales="datasales" :ifshare="ifShare" :can_book="can_book" @change="backData($event)" @reload="reloadData(value)" @showModal="showShareModal" @filterData="filterData"></session-component>
         </el-col>
       </el-col>
 
@@ -374,7 +374,8 @@ export default {
       fullPage: true,
       bg_color: '#000',
       icon_color: '#fff',
-      mentor_id: 0
+      mentor_id: 0,
+      canbook: false
     }
   },
   computed: {
@@ -721,6 +722,11 @@ export default {
       this.loading = false
     },
     getSummary(row, index) {
+      if(row.my_mentor === true) {
+        this.canbook = true
+      } else {
+        this.canbook = false
+      }
       // if(row.my_mentor) {
       //   if(row.my_mentor === false) {
       //     console.log(row)

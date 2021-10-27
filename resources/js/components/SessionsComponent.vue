@@ -6,7 +6,7 @@
     <div v-if="noMore && this.selected.length > 16" class="arrowDown" @click="scrollToTop({behavior: 'smooth'})">
       <i class="fa fa-angle-up" aria-hidden="true"></i>
     </div>
-    <span style="color: rgba(255, 255, 255, 0.7); padding-top: 12px; display: inline-block;padding-left: 10px;">{{ sales.computed_credits.total_available }} sessions left to book --  {{ ifshare }}</span>
+    <span style="color: rgba(255, 255, 255, 0.7); padding-top: 12px; display: inline-block;padding-left: 10px;">{{ sales.computed_credits.total_available }} sessions left to book --  {{ ifshare }}, {{ canbook }}</span>
     <el-button size="small" class="btn-buy-session" type="primary" style="float:right; display: none;">BUY SESSIONS</el-button>
     <el-col :span="24">
       <div style="display: block;">
@@ -78,7 +78,7 @@
       <el-col v-loading="loading" element-loading-text="Loading Schedules..." element-loading-spinner="el-icon-loading" element-loading-background="rgba(0, 0, 0, 0.5)":span="24" class="session-items-container">
         <div v-for="(position, index) in even(filteredPositions)" :key="index"  :class="['sessions-item-' + index]">
           <transition name="el-fade-in">
-            <div v-if="position.status === 'Pending'" class="list-item" @click="dialogMentor(position)" v-bind:class="[{ active: !ifshare }, disableClass]">
+            <div v-if="position.status === 'Pending'" class="list-item" @click="dialogMentor(position)" v-bind:class="[{ active: !ifshare || !canbook }, disableClass]">
               <el-col :xs="18" :sm="19" :md="20" :lg="22" :xl="22" :class="['list-' + position.status, 'session-listitem']">
                 <span style="width: 15px; display: inline-block"><i class="far fa-clock"></i></span>
                 <el-avatar :size="60" :src="position.coach_image" class="session-list-avatar">
@@ -297,6 +297,10 @@ export default {
       required: true,
       type: Object
     },
+    canbook: {
+      required: true,
+      type: Boolean
+    },
     ifshare: {
       required: true,
       type: Boolean
@@ -491,9 +495,16 @@ export default {
       this.session_type = ''
       this.profileTitle = ''
       // this.schedule_profile = position.coaches
-      if(this.ifshare === false && position.status === 'Pending') {
+      if(position.status === 'Pending') {
+        if(this.ifshare === false) {
           this.$emit('showModal', { value: false })
           return
+        } else {
+           if(this.canbook === false) {
+             console.log('unable to book')
+             return
+           }
+        }
       }
 
       if ((typeof (position.country) === 'undefined' || (position.country === null))) {
