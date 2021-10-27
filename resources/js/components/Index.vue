@@ -3,13 +3,29 @@
 
     <el-row class="">
       <el-col :span="24" >
-        <loading
-          :active.sync="loading"
-          :can-cancel="false"
-          :is-full-page="fullPage"
-          :background-color="bg_color"
-          :color="icon_color"
-        ></loading>
+<!--        <loading-->
+<!--          :active.sync="loading"-->
+<!--          :can-cancel="false"-->
+<!--          :is-full-page="fullPage"-->
+<!--          :background-color="bg_color"-->
+<!--          :color="icon_color"-->
+<!--        ></loading>-->
+        <div v-if="loading" style="position: absolute;
+          width: 100%;
+          height: 100%;
+          z-index: 20000;">
+          <div style="position: relative;
+            width: 100px;
+            height: 100px;
+            z-index: 20001;
+            box-sizing: border-box;
+            top: calc(50% - 50px);
+            left: calc(50% - 50px);">
+              <div>
+                <svg viewBox='0 0 105 105' xmlns='http://www.w3.org/2000/svg' fill='#fff'><circle cx='12.5' cy='12.5' r='12.5'><animate attributeName='fill-opacity' begin='0s' dur='1s' values='1;.2;1' calcMode='linear' repeatCount='indefinite'/></circle><circle cx='12.5' cy='52.5' r='12.5' fill-opacity='.5'><animate attributeName='fill-opacity' begin='100ms' dur='1s' values='1;.2;1' calcMode='linear' repeatCount='indefinite'/></circle><circle cx='52.5' cy='12.5' r='12.5'><animate attributeName='fill-opacity' begin='300ms' dur='1s' values='1;.2;1' calcMode='linear' repeatCount='indefinite'/></circle><circle cx='52.5' cy='52.5' r='12.5'><animate attributeName='fill-opacity' begin='600ms' dur='1s' values='1;.2;1' calcMode='linear' repeatCount='indefinite'/></circle><circle cx='92.5' cy='12.5' r='12.5'><animate attributeName='fill-opacity' begin='800ms' dur='1s' values='1;.2;1' calcMode='linear' repeatCount='indefinite'/></circle><circle cx='92.5' cy='52.5' r='12.5'><animate attributeName='fill-opacity' begin='400ms' dur='1s' values='1;.2;1' calcMode='linear' repeatCount='indefinite'/></circle><circle cx='12.5' cy='92.5' r='12.5'><animate attributeName='fill-opacity' begin='700ms' dur='1s' values='1;.2;1' calcMode='linear' repeatCount='indefinite'/></circle><circle cx='52.5' cy='92.5' r='12.5'><animate attributeName='fill-opacity' begin='500ms' dur='1s' values='1;.2;1' calcMode='linear' repeatCount='indefinite'/></circle><circle cx='92.5' cy='92.5' r='12.5'><animate attributeName='fill-opacity' begin='200ms' dur='1s' values='1;.2;1' calcMode='linear' repeatCount='indefinite'/></circle></svg>
+              </div>
+          </div>
+        </div>
         <el-col :xs="12" :sm="7" :md="8" :lg="6" :xl="6" class="full-height index-col-left">
           <el-col :span="24" style="padding: 10px;" class="coaches-search-desktop">
             <div style="width: 100%; display: inline-block;">
