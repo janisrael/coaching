@@ -684,8 +684,11 @@ export default {
         let m_index = 0
         this.coaches.forEach((value, index) => {
             console.log(value, 'val = ', mentor_id)
+          if(value.id === mentor_id) {
+            m_index = index
+          }
         })
-        this.$refs.singleTable.setCurrentRow(this.coaches[index_load])
+        this.$refs.singleTable.setCurrentRow(this.coaches[m_index])
         var scheds = schedraw
         var coach = coachesraw
 
