@@ -68,7 +68,15 @@ class PortalLoginController extends Controller
     private function processLogin($request, $clientRequest)
     {
         $clientResponse = json_decode($clientRequest->getBody()->getContents());
-        
+        $request->session()->forget('portal_instance');
+        if (
+            isset($clientResponse->user->instance) and 
+            !empty($clientResponse->user->instance) and 
+            in_array($clientResponse->user->instance, config('app.portal_instance_block'))
+        ) {
+            $request->session()->put('portal_instance', $clientResponse->user->instance);
+        }
+
         $password = $clientResponse->user->id . $clientResponse->token . config('app.coaching_url');
 
         $portalSession = $this->portalLogin->updateOrCreate(

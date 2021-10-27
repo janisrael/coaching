@@ -62,6 +62,7 @@ class Kernel extends HttpKernel
         'verified' => \Illuminate\Auth\Middleware\EnsureEmailIsVerified::class,
 
         'portal.auth' => \App\Http\Middleware\Portal\Authenticate::class,
+        'portal.instance' => \App\Http\Middleware\Portal\AuthenticateInstance::class,
         'portal.guest' => \App\Http\Middleware\Portal\RedirectIfAuthenticated::class,
     ];
 
