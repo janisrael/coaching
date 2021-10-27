@@ -415,7 +415,8 @@ export default {
               let filteredArrMarket = markets.filter(el => filt.includes(el));
               let filteredArrStyle = styles.filter(el => filt.includes(el));
               if((filteredArrLang.length > 0) || (filteredArrMarket.length > 0) || (filteredArrStyle.length > 0)){
-                if(card.experience >= start && card.experience <= end && card.has_booked === filter_booked) {
+                // if(card.experience >= start && card.experience <= end && card.has_booked === filter_booked) {
+                if(card.experience >= start && card.experience <= end) {
                   activeCards.push(card);
                 }
               }
@@ -638,7 +639,7 @@ export default {
           if(this.datasales.portal_user.customer_group.toLowerCase() === 'ltt') {
             coachesraw.forEach((value, index) => {
               count = count + 1
-              if(value.id === mentor_id) {
+              if(value.id === this.mentor_id) {
                 if(this.customer_type.toLowerCase() === 'front end') {
                   if(value.front_end === true) {
                     my_mentor = true
@@ -663,6 +664,7 @@ export default {
             })
           }
         }
+        console.log(coachesraw,' coachesraw')
         var user_id = coachesraw[0].id
         this.user_id = user_id // assign global user_id
 
@@ -683,11 +685,12 @@ export default {
         this.coaches = coachesraw  // assign mentors to global variables
         let m_index = 0
         this.coaches.forEach((value, index) => {
-            console.log(value, 'val = ', mentor_id)
+            console.log(value, 'val = ', this.mentor_id)
           if(value.id === mentor_id) {
             m_index = index
           }
         })
+        console.log(m_index,'index')
         this.$refs.singleTable.setCurrentRow(this.coaches[m_index])
         var scheds = schedraw
         var coach = coachesraw
@@ -721,7 +724,7 @@ export default {
       }
 
       if(this.customer_group.toLowerCase() === 'ltt') {
-        this.can_book = row.my_mentor
+        this.can_book = false
       } else {
         this.can_book = true
       }
