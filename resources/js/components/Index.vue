@@ -719,14 +719,14 @@ export default {
         var hasbooked = true
 
         // check and determine if mentors has booked
-        coachesraw.forEach(function (value, index) {
-          schedraw.forEach(function (val, i) {
-            if(val.status !== 'Pending' && value.id === val.coach_id) {
-              hasbooked = false
-            }
-          })
-          value['has_booked'] = hasbooked
-        })
+        // coachesraw.forEach(function (value, index) {
+        //   schedraw.forEach(function (val, i) {
+        //     if(val.status !== 'Pending' && value.id === val.coach_id) {
+        //       hasbooked = false
+        //     }
+        //   })
+        //   value['has_booked'] = hasbooked
+        // })
 
         this.coaches = coachesraw  // assign mentors to global variables
         let m_index = 0
