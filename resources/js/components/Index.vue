@@ -41,6 +41,7 @@
 <!--            <div style="width: 10%; display: inline-block;">-->
 <!--              <el-button type="primary" class="plain" plain size="small" @click="callFilter()"><i class="fas fa-sliders-h" aria-hidden="true" style="color: rgba(255, 255, 255, 0.68);"></i></el-button>-->
 <!--            </div>-->
+
           </el-col>
           <el-col :span="24" class="coaches-search-mobile" style="padding: 10px;">
             <el-button type="primary" class="plain" plain size="small" @click="callsearchmodal()"><i class="fa fa-search" aria-hidden="true" style="color: rgba(255, 255, 255, 0.68);"></i></el-button>
