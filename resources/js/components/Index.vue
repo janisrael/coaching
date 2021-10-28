@@ -585,14 +585,14 @@ export default {
       this.schedules = data
         // this.schedules = this.dummyschedules // dummy
 
-        coachesraw.forEach(function (value, index) {
-          data.forEach(function (val, index) {
-            if(val.status !== 'Pending' && value.id === val.coach_id) {
-              hasbooked = true
-            }
-          })
-          value['has_booked'] = hasbooked
-        })
+        // coachesraw.forEach(function (value, index) {
+        //   data.forEach(function (val, index) {
+        //     if(val.status !== 'Pending' && value.id === val.coach_id) {
+        //       hasbooked = true
+        //     }
+        //   })
+        //   value['has_booked'] = hasbooked
+        // })
 
       var schedraw = this.schedules
         var coach = coachesraw
