@@ -425,7 +425,8 @@ export default {
         if(this.final_range[0] === 0 && this.final_range[1] === 100){
           var coaches = this.coaches
 
-          return coaches.filter(el => (el.has_booked === filter_booked));;
+          // return coaches.filter(el => (el.has_booked === filter_booked));;
+          return coaches.filter(el => (el.has_booked === filter_booked || el.has_booked !== filter_booked));
         } else {
           this.coaches.forEach(function(card) {
             if(card.experience >= start && card.experience <= end)  {
