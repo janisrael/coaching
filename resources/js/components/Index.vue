@@ -424,9 +424,9 @@ export default {
 
         if(this.final_range[0] === 0 && this.final_range[1] === 100){
           var coaches = this.coaches
-
+          return coaches
           // return coaches.filter(el => (el.has_booked === filter_booked));;
-          return coaches.filter(el => (el.has_booked === filter_booked || el.has_booked !== filter_booked));
+          // return coaches.filter(el => (el.has_booked === filter_booked || el.has_booked !== filter_booked));
         } else {
           this.coaches.forEach(function(card) {
             if(card.experience >= start && card.experience <= end)  {
@@ -687,6 +687,7 @@ export default {
                 if(this.customer_type.toLowerCase() === 'front end') {
                   if(value.front_end === true) {
                     my_mentor = true
+                    this.canbook = true
                     if(count === 1) {
                       index_load = index
                       this.index_load = index
@@ -694,6 +695,7 @@ export default {
                   }
                 } else {
                   if(value.back_end === true) {
+                    this.canbook = true
                     my_mentor = true
                     if(count === 1) {
                       index_load = index
