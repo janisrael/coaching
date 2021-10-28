@@ -738,7 +738,7 @@ export default {
           }
         })
         console.log(m_index,'index')
-        this.$refs.singleTable.setCurrentRow(this.coaches[m_index])
+
         var scheds = schedraw
         var coach = coachesraw
 
@@ -757,11 +757,12 @@ export default {
         this.reset = this.coaches
         this.languages = this.options.languages // get all languages
         this.checkUser()
-        setTimeout(() => this.loadDefault(this.datacoach, index_load), 1)
+        setTimeout(() => this.loadDefault(this.datacoach, index_load, m_index), 1)
       })
     },
-    loadDefault(data, index_load) {
-      this.getSummary(data.coaches[index_load])
+    loadDefault(data, index_load, m_index) {
+      this.$refs.singleTable.setCurrentRow(this.coaches[m_index])
+      this.getSummary(data.coaches[m_index])
       this.loading = false
     },
     getSummary(row, index) {
