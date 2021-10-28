@@ -404,7 +404,7 @@ export default {
       bg_color: '#000',
       icon_color: '#fff',
       mentor_id: 0,
-      canbook: false,
+      canbook: true,
       instanceModal: false,
       instance_message: ''
     }
