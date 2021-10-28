@@ -762,10 +762,11 @@ export default {
       this.loading = false
     },
     getSummary(row, index) {
-      if(row.my_mentor === true) {
-        this.canbook = true
+      console.log(row, 'row')
+      if(row.my_mentor) {
+        this.canbook = row.my_mentor
       } else {
-        this.canbook = false
+        this.canbook = row.my_mentor
       }
       // if(row.my_mentor) {
       //   if(row.my_mentor === false) {
