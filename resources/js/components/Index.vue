@@ -680,35 +680,40 @@ export default {
         } else {
           this.customer_type = 'front end'
         }
-
+      console.log(this.customer_type.toLowerCase(),'customer type')
         if(this.mentor_id !== 0 || this.mentor_id !== '' || this.mentor_id !== undefined) {
           console.log(this.mentor_id, 'mentor_id')
           if(this.datasales.portal_user.customer_group.toLowerCase() === 'ltt') {
             coachesraw.forEach((value, index) => {
               count = count + 1
-              if(value.id === this.mentor_id) {
+
                 if(this.customer_type.toLowerCase() === 'front end') {
-                  if(value.front_end === true) {
-                    my_mentor = true
-                    this.canbook = true
-                    if(count === 1) {
-                      index_load = index
-                      this.index_load = index
+                  if(value.id === this.mentor_id) {
+                    if(value.front_end === true) {
+                      my_mentor = true
+                      this.canbook = true
+                      if(count === 1) {
+                        index_load = index
+                        this.index_load = index
+                      }
                     }
-                  }
-                } else {
-                  if(value.back_end === true) {
-                    this.canbook = true
-                    my_mentor = true
-                    if(count === 1) {
-                      index_load = index
-                      this.index_load = index
-                    }
+                  } else {
+                    my_mentor = false
                   }
                 }
-              } else {
-                my_mentor = false
-              }
+                if(this.customer_type.toLowerCase() === 'back end') {
+                  // if(value.back_end === true) {
+                    this.canbook = true
+                    my_mentor = true
+                    if(count === 1) {
+                      index_load = index
+                      this.index_load = index
+                    }
+                  // }
+                }
+              // } else {
+              //   my_mentor = false
+              // }
               value['my_mentor'] = my_mentor
             })
           }
