@@ -406,7 +406,8 @@ export default {
       mentor_id: 0,
       canbook: true,
       instanceModal: false,
-      instance_message: ''
+      instance_message: '',
+      m_index: 0
     }
   },
   computed: {
@@ -612,7 +613,8 @@ export default {
         this.new_collections = mergeById(arr1, arr2); // merge scheds to coach
         //  this.loading = true
         this.reset = this.coaches
-        setTimeout(() => this.loadDefault(this.datacoach), 1)
+        // setTimeout(() => this.loadDefault(this.datacoach), 1)
+        setTimeout(() => this.loadDefault(this.datacoach, this.index_load, this.m_index), 1)
         // this.loadingSession = false
 
       })
@@ -735,6 +737,7 @@ export default {
             console.log(value, 'val = ', this.mentor_id)
           if(value.id === mentor_id) {
             m_index = index
+            this.m_index = index
           }
         })
         console.log(m_index,'index')
@@ -763,6 +766,7 @@ export default {
     loadDefault(data, index_load, m_index) {
       this.$refs.singleTable.setCurrentRow(this.coaches[m_index])
       this.getSummary(data.coaches[m_index])
+
       this.loading = false
     },
     getSummary(row, index) {
