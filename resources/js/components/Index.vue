@@ -38,6 +38,12 @@
                 <i slot="prefix" class="el-input__icon el-icon-search"></i>
               </el-input>
             </div>
+
+            <el-col v-if="display_message" :span="24" style="padding: 10px;">
+              <span class="no-available-coach">
+                You don’t currently have a coach allocated you. To request that a coach is allocated to your account, please email <span style="color: #9ecaff;">info@smartchartsfx.com.</span>
+              </span>
+            </el-col>
 <!--            <div style="width: 10%; display: inline-block;">-->
 <!--              <el-button type="primary" class="plain" plain size="small" @click="callFilter()"><i class="fas fa-sliders-h" aria-hidden="true" style="color: rgba(255, 255, 255, 0.68);"></i></el-button>-->
 <!--            </div>-->
@@ -301,14 +307,24 @@
       </el-dialog>
 
       <!-- Instance Modal-->
-      <el-dialog id="dialogInstance" title="Unauthorized Access" :visible.sync="instanceModal" :close-on-click-modal="false" top="15%" style="width: 100%; height: 100%;">
+      <el-dialog id="dialogInstance" title="Unauthorized Access" :visible.sync="instanceModal" :close-on-click-modal="false" top="13%"  width="30%" style="height: 100%;">
         <el-row>
           <el-col :span="24" class="filter-blocks">
-            <h1 style="text-align: center;"> {{ instance_message }}</h1>
+            <div style="text-align:center;"><i class="fas fa-info" style="padding: 10px 17px;border: 2px solid #67C23A;border-radius: 50%;font-size: 20px;text-align: center;color: #67C23A;"></i></div>
+            <p style="text-align: center;">
+              Mentoring is one of the most important ways to develop your skillset as a trader. Our mentoring sessions are designed purely to review your live trading.
+              </br>
+              </br>
+              <span>to find out more <a href="https://vimeo.com/637480170" style="color: #9dafff;">Watch this video</a>.</span>
+              </br>
+              </br>
+              <span>To book mentoring sessions, you must be using your live account. Go To Your Account</span></p>
           </el-col>
         </el-row>
         <span slot="footer" class="dialog-footer">
-<!--        <el-button @click="instanceModal = false" type="success">Close</el-button>-->
+          <div style="text-align: center; width: 100%; display:inline-block;">
+            <el-button @click="instanceModal = false" type="success">GO TO YOUR ACCOUNT PAGE</el-button>
+          </div>
         </span>
       </el-dialog>
 
@@ -407,7 +423,8 @@ export default {
       canbook: true,
       instanceModal: false,
       instance_message: '',
-      m_index: 0
+      m_index: 0,
+      display_message: false
     }
   },
   computed: {
@@ -793,6 +810,9 @@ export default {
           }));
         this.new_collections = mergeById(arr1, arr2); // merge arr1 (SCHEDULES) to arr2 (Coaches)
 
+        if(this.customer_group.toLowerCase() === 'ltt' && this.coaches.length === 0) {
+          this.display_message = true
+        }
         this.reset = this.coaches
         this.languages = this.options.languages // get all languages
         this.checkUser()
