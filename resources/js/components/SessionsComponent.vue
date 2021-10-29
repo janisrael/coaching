@@ -419,7 +419,7 @@ export default {
             // console.log(response.data.data.status,'success')
             Notification.success({
               title: 'Success',
-              message: 'Schedule successfully Canceled',
+              message: 'Booking cancellation request sent!',
               duration: 4 * 1000
             })
             this.session_collection = []
