@@ -2,10 +2,16 @@ input#searchBar {
     background-color: transparent !important;
 }
 
-div#dialogInstance i.el-dialog__close.el-icon.el-icon-close, div#dialogInstance .el-dialog__header, div#dialogInstance .el-dialog__footer {
+div#dialogInstance i.el-dialog__close.el-icon.el-icon-close, div#dialogInstance .el-dialog__header {
     display: none !important;
 }
-
+.no-available-coach {
+    color: #fff;
+    padding: 20px;
+    display: inline-block;
+    word-break: break-word;
+    text-align: center;
+}
 div#dialogShare div.el-dialog__header {
     background-color: #4a6a8e !important;
     text-align: center;

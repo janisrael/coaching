@@ -10,6 +10,7 @@
 <!--          :background-color="bg_color"-->
 <!--          :color="icon_color"-->
 <!--        ></loading>-->
+        <transition name="el-fade-in">
         <div v-if="loading" style="position: absolute;
           width: 100%;
           height: 100%;
@@ -26,6 +27,7 @@
               </div>
           </div>
         </div>
+        </transition>
         <el-col :xs="12" :sm="7" :md="8" :lg="6" :xl="6" class="full-height index-col-left">
           <el-col :span="24" style="padding: 10px;" class="coaches-search-desktop">
             <div style="width: 100%; display: inline-block;">
@@ -38,6 +40,12 @@
                 <i slot="prefix" class="el-input__icon el-icon-search"></i>
               </el-input>
             </div>
+
+            <el-col v-if="display_message" :span="24" style="padding: 10px;">
+              <span class="no-available-coach">
+                You don’t currently have a coach allocated you. To request that a coach is allocated to your account, please email <span style="color: #9ecaff;">info@smartchartsfx.com.</span>
+              </span>
+            </el-col>
 <!--            <div style="width: 10%; display: inline-block;">-->
 <!--              <el-button type="primary" class="plain" plain size="small" @click="callFilter()"><i class="fas fa-sliders-h" aria-hidden="true" style="color: rgba(255, 255, 255, 0.68);"></i></el-button>-->
 <!--            </div>-->
@@ -301,14 +309,54 @@
       </el-dialog>
 
       <!-- Instance Modal-->
-      <el-dialog id="dialogInstance" title="Unauthorized Access" :visible.sync="instanceModal" :close-on-click-modal="false" top="15%" style="width: 100%; height: 100%;">
+      <el-dialog id="dialogInstance" title="No Available Credits!" :visible.sync="instanceModal" :close-on-click-modal="false" top="13%"  width="30%" style="height: 100%;">
         <el-row>
           <el-col :span="24" class="filter-blocks">
-            <h1 style="text-align: center;"> {{ instance_message }}</h1>
+            <div style="text-align: center;">
+              <i class="el-icon-warning-outline"
+                 style="color: rgb(110, 142, 106);
+                 font-size: 60px;
+                 transform: rotate(180deg);">
+              </i>
+            </div>
+<!--            <div style="text-align:center;"><i class="fas fa-info" style="padding: 10px 17px;border: 2px solid #67C23A;border-radius: 50%;font-size: 20px;text-align: center;color: #67C23A;"></i></div>-->
+            <p style="text-align: center;">
+              Mentoring is one of the most important ways to develop your skillset as a trader. Our mentoring sessions are designed purely to review your live trading.
+              <br>
+              <br>
+              <span>to find out more <a href="https://vimeo.com/637480170" style="color: #9dafff;">Watch this video</a>.</span>
+              <br>
+              <br>
+              <span>To book mentoring sessions, you must be using your live account. Go To Your Account</span></p>
           </el-col>
         </el-row>
         <span slot="footer" class="dialog-footer">
-<!--        <el-button @click="instanceModal = false" type="success">Close</el-button>-->
+          <div style="text-align: center; width: 100%; display:inline-block;">
+            <el-button @click="instanceModal = false" type="success">GO TO YOUR ACCOUNT PAGE</el-button>
+          </div>
+        </span>
+      </el-dialog>
+
+      <!-- Instance Modal-->
+      <el-dialog id="dialogCredits" title="Unauthorized Access" :visible.sync="creditModal" :close-on-click-modal="false" top="13%"  width="30%" style="height: 100%;">
+        <el-row>
+          <el-col :span="24" class="filter-blocks">
+            <div style="text-align: center;">
+              <i class="el-icon-warning-outline"
+                 style="color: rgb(110, 142, 106);
+                 font-size: 60px;
+                 transform: rotate(180deg);">
+              </i>
+            </div>
+            <!--            <div style="text-align:center;"><i class="fas fa-info" style="padding: 10px 17px;border: 2px solid #67C23A;border-radius: 50%;font-size: 20px;text-align: center;color: #67C23A;"></i></div>-->
+            <p style="text-align: center;">
+            No Available Credits!</p>
+          </el-col>
+        </el-row>
+        <span slot="footer" class="dialog-footer">
+          <div style="text-align: center; width: 100%; display:inline-block;">
+            <el-button @click="creditModal = false" type="success">CLOSE</el-button>
+          </div>
         </span>
       </el-dialog>
 
@@ -407,7 +455,9 @@ export default {
       canbook: true,
       instanceModal: false,
       instance_message: '',
-      m_index: 0
+      m_index: 0,
+      display_message: false,
+      creditModal: false
     }
   },
   computed: {
@@ -501,10 +551,6 @@ export default {
         this.showShareModal()
           this.ifShare = false
         })
-
-      // if(this.ifShare === false) {
-      //
-      // }
     },
     setShareValue(value) {
       if(value.value === true) {
@@ -533,12 +579,9 @@ export default {
           return 'warning-row';
         }
       }
-
       if(rowIndex === 0) {
         return 'this-is-active';
       }
-
-
     },
     reloadData(value) {
       this.schedules = value
@@ -548,7 +591,6 @@ export default {
       var booked = 0
       var attended = 0
       var cancelled = 0
-      // console.log(value,'value')
       value.forEach(function(value, index) {
         if(value.status === 'Booked') {
           booked = booked + 1
@@ -616,7 +658,6 @@ export default {
         // setTimeout(() => this.loadDefault(this.datacoach), 1)
         setTimeout(() => this.loadDefault(this.datacoach, this.index_load, this.m_index), 1)
         // this.loadingSession = false
-
       })
       .catch(error => console.log(error))
     },
@@ -651,7 +692,9 @@ export default {
         this.datasched = data[1].data // schedules
         this.datasales = data[2].data // sales
         // this.datasched = this.dummyschedules
-
+        if(this.datasales.computed_credits.total_available === 0) {
+          this.creditModal = true
+        }
         this.options = this.datacoach.options
         let coachesraw = this.datacoach.coaches
 
@@ -663,7 +706,10 @@ export default {
         if(this.datasales.sales.length > 0) {
           console.log('datasalse', this.datasales.sales.length)
           mentor_id = this.datasales.sales[0].coach
-          this.mentor_id = mentor_id
+          this.mentor_id = this.datasales.sales[0].coach
+          // let ret = this.datasales.sales.sort((a, b) => new Date(a.date) - new Date(b.date))
+          // mentor_id = ret[0].coach
+          // this.mentor_id = ret[0].coach
         }
 
         let my_mentor = false
@@ -720,31 +766,8 @@ export default {
         } else {
           if(this.datasales.portal_user.customer_group.toLowerCase() === 'ltt') {
             coachesraw.forEach((value, index) => {
-              // count = count + 1
-              // if(value.id === this.mentor_id) {
-              //   if(this.customer_type.toLowerCase() === 'front end') {
-              //     if(value.front_end === true) {
-              //       my_mentor = true
-              //       this.canbook = true
-              //       if(count === 1) {
-              //         index_load = index
-              //         this.index_load = index
-              //       }
-              //     }
-              //   } else {
-              //     if(value.back_end === true) {
-              //       this.canbook = true
-              //       my_mentor = true
-              //       if(count === 1) {
-              //         index_load = index
-              //         this.index_load = index
-              //       }
-              //     }
-              //   }
-              // } else {
-                my_mentor = true
-                this.canbook = true
-              // }
+              my_mentor = true
+              this.canbook = true
               value['my_mentor'] = my_mentor
             })
           }
@@ -793,6 +816,9 @@ export default {
           }));
         this.new_collections = mergeById(arr1, arr2); // merge arr1 (SCHEDULES) to arr2 (Coaches)
 
+        if(this.customer_group.toLowerCase() === 'ltt' && this.coaches.length === 0) {
+          this.display_message = true
+        }
         this.reset = this.coaches
         this.languages = this.options.languages // get all languages
         this.checkUser()
