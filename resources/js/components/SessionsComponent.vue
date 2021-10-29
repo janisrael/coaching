@@ -253,7 +253,7 @@
       <span slot="footer" class="dialog-footer">
         <span v-if="session_type === 'Pending'">
           <el-link @click="handleClose()" style="color: #fff; margin-right: 20px;">Cancel</el-link>
-          <el-button @click="handleBook(schedule_details)" size="small" type="success">Confirm</el-button>
+          <el-button @click="handleBook(schedule_details)" size="small" type="success" :loading="btn_loading">Confirm</el-button>
         </span>
         <span v-else-if="session_type === 'Booked'">
           <el-alert
@@ -362,7 +362,8 @@ export default {
       count: 16,
       count_loading: false,
       session_collection: this.selected.slice(0, this.count),
-      disableClass: 'class-disable'
+      disableClass: 'class-disable',
+      btn_loading: false
     }
   },
   computed: {
@@ -443,6 +444,7 @@ export default {
         })
     },
     handleBook(value) {
+      this.btn_loading = true
       // console.log(value,'value')
       this.loading = true
       // let total_a_credits = 0
@@ -474,6 +476,7 @@ export default {
             this.session_collection = []
             this.session_collection = response.data.data.schedules
             this.loading = false
+            this.btn_loading = false
             this.dialogItem = false
             // this.$emit('reload', response.data.data.schedules)
           } else {
@@ -483,11 +486,13 @@ export default {
               duration: 4 * 1000
             })
              this.loading = false
+            this.btn_loading = false
           }
         })
         .catch(error => {
           console.log(error)
           this.loading = false
+          this.btn_loading = false
           // this.isLoading = false
         })
     },
