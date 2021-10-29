@@ -6,7 +6,7 @@
     <div v-if="noMore && this.selected.length > 16" class="arrowDown" @click="scrollToTop({behavior: 'smooth'})">
       <i class="fa fa-angle-up" aria-hidden="true"></i>
     </div>
-    <span style="color: rgba(255, 255, 255, 0.7); padding-top: 12px; display: inline-block;padding-left: 10px;">{{ sales.computed_credits.total_available }} sessions left to book --  {{ ifshare }}, {{ canbook }}</span>
+    <span style="color: rgba(255, 255, 255, 0.7); padding-top: 12px; display: inline-block;padding-left: 10px;">{{ sales.computed_credits.total_available }} sessions left to book </span>
     <el-button size="small" class="btn-buy-session" type="primary" style="float:right; display: none;">BUY SESSIONS</el-button>
     <el-col :span="24">
       <div style="display: block;">
@@ -263,7 +263,7 @@
             show-icon
             style="width: 70%; float:left;">
           </el-alert>
-          <el-link @click="handleClose()" style="color: #fff; margin-right: 20px;">Delete Booking</el-link>
+          <el-link @click="handleDeleteBooking(schedule_details)" style="color: #fff; margin-right: 20px;">Delete Booking</el-link>
           <el-button @click="handleClose()" size="small" type="success">Update</el-button>
         </span>
         <span v-else>
@@ -407,6 +407,40 @@ export default {
       return arr.slice().sort(function(a, b) {
         return a.date - b.date;
       });
+    },
+    handleDeleteBooking(schedule_details) {
+      console.log(schedule_details,'schedule_details')
+      let url = "/api/v1/coaching-session/cancel?schedule_id=" + schedule_details.id;
+      axios.post(url)
+        .then(response => {
+          // console.log(value.id, 'id')
+          // console.log(response, 'response')
+          if(response.data.data.status === 'success') {
+            // console.log(response.data.data.status,'success')
+            Notification.success({
+              title: 'Success',
+              message: 'Booking cancellation request sent!',
+              duration: 4 * 1000
+            })
+            this.session_collection = []
+            this.session_collection = response.data.data.schedules
+            this.loading = false
+            this.dialogItem = false
+            // this.$emit('reload', response.data.data.schedules)
+          } else {
+            Notification.error({
+              title: 'Error',
+              message: response.data.data.message,
+              duration: 4 * 1000
+            })
+            this.loading = false
+          }
+        })
+        .catch(error => {
+          console.log(error)
+          this.loading = false
+          // this.isLoading = false
+        })
     },
     handleBook(value) {
       // console.log(value,'value')
