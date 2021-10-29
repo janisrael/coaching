@@ -309,7 +309,7 @@
       </el-dialog>
 
       <!-- Instance Modal-->
-      <el-dialog id="dialogInstance" title="No Available Credits!" :visible.sync="instanceModal" :close-on-click-modal="false" top="13%"  width="30%" style="height: 100%;">
+      <el-dialog id="dialogInstance" title="Unauthorized Access" :visible.sync="instanceModal" :close-on-click-modal="false" top="13%"  width="30%" style="height: 100%;">
         <el-row>
           <el-col :span="24" class="filter-blocks">
             <div style="text-align: center;">
@@ -337,8 +337,8 @@
         </span>
       </el-dialog>
 
-      <!-- Instance Modal-->
-      <el-dialog id="dialogCredits" title="Unauthorized Access" :visible.sync="creditModal" :close-on-click-modal="false" top="13%"  width="30%" style="height: 100%;">
+      <!-- Credit Modal-->
+      <el-dialog id="dialogCredits" title="No Credits" :visible.sync="creditModal" :close-on-click-modal="false" top="13%"  width="30%" style="height: 100%;">
         <el-row>
           <el-col :span="24" class="filter-blocks">
             <div style="text-align: center;">
@@ -816,8 +816,13 @@ export default {
           }));
         this.new_collections = mergeById(arr1, arr2); // merge arr1 (SCHEDULES) to arr2 (Coaches)
 
-        if(this.customer_group.toLowerCase() === 'ltt' && this.coaches.length === 0) {
-          this.display_message = true
+        if(this.customer_group.toLowerCase() === 'ltt') {
+          if(this.coaches.length === 0) {
+            this.display_message = true
+          }
+          if(this.mentor_id === null || this.mentor_id === '' || this.mentor_id === undefined) {
+            this.display_message = true
+          }
         }
         this.reset = this.coaches
         this.languages = this.options.languages // get all languages
