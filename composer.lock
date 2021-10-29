@@ -2138,7 +2138,7 @@
             "source": {
                 "type": "git",
                 "url": "git@git.evoluted.net:learn-to-trade/salesforce-api.git",
-                "reference": "ddafc123054be432c1882a57adc7980939a8f1fb"
+                "reference": "d0a7bcd897333cdca8709d3aaa92be93a64a7057"
             },
             "require": {
                 "guzzlehttp/guzzle": "^6.3",

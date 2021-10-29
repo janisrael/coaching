@@ -18,19 +18,19 @@ class ScheduleRepository implements ScheduleRepositoryInterface
 
     private $scheduleDate = [];
 
-    public function all(): array
+    public function all($resource=''): array
     {
         if (config('app.enable_api_dummy_data')) {
             $this->dummy();
 
         } else {
-            $this->live();
+            $this->live($resource);
         }
 
         return $this->result;
     }
 
-    public function live(): void
+    public function live($resource=''): void
     {
         $data = [];
 

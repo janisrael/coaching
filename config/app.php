@@ -99,6 +99,8 @@ return [
 
     'total_dummy_data' => env('API_TOTAL_DUMMY_DATA'),
 
+    'no_sale_defined_id' => env('NO_SALE_DEFINED_ID'),
+
     /*
     |--------------------------------------------------------------------------
     | Application Locale Configuration

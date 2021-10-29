@@ -12,13 +12,13 @@ class SaleRepository implements SaleRepositoryInterface
 {
     private $result = [];
 
-    public function all(): array
+    public function all($resource=''): array
     {
         if (config('app.enable_api_dummy_data')) {
             $this->dummy();
 
         } else {
-            $this->live();
+            $this->live($resource);
         }
 
         return $this->result;
@@ -28,16 +28,25 @@ class SaleRepository implements SaleRepositoryInterface
     {
         $total = collect($data);
 
+        $totalAvailable = $total->where('sessions_expiry', '!=', null);
+        $totalAvailable = $totalAvailable->count() > 0
+                            ? $totalAvailable->where('sessions_expiry', '>', now()->format('Y-m-d'))->sum('sessions_remaining') 
+                            : $total->sum('sessions_remaining');
+
+        $totalExpiry = $total->where('sessions_expiry', '!=', null);
+        $totalExpiry = $totalExpiry->count() > 0
+                            ? $totalExpiry->where('sessions_expiry', '<', now()->format('Y-m-d'))->sum('sessions_remaining') 
+                            : 0.0;
         return [
             'total_credits' => $total->sum('sessions'),
-            'total_available' => $total->where('sessions_expiry', '>', now())->sum('sessions_remaining'),
-            'total_expired' => $total->where('sessions_expiry', '<', now())->sum('sessions_remaining'),
+            'total_available' => $totalAvailable,
+            'total_expired' => $totalExpiry,
             'total_refunded' => $total->sum('sessions_recredited'),
             'total_cancelled' => $total->sum('sessions_cancelled'),
         ];
     }
 
-    public function live(): void
+    public function live($resource=''): void
     {
         $portalUser = auth()->guard('portal')->user();
         $data = [];
@@ -54,23 +63,24 @@ class SaleRepository implements SaleRepositoryInterface
         if (count($sf)) {
             foreach ($sf['records'] as $field => $value) {
                 foreach (config('api.sf_sale') as $key => $val) {
-                    if (isset($value[$val])) {
+                    if (in_array($val, $value)) {
                         $data[$field][$key] = $value[$val];
                     }
                 }
             }
         }
 
-        $portal_user = $portalUser->toArray();
-        $person = resolve(Person::class)->get(auth()->guard('portal')->user()->salesforce_token);
-        $portal_user['customer_group'] = $person[PersonFields::CUSTOMER_GROUP] ? $person[PersonFields::CUSTOMER_GROUP] : "SC2";
-        $portal_user['customer_region'] = $person[PersonFields::REGION];
-        $portal_user['customer_type'] = $person[PersonFields::CUSTOMER_TYPE] ? $person[PersonFields::CUSTOMER_TYPE] : "Front End";
+        $this->result = ['sales' => $data];
 
-        $this->result = [
-            'sales' => $data,
-            'portal_user' => collect($portal_user)->except(['id', 'password']),
-        ];
+        if ($resource == '') {
+            $portal_user = $portalUser->toArray();
+            $person = resolve(Person::class)->get(auth()->guard('portal')->user()->salesforce_token);
+            $portal_user['customer_group'] = $person[PersonFields::CUSTOMER_GROUP] ? $person[PersonFields::CUSTOMER_GROUP] : "SC2";
+            $portal_user['customer_region'] = $person[PersonFields::REGION];
+            $portal_user['customer_type'] = $person[PersonFields::CUSTOMER_TYPE] ? $person[PersonFields::CUSTOMER_TYPE] : "Front End";
+            
+            $this->result['portal_user'] = collect($portal_user)->except(['id', 'password']);
+        }
     }
 
     public function dummy(): void

@@ -26,13 +26,13 @@ class CoachRepository implements CoachRepositoryInterface
         'LTT Legacy' => 'LTT Legacy',
     ];
 
-    public function all(): array
+    public function all($resource=''): array
     {
         if (config('app.enable_api_dummy_data')) {
             $this->dummy();
 
         } else {
-            $this->live();
+            $this->live($resource);
         }
 
         if (count($this->result['options'])) {
@@ -47,7 +47,7 @@ class CoachRepository implements CoachRepositoryInterface
         return $this->result;
     }
 
-    public function live(): void
+    public function live($resource=''): void
     {
         $data = [];
         $options = [];

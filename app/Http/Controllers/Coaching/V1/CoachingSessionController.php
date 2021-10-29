@@ -25,7 +25,7 @@ class CoachingSessionController extends Controller
     
     public function book(CoachingSessionRequest $request)
     {
-        $sfSales = $this->saleRepository->all();
+        $sfSales = $this->saleRepository->all('sales');
 
         $computedCredits = $this->saleRepository->computedCredits($sfSales['sales']);
 
@@ -83,10 +83,30 @@ class CoachingSessionController extends Controller
             try {
                 resolve(CoachingSession::class)->update($request->schedule_id, [
                     CoachingSessionFields::STATUS => 'Cancelled',
+                    CoachingSessionFields::CANCELLED_TO_BE_RECREDITED => 'Yes',
                 ]);
                 $result = [
                     'status' => 'success',
                     'message' => 'Successfully Cancelled.'
+                ];
+                
+            } catch (SalesforceException $e) {
+                $result['message'] = parent::catchSalesforceException($e);
+            }
+
+            try {
+                resolve(CoachingSession::class)->create([
+                    CoachingSessionFields::SALE => config('app.no_sale_defined_id'),
+                    CoachingSessionFields::STATUS => 'Pending',
+                    CoachingSessionFields::DATE => $session[CoachingSessionFields::DATE],
+                    CoachingSessionFields::START_TIME => $session[CoachingSessionFields::START_TIME],
+                    CoachingSessionFields::END_TIME => $session[CoachingSessionFields::END_TIME],
+                    CoachingSessionFields::COACH => $session[CoachingSessionFields::COACH],
+                    CoachingSessionFields::LOCATION => 'Remote',
+                ]);
+                $result = [
+                    'status' => 'success',
+                    'message' => 'Successfully Created.'
                 ];
                 
             } catch (SalesforceException $e) {
@@ -103,7 +123,7 @@ class CoachingSessionController extends Controller
     {
         return [
             'computed_credits' => $this->saleRepository->computedCredits($this->saleRepository->all()['sales']),
-            'schedules' => $this->scheduleRepository->all()['schedules'],
+            //'schedules' => $this->scheduleRepository->all()['schedules'],
         ];
     }
 }
