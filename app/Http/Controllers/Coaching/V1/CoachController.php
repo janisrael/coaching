@@ -7,10 +7,10 @@ use App\Repositories\Interfaces\ScheduleRepositoryInterface;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\CoachResource;
 use App\Http\Resources\ScheduleResource;
-use GuzzleHttp\Client;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Http;
+use GuzzleHttp\Exception\GuzzleException;
+use GuzzleHttp\Client;
 
 class CoachController extends Controller
 {
@@ -52,77 +52,63 @@ class CoachController extends Controller
     /**
      * share read online live account
      *
-     * @return JsonResponse
+     * @return \Psr\Http\Message\ResponseInterface
      */
     public function share(Request $request)
     {
         $apiURL = config('app.share_url').'/v1/coaching/students/' .$request->id. '/opt-data-sharing';
-        $curl = curl_init($apiURL);
 
-        curl_setopt_array($curl, array(
-            CURLOPT_RETURNTRANSFER => true,
-            CURLOPT_ENCODING => '',
-            CURLOPT_MAXREDIRS => 10,
-            CURLOPT_TIMEOUT => 0,
-            CURLOPT_FOLLOWLOCATION => true,
-            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-            CURLOPT_CUSTOMREQUEST => 'POST',
-            CURLOPT_HTTPHEADER => array(
-                'Authorization: Bearer '.config('app.student_token'),
-                'Accept: application/json',
-                'Content-Type: application/json',
-                'Cache-Control: no-cache'
-            ),
-        ));
+        $headers = [
+            'Authorization' => 'Bearer '.config('app.student_token'),
+            'Accept' => 'application/json',
+            'Content-Type' => 'application/json',
+            'Cache-Control' => 'no-cache'
+        ];
 
-        $response = curl_exec($curl);
+        $client = new Client(['http_errors' => false]); //GuzzleHttp\Client
+        $result = $client->post($apiURL, [
+            'headers' => $headers
+        ]);
 
-        curl_close($curl);
-
-        return $response;
+        return $result;
     }
 
     /**
      * check student
      *
-     * @return JsonResponse
+     * @return array
      */
     public function check(Request $request)
     {
-        $apiURL = config('app.check_url') . '/v1/coaching/students/' . $request->id;
-        $curl = curl_init($apiURL);
+        $apiURL = config('app.check_url') . '/v1/coaching/students/' .$request->id;
 
-        curl_setopt_array($curl, array(
-            CURLOPT_RETURNTRANSFER => true,
-            CURLOPT_HEADER => true,
-            CURLOPT_ENCODING => '',
-            CURLOPT_NOBODY => false,
-            CURLOPT_MAXREDIRS => 10,
-            CURLOPT_TIMEOUT => 10,
-            CURLOPT_FOLLOWLOCATION => true,
-            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-            CURLOPT_CUSTOMREQUEST => 'GET',
-            CURLOPT_HTTPHEADER => array(
-                'Authorization: Bearer '.config('app.student_token'),
-                'Accept: application/json',
-                'Content-Type: application/json',
-                'Cache-Control: no-cache'
-            ),
-        ));
-
-        $output = curl_exec($curl);
-        $httpcode = curl_getinfo($curl, CURLINFO_HTTP_CODE);
-        curl_close($curl);
-
-        $status = false;
-        if($httpcode != 0) {
-            $status = true;
-        }
-        $response = [
-            'is_student' => $status,
-            'data' => $output
+        $headers = [
+            'Authorization' => 'Bearer '.config('app.student_token'),
+            'Accept' => 'application/json',
+            'Content-Type' => 'application/json',
+            'Cache-Control' => 'no-cache'
         ];
 
-        return $response;
+        $client = new Client(['http_errors' => false]); //GuzzleHttp\Client
+        $result = $client->get($apiURL, [
+            'headers' => $headers
+        ]);
+
+        $response = $result->getStatusCode();
+
+        $contents = json_decode($result->getBody(), true);
+
+        $status = false;
+        if($response === 200) {
+            $status = true;
+        }
+
+        $res = [
+            'is_student' => $status,
+            'data' => $contents
+        ];
+
+        return $res;
+
     }
 }

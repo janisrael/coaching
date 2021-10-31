@@ -18,7 +18,7 @@
         "beyondcode/laravel-self-diagnosis": "^1.4",
         "doctrine/dbal": "^2.10",
         "fideloper/proxy": "^4.0",
-        "guzzlehttp/guzzle": "^6.5",
+        "guzzlehttp/guzzle": "^6.2",
         "laravel/framework": "5.8.*",
         "laravel/horizon": "2.2.2",
         "laravel/passport": "7.5.1",
