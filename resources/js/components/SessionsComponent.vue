@@ -78,8 +78,8 @@
       <el-col v-loading="loading" element-loading-text="Loading Schedules..." element-loading-spinner="el-icon-loading" element-loading-background="rgba(0, 0, 0, 0.5)":span="24" class="session-items-container">
         <div v-for="(position, index) in even(filteredPositions)" :key="index"  :class="['sessions-item-' + index]">
           <transition name="el-fade-in">
-<!--            <div v-if="position.status === 'Pending'" class="list-item" @click="dialogMentor(position)" v-bind:class="[{ active: !ifshare || !canbook }, disableClass]">-->
-            <div v-if="position.status === 'Pending'" class="list-item" @click="dialogMentor(position)">
+            <div v-if="position.status === 'Pending'" class="list-item" @click="dialogMentor(position)" v-bind:class="[{ active: !ifshare || !canbook }, disableClass]">
+<!--            <div v-if="position.status === 'Pending'" class="list-item" @click="dialogMentor(position)">-->
               <el-col :xs="18" :sm="19" :md="20" :lg="22" :xl="22" :class="['list-' + position.status, 'session-listitem']">
                 <span style="width: 15px; display: inline-block"><i class="far fa-clock"></i></span>
                 <el-avatar :size="60" :src="position.coach_image" class="session-list-avatar">
@@ -99,7 +99,7 @@
                   <span v-if="position.availability_type.includes('Group')"><i class="fa fa-users" style="font-size: 14px"></i></span>
                 </span>
               </el-col>
-              <el-col :xs="6" :sm="5" :md="4" :lg="2" :xl="2" v-if="position.status === 'Pending'" :class="['list-' + position.status, 'list-item-btn']">
+              <el-col :xs="6" :sm="5" :md="4" :lg="2" :xl="2" v-if="position.status === 'Pending'" v-bind:class="[{ active: !ifshare || !canbook }, disableClass, 'list-' + position.status, 'list-item-btn']" >
                 <span>BOOK</span>
               </el-col>
             </div>
@@ -228,7 +228,6 @@
             <!--            <span v-if="schedule_details.country !== null || schedule_details.country !== '' || schedule_details.country !== 'null'"><i class="fa fa-map-marker" aria-hidden="true"></i> {{ schedule_details.country }}</span>-->
             <span><i class="fa fa-map-marker" aria-hidden="true"></i> {{ country_to_show }}</span>
           </div>
-          <!--          {{ schedule_details }}-->
           <div style="display: block; padding: 10px;">
             <span>Attend
               <span v-if="avail_data.includes('Can do either')">
@@ -253,8 +252,8 @@
       </el-row>
       <span slot="footer" class="dialog-footer">
         <span v-if="session_type === 'Pending'">
-          <el-link @click="handleClose()" style="color: #fff; margin-right: 20px;">Cancel</el-link>
-          <el-button @click="handleBook(schedule_details)" size="small" type="success" :loading="btn_loading">Confirm</el-button>
+          <el-button @click="handleBook(schedule_details)" size="small" type="success" style="margin-right: 20px;" :loading="btn_loading">Confirm</el-button>
+          <el-link @click="handleClose()" style="color: #fff;">Cancel</el-link>
         </span>
         <span v-else-if="session_type === 'Booked'">
           <el-alert
@@ -264,8 +263,8 @@
             show-icon
             style="width: 70%; float:left;">
           </el-alert>
-          <el-link @click="handleDeleteBooking(schedule_details)" style="color: #fff; margin-right: 20px;">Delete Booking</el-link>
-          <el-button @click="handleClose()" size="small" type="success">Update</el-button>
+          <el-button :loading="loading" @click="handleDeleteBooking(schedule_details)" style="color: #fff; background-color: transparent !important; border: none !important;" size="small" type="primary">Cancel Booking</el-button>
+          <el-button @click="handleClose()" size="small" type="success">Close</el-button>
         </span>
         <span v-else>
           <el-button @click="handleClose()" size="small" type="success">Close</el-button>
@@ -411,6 +410,7 @@ export default {
       });
     },
     handleDeleteBooking(schedule_details) {
+      this.loading = true
       console.log(schedule_details,'schedule_details')
       let url = "/api/v1/coaching-session/cancel?schedule_id=" + schedule_details.id;
       axios.post(url)
@@ -426,6 +426,7 @@ export default {
             })
             this.session_collection = []
             this.session_collection = response.data.data.schedules
+
             this.loading = false
             this.dialogItem = false
             // this.$emit('reload', response.data.data.schedules)
@@ -459,27 +460,34 @@ export default {
       //   this.loading = false
       //   return
       // }
+
       let url = "/api/v1/coaching-session/book";
       axios.post(url,
         {
           schedule_id: value.id
         })
         .then(response => {
-          // console.log(value.id, 'id')
-          // console.log(response, 'response')
           if(response.data.data.status === 'success') {
-            // console.log(response.data.data.status,'success')
             Notification.success({
               title: 'Success',
               message: 'Schedule successfully booked',
               duration: 4 * 1000
             })
-            this.session_collection = []
-            this.session_collection = response.data.data.schedules
+
+            //** Update schedule by id **//
+            this.session_collection.forEach((item, index) => {
+              if(item.id === value.id) {
+                item['status'] = 'Booked'
+              }
+            })
+
             this.loading = false
             this.btn_loading = false
             this.dialogItem = false
-            // this.$emit('reload', response.data.data.schedules)
+            this.$emit('reload', value)
+
+            // this.session_collection = []
+            // this.session_collection = response.data.data.schedules
           } else {
             Notification.error({
               title: 'Error',

@@ -43,7 +43,8 @@
 
             <el-col v-if="display_message" :span="24" style="padding: 10px;">
               <span class="no-available-coach">
-                You don’t currently have a coach allocated you. To request that a coach is allocated to your account, please email <span style="color: #9ecaff;">info@smartchartsfx.com.</span>
+                You don’t currently have a coach allocated you. <br> To request that a coach is allocated to your account, <br>
+                please email <a href="mailto:info@smartchartsfx.com" style="color: #9ecaff;">info@smartchartsfx.com.</a>
               </span>
             </el-col>
 <!--            <div style="width: 10%; display: inline-block;">-->
@@ -231,7 +232,7 @@
         </el-col>
         <el-col :xs="12" :sm="17" :md="16" :lg="18" :xl="18" class="full-height index-col-right" style="background-image: url('../../images/background.jpg'); background-size: cover;">
           <content-component v-if="loading === false" :selected="passData" :ifshare="ifShare" :canbook="canbook" @showModal="showShareModal" ></content-component>
-          <session-component v-if="loading === false" ref="sessionComponent" :selected="for_sessiondata" :canbook="canbook" :user_id="coach_id" :sales="datasales" :ifshare="ifShare" :can_book="can_book" @change="backData($event)" @reload="reloadData(value)" @showModal="showShareModal" @filterData="filterData"></session-component>
+          <session-component v-if="loading === false" ref="sessionComponent" :selected="for_sessiondata" :canbook="canbook" :user_id="coach_id" :sales="datasales" :ifshare="ifShare" :can_book="can_book" @change="backData($event)" @reload="reloadData" @showModal="showShareModal" @filterData="filterData"></session-component>
         </el-col>
       </el-col>
 
@@ -309,22 +310,20 @@
       </el-dialog>
 
       <!-- Instance Modal-->
-      <el-dialog id="dialogInstance" title="Unauthorized Access" :visible.sync="instanceModal" :close-on-click-modal="false" top="13%"  width="30%" style="height: 100%;">
+      <el-dialog id="dialogInstance" title="Unauthorized Access" :visible.sync="instanceModal" :close-on-click-modal="false" top="12%"  width="30%" style="height: 100%;">
         <el-row>
           <el-col :span="24" class="filter-blocks">
             <div style="text-align: center;">
               <i class="el-icon-warning-outline"
-                 style="color: rgb(110, 142, 106);
+                 style="color: #79bb71;
                  font-size: 60px;
                  transform: rotate(180deg);">
               </i>
             </div>
 <!--            <div style="text-align:center;"><i class="fas fa-info" style="padding: 10px 17px;border: 2px solid #67C23A;border-radius: 50%;font-size: 20px;text-align: center;color: #67C23A;"></i></div>-->
-            <p style="text-align: center;">
+            <p style="text-align: center; word-break: break-word">
               Mentoring is one of the most important ways to develop your skillset as a trader. Our mentoring sessions are designed purely to review your live trading.
-              <br>
-              <br>
-              <span>to find out more <a href="https://vimeo.com/637480170" style="color: #9dafff;">Watch this video</a>.</span>
+             to find out more <a href="https://vimeo.com/637480170" style="color: #9dafff;">Watch this video</a>.
               <br>
               <br>
               <span>To book mentoring sessions, you must be using your live account. Go To Your Account</span></p>
@@ -380,6 +379,12 @@ import ContentComponent from './ContentComponent.vue'
 import Loading from "vue-loading-overlay";
 import SessionComponent from './SessionsComponent.vue'
 import ShareModalComponent from './ShareModalComponent.vue'
+
+// dummy data
+
+// import json_sales from './dummy_sales.json'
+// import json_coaches from './dummy_coaches.json'
+// import json_schedules from './dummy_schedules.json'
 
 export default {
   name: 'Index',
@@ -453,11 +458,18 @@ export default {
       icon_color: '#fff',
       mentor_id: 0,
       canbook: true,
-      instanceModal: false,
       instance_message: '',
       m_index: 0,
+      instanceModal: false,
       display_message: false,
-      creditModal: false
+      creditModal: false,
+      selected_row: {},
+// dummy
+//       dummy_sales: json_sales,
+//
+//       dummy_schedules: json_schedules,
+//
+//       dummy_coaches: json_coaches
     }
   },
   computed: {
@@ -576,7 +588,7 @@ export default {
     coachesRowClassName({row, rowIndex}) {
       if(this.customer_group.toLowerCase() === 'ltt') {
         if (row.my_mentor === false) {
-          return 'warning-row';
+          return 'disabled-row';
         }
       }
       if(rowIndex === 0) {
@@ -584,8 +596,16 @@ export default {
       }
     },
     reloadData(value) {
-      this.schedules = value
-      this.getSummary()
+      this.schedules.forEach((sched, i) => {
+        if(sched.id === value.id) {
+          sched['status'] = 'Booked'
+        }
+      })
+      // this.new_collections.forEach((item, index) => {
+      //   if(item.id === value.id) {
+      //     item['status'] = 'Booked'
+      //   }
+      // })
     },
     backData(value) {
       var booked = 0
@@ -653,6 +673,8 @@ export default {
           }));
         this.new_collections = []
         this.new_collections = mergeById(arr1, arr2); // merge scheds to coach
+
+
         //  this.loading = true
         this.reset = this.coaches
         // setTimeout(() => this.loadDefault(this.datacoach), 1)
@@ -666,45 +688,55 @@ export default {
       let sched_api = '/api/v1/coaches/schedule'
       let letcurrentDate = new Date().toJSON().slice(0,10).replace(/-/g,'-');
 
+      //** assigning default schedule filter **//
       const today = new Date()
       const tomorrow = new Date(today)
       tomorrow.setDate(tomorrow.getDate() + 1)
 
       let date1 = letcurrentDate
       let date2 = tomorrow.toJSON().slice(0,10).replace(/-/g,'-');
+
       // fetching data in all promise
       Promise.all([
-        await fetch('/api/v1/coaches').then(res =>
-          res.ok && res.json() || Promise.reject(res)),
+        await fetch('/api/v1/coaches').then(res => res.ok && res.json() || Promise.reject(res)),
         await fetch(sched_api + '/' + date1 + '/' + date2).then(res => res.ok && res.json() || Promise.reject(res)),
-        // await fetch(sched_api).then(res => res.ok && res.json() || Promise.reject(res)),
         await fetch('/api/v1/account/sales').then(res => res.ok && res.json() || Promise.reject(res))
       ]).then(data => {
-        console.log(data[0])
+
+        //** for test mode using local data, change to true **//
+        // let test_mode = true
+        // let data = []
+        // if(test_mode === true) {
+        //   data[0] = this.dummy_coaches
+        //   data[1] = this.dummy_schedules
+        //   data[2] = this.dummy_sales
+        // }
+
+        //** Check Instance **//
         if(data[0].error_code) {
           this.loading = false
           this.instanceModal = true
           this.instance_message = data[0].error_message
-
           return
         }
+        //** Assigning Response **//
         this.datacoach = data[0].data // mentors
         this.datasched = data[1].data // schedules
         this.datasales = data[2].data // sales
-        // this.datasched = this.dummyschedules
+
+        //** Check available credits **//
         if(this.datasales.computed_credits.total_available === 0) {
           this.creditModal = true
         }
+
         this.options = this.datacoach.options
         let coachesraw = this.datacoach.coaches
 
-        // filter mentors if user customer_group is learn to trade
+        //** filter mentors if user customer_group is learn to trade **//
         this.portal_user_id = this.datasales.portal_user.portal_user_id
-        // let str_llt = 'ltt'
         let mentor_id = ''
 
         if(this.datasales.sales.length > 0) {
-          console.log('datasalse', this.datasales.sales.length)
           mentor_id = this.datasales.sales[0].coach
           this.mentor_id = this.datasales.sales[0].coach
           // let ret = this.datasales.sales.sort((a, b) => new Date(a.date) - new Date(b.date))
@@ -715,24 +747,27 @@ export default {
         let my_mentor = false
         let index_load = 0
         let count = 0
+
+        //** Check if has customer group **//
         if(this.datasales.portal_user.customer_group) {
           this.customer_group = this.datasales.portal_user.customer_group.toLowerCase()
         } else {
           this.customer_group = 'sc2'
         }
 
+        //** Check if has customer type **//
         if(this.datasales.portal_user.customer_type) {
           this.customer_type = this.datasales.portal_user.customer_type.toLowerCase()
         } else {
           this.customer_type = 'front end'
         }
-      console.log(this.customer_type.toLowerCase(),'customer type')
+
+
+        //** Check and assign access to the user **//
         if(this.mentor_id !== 0 || this.mentor_id !== '' || this.mentor_id !== undefined) {
-          console.log(this.mentor_id, 'mentor_id')
           if(this.datasales.portal_user.customer_group.toLowerCase() === 'ltt') {
             coachesraw.forEach((value, index) => {
               count = count + 1
-
                 if(this.customer_type.toLowerCase() === 'front end') {
                   if(value.id === this.mentor_id) {
                     if(value.front_end === true) {
@@ -772,7 +807,7 @@ export default {
             })
           }
         }
-        console.log(coachesraw,' coachesraw')
+
         var user_id = coachesraw[0].id
         this.user_id = user_id // assign global user_id
 
@@ -792,14 +827,14 @@ export default {
 
         this.coaches = coachesraw  // assign mentors to global variables
         let m_index = 0
+
+        //** get default sales index by id, index use to default selected mentor on page load **//
         this.coaches.forEach((value, index) => {
-            console.log(value, 'val = ', this.mentor_id)
           if(value.id === mentor_id) {
             m_index = index
             this.m_index = index
           }
         })
-        console.log(m_index,'index')
 
         var scheds = schedraw
         var coach = coachesraw
@@ -816,6 +851,7 @@ export default {
           }));
         this.new_collections = mergeById(arr1, arr2); // merge arr1 (SCHEDULES) to arr2 (Coaches)
 
+        //** Check if coaches is 0  **//
         if(this.customer_group.toLowerCase() === 'ltt') {
           if(this.coaches.length === 0) {
             this.display_message = true
@@ -824,6 +860,7 @@ export default {
             this.display_message = true
           }
         }
+
         this.reset = this.coaches
         this.languages = this.options.languages // get all languages
         this.checkUser()
@@ -837,18 +874,22 @@ export default {
       this.loading = false
     },
     getSummary(row, index) {
-      console.log(row, 'row')
-      if(row.my_mentor) {
-        this.canbook = row.my_mentor
+      this.selected_row = row
+      //** on pageload check if my_mentor exist **//
+      if(this.customer_group.toLowerCase() === 'ltt') {
+        if(row.my_mentor !== '' || row.my_mentor !== null || row.my_mentor !== undefined) {
+          this.canbook = row.my_mentor
+        } else {
+          this.canbook = row.my_mentor
+        }
       } else {
-        this.canbook = row.my_mentor
+        if(row.my_mentor !== '' || row.my_mentor !== null || row.my_mentor !== undefined) {
+          this.canbook = row.my_mentor
+        } else {
+          this.canbook = true
+        }
       }
-      // if(row.my_mentor) {
-      //   if(row.my_mentor === false) {
-      //     console.log(row)
-      //     return
-      //   }
-      // }
+
       this.passData = row
       if(row) {
         this.selected_id = row.id
@@ -859,6 +900,8 @@ export default {
       } else {
         this.can_book = true
       }
+
+
       var scheds = this.schedules
       var coach = this.coaches
 
@@ -873,6 +916,12 @@ export default {
           ...itm
         }));
       var datares = mergeById(arr1, arr2)
+
+      //** filter schedules by selected coach_id **//
+      let ret_data = datares.filter(function(ele){
+        return (ele.coach_id == row.id)
+      });
+
       var countBooked = 0;
       var countAttended = 0;
       var countCancelled = 0;
@@ -890,10 +939,11 @@ export default {
       this.booked = countBooked
       this.Attended = countAttended
       this.Cancelled = countCancelled
-      this.datamerge = datares
+      // this.datamerge = datares
+      this.datamerge = ret_data
       this.for_sessiondata = []
       this.for_sessiondata = this.datamerge
-      // console.log(this.for_sessiondata,'for_session')
+
       setTimeout(() => this.ex_call_session(), 1)
     },
     ex_call_session() {
@@ -972,7 +1022,6 @@ export default {
 .full-height {
   height: 100vh;
 }
-
 
 </style>
 

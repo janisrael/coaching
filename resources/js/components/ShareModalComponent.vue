@@ -9,7 +9,7 @@
             <div style="display: inline-block; width: 100%; text-align: center;">
                 <div style="display: inline-block;">
 
-                    <i class="el-icon-warning-outline" style="color: #6e8e6a;font-size: 60px;transform: rotate(180deg);"></i>
+                    <i class="el-icon-warning-outline" style="color: #79bb71;font-size: 60px;transform: rotate(180deg);"></i>
 
                     <h2 v-if="ifshare === false" style="font-weight: 300;word-break: break-word; padding: 0 40px;">Mentoring is one of the most important ways to develop your skillset as a trader. Our mentoring sessions are designed to review your live trading. To find out more, <span style="display: inline-block;color: #619fe7;text-decoration: underline;cursor: pointer;">watch this video.</span></h2>
                     <h2 v-else style="font-weight: 300;word-break: break-word; padding: 0 40px;">Your information is being shared</h2>

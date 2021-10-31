@@ -7,10 +7,18 @@ div#dialogInstance i.el-dialog__close.el-icon.el-icon-close, div#dialogInstance 
 }
 .no-available-coach {
     color: #fff;
-    padding: 20px;
+    /*padding: 20px;*/
     display: inline-block;
     word-break: break-word;
     text-align: center;
+    padding: 15px 16px;
+    background-color: rgba(236, 248, 255, .17);
+    border-radius: 4px;
+    border-left: 5px solid #f96b6c;
+    margin: 20px 0;
+    font-size: 13px;
+    margin-bottom: 0px !important;
+    width: 90%;
 }
 div#dialogShare div.el-dialog__header {
     background-color: #4a6a8e !important;
@@ -257,7 +265,18 @@ button.el-button.plain {
     cursor: not-allowed;
 }
 
+.el-table .disabled-row {
+    /*background: rgba(54, 54, 54, 1) !important*/
+    opacity: 0.5;
+    cursor: not-allowed;
+    pointer-events: none !important;
+}
+
 .list-item.active.class-disable {
+    cursor: not-allowed;
+}
+
+.class-disable {
     cursor: not-allowed;
 }
 button.el-button.plain:hover {
