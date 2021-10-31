@@ -397,9 +397,6 @@ export default {
   },
   created: function() {
     this.loading = true
-    // console.log(this.session_collection,'collections')
-    // this.session_collection = this.selected.slice(0, this.count)
-    // console.log('collection',this.session_collection)
     this.session_data = this.selected.coaches
     this.getDate()
   },
@@ -588,16 +585,14 @@ export default {
     },
     checkDate: function(){
       this.loading = true
+      let data = []
       if(this.datefilter === null) {
         this.range_sep = ''
+        this.loading = false
       } else {
-        var data = []
         data.push(this.$moment(this.datefilter[0]).format('YYYY-MM-DD'))
         data.push(this.$moment(this.datefilter[1]).format('YYYY-MM-DD'))
-
-
         this.$emit('filterData', { value: data })
-
         this.date_collections = data
         this.range_sep = '-'
       }

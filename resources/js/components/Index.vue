@@ -880,7 +880,7 @@ export default {
         if(row.my_mentor !== '' || row.my_mentor !== null || row.my_mentor !== undefined) {
           this.canbook = row.my_mentor
         } else {
-          this.canbook = row.my_mentor
+          this.canbook = false
         }
       } else {
         if(row.my_mentor !== '' || row.my_mentor !== null || row.my_mentor !== undefined) {

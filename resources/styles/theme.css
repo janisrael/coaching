@@ -288,10 +288,10 @@ span.dbl-border.el-avatar.el-avatar--circle {
     border-radius: 50% !important;
     /* border: 1px solid #fff; */
     /* box-shadow: 0 0 0 4px #817dd1, 0 0 0 4px #b551a9; */
-    box-shadow: 0 0 0 5px #293f5d, 0 0 0 6px #9ecaff !important;
+    box-shadow: 0 0 0 5px #293f5d, 0 0 0 7px #9ecaff !important;
 }
 span.dbl-border-disable.el-avatar.el-avatar--circle {
-    box-shadow: 0 0 0 5px #3b3b3b, 0 0 0 6px #777777 !important;
+    box-shadow: 0 0 0 5px #3b3b3b, 0 0 0 7px #777777 !important;
 }
 
 
