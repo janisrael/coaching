@@ -63,7 +63,7 @@ class SaleRepository implements SaleRepositoryInterface
         if (count($sf)) {
             foreach ($sf['records'] as $field => $value) {
                 foreach (config('api.sf_sale') as $key => $val) {
-                    if (in_array($val, $value)) {
+                    if (in_array($val, array_keys($value))) {
                         $data[$field][$key] = $value[$val];
                     }
                 }

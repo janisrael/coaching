@@ -32,12 +32,11 @@ class ScheduleRepository implements ScheduleRepositoryInterface
 
     public function live($resource=''): void
     {
+        $sf = [];
         $data = [];
 
         $coach = resolve(CoachRepositoryInterface::class)->all();
         $coaches = Arr::pluck($coach['coaches'], 'country_code', 'id');
-
-        $where = [CoachingSessionFields::DATE . ' >= '.date('Y-m-d')];
 
         if (auth()->guard('portal')->check()) {
             $salesforceToken = auth()->guard('portal')->user()->salesforce_token;
@@ -51,17 +50,20 @@ class ScheduleRepository implements ScheduleRepositoryInterface
                             CoachingSessionFields::STATUS . ' = \'Pending\')'];
 
             if (! empty($this->scheduleDate)) {
-                $where[] = CoachingSessionFields::DATE . ' >= '.$this->scheduleDate['from'].' and ' .
+                $where[] = CoachingSessionFields::DATE . ' >= '.$this->scheduleDate['from'] .' and ' .
                             CoachingSessionFields::DATE . ' <= '.$this->scheduleDate['to'];
+            } else {
+                $where[] = CoachingSessionFields::DATE . ' >= ' . date('Y-m-d') . ' and ' .
+                            CoachingSessionFields::START_TIME . ' > \'' . date('H:i') . "'";
             }
+
+            $sf = resolve(CoachingSession::class)->query(
+                array_values(config('api.sf_schedule')),
+                $where
+            );
         }
 
-        $sf = resolve(CoachingSession::class)->query(
-            array_values(config('api.sf_schedule')),
-            $where
-        );
-
-        if (count($sf)) {
+        if (count($sf) > 0) {
             foreach ($sf['records'] as $field => $value) {
                 foreach (config('api.sf_schedule') as $key => $val) {
                     $data[$field][$key] = $value[$val];
