@@ -77,7 +77,7 @@
       </div>
       <el-col v-loading="loading" element-loading-text="Loading Schedules..." element-loading-spinner="el-icon-loading" element-loading-background="rgba(0, 0, 0, 0.5)":span="24" class="session-items-container">
         <div v-for="(position, index) in even(filteredPositions)" :key="index"  :class="['sessions-item-' + index]">
-          <transition name="el-fade-in">
+          <transition name="el-fade-in-linear" mode="out-in">
             <div v-if="position.status === 'Pending'" class="list-item" @click="dialogMentor(position)" v-bind:class="[{ active: !ifshare || !canbook }, disableClass]">
 <!--            <div v-if="position.status === 'Pending'" class="list-item" @click="dialogMentor(position)">-->
               <el-col :xs="18" :sm="19" :md="20" :lg="22" :xl="22" :class="['list-' + position.status, 'session-listitem']">
