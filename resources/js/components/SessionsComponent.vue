@@ -444,7 +444,7 @@ export default {
     },
     handleBook(value) {
       this.btn_loading = true
-      // console.log(value,'value')
+      console.log(value,'value')
       this.loading = true
       // let total_a_credits = 0
       let total_a_credits = this.sales.computed_credits.total_available
@@ -547,7 +547,7 @@ export default {
         } else {
            if(this.canbook === false) {
              console.log('unable to book')
-             return
+             // return
            }
         }
       }
@@ -580,6 +580,7 @@ export default {
         this.dialogItem = true
       } else {
         console.log('unable to book')
+        this.dialogItem = true
       }
 
     },
