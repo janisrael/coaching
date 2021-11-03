@@ -489,7 +489,7 @@ export default {
               message: response.data.data.message,
               duration: 4 * 1000
             })
-             this.loading = false
+            this.loading = false
             this.btn_loading = false
           }
         })

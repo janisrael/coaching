@@ -318,6 +318,7 @@
               <br>
               <span>To book mentoring sessions, you must be using your live account. Go To Your Account</span></p>
           </el-col>
+
         </el-row>
         <span slot="footer" class="dialog-footer">
           <div style="text-align: center; width: 100%; display:inline-block;">
@@ -372,9 +373,9 @@ import ShareModalComponent from './ShareModalComponent.vue'
 
 // dummy data
 
-import json_sales from './dummy_sales.json'
-import json_coaches from './dummy_coaches.json'
-import json_schedules from './dummy_schedules.json'
+// import json_sales from './dummy_sales.json'
+// import json_coaches from './dummy_coaches.json'
+// import json_schedules from './dummy_schedules.json'
 
 export default {
   name: 'Index',
@@ -455,11 +456,11 @@ export default {
       creditModal: false,
       selected_row: {},
 // dummy
-      dummy_sales: json_sales,
-
-      dummy_schedules: json_schedules,
-
-      dummy_coaches: json_coaches
+//       dummy_sales: json_sales,
+//
+//       dummy_schedules: json_schedules,
+//
+//       dummy_coaches: json_coaches
     }
   },
   computed: {
@@ -688,20 +689,20 @@ export default {
 
       // fetching data in all promise
       Promise.all([
-        // await fetch('/api/v1/coaches').then(res => res.ok && res.json() || Promise.reject(res)),
-        // await fetch(sched_api + '/' + date1 + '/' + date2).then(res => res.ok && res.json() || Promise.reject(res)),
-        // await fetch('/api/v1/account/sales').then(res => res.ok && res.json() || Promise.reject(res))
-      ]).then(datax => {
+        await fetch('/api/v1/coaches').then(res => res.ok && res.json() || Promise.reject(res)),
+        await fetch(sched_api + '/' + date1 + '/' + date2).then(res => res.ok && res.json() || Promise.reject(res)),
+        await fetch('/api/v1/account/sales').then(res => res.ok && res.json() || Promise.reject(res))
+      ]).then(data => {
 
         //** for test mode using local data, change to true **//
-        let test_mode = true
-        let data = []
-        if(test_mode === true) {
-          data[0] = this.dummy_coaches
-          data[1] = this.dummy_schedules
-          data[2] = this.dummy_sales
-        }
-        console.log(this.dummy_schedules,'sd')
+        // let test_mode = true
+        // let data = []
+        // if(test_mode === true) {
+        //   data[0] = this.dummy_coaches
+        //   data[1] = this.dummy_schedules
+        //   data[2] = this.dummy_sales
+        // }
+        // console.log(this.dummy_schedules,'sd')
 
         //** Check Instance **//
         if(data[0].error_code) {
