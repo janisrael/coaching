@@ -73,8 +73,8 @@
                         </el-col>
                         <el-col :xs="20" :sm="19" :md="19" :lg="19" :xl="19" style="display: inline-block; padding-left: 10px;">
                           <div class="flag-container">
-                            <country-flag v-if="scope.row.country_code === null" country='' size='normal'/>
-                            <country-flag v-else :country='scope.row.country_code' size='normal'/>
+                            <country-flag v-if="scope.row.region === null" country='' size='normal'/>
+                            <country-flag v-else :country='scope.row.region' size='normal'/>
                           </div>
                           <div class="left-list-header">{{ scope.row.first_name }} {{ scope.row.last_name }}</div>
                           <span class="coaches-desktop">
@@ -121,8 +121,8 @@
                         </el-col>
                         <el-col :xs="20" :sm="19" :md="19" :lg="19" :xl="19" style="display: inline-block; padding-left: 10px;">
                           <div class="flag-container">
-                            <country-flag v-if="scope.row.country_code === null" country='' size='normal'/>
-                            <country-flag v-else :country='scope.row.country_code' size='normal'/>
+                            <country-flag v-if="scope.row.region === null" country='' size='normal'/>
+                            <country-flag v-else :country='scope.row.region' size='normal'/>
                           </div>
                           <div class="left-list-header" style="color: #919191 !important;">{{ scope.row.first_name }} {{ scope.row.last_name }}</div>
                           <span class="coaches-desktop">
@@ -173,8 +173,8 @@
                         </el-col>
                         <el-col :xs="20" :sm="19" :md="19" :lg="19" :xl="19" style="display: inline-block; padding-left: 10px;">
                           <div class="flag-container">
-                            <country-flag v-if="scope.row.country_code === null" country='' size='normal'/>
-                            <country-flag v-else :country='scope.row.country_code' size='normal'/>
+                            <country-flag v-if="scope.row.region === null" country='' size='normal'/>
+                            <country-flag v-else :country='scope.row.region' size='normal'/>
                           </div>
                           <div class="left-list-header">{{ scope.row.first_name }} {{ scope.row.last_name }}</div>
                           <span class="coaches-desktop">
@@ -823,6 +823,47 @@ export default {
 
         //** get default sales index by id, index use to default selected mentor on page load **//
         this.coaches.forEach((value, index) => {
+          console.log(value,'cc')
+          if(value.region.toLowerCase() === 'aus') {
+            value.region = 'AUS'
+          }
+          if(value.region.toLowerCase() === 'es') {
+            value.region = 'ES'
+          }
+          if(value.region.toLowerCase() === 'id') {
+            value.region = 'ID'
+          }
+          if(value.region.toLowerCase() === 'ind') {
+            value.region = 'IND'
+          }
+          if(value.region.toLowerCase() === 'mx') {
+            value.region = 'MX'
+          }
+          if(value.region.toLowerCase() === 'ng') {
+            value.region = 'NG'
+          }
+          if(value.region.toLowerCase() === 'nor') {
+            value.region = 'NOR'
+          }
+          if(value.region.toLowerCase() === 'phl') {
+            value.region = 'PHL'
+          }
+          if(value.region.toLowerCase() === 'pl') {
+            value.region = 'PL'
+          }
+          if(value.region.toLowerCase() === 'sg') {
+            value.region = 'SG'
+          }
+          if(value.region.toLowerCase() === 'uk') {
+            value.region = 'GB'
+          }
+          if(value.region.toLowerCase() === 'us') {
+            value.region = 'US'
+          }
+          if(value.region.toLowerCase() === 'za') {
+            value.region = 'ZA'
+          }
+
           if(value.id === mentor_id) {
             m_index = index
             this.m_index = index
