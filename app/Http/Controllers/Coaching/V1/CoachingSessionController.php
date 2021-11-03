@@ -128,7 +128,7 @@ class CoachingSessionController extends Controller
     {
         return [
             'computed_credits' => $this->saleRepository->computedCredits($this->saleRepository->all()['sales']),
-            'schedules' => $this->scheduleRepository->all()['schedules'],
+            //'schedules' => $this->scheduleRepository->all()['schedules'],
         ];
     }
 }

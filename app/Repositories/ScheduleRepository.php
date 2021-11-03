@@ -65,8 +65,8 @@ class ScheduleRepository implements ScheduleRepositoryInterface
                 $where[] = CoachingSessionFields::DATE . ' >= '.$this->scheduleDate['from'] .' and ' .
                             CoachingSessionFields::DATE . ' <= '.$this->scheduleDate['to'];
             } else {
-                $where[] = CoachingSessionFields::DATE . ' >= ' . date('Y-m-d') . ' and ' .
-                            CoachingSessionFields::START_TIME . ' > \'' . date('H:i') . "'";
+                /* $where[] = CoachingSessionFields::DATE . ' >= ' . date('Y-m-d') . ' and ' .
+                            CoachingSessionFields::START_TIME . ' > \'' . date('H:i') . "'"; */
             }
 
             $sf = resolve(CoachingSession::class)->query(
