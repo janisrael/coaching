@@ -407,9 +407,11 @@ export default {
     handleDeleteBooking(schedule_details) {
       this.loading = true
       console.log(schedule_details,'schedule_details')
-      let url = "/api/v1/coaching-session/cancel?schedule_id=" + schedule_details.id;
-      axios.post(url)
-        .then(response => {
+      let url = "/api/v1/coaching-session/cancel";
+      axios.post(url,
+        {
+          schedule_id: schedule_details.id
+        }).then(response => {
           // console.log(value.id, 'id')
           // console.log(response, 'response')
           if(response.data.data.status === 'success') {
