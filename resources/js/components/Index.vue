@@ -1,6 +1,5 @@
 <template>
   <div class="row full-height">
-
     <el-row class="">
       <el-col :span="24" >
 <!--        <loading-->
@@ -11,17 +10,8 @@
 <!--          :color="icon_color"-->
 <!--        ></loading>-->
         <transition name="el-fade-in">
-        <div v-if="loading" style="position: absolute;
-          width: 100%;
-          height: 100%;
-          z-index: 20000;">
-          <div style="position: relative;
-            width: 100px;
-            height: 100px;
-            z-index: 20001;
-            box-sizing: border-box;
-            top: calc(50% - 50px);
-            left: calc(50% - 50px);">
+        <div v-if="loading" class="loader-container">
+          <div class="main-loader">
               <div>
                 <svg viewBox='0 0 105 105' xmlns='http://www.w3.org/2000/svg' fill='#fff'><circle cx='12.5' cy='12.5' r='12.5'><animate attributeName='fill-opacity' begin='0s' dur='1s' values='1;.2;1' calcMode='linear' repeatCount='indefinite'/></circle><circle cx='12.5' cy='52.5' r='12.5' fill-opacity='.5'><animate attributeName='fill-opacity' begin='100ms' dur='1s' values='1;.2;1' calcMode='linear' repeatCount='indefinite'/></circle><circle cx='52.5' cy='12.5' r='12.5'><animate attributeName='fill-opacity' begin='300ms' dur='1s' values='1;.2;1' calcMode='linear' repeatCount='indefinite'/></circle><circle cx='52.5' cy='52.5' r='12.5'><animate attributeName='fill-opacity' begin='600ms' dur='1s' values='1;.2;1' calcMode='linear' repeatCount='indefinite'/></circle><circle cx='92.5' cy='12.5' r='12.5'><animate attributeName='fill-opacity' begin='800ms' dur='1s' values='1;.2;1' calcMode='linear' repeatCount='indefinite'/></circle><circle cx='92.5' cy='52.5' r='12.5'><animate attributeName='fill-opacity' begin='400ms' dur='1s' values='1;.2;1' calcMode='linear' repeatCount='indefinite'/></circle><circle cx='12.5' cy='92.5' r='12.5'><animate attributeName='fill-opacity' begin='700ms' dur='1s' values='1;.2;1' calcMode='linear' repeatCount='indefinite'/></circle><circle cx='52.5' cy='92.5' r='12.5'><animate attributeName='fill-opacity' begin='500ms' dur='1s' values='1;.2;1' calcMode='linear' repeatCount='indefinite'/></circle><circle cx='92.5' cy='92.5' r='12.5'><animate attributeName='fill-opacity' begin='200ms' dur='1s' values='1;.2;1' calcMode='linear' repeatCount='indefinite'/></circle></svg>
               </div>
@@ -323,11 +313,12 @@
 <!--            <div style="text-align:center;"><i class="fas fa-info" style="padding: 10px 17px;border: 2px solid #67C23A;border-radius: 50%;font-size: 20px;text-align: center;color: #67C23A;"></i></div>-->
             <p style="text-align: center; word-break: break-word">
               Mentoring is one of the most important ways to develop your skillset as a trader. Our mentoring sessions are designed purely to review your live trading.
-             to find out more <a href="https://vimeo.com/637480170" style="color: #9dafff;">Watch this video</a>.
+             to find out more <a href="https://mentors.smartchartsfx.com/" target="_blank" style="color: #9dafff;">Watch this video</a>.
               <br>
               <br>
               <span>To book mentoring sessions, you must be using your live account. Go To Your Account</span></p>
           </el-col>
+
         </el-row>
         <span slot="footer" class="dialog-footer">
           <div style="text-align: center; width: 100%; display:inline-block;">
@@ -484,10 +475,10 @@ export default {
       // // } else {
       //   filter_booked = this.filter_booked
       // }
+      let coaches = this.coaches
       if(this.selectedTags.length === 0) {
 
         if(this.final_range[0] === 0 && this.final_range[1] === 100){
-          var coaches = this.coaches
           return coaches
           // return coaches.filter(el => (el.has_booked === filter_booked));;
           // return coaches.filter(el => (el.has_booked === filter_booked || el.has_booked !== filter_booked));
@@ -711,6 +702,7 @@ export default {
         //   data[1] = this.dummy_schedules
         //   data[2] = this.dummy_sales
         // }
+        // console.log(this.dummy_schedules,'sd')
 
         //** Check Instance **//
         if(data[0].error_code) {

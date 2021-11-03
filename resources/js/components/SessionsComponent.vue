@@ -6,7 +6,7 @@
     <div v-if="noMore && this.selected.length > 16" class="arrowDown" @click="scrollToTop({behavior: 'smooth'})">
       <i class="fa fa-angle-up" aria-hidden="true"></i>
     </div>
-    <span style="color: rgba(255, 255, 255, 0.7); padding-top: 12px; display: inline-block;padding-left: 10px;">{{ sales.computed_credits.total_available }} sessions left to book </span>
+    <span style="color: rgba(255, 255, 255, 0.7); padding-top: 12px; display: inline-block;padding-left: 10px;">{{ sales.computed_credits.total_available }} sessions left to book</span>
     <el-button size="small" class="btn-buy-session" type="primary" style="float:right; display: none;">BUY SESSIONS</el-button>
     <el-col :span="24">
       <div style="display: block;">
@@ -77,10 +77,10 @@
       </div>
       <el-col v-loading="loading" element-loading-text="Loading Schedules..." element-loading-spinner="el-icon-loading" element-loading-background="rgba(0, 0, 0, 0.5)":span="24" class="session-items-container">
         <div v-for="(position, index) in even(filteredPositions)" :key="index"  :class="['sessions-item-' + index]">
-          <transition name="el-fade-in">
-            <div v-if="position.status === 'Pending'" class="list-item" @click="dialogMentor(position)" v-bind:class="[{ active: !ifshare || !canbook }, disableClass]">
+          <transition name="el-fade-in-linear" mode="out-in">
+            <div v-if="position.status === 'Pending'" class="list-item" @click="dialogMentor(position)">
 <!--            <div v-if="position.status === 'Pending'" class="list-item" @click="dialogMentor(position)">-->
-              <el-col :xs="18" :sm="19" :md="20" :lg="22" :xl="22" :class="['list-' + position.status, 'session-listitem']">
+              <el-col :xs="18" :sm="19" :md="20" :lg="22" :xl="22" :class="[(ifshare === false ? 'class-disable' : 'class-enable' && canbook === false ? 'class-disable' : 'class-enable'), 'list-' + position.status, 'session-listitem']">
                 <span style="width: 15px; display: inline-block"><i class="far fa-clock"></i></span>
                 <el-avatar :size="60" :src="position.coach_image" class="session-list-avatar">
                   <img :src="position.coach_image"/>
@@ -99,7 +99,7 @@
                   <span v-if="position.availability_type.includes('Group')"><i class="fa fa-users" style="font-size: 14px"></i></span>
                 </span>
               </el-col>
-              <el-col :xs="6" :sm="5" :md="4" :lg="2" :xl="2" v-if="position.status === 'Pending'" v-bind:class="[{ active: !ifshare || !canbook }, disableClass, 'list-' + position.status, 'list-item-btn']" >
+              <el-col :xs="6" :sm="5" :md="4" :lg="2" :xl="2" v-if="position.status === 'Pending'" v-bind:class="[(ifshare === false ? 'class-disable' : 'class-enable' && canbook === false ? 'class-disable' : 'class-enable'), 'list-' + position.status, 'list-item-btn']" >
                 <span>BOOK</span>
               </el-col>
             </div>
@@ -130,7 +130,6 @@
                 </el-col>
               </div>
             </div>
-
             <div v-if="position.status === 'Attended'" class="list-item" @click="dialogMentor(position)">
               <el-col :xs="18" :sm="19" :md="20" :lg="22" :xl="22" :class="['list-' + position.status, 'session-listitem']">
                 <span style="width: 15px; display: inline-block"> <i class="el-icon-circle-check"></i></span>
@@ -155,8 +154,7 @@
                 <span>VIEW</span>
               </el-col>
             </div>
-
-            <div v-if="position.status === 'Attended'" class="list-item" @click="dialogMentor(position)">
+            <div v-if="position.status === 'No-show'" class="list-item" @click="dialogMentor(position)">
               <el-col :xs="18" :sm="19" :md="20" :lg="22" :xl="22" :class="['list-' + position.status, 'session-listitem']">
                 <span style="width: 15px; display: inline-block"><i class="fa fa-ban" aria-hidden="true"></i></span>
                 <el-avatar :size="60" :src="position.coach_image" class="session-list-avatar">
@@ -444,7 +442,7 @@ export default {
     },
     handleBook(value) {
       this.btn_loading = true
-      // console.log(value,'value')
+      console.log(value,'value')
       this.loading = true
       // let total_a_credits = 0
       let total_a_credits = this.sales.computed_credits.total_available
@@ -491,7 +489,7 @@ export default {
               message: response.data.data.message,
               duration: 4 * 1000
             })
-             this.loading = false
+            this.loading = false
             this.btn_loading = false
           }
         })
