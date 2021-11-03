@@ -414,16 +414,39 @@ export default {
           // console.log(response, 'response')
           if(response.data.data.status === 'success') {
             // console.log(response.data.data.status,'success')
+            // this.
             Notification.success({
               title: 'Success',
               message: 'Booking cancellation request sent!',
               duration: 4 * 1000
             })
-            this.session_collection = []
-            this.session_collection = response.data.data.schedules
+            let coaching_session_id = ''
+            if(response.data.data.coaching_session_id) {
+              coaching_session_id = response.data.data.coaching_session_id
+            } else {
+              console.log('no coaching session id')
+            }
 
+            schedule_details['coaching_session_id'] = coaching_session_id
+            // schedule_details['status'] = 'Pending'
+            //** Update schedule by id **//
+            this.session_collection.forEach((item, index) => {
+              if(item.id === schedule_details.id) {
+                item['status'] = 'Pending'
+                item.id = coaching_session_id
+              }
+            })
+            console.log(schedule_details)
             this.loading = false
+            this.btn_loading = false
             this.dialogItem = false
+            this.$emit('reload', schedule_details)
+
+            // this.session_collection = []
+            // this.session_collection = response.data.data.schedules
+
+            // this.loading = false
+            // this.dialogItem = false
             // this.$emit('reload', response.data.data.schedules)
           } else {
             Notification.error({

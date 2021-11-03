@@ -528,7 +528,7 @@ export default {
       axios.get(url,
         {
           params: {
-            'id': user_id
+            'id': 90
           }
         }
       ).then(response => {
@@ -589,7 +589,8 @@ export default {
     reloadData(value) {
       this.schedules.forEach((sched, i) => {
         if(sched.id === value.id) {
-          sched['status'] = 'Booked'
+          sched['status'] = 'Pending'
+          sched.id = value.coaching_session_id
         }
       })
       // this.new_collections.forEach((item, index) => {
