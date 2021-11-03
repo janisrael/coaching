@@ -38,10 +38,14 @@ class CoachController extends Controller
      *
      * @return json
      */
-    public function schedule($date_from=null, $date_to=null)
+    public function schedule($date_from=null, $date_to=null, Request $request)
     {
         if (!is_null($date_from) and !is_null($date_to)) {
             $this->scheduleRepository->setDate($date_from, $date_to);
+        }
+
+        if ($request->has('status')) {
+            $this->scheduleRepository->setStatus($request->status);
         }
 
         $data = $this->scheduleRepository->all();

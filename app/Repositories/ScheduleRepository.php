@@ -18,6 +18,15 @@ class ScheduleRepository implements ScheduleRepositoryInterface
 
     private $scheduleDate = [];
 
+    private $coachingSessionStatus = null;
+
+    private $statuses = [
+        'booked' => 'Booked',
+        'cancelled' => 'Cancelled',
+        'noshow' => 'No Show',
+        'attended' => 'Attended',
+    ];
+
     public function all($resource=''): array
     {
         if (config('app.enable_api_dummy_data')) {
@@ -45,16 +54,19 @@ class ScheduleRepository implements ScheduleRepositoryInterface
 
             $sale = resolve(SaleRepositoryInterface::class)->all();
             $saleId = Arr::pluck($sale['sales'], 'id');
+            $where = [CoachingSessionFields::STATUS . ' = \'Pending\''];
             
-            $where = ['(' . CoachingSessionFields::SALE . ' IN (\'' . implode('\',\'', $saleId) . '\') or ' . 
-                            CoachingSessionFields::STATUS . ' = \'Pending\')'];
+            if (! is_null($this->coachingSessionStatus) and in_array($this->coachingSessionStatus, array_keys($this->statuses))) {
+                $where = ['(' . CoachingSessionFields::SALE . ' IN (\'' . implode('\',\'', $saleId) . '\') and ' . 
+                                CoachingSessionFields::STATUS . ' = \''.$this->statuses[$this->coachingSessionStatus].'\')'];
+            }
 
             if (! empty($this->scheduleDate)) {
                 $where[] = CoachingSessionFields::DATE . ' >= '.$this->scheduleDate['from'] .' and ' .
                             CoachingSessionFields::DATE . ' <= '.$this->scheduleDate['to'];
             } else {
-                $where[] = CoachingSessionFields::DATE . ' >= ' . date('Y-m-d') . ' and ' .
-                            CoachingSessionFields::START_TIME . ' > \'' . date('H:i') . "'";
+                /* $where[] = CoachingSessionFields::DATE . ' >= ' . date('Y-m-d') . ' and ' .
+                            CoachingSessionFields::START_TIME . ' > \'' . date('H:i') . "'"; */
             }
 
             $sf = resolve(CoachingSession::class)->query(
@@ -110,5 +122,10 @@ class ScheduleRepository implements ScheduleRepositoryInterface
             'from' => $dateFrom,
             'to' => $dateTo
         ];
+    }
+
+    public function setStatus($status): void
+    {
+        $this->coachingSessionStatus = $status;
     }
 }
