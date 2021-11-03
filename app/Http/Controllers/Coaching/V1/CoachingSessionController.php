@@ -65,7 +65,10 @@ class CoachingSessionController extends Controller
 
     public function cancel(CoachingSessionRequest $request)
     {
-        $result = ['status' => 'error'];
+        $result = [
+            'status' => 'error',
+            'coaching_session_id' => null
+        ];
 
         $session = resolve(CoachingSession::class)->get($request->schedule_id);
         
@@ -95,7 +98,7 @@ class CoachingSessionController extends Controller
             // Clone Cancelled CoachSession.
             if ($result['status'] == 'success') {
                 try {
-                    resolve(CoachingSession::class)->create([
+                    $coachingSessionId = resolve(CoachingSession::class)->create([
                         CoachingSessionFields::SALE => config('app.no_sale_defined_id'),
                         CoachingSessionFields::STATUS => 'Pending',
                         CoachingSessionFields::DATE => $session[CoachingSessionFields::DATE],
@@ -105,6 +108,7 @@ class CoachingSessionController extends Controller
                         CoachingSessionFields::LOCATION => 'Remote',
                     ]);
                     $result['message'] = 'Successfully Cancelled.';
+                    $result['coaching_session_id'] = $coachingSessionId;
                     
                 } catch (SalesforceException $e) {
                     $result = [
