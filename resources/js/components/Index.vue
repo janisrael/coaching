@@ -313,7 +313,7 @@
 <!--            <div style="text-align:center;"><i class="fas fa-info" style="padding: 10px 17px;border: 2px solid #67C23A;border-radius: 50%;font-size: 20px;text-align: center;color: #67C23A;"></i></div>-->
             <p style="text-align: center; word-break: break-word">
               Mentoring is one of the most important ways to develop your skillset as a trader. Our mentoring sessions are designed purely to review your live trading.
-             to find out more <a href="https://vimeo.com/637480170" style="color: #9dafff;">Watch this video</a>.
+             to find out more <a href="https://mentors.smartchartsfx.com/" target="_blank" style="color: #9dafff;">Watch this video</a>.
               <br>
               <br>
               <span>To book mentoring sessions, you must be using your live account. Go To Your Account</span></p>
@@ -455,11 +455,11 @@ export default {
       creditModal: false,
       selected_row: {},
 // dummy
-//       dummy_sales: json_sales,
-//
-//       dummy_schedules: json_schedules,
-//
-//       dummy_coaches: json_coaches
+      dummy_sales: json_sales,
+
+      dummy_schedules: json_schedules,
+
+      dummy_coaches: json_coaches
     }
   },
   computed: {
@@ -474,10 +474,10 @@ export default {
       // // } else {
       //   filter_booked = this.filter_booked
       // }
+      let coaches = this.coaches
       if(this.selectedTags.length === 0) {
 
         if(this.final_range[0] === 0 && this.final_range[1] === 100){
-          var coaches = this.coaches
           return coaches
           // return coaches.filter(el => (el.has_booked === filter_booked));;
           // return coaches.filter(el => (el.has_booked === filter_booked || el.has_booked !== filter_booked));
@@ -688,20 +688,20 @@ export default {
 
       // fetching data in all promise
       Promise.all([
-        await fetch('/api/v1/coaches').then(res => res.ok && res.json() || Promise.reject(res)),
-        await fetch(sched_api + '/' + date1 + '/' + date2).then(res => res.ok && res.json() || Promise.reject(res)),
-        await fetch('/api/v1/account/sales').then(res => res.ok && res.json() || Promise.reject(res))
-      ]).then(data => {
+        // await fetch('/api/v1/coaches').then(res => res.ok && res.json() || Promise.reject(res)),
+        // await fetch(sched_api + '/' + date1 + '/' + date2).then(res => res.ok && res.json() || Promise.reject(res)),
+        // await fetch('/api/v1/account/sales').then(res => res.ok && res.json() || Promise.reject(res))
+      ]).then(datax => {
 
         //** for test mode using local data, change to true **//
-        // let test_mode = true
-        // let data = []
-        // if(test_mode === true) {
-        //   data[0] = this.dummy_coaches
-        //   data[1] = this.dummy_schedules
-        //   data[2] = this.dummy_sales
-        // }
-        // console.log(this.dummy_schedules,'sd')
+        let test_mode = true
+        let data = []
+        if(test_mode === true) {
+          data[0] = this.dummy_coaches
+          data[1] = this.dummy_schedules
+          data[2] = this.dummy_sales
+        }
+        console.log(this.dummy_schedules,'sd')
 
         //** Check Instance **//
         if(data[0].error_code) {
