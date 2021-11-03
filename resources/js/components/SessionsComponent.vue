@@ -259,7 +259,7 @@
             title="To cancel a session you must give at least 24 hours notice."
             type="warning"
             show-icon
-            style="width: 70%; float:left;">
+            style="width: 60%; float:left;">
           </el-alert>
           <el-button :loading="loading" @click="handleDeleteBooking(schedule_details)" style="color: #fff; background-color: transparent !important; border: none !important;" size="small" type="primary">Cancel Booking</el-button>
           <el-button @click="handleClose()" size="small" type="success">Close</el-button>
