@@ -2,21 +2,21 @@
   <div class="row full-height">
     <el-row class="">
       <el-col :span="24" >
-<!--        <loading-->
-<!--          :active.sync="loading"-->
-<!--          :can-cancel="false"-->
-<!--          :is-full-page="fullPage"-->
-<!--          :background-color="bg_color"-->
-<!--          :color="icon_color"-->
-<!--        ></loading>-->
+        <!--        <loading-->
+        <!--          :active.sync="loading"-->
+        <!--          :can-cancel="false"-->
+        <!--          :is-full-page="fullPage"-->
+        <!--          :background-color="bg_color"-->
+        <!--          :color="icon_color"-->
+        <!--        ></loading>-->
         <transition name="el-fade-in">
-        <div v-if="loading" class="loader-container">
-          <div class="main-loader">
+          <div v-if="loading" class="loader-container">
+            <div class="main-loader">
               <div>
                 <svg viewBox='0 0 105 105' xmlns='http://www.w3.org/2000/svg' fill='#fff'><circle cx='12.5' cy='12.5' r='12.5'><animate attributeName='fill-opacity' begin='0s' dur='1s' values='1;.2;1' calcMode='linear' repeatCount='indefinite'/></circle><circle cx='12.5' cy='52.5' r='12.5' fill-opacity='.5'><animate attributeName='fill-opacity' begin='100ms' dur='1s' values='1;.2;1' calcMode='linear' repeatCount='indefinite'/></circle><circle cx='52.5' cy='12.5' r='12.5'><animate attributeName='fill-opacity' begin='300ms' dur='1s' values='1;.2;1' calcMode='linear' repeatCount='indefinite'/></circle><circle cx='52.5' cy='52.5' r='12.5'><animate attributeName='fill-opacity' begin='600ms' dur='1s' values='1;.2;1' calcMode='linear' repeatCount='indefinite'/></circle><circle cx='92.5' cy='12.5' r='12.5'><animate attributeName='fill-opacity' begin='800ms' dur='1s' values='1;.2;1' calcMode='linear' repeatCount='indefinite'/></circle><circle cx='92.5' cy='52.5' r='12.5'><animate attributeName='fill-opacity' begin='400ms' dur='1s' values='1;.2;1' calcMode='linear' repeatCount='indefinite'/></circle><circle cx='12.5' cy='92.5' r='12.5'><animate attributeName='fill-opacity' begin='700ms' dur='1s' values='1;.2;1' calcMode='linear' repeatCount='indefinite'/></circle><circle cx='52.5' cy='92.5' r='12.5'><animate attributeName='fill-opacity' begin='500ms' dur='1s' values='1;.2;1' calcMode='linear' repeatCount='indefinite'/></circle><circle cx='92.5' cy='92.5' r='12.5'><animate attributeName='fill-opacity' begin='200ms' dur='1s' values='1;.2;1' calcMode='linear' repeatCount='indefinite'/></circle></svg>
               </div>
+            </div>
           </div>
-        </div>
         </transition>
         <el-col :xs="12" :sm="7" :md="8" :lg="6" :xl="6" class="full-height index-col-left">
           <el-col :span="24" style="padding: 10px;" class="coaches-search-desktop">
@@ -37,9 +37,9 @@
                 please email <a href="mailto:info@smartchartsfx.com" style="color: #9ecaff;">info@smartchartsfx.com.</a>
               </span>
             </el-col>
-<!--            <div style="width: 10%; display: inline-block;">-->
-<!--              <el-button type="primary" class="plain" plain size="small" @click="callFilter()"><i class="fas fa-sliders-h" aria-hidden="true" style="color: rgba(255, 255, 255, 0.68);"></i></el-button>-->
-<!--            </div>-->
+            <!--            <div style="width: 10%; display: inline-block;">-->
+            <!--              <el-button type="primary" class="plain" plain size="small" @click="callFilter()"><i class="fas fa-sliders-h" aria-hidden="true" style="color: rgba(255, 255, 255, 0.68);"></i></el-button>-->
+            <!--            </div>-->
 
           </el-col>
           <el-col :span="24" class="coaches-search-mobile" style="padding: 10px;">
@@ -80,8 +80,8 @@
                           <span class="coaches-desktop">
                             <div class="left-list-sub">
 <!--                                <span style="color: rgb(169, 169, 169);">Experience - </span>-->
-<!--                                <span v-if="scope.row.experience > 0">{{ scope.row.experience }} years</span>-->
-<!--                                <span v-else>0</span>-->
+                              <!--                                <span v-if="scope.row.experience > 0">{{ scope.row.experience }} years</span>-->
+                              <!--                                <span v-else>0</span>-->
                             </div>
                             <div class="left-list-sub">
                               <span style="color: rgb(169, 169, 169);">Markets traded -</span>
@@ -128,8 +128,8 @@
                           <span class="coaches-desktop">
                             <div class="left-list-sub">
 <!--                                <span style="color: rgb(169, 169, 169);">Experience - </span>-->
-<!--                                <span v-if="scope.row.experience > 0">{{ scope.row.experience }} years</span>-->
-<!--                                <span v-else>0</span>-->
+                              <!--                                <span v-if="scope.row.experience > 0">{{ scope.row.experience }} years</span>-->
+                              <!--                                <span v-else>0</span>-->
                             </div>
                             <div class="left-list-sub">
                               <span style="color: rgb(169, 169, 169);">Markets traded -</span>
@@ -180,8 +180,8 @@
                           <span class="coaches-desktop">
                             <div class="left-list-sub">
 <!--                                <span style="color: rgb(169, 169, 169);">Experience - </span>-->
-<!--                                <span v-if="scope.row.experience > 0">{{ scope.row.experience }} years</span>-->
-<!--                                <span v-else>0</span>-->
+                              <!--                                <span v-if="scope.row.experience > 0">{{ scope.row.experience }} years</span>-->
+                              <!--                                <span v-else>0</span>-->
                             </div>
                             <div class="left-list-sub">
                               <span style="color: rgb(169, 169, 169);">Markets traded -</span>
@@ -222,7 +222,7 @@
         </el-col>
         <el-col :xs="12" :sm="17" :md="16" :lg="18" :xl="18" class="full-height index-col-right" style="background-image: url('../../images/background.jpg'); background-size: cover;">
           <content-component v-if="loading === false" :selected="passData" :ifshare="ifShare" :canbook="canbook" @showModal="showShareModal" ></content-component>
-          <session-component v-if="loading === false" ref="sessionComponent" :selected="for_sessiondata" :canbook="canbook" :user_id="coach_id" :sales="datasales" :ifshare="ifShare" :can_book="can_book" :selected_row="selected_row" @change="backData($event)" @reload="reloadData" @mergedata="mergeData" @showModal="showShareModal" @filterData="filterData"></session-component>
+          <session-component v-if="loading === false" ref="sessionComponent" :selected="for_sessiondata" :canbook="canbook" :user_id="coach_id" :sales="datasales" :ifshare="ifShare" :can_book="can_book" @change="backData($event)" @reload="reloadData" @showModal="showShareModal" @filterData="filterData"></session-component>
         </el-col>
       </el-col>
 
@@ -310,10 +310,10 @@
                  transform: rotate(180deg);">
               </i>
             </div>
-<!--            <div style="text-align:center;"><i class="fas fa-info" style="padding: 10px 17px;border: 2px solid #67C23A;border-radius: 50%;font-size: 20px;text-align: center;color: #67C23A;"></i></div>-->
+            <!--            <div style="text-align:center;"><i class="fas fa-info" style="padding: 10px 17px;border: 2px solid #67C23A;border-radius: 50%;font-size: 20px;text-align: center;color: #67C23A;"></i></div>-->
             <p style="text-align: center; word-break: break-word">
               Mentoring is one of the most important ways to develop your skillset as a trader. Our mentoring sessions are designed purely to review your live trading.
-             to find out more <a href="https://mentors.smartchartsfx.com/" target="_blank" style="color: #9dafff;">Watch this video</a>.
+              to find out more <a href="https://mentors.smartchartsfx.com/" target="_blank" style="color: #9dafff;">Watch this video</a>.
               <br>
               <br>
               <span>To book mentoring sessions, you must be using your live account. Go To Your Account</span></p>
@@ -340,7 +340,7 @@
             </div>
             <!--            <div style="text-align:center;"><i class="fas fa-info" style="padding: 10px 17px;border: 2px solid #67C23A;border-radius: 50%;font-size: 20px;text-align: center;color: #67C23A;"></i></div>-->
             <p style="text-align: center;">
-            No Available Credits!</p>
+              No Available Credits!</p>
           </el-col>
         </el-row>
         <span slot="footer" class="dialog-footer">
@@ -352,12 +352,12 @@
 
       <!-- dialog share read only live account -->
       <component
-          ref="currentComponent"
-          :is="currentComponent"
-          :ifshare="ifShare"
-          :datasales="datasales"
-          @setShareValue="setShareValue"
-        />
+        ref="currentComponent"
+        :is="currentComponent"
+        :ifshare="ifShare"
+        :datasales="datasales"
+        @setShareValue="setShareValue"
+      />
 
     </el-row>
   </div>
@@ -549,11 +549,11 @@ export default {
           this.ifShare = false
         }
       }).catch(error => {
-          console.log(error)
-          this.isStudent = false
+        console.log(error)
+        this.isStudent = false
         this.showShareModal()
-          this.ifShare = false
-        })
+        this.ifShare = false
+      })
     },
     setShareValue(value) {
       if(value.value === true) {
@@ -565,12 +565,12 @@ export default {
     showShareModal() {
       this.currentComponent = null
       if(this.ifShare === false) {
-          this.currentComponent = ShareModalComponent
-          setTimeout(() => this.ex_call_modal(), 1);
+        this.currentComponent = ShareModalComponent
+        setTimeout(() => this.ex_call_modal(), 1);
       } else {
-          // this.currentComponent = null
-          this.currentComponent = ShareModalComponent
-          setTimeout(() => this.ex_call_modal(), 1);
+        // this.currentComponent = null
+        this.currentComponent = ShareModalComponent
+        setTimeout(() => this.ex_call_modal(), 1);
       }
     },
     ex_call_modal() {
@@ -593,22 +593,6 @@ export default {
           sched.id = value.coaching_session_id
         }
       })
-      // this.new_collections.forEach((item, index) => {
-      //   if(item.id === value.id) {
-      //     item['status'] = 'Booked'
-      //   }
-      // })
-    },
-    mergeData(value) {
-      let for_session = this.for_sessiondata
-      let new_collection = for_session.concat(value);
-      this.for_sessiondata = new_collection
-      // this.schedules.forEach((sched, i) => {
-      //   if(sched.id === value.id) {
-      //     sched['status'] = 'Pending'
-      //     sched.id = value.coaching_session_id
-      //   }
-      // })
       // this.new_collections.forEach((item, index) => {
       //   if(item.id === value.id) {
       //     item['status'] = 'Booked'
@@ -651,45 +635,45 @@ export default {
       let hasbooked = false
       // let coachesraw = []
       axios
-      .get(sched_api + '/' + date1a + '/' + date2a)
-      .then(response => {
-        data = response.data.data.schedules
-      this.schedules = data
-        // this.schedules = this.dummyschedules // dummy
+        .get(sched_api + '/' + date1a + '/' + date2a)
+        .then(response => {
+          data = response.data.data.schedules
+          this.schedules = data
+          // this.schedules = this.dummyschedules // dummy
 
-        // coachesraw.forEach(function (value, index) {
-        //   data.forEach(function (val, index) {
-        //     if(val.status !== 'Pending' && value.id === val.coach_id) {
-        //       hasbooked = true
-        //     }
-        //   })
-        //   value['has_booked'] = hasbooked
-        // })
+          // coachesraw.forEach(function (value, index) {
+          //   data.forEach(function (val, index) {
+          //     if(val.status !== 'Pending' && value.id === val.coach_id) {
+          //       hasbooked = true
+          //     }
+          //   })
+          //   value['has_booked'] = hasbooked
+          // })
 
-      var schedraw = this.schedules
-        var coach = coachesraw
+          var schedraw = this.schedules
+          var coach = coachesraw
 
-        let arr1 = schedraw.filter(function (sched) {
-          return (sched.status === 'Pending' && sched.coach_id === user_id) || (sched.status !== 'Pending');
-        });
+          let arr1 = schedraw.filter(function (sched) {
+            return (sched.status === 'Pending' && sched.coach_id === user_id) || (sched.status !== 'Pending');
+          });
 
-        let arr2 = coach
-        const mergeById = (a1, a2) =>
-          a1.map(itm => ({
-            ...a2.find((item) => (item.id === itm.coach_id) && item),
-            ...itm
-          }));
-        this.new_collections = []
-        this.new_collections = mergeById(arr1, arr2); // merge scheds to coach
+          let arr2 = coach
+          const mergeById = (a1, a2) =>
+            a1.map(itm => ({
+              ...a2.find((item) => (item.id === itm.coach_id) && item),
+              ...itm
+            }));
+          this.new_collections = []
+          this.new_collections = mergeById(arr1, arr2); // merge scheds to coach
 
 
-        //  this.loading = true
-        this.reset = this.coaches
-        // setTimeout(() => this.loadDefault(this.datacoach), 1)
-        setTimeout(() => this.loadDefault(this.datacoach, this.index_load, this.m_index), 1)
-        // this.loadingSession = false
-      })
-      .catch(error => console.log(error))
+          //  this.loading = true
+          this.reset = this.coaches
+          // setTimeout(() => this.loadDefault(this.datacoach), 1)
+          setTimeout(() => this.loadDefault(this.datacoach, this.index_load, this.m_index), 1)
+          // this.loadingSession = false
+        })
+        .catch(error => console.log(error))
     },
     async read(action) {
       this.loading = true
@@ -777,30 +761,30 @@ export default {
           if(this.datasales.portal_user.customer_group.toLowerCase() === 'ltt') {
             coachesraw.forEach((value, index) => {
               count = count + 1
-                if(this.customer_type.toLowerCase() === 'front end') {
-                  if(value.id === this.mentor_id) {
-                    if(value.front_end === true) {
-                      my_mentor = true
-                      this.canbook = true
-                      if(count === 1) {
-                        index_load = index
-                        this.index_load = index
-                      }
-                    }
-                  } else {
-                    my_mentor = false
-                  }
-                }
-                if(this.customer_type.toLowerCase() === 'back end') {
-                  // if(value.back_end === true) {
-                    this.canbook = true
+              if(this.customer_type.toLowerCase() === 'front end') {
+                if(value.id === this.mentor_id) {
+                  if(value.front_end === true) {
                     my_mentor = true
+                    this.canbook = true
                     if(count === 1) {
                       index_load = index
                       this.index_load = index
                     }
-                  // }
+                  }
+                } else {
+                  my_mentor = false
                 }
+              }
+              if(this.customer_type.toLowerCase() === 'back end') {
+                // if(value.back_end === true) {
+                this.canbook = true
+                my_mentor = true
+                if(count === 1) {
+                  index_load = index
+                  this.index_load = index
+                }
+                // }
+              }
               // } else {
               //   my_mentor = false
               // }
@@ -1074,4 +1058,3 @@ export default {
 }
 
 </style>
-

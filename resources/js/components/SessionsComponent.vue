@@ -12,7 +12,7 @@
       <div style="display: block;">
         <div v-for="(filter, i) in filters" :key="i" style="display: inline-block;">
           <div class="desktop-session-filter">
-            <el-checkbox :id="'id-' + filter.id" :value="filter.tag" v-model="checkedFilters" :class="['obj-' + filter.id]" :label="filter.tag" @change="getSchedules()">
+            <el-checkbox :id="'id-' + filter.id" :value="filter.tag" v-model="checkedFilters" :class="['obj-' + filter.id]" :label="filter.tag">
               <span v-if="filter.tag === 'Pending'"><i class="far fa-clock"></i>  MENTOR AVAILABLE</span>
               <span v-if="filter.tag === 'Booked'"><i class="fa fa-calendar-check" aria-hidden="true"></i>  BOOKED SESSIONS</span>
               <span v-if="filter.tag === 'Attended'"><i class="el-icon-circle-check"></i>  ATTENDED SESSIONS</span>
@@ -79,7 +79,7 @@
         <div v-for="(position, index) in even(filteredPositions)" :key="index"  :class="['sessions-item-' + index]">
           <transition name="el-fade-in-linear" mode="out-in">
             <div v-if="position.status === 'Pending'" class="list-item" @click="dialogMentor(position)">
-<!--            <div v-if="position.status === 'Pending'" class="list-item" @click="dialogMentor(position)">-->
+              <!--            <div v-if="position.status === 'Pending'" class="list-item" @click="dialogMentor(position)">-->
               <el-col :xs="18" :sm="19" :md="20" :lg="22" :xl="22" :class="[(ifshare === false ? 'class-disable' : 'class-enable' && canbook === false ? 'class-disable' : 'class-enable'), 'list-' + position.status, 'session-listitem']">
                 <span style="width: 15px; display: inline-block"><i class="far fa-clock"></i></span>
                 <el-avatar :size="60" :src="position.coach_image" class="session-list-avatar">
@@ -113,12 +113,12 @@
                   <span class="session-list-time">
                {{ position.start_time }}  {{ $moment(position.date).format('dddd') }}  {{ $moment(position.date).format('MM/DD')}}
             </span>
-              <span v-if="position.availability_type.includes('Can do either')">
+                  <span v-if="position.availability_type.includes('Can do either')">
                 <span><i class="fas fa-headset" style="font-size: 14px"></i></span>
                 <span><i class="fa fa-user" style="font-size: 14px"></i></span>
                 <span><i class="fa fa-users" style="font-size: 14px"></i></span>
               </span>
-              <span v-else>
+                  <span v-else>
                 <span v-if="position.availability_type.includes('Remote only')"><i class="fas fa-headset" style="font-size: 14px"></i></span>
                 <span v-if="position.availability_type.includes('In-house only')"><i class="fa fa-user" style="font-size: 14px"></i></span>
                 <span v-if="position.availability_type.includes('Group')"><i class="fa fa-users" style="font-size: 14px"></i></span>
@@ -139,12 +139,12 @@
                 <span class="session-list-time">
              {{ position.start_time }}  {{ $moment(position.date).format('dddd') }}  {{ $moment(position.date).format('MM/DD')}}
             </span>
-              <span v-if="position.availability_type.includes('Can do either')">
+                <span v-if="position.availability_type.includes('Can do either')">
                 <span><i class="fas fa-headset" style="font-size: 14px"></i></span>
                 <span><i class="fa fa-user" style="font-size: 14px"></i></span>
                 <span><i class="fa fa-users" style="font-size: 14px"></i></span>
               </span>
-              <span v-else>
+                <span v-else>
                 <span v-if="position.availability_type.includes('Remote only')"><i class="fas fa-headset" style="font-size: 14px"></i></span>
                 <span v-if="position.availability_type.includes('In-house only')"><i class="fa fa-user" style="font-size: 14px"></i></span>
                 <span v-if="position.availability_type.includes('Group')"><i class="fa fa-users" style="font-size: 14px"></i></span>
@@ -163,12 +163,12 @@
                 <span class="session-list-time">
                {{ position.start_time }}  {{ $moment(position.date).format('dddd') }}  {{ $moment(position.date).format('MM/DD')}}
             </span>
-              <span v-if="position.availability_type.includes('Can do either')">
+                <span v-if="position.availability_type.includes('Can do either')">
                 <span><i class="fas fa-headset" style="font-size: 14px"></i></span>
                 <span><i class="fa fa-user" style="font-size: 14px"></i></span>
                 <span><i class="fa fa-users" style="font-size: 14px"></i></span>
               </span>
-              <span v-else>
+                <span v-else>
                 <span v-if="position.availability_type.includes('Remote only')"><i class="fas fa-headset" style="font-size: 14px"></i></span>
                 <span v-if="position.availability_type.includes('In-house only')"><i class="fa fa-user" style="font-size: 14px"></i></span>
                 <span v-if="position.availability_type.includes('Group')"><i class="fa fa-users" style="font-size: 14px"></i></span>
@@ -306,10 +306,6 @@ export default {
     can_book: {
       required: true,
       type: Boolean
-    },
-    selected_row: {
-      required: true,
-      type: Object
     }
   },
   data() {
@@ -343,7 +339,7 @@ export default {
       ],
       range_sep: "",
       // checkedFilters: ['Pending', 'Booked','Attended','Cancelled'],
-      checkedFilters: ['Pending'],
+      checkedFilters: ['Pending', 'Booked'],
       datefilter: [],
       currentDate: '',
       profileTitle: '',
@@ -365,10 +361,7 @@ export default {
       count_loading: false,
       session_collection: this.selected.slice(0, this.count),
       disableClass: 'class-disable',
-      btn_loading: false,
-      booked_data: [],
-      attended_data: [],
-      noshow_data: []
+      btn_loading: false
     }
   },
   computed: {
@@ -411,200 +404,61 @@ export default {
         return a.date - b.date;
       });
     },
-    getSchedules() {
-      console.log(this.selected ,'selected')
-      console.log(this.selected_row, 'selected_row')
-      let filter_status = ''
-      let sched_api = '/api/v1/coaches/schedule'
-      if(this.checkedFilters.includes('Booked')) {
-        console.log('asdasd')
-        filter_status = 'booked'
-
-        if(this.booked_data.length === 0) {
-          console.log('1')
-          this.loading = true
-          axios.get(sched_api,
-            { params: { status: filter_status } }
-            ).then(response => {
-              this.booked_data = response.data.data.schedules
-              // if(response.data.data.status === 'success') {
-              this.booked_data.forEach((value, index) => {
-                value['access_group'] = this.selected.access_group
-                value['back_end'] = this.selected.back_end
-                value['front_end'] = this.selected.front_end
-                value['bio'] = this.selected.bio
-                value['coach_image'] = this.selected.coach_image
-                value['country'] = this.selected.country
-                value['country_code'] = this.selected.country_code
-                value['email'] = this.selected.email
-                value['experience'] = this.selected.experience
-                value['experience_summary'] = this.selected.experience_summary
-                value['first_name'] = this.selected.first_name
-                value['languages'] = this.selected.languages
-                value['last_name'] = this.selected.last_name
-                value['market_traded'] = this.selected.market_traded
-                value['market_traded_summary'] = this.selected.market_traded_summary
-                value['my_mentor'] = this.selected.my_mentor
-                value['region'] = this.selected.region
-                value['style'] = this.selected.style
-                value['style_summary'] = this.selected.style_summary
-
-                this.session_collection.push(value)
-              })
-              this.loading = false
-              this.$emit('mergedata', this.booked_data)
-                console.log(this.session_collection,'new collection tt')
-              // }
-          })
-            .catch(error => {
-              console.log(error)
-              this.loading = false
-              // this.isLoading = false
-            })
-        }
-      }
-
-      if(this.checkedFilters.includes('Attended')) {
-        filter_status = 'attended'
-        this.loading = true
-        if(this.attended_data.length === 0) {
-          axios.get(sched_api,
-            { params: { status: filter_status } }
-            ).then(response => {
-            this.attended_data = response.data.data.schedules
-
-            this.attended_data.forEach((value, index) => {
-              value['access_group'] = this.selected.access_group
-              value['back_end'] = this.selected.back_end
-              value['front_end'] = this.selected.front_end
-              value['bio'] = this.selected.bio
-              value['coach_image'] = this.selected.coach_image
-              value['country'] = this.selected.country
-              value['country_code'] = this.selected.country_code
-              value['email'] = this.selected.email
-              value['experience'] = this.selected.experience
-              value['experience_summary'] = this.selected.experience_summary
-              value['first_name'] = this.selected.first_name
-              value['languages'] = this.selected.languages
-              value['last_name'] = this.selected.last_name
-              value['market_traded'] = this.selected.market_traded
-              value['market_traded_summary'] = this.selected.market_traded_summary
-              value['my_mentor'] = this.selected.my_mentor
-              value['region'] = this.selected.region
-              value['style'] = this.selected.style
-              value['style_summary'] = this.selected.style_summary
-              this.session_collection.push(value)
-            })
-            this.loading = false
-            this.$emit('mergedata', this.attended_data)
-            console.log(this.session_collection,'new collection')
-          })
-            .catch(error => {
-              console.log(error)
-              this.loading = false
-              // this.isLoading = false
-            })
-        }
-      }
-
-      if(this.checkedFilters.includes('No Show')) {
-        filter_status = 'noshow'
-        this.loading = true
-        if(this.noshow_data.length === 0) {
-          axios.get(sched_api,
-            { params: { status: filter_status } }
-          ).then(response => {
-            this.noshow_data = response.data.data.schedules
-            // this.session_collection.push(this.noshow_data)
-
-            this.noshow_data.forEach((value, index) => {
-              value['access_group'] = this.selected.access_group
-              value['back_end'] = this.selected.back_end
-              value['front_end'] = this.selected.front_end
-              value['bio'] = this.selected.bio
-              value['coach_image'] = this.selected.coach_image
-              value['country'] = this.selected.country
-              value['country_code'] = this.selected.country_code
-              value['email'] = this.selected.email
-              value['experience'] = this.selected.experience
-              value['experience_summary'] = this.selected.experience_summary
-              value['first_name'] = this.selected.first_name
-              value['languages'] = this.selected.languages
-              value['last_name'] = this.selected.last_name
-              value['market_traded'] = this.selected.market_traded
-              value['market_traded_summary'] = this.selected.market_traded_summary
-              value['my_mentor'] = this.selected.my_mentor
-              value['region'] = this.selected.region
-              value['style'] = this.selected.style
-              value['style_summary'] = this.selected.style_summary
-              this.session_collection.push(value)
-            })
-            this.loading = false
-            this.$emit('mergedata', this.noshow_data)
-            console.log(this.session_collection,'new collection')
-          })
-            .catch(error => {
-              console.log(error)
-              this.loading = false
-              // this.isLoading = false
-            })
-        }
-      }
-    },
     handleDeleteBooking(schedule_details) {
       this.loading = true
+      console.log(schedule_details,'schedule_details')
       let url = "/api/v1/coaching-session/cancel";
       axios.post(url,
         {
           schedule_id: schedule_details.id
         }).then(response => {
-          // console.log(value.id, 'id')
-          // console.log(response, 'response')
-          if(response.data.data.status === 'success') {
-            // console.log(response.data.data.status,'success')
-            // this.
-            Notification.success({
-              title: 'Success',
-              message: 'Booking cancellation request sent!',
-              duration: 4 * 1000
-            })
-            let coaching_session_id = ''
-            if(response.data.data.coaching_session_id) {
-              coaching_session_id = response.data.data.coaching_session_id
-            } else {
-              console.log('no coaching session id')
-            }
-
-            schedule_details['coaching_session_id'] = coaching_session_id
-            // schedule_details['status'] = 'Pending'
-            //** Update schedule by id **//
-            this.session_collection.forEach((item, index) => {
-              if(item.id === schedule_details.id) {
-                item['status'] = 'Pending'
-                item.id = coaching_session_id
-              }
-            })
-            console.log(schedule_details)
-            this.loading = false
-            this.btn_loading = false
-            this.dialogItem = false
-            this.$emit('reload', schedule_details)
-
-            // this.session_collection = []
-            // this.session_collection = response.data.data.schedules
-
-            // this.loading = false
-            // this.dialogItem = false
-            // this.$emit('reload', response.data.data.schedules)
+        // console.log(value.id, 'id')
+        // console.log(response, 'response')
+        if(response.data.data.status === 'success') {
+          // console.log(response.data.data.status,'success')
+          // this.
+          Notification.success({
+            title: 'Success',
+            message: 'Booking cancellation request sent!',
+            duration: 4 * 1000
+          })
+          let coaching_session_id = ''
+          if(response.data.data.coaching_session_id) {
+            coaching_session_id = response.data.data.coaching_session_id
           } else {
-            Notification.error({
-              title: 'Error',
-              message: response.data.data.message,
-              duration: 4 * 1000
-            })
-            this.loading = false
+            console.log('no coaching session id')
           }
-        })
+
+          schedule_details['coaching_session_id'] = coaching_session_id
+          // schedule_details['status'] = 'Pending'
+          //** Update schedule by id **//
+          this.session_collection.forEach((item, index) => {
+            if(item.id === schedule_details.id) {
+              item['status'] = 'Pending'
+              item.id = coaching_session_id
+            }
+          })
+          console.log(schedule_details)
+          this.loading = false
+          this.btn_loading = false
+          this.dialogItem = false
+          this.$emit('reload', schedule_details)
+
+          // this.session_collection = []
+          // this.session_collection = response.data.data.schedules
+
+          // this.loading = false
+          // this.dialogItem = false
+          // this.$emit('reload', response.data.data.schedules)
+        } else {
+          Notification.error({
+            title: 'Error',
+            message: response.data.data.message,
+            duration: 4 * 1000
+          })
+          this.loading = false
+        }
+      })
         .catch(error => {
           console.log(error)
           this.loading = false
@@ -714,10 +568,10 @@ export default {
           this.$emit('showModal', { value: false })
           return
         } else {
-           if(this.canbook === false) {
-             console.log('unable to book')
-             return
-           }
+          if(this.canbook === false) {
+            console.log('unable to book')
+            return
+          }
         }
       }
 
@@ -741,7 +595,7 @@ export default {
         this.profileTitle = 'Your Attended Session'
         this.session_type = position.status
       }
-      if(position.status === 'No Show') {
+      if(position.status === 'Cancelled') {
         this.profileTitle = 'Your no show Session'
         this.session_type = position.status
       }
