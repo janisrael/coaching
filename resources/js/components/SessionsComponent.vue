@@ -364,6 +364,7 @@ export default {
       btn_loading: false,
       booked_data: [],
       attended_data: [],
+      noshow_data: []
     }
   },
   computed: {
@@ -432,16 +433,14 @@ export default {
       }
 
       if(this.checkedFilters.includes('Attended')) {
-
         filter_status = 'attended'
-        if(!this.attended_data) {
+        if(this.attended_data.length === 0) {
           axios.get(sched_api,
-            {
-              status: filter_status
-            }).then(response => {
-            this.attended = response.data.data
+            { params: { status: filter_status } }
+            ).then(response => {
+            this.attended_data = response.data.data
             if(response.data.data.status === 'success') {
-              this.this.session_collection.push(this.attended)
+              this.this.session_collection.push(this.attended_data)
               console.log(this.this.session_collection)
             }
           })
@@ -454,8 +453,23 @@ export default {
       }
 
       if(this.checkedFilters.includes('No-show')) {
-        console.log('asdasd')
-        filter_status = 'booked'
+        filter_status = 'noshow'
+        if(this.noshow_data.length === 0) {
+          axios.get(sched_api,
+            { params: { status: filter_status } }
+          ).then(response => {
+            this.noshow_data = response.data.data
+            if(response.data.data.status === 'success') {
+              this.this.session_collection.push(this.noshow_data)
+              console.log(this.this.session_collection)
+            }
+          })
+            .catch(error => {
+              console.log(error)
+              this.loading = false
+              // this.isLoading = false
+            })
+        }
       }
     },
     handleDeleteBooking(schedule_details) {
