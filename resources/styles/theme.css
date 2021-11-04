@@ -153,6 +153,12 @@ label#id-4 span {
     transition: 0.3s;
 }
 
+.list-no-show {
+    background-color: #92505e !important;
+    transition: 0.3s;
+}
+
+
 .list-item:hover .list-Pending.session-listitem, .list-item.hover .list-Pending.session-listitem {
     background: #91b98c !important;
 }

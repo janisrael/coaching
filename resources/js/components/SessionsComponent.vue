@@ -16,7 +16,7 @@
               <span v-if="filter.tag === 'Pending'"><i class="far fa-clock"></i>  MENTOR AVAILABLE</span>
               <span v-if="filter.tag === 'Booked'"><i class="fa fa-calendar-check" aria-hidden="true"></i>  BOOKED SESSIONS</span>
               <span v-if="filter.tag === 'Attended'"><i class="el-icon-circle-check"></i>  ATTENDED SESSIONS</span>
-              <span v-if="filter.tag === 'Cancelled'"><i class="fa fa-ban" aria-hidden="true"></i>  NO SHOW SESSIONS</span>
+              <span v-if="filter.tag === 'No Show'"><i class="fa fa-ban" aria-hidden="true"></i>  NO SHOW SESSIONS</span>
             </el-checkbox>
           </div>
           <div class="mobile-session-filter">
@@ -24,7 +24,7 @@
               <span v-if="filter.tag === 'Pending'"><i class="far fa-clock"></i></span>
               <span v-if="filter.tag === 'Booked'"><i class="fa fa-calendar-check" aria-hidden="true"></i></span>
               <span v-if="filter.tag === 'Attended'"><i class="el-icon-circle-check"></i></span>
-              <span v-if="filter.tag === 'Cancelled'"> <i class="fa fa-ban" aria-hidden="true"></i></span>
+              <span v-if="filter.tag === 'No Show'"> <i class="fa fa-ban" aria-hidden="true"></i></span>
             </el-checkbox>
           </div>
         </div>
@@ -154,8 +154,8 @@
                 <span>VIEW</span>
               </el-col>
             </div>
-            <div v-if="position.status === 'No-show'" class="list-item" @click="dialogMentor(position)">
-              <el-col :xs="18" :sm="19" :md="20" :lg="22" :xl="22" :class="['list-' + position.status, 'session-listitem']">
+            <div v-if="position.status === 'No show'" class="list-item" @click="dialogMentor(position)">
+              <el-col :xs="18" :sm="19" :md="20" :lg="22" :xl="22" :class="['list-no-show', 'session-listitem']">
                 <span style="width: 15px; display: inline-block"><i class="fa fa-ban" aria-hidden="true"></i></span>
                 <el-avatar :size="60" :src="position.coach_image" class="session-list-avatar">
                   <img :src="position.coach_image"/>
@@ -333,13 +333,13 @@ export default {
         },
         {
           name: 'NO SHOW SESSIONS',
-          tag: 'Cancelled',
+          tag: 'No Show',
           id: 4
         }
       ],
       range_sep: "",
       // checkedFilters: ['Pending', 'Booked','Attended','Cancelled'],
-      checkedFilters: ['Pending', 'Booked'],
+      checkedFilters: ['Pending'],
       datefilter: [],
       currentDate: '',
       profileTitle: '',
@@ -595,7 +595,7 @@ export default {
         this.profileTitle = 'Your Attended Session'
         this.session_type = position.status
       }
-      if(position.status === 'Cancelled') {
+      if(position.status === 'No Show') {
         this.profileTitle = 'Your no show Session'
         this.session_type = position.status
       }
