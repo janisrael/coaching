@@ -333,7 +333,7 @@ export default {
         },
         {
           name: 'NO SHOW SESSIONS',
-          tag: 'Cancelled',
+          tag: 'No Show',
           id: 4
         }
       ],
