@@ -416,6 +416,7 @@ export default {
 
         if(this.booked_data.length === 0) {
           console.log('1')
+          this.loading = true
           axios.get(sched_api,
             { params: { status: filter_status } }
             ).then(response => {
@@ -424,7 +425,7 @@ export default {
               this.booked_data.forEach((value, index) => {
                 this.session_collection.push(value)
               })
-
+              this.loading = false
                 console.log(this.session_collection,'new collection tt')
               // }
           })
@@ -438,6 +439,7 @@ export default {
 
       if(this.checkedFilters.includes('Attended')) {
         filter_status = 'attended'
+        this.loading = true
         if(this.attended_data.length === 0) {
           axios.get(sched_api,
             { params: { status: filter_status } }
@@ -447,7 +449,7 @@ export default {
             this.attended_data.forEach((value, index) => {
               this.session_collection.push(value)
             })
-
+            this.loading = false
             console.log(this.session_collection,'new collection')
           })
             .catch(error => {
@@ -458,8 +460,9 @@ export default {
         }
       }
 
-      if(this.checkedFilters.includes('noshow')) {
+      if(this.checkedFilters.includes('No Show')) {
         filter_status = 'noshow'
+        this.loading = true
         if(this.noshow_data.length === 0) {
           axios.get(sched_api,
             { params: { status: filter_status } }
@@ -470,7 +473,7 @@ export default {
             this.noshow_data.forEach((value, index) => {
               this.session_collection.push(value)
             })
-
+            this.loading = false
             console.log(this.session_collection,'new collection')
           })
             .catch(error => {
