@@ -12,7 +12,7 @@
       <div style="display: block;">
         <div v-for="(filter, i) in filters" :key="i" style="display: inline-block;">
           <div class="desktop-session-filter">
-            <el-checkbox :id="'id-' + filter.id" :value="filter.tag" v-model="checkedFilters" :class="['obj-' + filter.id]" :label="filter.tag">
+            <el-checkbox :id="'id-' + filter.id" :value="filter.tag" v-model="checkedFilters" :class="['obj-' + filter.id]" :label="filter.tag" @change="getSchedules()">
               <span v-if="filter.tag === 'Pending'"><i class="far fa-clock"></i>  MENTOR AVAILABLE</span>
               <span v-if="filter.tag === 'Booked'"><i class="fa fa-calendar-check" aria-hidden="true"></i>  BOOKED SESSIONS</span>
               <span v-if="filter.tag === 'Attended'"><i class="el-icon-circle-check"></i>  ATTENDED SESSIONS</span>
@@ -339,7 +339,7 @@ export default {
       ],
       range_sep: "",
       // checkedFilters: ['Pending', 'Booked','Attended','Cancelled'],
-      checkedFilters: ['Pending', 'Booked'],
+      checkedFilters: ['Pending'],
       datefilter: [],
       currentDate: '',
       profileTitle: '',
@@ -361,7 +361,9 @@ export default {
       count_loading: false,
       session_collection: this.selected.slice(0, this.count),
       disableClass: 'class-disable',
-      btn_loading: false
+      btn_loading: false,
+      booked_data: [],
+      attended_data: [],
     }
   },
   computed: {
@@ -403,6 +405,59 @@ export default {
       return arr.slice().sort(function(a, b) {
         return a.date - b.date;
       });
+    },
+    getSchedules() {
+      let filter_status = ''
+      let sched_api = '/api/v1/coaches/schedule'
+      if(this.checkedFilters.includes('Booked')) {
+        console.log('asdasd')
+        filter_status = 'booked'
+
+        if(!this.booked_data) {
+          axios.get(sched_api,
+            {
+              status: filter_status
+            }).then(response => {
+              this.booked_data = response.data.data
+              if(response.data.data.status === 'success') {
+                this.this.session_collection.push(this.booked_data)
+                console.log(this.this.session_collection)
+              }
+          })
+            .catch(error => {
+              console.log(error)
+              this.loading = false
+              // this.isLoading = false
+            })
+        }
+      }
+
+      if(this.checkedFilters.includes('Attended')) {
+
+        filter_status = 'attended'
+        if(!this.attended_data) {
+          axios.get(sched_api,
+            {
+              status: filter_status
+            }).then(response => {
+            this.attended = response.data.data
+            if(response.data.data.status === 'success') {
+              this.this.session_collection.push(this.attended)
+              console.log(this.this.session_collection)
+            }
+          })
+            .catch(error => {
+              console.log(error)
+              this.loading = false
+              // this.isLoading = false
+            })
+        }
+      }
+
+      if(this.checkedFilters.includes('No-show')) {
+        console.log('asdasd')
+        filter_status = 'booked'
+      }
     },
     handleDeleteBooking(schedule_details) {
       this.loading = true
