@@ -413,11 +413,10 @@ export default {
         console.log('asdasd')
         filter_status = 'booked'
 
-        if(!this.booked_data) {
+        if(this.booked_data.length === 0) {
           axios.get(sched_api,
-            {
-              status: filter_status
-            }).then(response => {
+            { params: { status: filter_status } }
+            ).then(response => {
               this.booked_data = response.data.data
               if(response.data.data.status === 'success') {
                 this.this.session_collection.push(this.booked_data)
