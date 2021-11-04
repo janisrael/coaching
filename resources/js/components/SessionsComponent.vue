@@ -75,6 +75,7 @@
           </el-popover>
         </div>
       </div>
+<!--      {{ filteredPositions }}-->
       <el-col v-loading="loading" element-loading-text="Loading Schedules..." element-loading-spinner="el-icon-loading" element-loading-background="rgba(0, 0, 0, 0.5)":span="24" class="session-items-container">
         <div v-for="(position, index) in even(filteredPositions)" :key="index"  :class="['sessions-item-' + index]">
           <transition name="el-fade-in-linear" mode="out-in">
@@ -161,20 +162,20 @@
                   <img :src="position.coach_image"/>
                 </el-avatar>
                 <span class="session-list-time">
-               {{ position.start_time }}  {{ $moment(position.date).format('dddd') }}  {{ $moment(position.date).format('MM/DD')}}
-            </span>
+                  {{ position.start_time }}  {{ $moment(position.date).format('dddd') }}  {{ $moment(position.date).format('MM/DD')}}
+                </span>
                 <span v-if="position.availability_type.includes('Can do either')">
-                <span><i class="fas fa-headset" style="font-size: 14px"></i></span>
-                <span><i class="fa fa-user" style="font-size: 14px"></i></span>
-                <span><i class="fa fa-users" style="font-size: 14px"></i></span>
-              </span>
+                  <span><i class="fas fa-headset" style="font-size: 14px"></i></span>
+                  <span><i class="fa fa-user" style="font-size: 14px"></i></span>
+                  <span><i class="fa fa-users" style="font-size: 14px"></i></span>
+                </span>
                 <span v-else>
                 <span v-if="position.availability_type.includes('Remote only')"><i class="fas fa-headset" style="font-size: 14px"></i></span>
                 <span v-if="position.availability_type.includes('In-house only')"><i class="fa fa-user" style="font-size: 14px"></i></span>
                 <span v-if="position.availability_type.includes('Group')"><i class="fa fa-users" style="font-size: 14px"></i></span>
               </span>
               </el-col>
-              <el-col :xs="6" :sm="5" :md="4" :lg="2" :xl="2" v-if="position.status === 'Attended'" :class="['list-' + position.status, 'list-item-btn']">
+              <el-col :xs="6" :sm="5" :md="4" :lg="2" :xl="2" v-if="position.status === 'No Show'" :class="['list-no-show', 'list-item-btn']">
                 <span>VIEW</span>
               </el-col>
             </div>
@@ -338,8 +339,8 @@ export default {
         }
       ],
       range_sep: "",
-      // checkedFilters: ['Pending', 'Booked','Attended','Cancelled'],
       checkedFilters: ['Pending', 'Booked'],
+      // checkedFilters: ['Pending'],
       datefilter: [],
       currentDate: '',
       profileTitle: '',
@@ -357,7 +358,7 @@ export default {
       coaches: {},
       country_to_show: '',
       max_count: this.selected.length,
-      count: 16,
+      count: 100,
       count_loading: false,
       session_collection: this.selected.slice(0, this.count),
       disableClass: 'class-disable',
@@ -366,13 +367,21 @@ export default {
   },
   computed: {
     filteredPositions () {
+      console.log('change')
       if(this.datefilter === '' || this.datefilter === null) {
+        console.log(this.session_collection, 'null')
         return this.session_collection.filter(position => this.checkedFilters.includes(position.status));
       } else {
-        if(this.datefilter.length > 1) {
-          var data = this.session_collection.filter(position => this.checkedFilters.includes(position.status));
-          return data.filter(position => (this.date_collections[0] <= position.date) && (this.date_collections[1] >= position.date))
-        }
+        console.log(this.session_collection, 'nullx')
+        // if(this.datefilter.length > 1) {
+        //   console.log('null')
+        //   var data = this.session_collection.filter(position => this.checkedFilters.includes(position.status));
+        //   return data.filter(position => (this.date_collections[0] <= position.date) && (this.date_collections[1] >= position.date))
+        // } else {
+        //   var data = this.session_collection.filter(position => this.checkedFilters.includes(position.status));
+        //   return data.filter(position => (this.date_collections[0] <= position.date) && (this.date_collections[1] >= position.date))
+        // }
+        console.log(this.checkedFilters,'this.checkedFilters')
         return this.session_collection.filter(position => this.checkedFilters.includes(position.status));
       }
     },
@@ -394,9 +403,11 @@ export default {
     }
   },
   created: function() {
+
     this.loading = true
     this.session_data = this.selected.coaches
     this.getDate()
+    console.log(this.session_collection,'session collection')
   },
   methods: {
     even: function(arr) {
@@ -595,7 +606,7 @@ export default {
         this.profileTitle = 'Your Attended Session'
         this.session_type = position.status
       }
-      if(position.status === 'Cancelled') {
+      if(position.status === 'No Show') {
         this.profileTitle = 'Your no show Session'
         this.session_type = position.status
       }
