@@ -406,7 +406,6 @@ export default {
     },
     handleDeleteBooking(schedule_details) {
       this.loading = true
-      console.log(schedule_details,'schedule_details')
       let url = "/api/v1/coaching-session/cancel";
       axios.post(url,
         {
