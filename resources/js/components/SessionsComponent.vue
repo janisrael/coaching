@@ -155,7 +155,7 @@
               </el-col>
             </div>
             <div v-if="position.status === 'No Show'" class="list-item" @click="dialogMentor(position)">
-              <el-col :xs="18" :sm="19" :md="20" :lg="22" :xl="22" :class="['list-' + position.status, 'session-listitem']">
+              <el-col :xs="18" :sm="19" :md="20" :lg="22" :xl="22" :class="['list-no-show', 'session-listitem']">
                 <span style="width: 15px; display: inline-block"><i class="fa fa-ban" aria-hidden="true"></i></span>
                 <el-avatar :size="60" :src="position.coach_image" class="session-list-avatar">
                   <img :src="position.coach_image"/>
@@ -306,6 +306,10 @@ export default {
     can_book: {
       required: true,
       type: Boolean
+    },
+    selected_row: {
+      required: true,
+      type: Object
     }
   },
   data() {
@@ -408,6 +412,8 @@ export default {
       });
     },
     getSchedules() {
+      console.log(this.selected ,'selected')
+      console.log(this.selected_row, 'selected_row')
       let filter_status = ''
       let sched_api = '/api/v1/coaches/schedule'
       if(this.checkedFilters.includes('Booked')) {
@@ -423,9 +429,30 @@ export default {
               this.booked_data = response.data.data.schedules
               // if(response.data.data.status === 'success') {
               this.booked_data.forEach((value, index) => {
+                value['access_group'] = this.selected.access_group
+                value['back_end'] = this.selected.back_end
+                value['front_end'] = this.selected.front_end
+                value['bio'] = this.selected.bio
+                value['coach_image'] = this.selected.coach_image
+                value['country'] = this.selected.country
+                value['country_code'] = this.selected.country_code
+                value['email'] = this.selected.email
+                value['experience'] = this.selected.experience
+                value['experience_summary'] = this.selected.experience_summary
+                value['first_name'] = this.selected.first_name
+                value['languages'] = this.selected.languages
+                value['last_name'] = this.selected.last_name
+                value['market_traded'] = this.selected.market_traded
+                value['market_traded_summary'] = this.selected.market_traded_summary
+                value['my_mentor'] = this.selected.my_mentor
+                value['region'] = this.selected.region
+                value['style'] = this.selected.style
+                value['style_summary'] = this.selected.style_summary
+
                 this.session_collection.push(value)
               })
               this.loading = false
+              this.$emit('mergedata', this.booked_data)
                 console.log(this.session_collection,'new collection tt')
               // }
           })
@@ -447,9 +474,29 @@ export default {
             this.attended_data = response.data.data.schedules
 
             this.attended_data.forEach((value, index) => {
+              value['access_group'] = this.selected.access_group
+              value['back_end'] = this.selected.back_end
+              value['front_end'] = this.selected.front_end
+              value['bio'] = this.selected.bio
+              value['coach_image'] = this.selected.coach_image
+              value['country'] = this.selected.country
+              value['country_code'] = this.selected.country_code
+              value['email'] = this.selected.email
+              value['experience'] = this.selected.experience
+              value['experience_summary'] = this.selected.experience_summary
+              value['first_name'] = this.selected.first_name
+              value['languages'] = this.selected.languages
+              value['last_name'] = this.selected.last_name
+              value['market_traded'] = this.selected.market_traded
+              value['market_traded_summary'] = this.selected.market_traded_summary
+              value['my_mentor'] = this.selected.my_mentor
+              value['region'] = this.selected.region
+              value['style'] = this.selected.style
+              value['style_summary'] = this.selected.style_summary
               this.session_collection.push(value)
             })
             this.loading = false
+            this.$emit('mergedata', this.attended_data)
             console.log(this.session_collection,'new collection')
           })
             .catch(error => {
@@ -471,9 +518,29 @@ export default {
             // this.session_collection.push(this.noshow_data)
 
             this.noshow_data.forEach((value, index) => {
+              value['access_group'] = this.selected.access_group
+              value['back_end'] = this.selected.back_end
+              value['front_end'] = this.selected.front_end
+              value['bio'] = this.selected.bio
+              value['coach_image'] = this.selected.coach_image
+              value['country'] = this.selected.country
+              value['country_code'] = this.selected.country_code
+              value['email'] = this.selected.email
+              value['experience'] = this.selected.experience
+              value['experience_summary'] = this.selected.experience_summary
+              value['first_name'] = this.selected.first_name
+              value['languages'] = this.selected.languages
+              value['last_name'] = this.selected.last_name
+              value['market_traded'] = this.selected.market_traded
+              value['market_traded_summary'] = this.selected.market_traded_summary
+              value['my_mentor'] = this.selected.my_mentor
+              value['region'] = this.selected.region
+              value['style'] = this.selected.style
+              value['style_summary'] = this.selected.style_summary
               this.session_collection.push(value)
             })
             this.loading = false
+            this.$emit('mergedata', this.noshow_data)
             console.log(this.session_collection,'new collection')
           })
             .catch(error => {

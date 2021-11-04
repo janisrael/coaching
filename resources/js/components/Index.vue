@@ -222,7 +222,7 @@
         </el-col>
         <el-col :xs="12" :sm="17" :md="16" :lg="18" :xl="18" class="full-height index-col-right" style="background-image: url('../../images/background.jpg'); background-size: cover;">
           <content-component v-if="loading === false" :selected="passData" :ifshare="ifShare" :canbook="canbook" @showModal="showShareModal" ></content-component>
-          <session-component v-if="loading === false" ref="sessionComponent" :selected="for_sessiondata" :canbook="canbook" :user_id="coach_id" :sales="datasales" :ifshare="ifShare" :can_book="can_book" @change="backData($event)" @reload="reloadData" @showModal="showShareModal" @filterData="filterData"></session-component>
+          <session-component v-if="loading === false" ref="sessionComponent" :selected="for_sessiondata" :canbook="canbook" :user_id="coach_id" :sales="datasales" :ifshare="ifShare" :can_book="can_book" :selected_row="selected_row" @change="backData($event)" @reload="reloadData" @mergedata="mergeData" @showModal="showShareModal" @filterData="filterData"></session-component>
         </el-col>
       </el-col>
 
@@ -593,6 +593,22 @@ export default {
           sched.id = value.coaching_session_id
         }
       })
+      // this.new_collections.forEach((item, index) => {
+      //   if(item.id === value.id) {
+      //     item['status'] = 'Booked'
+      //   }
+      // })
+    },
+    mergeData(value) {
+      let for_session = this.for_sessiondata
+      let new_collection = for_session.concat(value);
+      this.for_sessiondata = new_collection
+      // this.schedules.forEach((sched, i) => {
+      //   if(sched.id === value.id) {
+      //     sched['status'] = 'Pending'
+      //     sched.id = value.coaching_session_id
+      //   }
+      // })
       // this.new_collections.forEach((item, index) => {
       //   if(item.id === value.id) {
       //     item['status'] = 'Booked'
