@@ -421,8 +421,8 @@ export default {
             ).then(response => {
               this.booked_data = response.data.data.schedules
               // if(response.data.data.status === 'success') {
-                this.this.session_collection.push(this.booked_data)
-                console.log(this.this.session_collection,'new collection')
+                this.session_collection.push(this.booked_data)
+                console.log(this.session_collection,'new collection')
               // }
           })
             .catch(error => {
@@ -440,8 +440,8 @@ export default {
             { params: { status: filter_status } }
             ).then(response => {
             this.attended_data = response.data.data.schedules
-            this.this.session_collection.push(this.attended_data)
-            console.log(this.this.session_collection,'new collection')
+            this.session_collection.push(this.attended_data)
+            console.log(this.session_collection,'new collection')
           })
             .catch(error => {
               console.log(error)
@@ -458,8 +458,8 @@ export default {
             { params: { status: filter_status } }
           ).then(response => {
             this.noshow_data = response.data.data.schedules
-            this.this.session_collection.push(this.noshow_data)
-            console.log(this.this.session_collection,'new collection')
+            this.session_collection.push(this.noshow_data)
+            console.log(this.session_collection,'new collection')
           })
             .catch(error => {
               console.log(error)
