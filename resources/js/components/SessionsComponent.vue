@@ -742,7 +742,7 @@ export default {
         this.profileTitle = 'Your Attended Session'
         this.session_type = position.status
       }
-      if(position.status === 'Cancelled') {
+      if(position.status === 'No Show') {
         this.profileTitle = 'Your no show Session'
         this.session_type = position.status
       }
