@@ -425,7 +425,7 @@ export default {
                 this.session_collection.push(value)
               })
 
-                console.log(this.session_collection,'new collection')
+                console.log(this.session_collection,'new collection tt')
               // }
           })
             .catch(error => {
