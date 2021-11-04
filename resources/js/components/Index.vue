@@ -528,7 +528,7 @@ export default {
       axios.get(url,
         {
           params: {
-            'id': user_id
+            'id': 90
           }
         }
       ).then(response => {
@@ -754,7 +754,6 @@ export default {
         } else {
           this.customer_type = 'front end'
         }
-
 
         //** Check and assign access to the user **//
         if(this.mentor_id !== 0 || this.mentor_id !== '' || this.mentor_id !== undefined) {
