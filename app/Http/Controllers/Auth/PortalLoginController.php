@@ -74,8 +74,10 @@ class PortalLoginController extends Controller
             !empty($clientResponse->user->instance) and 
             in_array($clientResponse->user->instance, config('app.portal_instance_block'))
         ) {
-            if ($clientResponse->user->accessControlList->coaching === false or 
-                $clientResponse->user->accessControlList->coaching_in_demo === true
+            if (
+                isset($clientResponse->user->accessControlList) and
+                ($clientResponse->user->accessControlList->coaching === false or 
+                $clientResponse->user->accessControlList->coaching_in_demo === true)
             ) {
                 $request->session()->put('portal_instance', $clientResponse->user->instance);
             }
