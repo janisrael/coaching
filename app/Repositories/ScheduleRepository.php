@@ -22,7 +22,6 @@ class ScheduleRepository implements ScheduleRepositoryInterface
 
     private $statuses = [
         'booked' => 'Booked',
-        'cancelled' => 'Cancelled',
         'noshow' => 'No Show',
         'attended' => 'Attended',
     ];
@@ -55,24 +54,45 @@ class ScheduleRepository implements ScheduleRepositoryInterface
             $sale = resolve(SaleRepositoryInterface::class)->all();
             $saleId = Arr::pluck($sale['sales'], 'id');
             $where = [CoachingSessionFields::STATUS . ' = \'Pending\''];
-            
-            if (! is_null($this->coachingSessionStatus) and in_array($this->coachingSessionStatus, array_keys($this->statuses))) {
-                $where = ['(' . CoachingSessionFields::SALE . ' IN (\'' . implode('\',\'', $saleId) . '\') and ' . 
-                                CoachingSessionFields::STATUS . ' = \''.$this->statuses[$this->coachingSessionStatus].'\')'];
-            }
 
-            if (! empty($this->scheduleDate)) {
-                $where[] = CoachingSessionFields::DATE . ' >= '.$this->scheduleDate['from'] .' and ' .
-                            CoachingSessionFields::DATE . ' <= '.$this->scheduleDate['to'];
+            if ($this->coachingSessionStatus == "all") {
+                $whereAvailable = [CoachingSessionFields::STATUS . ' = \'Pending\''];
+                if (! empty($this->scheduleDate)) {
+                    $whereAvailable[] = CoachingSessionFields::DATE . ' >= '.$this->scheduleDate['from'] .' and ' .
+                                        CoachingSessionFields::DATE . ' <= '.$this->scheduleDate['to'];
+                } 
+                $available = resolve(CoachingSession::class)->query(
+                    array_values(config('api.sf_schedule')),
+                    $whereAvailable
+                )['records'] ?? [];
+
+                $otherStatuses = resolve(CoachingSession::class)->query(
+                    array_values(config('api.sf_schedule')),
+                    [
+                        CoachingSessionFields::SALE . ' IN (\'' . implode('\',\'', $saleId) . '\') and ' .
+                        CoachingSessionFields::STATUS . ' IN (\'' . implode('\',\'', $this->statuses) . '\') ', 
+                    ]
+                )['records'] ?? [];
+
+                $sf['records'] = array_merge($available, $otherStatuses);
+
             } else {
-                /* $where[] = CoachingSessionFields::DATE . ' >= ' . date('Y-m-d') . ' and ' .
-                            CoachingSessionFields::START_TIME . ' > \'' . date('H:i') . "'"; */
-            }
+            
+                if (! is_null($this->coachingSessionStatus) and in_array($this->coachingSessionStatus, array_keys($this->statuses))) {
+                    $where = ['(' . CoachingSessionFields::SALE . ' IN (\'' . implode('\',\'', $saleId) . '\') and ' . 
+                                    CoachingSessionFields::STATUS . ' = \''.$this->statuses[$this->coachingSessionStatus].'\')'];
+                }
 
-            $sf = resolve(CoachingSession::class)->query(
-                array_values(config('api.sf_schedule')),
-                $where
-            );
+                if (! empty($this->scheduleDate)) {
+                    $where[] = CoachingSessionFields::DATE . ' >= '.$this->scheduleDate['from'] .' and ' .
+                                CoachingSessionFields::DATE . ' <= '.$this->scheduleDate['to'];
+                }
+
+                $sf = resolve(CoachingSession::class)->query(
+                    array_values(config('api.sf_schedule')),
+                    $where
+                );
+            }
         }
 
         if (count($sf) > 0) {
