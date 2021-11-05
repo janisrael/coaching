@@ -404,11 +404,9 @@ export default {
     }
   },
   created: function() {
-
     this.loading = true
     this.session_data = this.selected.coaches
     this.getDate()
-    console.log(this.session_collection,'session collection')
   },
   methods: {
     even: function(arr) {
@@ -419,11 +417,20 @@ export default {
     handleDeleteBooking(schedule_details) {
       this.loading = true
       console.log(schedule_details,'schedule_details')
-      let url = "/api/v1/coaching-session/cancel";
-      axios.post(url,
-        {
-          schedule_id: schedule_details.id
-        }).then(response => {
+      const today = new Date()
+      const tomorrow = new Date(schedule_details.date)
+      tomorrow.setDate(tomorrow.getDate() + 1)
+      let date2 = tomorrow.toJSON().slice(0,10).replace(/-/g,'-');
+      if(today < date2) {
+        Notification.error({
+          title: 'Unable to Cancel',
+          message: 'You can only cancel sessions through SmartCharts more than 24 hours before the start of the booked session. If you need help, please email info@smartchartsfx.com',
+          duration: 4 * 1000
+        })
+        return
+      }
+      let url = "/api/v1/coaching-session/cancel?schedule_id=" + schedule_details.id;
+      axios.post(url).then(response => {
         // console.log(value.id, 'id')
         // console.log(response, 'response')
         if(response.data.data.status === 'success') {
@@ -493,12 +500,8 @@ export default {
       //   return
       // }
 
-      let url = "/api/v1/coaching-session/book";
-      axios.post(url,
-        {
-          schedule_id: value.id
-        })
-        .then(response => {
+      let url = "/api/v1/coaching-session/book?schedule_id=" + value.id;
+      axios.post(url).then(response => {
           if(response.data.data.status === 'success') {
             Notification.success({
               title: 'Success',
@@ -622,7 +625,15 @@ export default {
       this.loading = true
       let data = []
       if(this.datefilter === null) {
-        this.range_sep = ''
+        const today = new Date()
+        const tomorrow = new Date(today)
+        tomorrow.setDate(tomorrow.getDate() + 1)
+        let date2 = tomorrow.toJSON().slice(0,10).replace(/-/g,'-');
+        data.push(this.$moment(today).format('YYYY-MM-DD'))
+        data.push(this.$moment(date2).format('YYYY-MM-DD'))
+        this.$emit('filterData', { value: data })
+        this.date_collections = data
+        this.range_sep = '-'
         this.loading = false
       } else {
         data.push(this.$moment(this.datefilter[0]).format('YYYY-MM-DD'))

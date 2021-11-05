@@ -528,7 +528,7 @@ export default {
       axios.get(url,
         {
           params: {
-            'id': user_id
+            'id': 90
           }
         }
       ).then(response => {
@@ -635,7 +635,7 @@ export default {
       let hasbooked = false
       // let coachesraw = []
       axios
-        .get(sched_api + '/' + date1a + '/' + date2a)
+        .get(sched_api + '/' + date1a + '/' + date2a + '?status=all')
         .then(response => {
           data = response.data.data.schedules
           this.schedules = data
