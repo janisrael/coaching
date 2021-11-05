@@ -32,6 +32,7 @@
           <span class="demonstration">Date</span>
           <el-date-picker
             v-model="datefilter"
+            :picker-options="datePickerOptions"
             type="daterange"
             size="mini"
             :default-value="currentDate"
@@ -362,7 +363,12 @@ export default {
       count_loading: false,
       session_collection: this.selected.slice(0, this.count),
       disableClass: 'class-disable',
-      btn_loading: false
+      btn_loading: false,
+      datePickerOptions: {
+        disabledDate (time) {
+          return time.getTime() < Date.now() - 8.64e7;
+        }
+      }
     }
   },
   computed: {
