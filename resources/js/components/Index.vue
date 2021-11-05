@@ -822,7 +822,6 @@ export default {
 
         //** get default sales index by id, index use to default selected mentor on page load **//
         this.coaches.forEach((value, index) => {
-          console.log(value,'cc')
           if(value.region.toLowerCase() === 'aus') {
             value.region = 'AUS'
           }
@@ -969,11 +968,14 @@ export default {
           countCancelled++;
         }
       })
+
+
+
       this.booked = countBooked
       this.Attended = countAttended
       this.Cancelled = countCancelled
       // this.datamerge = datares
-      this.datamerge = ret_data
+      this.datamerge = datares
       this.for_sessiondata = []
       this.for_sessiondata = this.datamerge
 
