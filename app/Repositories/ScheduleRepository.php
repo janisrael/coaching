@@ -74,7 +74,7 @@ class ScheduleRepository implements ScheduleRepositoryInterface
                     ]
                 )['records'] ?? [];
 
-                $sf['records'] = array_merge($available, $otherStatuses);
+                $sf['records'] = array_merge($otherStatuses, $available);
 
             } else {
             
