@@ -528,7 +528,7 @@ export default {
       axios.get(url,
         {
           params: {
-            'id': 90
+            'id': user_id
           }
         }
       ).then(response => {
