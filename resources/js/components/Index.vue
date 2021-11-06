@@ -370,7 +370,7 @@ import ContentComponent from './ContentComponent.vue'
 import Loading from "vue-loading-overlay";
 import SessionComponent from './SessionsComponent.vue'
 import ShareModalComponent from './ShareModalComponent.vue'
-
+import Region from './region.json'
 // dummy data
 
 // import json_sales from './dummy_sales.json'
@@ -455,11 +455,10 @@ export default {
       display_message: false,
       creditModal: false,
       selected_row: {},
+      region: Region,
 // dummy
 //       dummy_sales: json_sales,
-//
 //       dummy_schedules: json_schedules,
-//
 //       dummy_coaches: json_coaches
     }
   },
@@ -528,7 +527,7 @@ export default {
       axios.get(url,
         {
           params: {
-            'id': 90
+            'id': user_id
           }
         }
       ).then(response => {
@@ -821,45 +820,15 @@ export default {
         let m_index = 0
 
         //** get default sales index by id, index use to default selected mentor on page load **//
+
+        let arrs = Region.data.region
         this.coaches.forEach((value, index) => {
-          if(value.region.toLowerCase() === 'aus') {
-            value.region = 'AUS'
-          }
-          if(value.region.toLowerCase() === 'es') {
-            value.region = 'ES'
-          }
-          if(value.region.toLowerCase() === 'id') {
-            value.region = 'ID'
-          }
-          if(value.region.toLowerCase() === 'ind') {
-            value.region = 'IND'
-          }
-          if(value.region.toLowerCase() === 'mx') {
-            value.region = 'MX'
-          }
-          if(value.region.toLowerCase() === 'ng') {
-            value.region = 'NG'
-          }
-          if(value.region.toLowerCase() === 'nor') {
-            value.region = 'NOR'
-          }
-          if(value.region.toLowerCase() === 'phl') {
-            value.region = 'PHL'
-          }
-          if(value.region.toLowerCase() === 'pl') {
-            value.region = 'PL'
-          }
-          if(value.region.toLowerCase() === 'sg') {
-            value.region = 'SG'
-          }
-          if(value.region.toLowerCase() === 'uk') {
+          let obj = arrs.find(o => o.code.toLowerCase() === value.region.toLowerCase());
+          console.log(obj.region, 'obj')
+          if(obj.region) {
+            value.region = obj.region
+          } else {
             value.region = 'GB'
-          }
-          if(value.region.toLowerCase() === 'us') {
-            value.region = 'US'
-          }
-          if(value.region.toLowerCase() === 'za') {
-            value.region = 'ZA'
           }
 
           if(value.id === mentor_id) {
