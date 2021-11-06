@@ -373,22 +373,17 @@ export default {
   },
   computed: {
     filteredPositions () {
-      console.log('change')
       if(this.datefilter === '' || this.datefilter === null) {
-        console.log(this.session_collection, 'null')
-        return this.session_collection.filter(position => this.checkedFilters.includes(position.status));
+        let ret = this.session_collection.filter(position => this.checkedFilters.includes(position.status));
+        return ret.sort((a, b) => (a.status > b.status) ? 1 : (a.status === b.status) ? ((a.date > b.date) ? 1 : -1) : -1 ) // sort data pending as end
       } else {
-        console.log(this.session_collection, 'nullx')
-        // if(this.datefilter.length > 1) {
-        //   console.log('null')
-        //   var data = this.session_collection.filter(position => this.checkedFilters.includes(position.status));
-        //   return data.filter(position => (this.date_collections[0] <= position.date) && (this.date_collections[1] >= position.date))
-        // } else {
-        //   var data = this.session_collection.filter(position => this.checkedFilters.includes(position.status));
-        //   return data.filter(position => (this.date_collections[0] <= position.date) && (this.date_collections[1] >= position.date))
-        // }
-        console.log(this.checkedFilters,'this.checkedFilters')
-        return this.session_collection.filter(position => this.checkedFilters.includes(position.status));
+        if(this.datefilter.length > 1) {
+          var data = this.session_collection.filter(position => this.checkedFilters.includes(position.status));
+          let ret = data.filter(position => (this.date_collections[0] <= position.date) && (this.date_collections[1] >= position.date))
+          return ret.sort((a, b) => (a.status > b.status) ? 1 : (a.status === b.status) ? ((a.date > b.date) ? 1 : -1) : -1 ) // sort data pending as end
+        }
+        let ret = this.session_collection.filter(position => this.checkedFilters.includes(position.status));
+        return ret.sort((a, b) => (a.status > b.status) ? 1 : (a.status === b.status) ? ((a.date > b.date) ? 1 : -1) : -1 ) // sort data pending as end
       }
     },
     noMore () {
@@ -409,11 +404,9 @@ export default {
     }
   },
   created: function() {
-
     this.loading = true
     this.session_data = this.selected.coaches
     this.getDate()
-    console.log(this.session_collection,'session collection')
   },
   methods: {
     even: function(arr) {
@@ -424,11 +417,20 @@ export default {
     handleDeleteBooking(schedule_details) {
       this.loading = true
       console.log(schedule_details,'schedule_details')
-      let url = "/api/v1/coaching-session/cancel";
-      axios.post(url,
-        {
-          schedule_id: schedule_details.id
-        }).then(response => {
+      const today = new Date()
+      const tomorrow = new Date(schedule_details.date)
+      tomorrow.setDate(tomorrow.getDate() + 1)
+      let date2 = tomorrow.toJSON().slice(0,10).replace(/-/g,'-');
+      if(today < date2) {
+        Notification.error({
+          title: 'Unable to Cancel',
+          message: 'You can only cancel sessions through SmartCharts more than 24 hours before the start of the booked session. If you need help, please email info@smartchartsfx.com',
+          duration: 4 * 1000
+        })
+        return
+      }
+      let url = "/api/v1/coaching-session/cancel?schedule_id=" + schedule_details.id;
+      axios.post(url).then(response => {
         // console.log(value.id, 'id')
         // console.log(response, 'response')
         if(response.data.data.status === 'success') {
@@ -498,12 +500,8 @@ export default {
       //   return
       // }
 
-      let url = "/api/v1/coaching-session/book";
-      axios.post(url,
-        {
-          schedule_id: value.id
-        })
-        .then(response => {
+      let url = "/api/v1/coaching-session/book?schedule_id=" + value.id;
+      axios.post(url).then(response => {
           if(response.data.data.status === 'success') {
             Notification.success({
               title: 'Success',
@@ -627,7 +625,15 @@ export default {
       this.loading = true
       let data = []
       if(this.datefilter === null) {
-        this.range_sep = ''
+        const today = new Date()
+        const tomorrow = new Date(today)
+        tomorrow.setDate(tomorrow.getDate() + 1)
+        let date2 = tomorrow.toJSON().slice(0,10).replace(/-/g,'-');
+        data.push(this.$moment(today).format('YYYY-MM-DD'))
+        data.push(this.$moment(date2).format('YYYY-MM-DD'))
+        this.$emit('filterData', { value: data })
+        this.date_collections = data
+        this.range_sep = '-'
         this.loading = false
       } else {
         data.push(this.$moment(this.datefilter[0]).format('YYYY-MM-DD'))

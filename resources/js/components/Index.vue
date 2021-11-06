@@ -528,7 +528,7 @@ export default {
       axios.get(url,
         {
           params: {
-            'id': user_id
+            'id': 90
           }
         }
       ).then(response => {
@@ -635,7 +635,7 @@ export default {
       let hasbooked = false
       // let coachesraw = []
       axios
-        .get(sched_api + '/' + date1a + '/' + date2a)
+        .get(sched_api + '/' + date1a + '/' + date2a + '?status=all')
         .then(response => {
           data = response.data.data.schedules
           this.schedules = data
@@ -822,7 +822,6 @@ export default {
 
         //** get default sales index by id, index use to default selected mentor on page load **//
         this.coaches.forEach((value, index) => {
-          console.log(value,'cc')
           if(value.region.toLowerCase() === 'aus') {
             value.region = 'AUS'
           }
@@ -969,11 +968,14 @@ export default {
           countCancelled++;
         }
       })
+
+
+
       this.booked = countBooked
       this.Attended = countAttended
       this.Cancelled = countCancelled
       // this.datamerge = datares
-      this.datamerge = ret_data
+      this.datamerge = datares
       this.for_sessiondata = []
       this.for_sessiondata = this.datamerge
 
