@@ -298,13 +298,13 @@
               <i class="el-icon-warning-outline dialog-warning-exclamation">
               </i>
             </div>
-            <!--            <div style="text-align:center;"><i class="fas fa-info" style="padding: 10px 17px;border: 2px solid #67C23A;border-radius: 50%;font-size: 20px;text-align: center;color: #67C23A;"></i></div>-->
             <p style="text-align: center; word-break: break-word">
               Mentoring is one of the most important ways to develop your skillset as a trader. Our mentoring sessions are designed purely to review your live trading.
               to find out more <a href="https://mentors.smartchartsfx.com/" target="_blank" style="color: #9dafff;">Watch this video</a>.
               <br>
               <br>
-              <span>To book mentoring sessions, you must be using your live account. Go To Your Account</span></p>
+              <span>To book mentoring sessions, you must be using your live account. Go To Your Account</span>
+            </p>
           </el-col>
 
         </el-row>
@@ -664,6 +664,11 @@ export default {
         this.datasched = data[1].data // schedules
         this.datasales = data[2].data // sales
 
+        if(this.datacoach.coaches.length === 0) {
+          this.display_message = true
+          this.loading = false
+          return
+        }
         //** Check available credits **//
         if(this.datasales.computed_credits.total_available === 0) {
           this.creditModal = true
@@ -748,6 +753,13 @@ export default {
 
         this.schedules = this.datasched.schedules // assign schedules to global variables
         var schedraw = this.schedules
+
+        //** check availability_type if null set default value as Remote Only **//
+        schedraw.forEach((value, index) => {
+          if(value.availability_type === null || value.availability_type === undefined || value.availability_type === '') {
+            value['availability_type'] = 'Remote only'
+          }
+        })
         var hasbooked = true
 
         this.coaches = coachesraw  // assign mentors to global variables
