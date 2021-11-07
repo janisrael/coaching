@@ -316,6 +316,10 @@ export default {
     can_book: {
       required: true,
       type: Boolean
+    },
+    date_filter: {
+      required: false,
+      type: Array
     }
   },
   data() {
@@ -414,6 +418,7 @@ export default {
   created: function() {
     this.loading = true
     this.session_data = this.selected.coaches
+    this.datefilter = this.date_filter
     this.getDate()
   },
   methods: {
