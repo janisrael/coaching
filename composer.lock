@@ -2232,7 +2232,7 @@
             "version": "dev-master",
             "source": {
                 "type": "git",
-                "url": "https://git.evoluted.net/learn-to-trade/salesforce-api.git",
+                "url": "git@git.evoluted.net:learn-to-trade/salesforce-api.git",
                 "reference": "38212da2268d8ecf3ac143e9e9d3e8b0eb468467"
             },
             "require": {
