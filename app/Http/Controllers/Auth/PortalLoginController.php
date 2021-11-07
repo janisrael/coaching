@@ -69,10 +69,7 @@ class PortalLoginController extends Controller
     {
         $clientResponse = json_decode($clientRequest->getBody()->getContents());
         $request->session()->forget('portal_instance');
-        if (
-            !empty($clientResponse->user->instance) and 
-            in_array($clientResponse->user->instance, config('app.portal_instance_block'))
-        ) {
+        if ($clientResponse->user->accessControlList->coaching === false) {
             $request->session()->put('portal_instance', $clientResponse->user->instance);
         }
 
