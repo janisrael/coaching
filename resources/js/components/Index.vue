@@ -213,7 +213,7 @@
         </el-col>
         <el-col :xs="12" :sm="17" :md="16" :lg="18" :xl="18" class="full-height index-col-right" style="background-image: url('../../images/background.jpg'); background-size: cover;">
           <content-component v-if="loading === false" :selected="passData" :ifshare="ifShare" :canbook="canbook" @showModal="showShareModal" ></content-component>
-          <session-component v-if="loading === false" ref="sessionComponent" :selected="for_sessiondata" :canbook="canbook" :user_id="coach_id" :sales="datasales" :ifshare="ifShare" :can_book="can_book" @reload="reloadData" @showModal="showShareModal" @filterData="filterData"></session-component>
+          <session-component v-if="loading === false" ref="sessionComponent" :date_filter="datefilter" :selected="for_sessiondata" :canbook="canbook" :user_id="coach_id" :sales="datasales" :ifshare="ifShare" :can_book="can_book" @reload="reloadData" @showModal="showShareModal" @filterData="filterData"></session-component>
         </el-col>
       </el-col>
 
@@ -439,6 +439,7 @@ export default {
       selected_row: {},
       region: Region,
       base_url: window.location.origin + '#funds',
+      datefilter: [],
 // dummy
 //       dummy_sales: json_sales,
 //       dummy_schedules: json_schedules,
@@ -630,12 +631,15 @@ export default {
       //** assigning default schedule filter **//
       const today = new Date()
       const tomorrow = new Date(today)
-      tomorrow.setDate(tomorrow.getDate() + 1)
+      tomorrow.setDate(tomorrow.getDate() + 7)
+
 
       let date1 = currentDate
       let date2 = tomorrow.toJSON().slice(0,10).replace(/-/g,'-');
+      this.datefilter[0] = date1
+      this.datefilter[1] = date2
 
-      // fetching data in all promise
+        // fetching data in all promise
       Promise.all([
         await fetch('/api/v1/coaches').then(res => res.ok && res.json() || Promise.reject(res)),
         await fetch(sched_api + '/' + date1 + '/' + date2 + '?status=all').then(res => res.ok && res.json() || Promise.reject(res)),
@@ -665,6 +669,7 @@ export default {
         this.datasales = data[2].data // sales
 
         if(this.datacoach.coaches.length === 0) {
+          console.log('asdasd')
           this.display_message = true
           this.loading = false
           return
