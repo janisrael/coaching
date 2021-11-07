@@ -604,6 +604,12 @@ export default {
           // })
 
           var schedraw = this.schedules
+          //** check availability_type if null set default value as Remote Only **//
+          schedraw.forEach((value, index) => {
+            if(value.availability_type === null || value.availability_type === undefined || value.availability_type === '') {
+              value['availability_type'] = 'Remote only'
+            }
+          })
           var coach = coachesraw
 
           let arr1 = schedraw.filter(function (sched) {
