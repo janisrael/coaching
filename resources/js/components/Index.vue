@@ -2,13 +2,6 @@
   <div class="row full-height">
     <el-row class="">
       <el-col :span="24" >
-        <!--        <loading-->
-        <!--          :active.sync="loading"-->
-        <!--          :can-cancel="false"-->
-        <!--          :is-full-page="fullPage"-->
-        <!--          :background-color="bg_color"-->
-        <!--          :color="icon_color"-->
-        <!--        ></loading>-->
         <transition name="el-fade-in">
           <div v-if="loading" class="loader-container">
             <div class="main-loader">
@@ -34,13 +27,12 @@
             <el-col v-if="display_message" :span="24" style="padding: 10px;">
               <span class="no-available-coach">
                 You don’t currently have a coach allocated you. <br> To request that a coach is allocated to your account, <br>
-                please email <a href="mailto:info@smartchartsfx.com" style="color: #9ecaff;">info@smartchartsfx.com.</a>
+                please email <a href="mailto:info@smartchartsfx.com" class="text-link">info@smartchartsfx.com.</a>
               </span>
             </el-col>
             <!--            <div style="width: 10%; display: inline-block;">-->
             <!--              <el-button type="primary" class="plain" plain size="small" @click="callFilter()"><i class="fas fa-sliders-h" aria-hidden="true" style="color: rgba(255, 255, 255, 0.68);"></i></el-button>-->
             <!--            </div>-->
-
           </el-col>
           <el-col :span="24" class="coaches-search-mobile" style="padding: 10px;">
             <el-button type="primary" class="plain" plain size="small" @click="callsearchmodal()"><i class="fa fa-search" aria-hidden="true" style="color: rgba(255, 255, 255, 0.68);"></i></el-button>
@@ -215,14 +207,13 @@
                     </span>
                   </template>
                 </el-table-column>
-
               </el-table>
             </div>
           </div>
         </el-col>
         <el-col :xs="12" :sm="17" :md="16" :lg="18" :xl="18" class="full-height index-col-right" style="background-image: url('../../images/background.jpg'); background-size: cover;">
           <content-component v-if="loading === false" :selected="passData" :ifshare="ifShare" :canbook="canbook" @showModal="showShareModal" ></content-component>
-          <session-component v-if="loading === false" ref="sessionComponent" :selected="for_sessiondata" :canbook="canbook" :user_id="coach_id" :sales="datasales" :ifshare="ifShare" :can_book="can_book" @change="backData($event)" @reload="reloadData" @showModal="showShareModal" @filterData="filterData"></session-component>
+          <session-component v-if="loading === false" ref="sessionComponent" :selected="for_sessiondata" :canbook="canbook" :user_id="coach_id" :sales="datasales" :ifshare="ifShare" :can_book="can_book" @reload="reloadData" @showModal="showShareModal" @filterData="filterData"></session-component>
         </el-col>
       </el-col>
 
@@ -295,8 +286,8 @@
           </el-col>
         </el-row>
         <span slot="footer" class="dialog-footer">
-        <el-button @click="searchCoach()" type="success">OK</el-button>
-      </span>
+          <el-button @click="searchCoach()" type="success">OK</el-button>
+        </span>
       </el-dialog>
 
       <!-- Instance Modal-->
@@ -304,10 +295,7 @@
         <el-row>
           <el-col :span="24" class="filter-blocks">
             <div style="text-align: center;">
-              <i class="el-icon-warning-outline"
-                 style="color: #79bb71;
-                 font-size: 60px;
-                 transform: rotate(180deg);">
+              <i class="el-icon-warning-outline dialog-warning-exclamation">
               </i>
             </div>
             <!--            <div style="text-align:center;"><i class="fas fa-info" style="padding: 10px 17px;border: 2px solid #67C23A;border-radius: 50%;font-size: 20px;text-align: center;color: #67C23A;"></i></div>-->
@@ -332,10 +320,7 @@
         <el-row>
           <el-col :span="24" class="filter-blocks">
             <div style="text-align: center;">
-              <i class="el-icon-warning-outline"
-                 style="color: rgb(110, 142, 106);
-                 font-size: 60px;
-                 transform: rotate(180deg);">
+              <i class="el-icon-warning-outline dialog-warning-exclamation">
               </i>
             </div>
             <!--            <div style="text-align:center;"><i class="fas fa-info" style="padding: 10px 17px;border: 2px solid #67C23A;border-radius: 50%;font-size: 20px;text-align: center;color: #67C23A;"></i></div>-->
@@ -344,9 +329,7 @@
           </el-col>
         </el-row>
         <span slot="footer" class="dialog-footer">
-          <div style="text-align: center; width: 100%; display:inline-block;">
-            <el-button @click="creditModal = false" type="success">CLOSE</el-button>
-          </div>
+          <el-button @click="creditModal = false" type="success">CLOSE</el-button>
         </span>
       </el-dialog>
 
@@ -551,11 +534,7 @@ export default {
       })
     },
     setShareValue(value) {
-      if(value.value === true) {
-        this.ifShare = true
-      } else {
-        this.ifShare = false
-      }
+      this.ifShare = value.value === true;
     },
     showShareModal() {
       this.currentComponent = null
@@ -592,25 +571,6 @@ export default {
       //     item['status'] = 'Booked'
       //   }
       // })
-    },
-    backData(value) {
-      var booked = 0
-      var attended = 0
-      var cancelled = 0
-      value.forEach(function(value, index) {
-        if(value.status === 'Booked') {
-          booked = booked + 1
-        }
-        if(value.status === 'Attended') {
-          attended = attended + 1
-        }
-        if(value.status === 'Cancelled') {
-          cancelled = cancelled + 1
-        }
-      })
-      this.booked = booked
-      this.attended = attended
-      this.cancelled = cancelled
     },
     setrange() {
       this.final_range[0] = this.value_range[0]

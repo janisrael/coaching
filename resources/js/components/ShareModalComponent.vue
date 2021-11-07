@@ -8,7 +8,7 @@
       center>
       <div style="display: inline-block; width: 100%; text-align: center;">
         <div style="display: inline-block;">
-          <i class="el-icon-warning-outline" style="color: #79bb71;font-size: 60px;transform: rotate(180deg);"></i>
+          <i class="el-icon-warning-outline dialog-warning-exclamation"></i>
           <h3 v-if="ifshare === false" style="font-weight: 300;word-break: break-word; padding: 0 40px;">
             Mentoring is one of the most important ways to develop your skillset as a trader.
             <br>
@@ -18,19 +18,20 @@
           <h3 v-else style="font-weight: 300;word-break: break-word; padding: 0 40px;">Your information is being shared</h3>
         </div>
         <div style="display: inline-block;">
-          <span v-if="ifshare === false" >
+          <span v-if="ifshare === false" style="display: inline-block;width: 100%;">
             <p style="color: rgba(255, 255, 255, .51);">N.B. To book metoring sessions, we require you to share your Read-only live account Capital index account with us.</p>
           </span>
-          <span v-else>
+          <span v-else style="display: inline-block;width: 100%;">
             <p style="color: rgba(255, 255, 255, .51);">To revoke your permission to share read-only account with Learn to Trade Ltd,</p>
-            <p style="color: rgba(255, 255, 255, .51); word-break: break-word;">please email: <a href = "mailto: info@smartchartsfx.com" style="color: #3a95ff;">info@smartchartsfx.com</a>, if you revoke your permission to share your journal, you will no longer be able to book mentoring sessions.</p>
+            <p style="color: rgba(255, 255, 255, .51); word-break: break-word;">please email: <a href = "mailto: info@smartchartsfx.com" class="text-link">info@smartchartsfx.com</a>,</p>
+            <p style="color: rgba(255, 255, 255, .51); word-break: break-word;">if you revoke your permission to share your journal, you will no longer be able to book mentoring sessions.</p>
           </span>
         </div>
-        <div style="display: inline-block; margin-top: 20px;">
-          <el-button v-if="ifshare === false" :loading="loading" type="success" @click="onShare()">SHARE READ ONLY LIVE ACCOUNT</el-button>
-          <el-button v-if="ifshare === true" type="success" @click="dialogShare = false">Close</el-button>
-        </div>
       </div>
+      <span slot="footer" class="dialog-footer">
+        <el-button v-if="ifshare === false" :loading="loading" type="success" @click="onShare()">SHARE READ ONLY LIVE ACCOUNT</el-button>
+        <el-button v-if="ifshare === true" type="success" @click="dialogShare = false">Close</el-button>
+      </span>
     </el-dialog>
   </div>
 </template>

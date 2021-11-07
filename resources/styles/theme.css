@@ -462,6 +462,15 @@ span.session-list-avatar.el-avatar.el-avatar--circle {
     color: #fff !important;
 }
 
+.dialog-warning-exclamation {
+    color: #79bb71;
+    font-size: 60px;
+    transform: rotate(180deg)
+}
+
+a.text-link {
+    color: #9ecaff;
+}
 .el-dialog__body {
     padding: 30px 40px !important;
     /*color: #606266;*/
@@ -470,7 +479,9 @@ span.session-list-avatar.el-avatar.el-avatar--circle {
     color: #fff !important;
     background-color: #4a6a8e !important;
 }
-
+#dialogShare .el-dialog__body {
+    padding: 10px 40px !important;
+}
 span.demonstration {
     color: #fff !important;
 }
