@@ -90,15 +90,17 @@
                 <span class="session-list-time">
                   {{ position.start_time }}  {{ $moment(position.date).format('dddd') }}  {{ $moment(position.date).format('MM/DD')}}
                 </span>
-                <span v-if="position.availability_type.includes('Can do either')">
-                  <span><i class="fas fa-headset" style="font-size: 14px"></i></span>
-                  <span><i class="fa fa-user" style="font-size: 14px"></i></span>
-                  <span><i class="fa fa-users" style="font-size: 14px"></i></span>
-                </span>
-                <span v-else>
-                  <span v-if="position.availability_type.includes('Remote only')"><i class="fas fa-headset" style="font-size: 14px"></i></span>
-                  <span v-if="position.availability_type.includes('In-house only')"><i class="fa fa-user" style="font-size: 14px"></i></span>
-                  <span v-if="position.availability_type.includes('Group')"><i class="fa fa-users" style="font-size: 14px"></i></span>
+                <span v-if="position.availability_type !== null || position.availability_type !== '' || position.availability_type !== undefined">
+                  <span v-if="position.availability_type.includes('Can do either')">
+                    <span><i class="fas fa-headset" style="font-size: 14px"></i></span>
+                    <span><i class="fa fa-user" style="font-size: 14px"></i></span>
+                    <span><i class="fa fa-users" style="font-size: 14px"></i></span>
+                  </span>
+                  <span v-else>
+                    <span v-if="position.availability_type.includes('Remote only')"><i class="fas fa-headset" style="font-size: 14px"></i></span>
+                    <span v-if="position.availability_type.includes('In-house only')"><i class="fa fa-user" style="font-size: 14px"></i></span>
+                    <span v-if="position.availability_type.includes('Group')"><i class="fa fa-users" style="font-size: 14px"></i></span>
+                  </span>
                 </span>
               </el-col>
               <el-col :xs="6" :sm="5" :md="4" :lg="2" :xl="2" v-if="position.status === 'Pending'" v-bind:class="[(ifshare === false ? 'class-disable' : 'class-enable' && canbook === false ? 'class-disable' : 'class-enable'), 'list-' + position.status, 'list-item-btn']" >
@@ -113,18 +115,20 @@
                     <img :src="selected.coach_image"/>
                   </el-avatar>
                   <span class="session-list-time">
-               {{ position.start_time }}  {{ $moment(position.date).format('dddd') }}  {{ $moment(position.date).format('MM/DD')}}
-            </span>
+                  {{ position.start_time }}  {{ $moment(position.date).format('dddd') }}  {{ $moment(position.date).format('MM/DD')}}
+                  </span>
+                <span v-if="position.availability_type !== null || position.availability_type !== '' || position.availability_type !== undefined">
                   <span v-if="position.availability_type.includes('Can do either')">
-                <span><i class="fas fa-headset" style="font-size: 14px"></i></span>
-                <span><i class="fa fa-user" style="font-size: 14px"></i></span>
-                <span><i class="fa fa-users" style="font-size: 14px"></i></span>
-              </span>
+                    <span><i class="fas fa-headset" style="font-size: 14px"></i></span>
+                    <span><i class="fa fa-user" style="font-size: 14px"></i></span>
+                    <span><i class="fa fa-users" style="font-size: 14px"></i></span>
+                  </span>
                   <span v-else>
-                <span v-if="position.availability_type.includes('Remote only')"><i class="fas fa-headset" style="font-size: 14px"></i></span>
-                <span v-if="position.availability_type.includes('In-house only')"><i class="fa fa-user" style="font-size: 14px"></i></span>
-                <span v-if="position.availability_type.includes('Group')"><i class="fa fa-users" style="font-size: 14px"></i></span>
-              </span>
+                    <span v-if="position.availability_type.includes('Remote only')"><i class="fas fa-headset" style="font-size: 14px"></i></span>
+                    <span v-if="position.availability_type.includes('In-house only')"><i class="fa fa-user" style="font-size: 14px"></i></span>
+                    <span v-if="position.availability_type.includes('Group')"><i class="fa fa-users" style="font-size: 14px"></i></span>
+                  </span>
+                </span>
                   <!-- <div class="session-list-time session-list-time-calendar"><i class="fas fa-calendar-plus" style="margin-right:10px;"></i><span class="session-calendar-caption">CALENDAR</span></div> -->
                 </el-col>
                 <el-col :xs="6" :sm="5" :md="4" :lg="2" :xl="2" v-if="position.status === 'Booked'" :class="['list-' + position.status, 'list-item-btn']" @click="dialogMentor(position)">
@@ -139,18 +143,20 @@
                   <img :src="position.coach_image"/>
                 </el-avatar>
                 <span class="session-list-time">
-             {{ position.start_time }}  {{ $moment(position.date).format('dddd') }}  {{ $moment(position.date).format('MM/DD')}}
-            </span>
-                <span v-if="position.availability_type.includes('Can do either')">
-                <span><i class="fas fa-headset" style="font-size: 14px"></i></span>
-                <span><i class="fa fa-user" style="font-size: 14px"></i></span>
-                <span><i class="fa fa-users" style="font-size: 14px"></i></span>
-              </span>
-                <span v-else>
-                <span v-if="position.availability_type.includes('Remote only')"><i class="fas fa-headset" style="font-size: 14px"></i></span>
-                <span v-if="position.availability_type.includes('In-house only')"><i class="fa fa-user" style="font-size: 14px"></i></span>
-                <span v-if="position.availability_type.includes('Group')"><i class="fa fa-users" style="font-size: 14px"></i></span>
-              </span>
+                {{ position.start_time }}  {{ $moment(position.date).format('dddd') }}  {{ $moment(position.date).format('MM/DD')}}
+                </span>
+                <span v-if="position.availability_type !== null || position.availability_type !== '' || position.availability_type !== undefined">
+                  <span v-if="position.availability_type.includes('Can do either')">
+                    <span><i class="fas fa-headset" style="font-size: 14px"></i></span>
+                    <span><i class="fa fa-user" style="font-size: 14px"></i></span>
+                    <span><i class="fa fa-users" style="font-size: 14px"></i></span>
+                  </span>
+                  <span v-else>
+                    <span v-if="position.availability_type.includes('Remote only')"><i class="fas fa-headset" style="font-size: 14px"></i></span>
+                    <span v-if="position.availability_type.includes('In-house only')"><i class="fa fa-user" style="font-size: 14px"></i></span>
+                    <span v-if="position.availability_type.includes('Group')"><i class="fa fa-users" style="font-size: 14px"></i></span>
+                  </span>
+                </span>
               </el-col>
               <el-col :xs="6" :sm="5" :md="4" :lg="2" :xl="2" v-if="position.status === 'Attended'" :class="['list-' + position.status, 'list-item-btn']">
                 <span>VIEW</span>
@@ -165,16 +171,18 @@
                 <span class="session-list-time">
                   {{ position.start_time }}  {{ $moment(position.date).format('dddd') }}  {{ $moment(position.date).format('MM/DD')}}
                 </span>
-                <span v-if="position.availability_type.includes('Can do either')">
-                  <span><i class="fas fa-headset" style="font-size: 14px"></i></span>
-                  <span><i class="fa fa-user" style="font-size: 14px"></i></span>
-                  <span><i class="fa fa-users" style="font-size: 14px"></i></span>
+                <span v-if="position.availability_type !== null || position.availability_type !== '' || position.availability_type !== undefined">
+                  <span v-if="position.availability_type.includes('Can do either')">
+                    <span><i class="fas fa-headset" style="font-size: 14px"></i></span>
+                    <span><i class="fa fa-user" style="font-size: 14px"></i></span>
+                    <span><i class="fa fa-users" style="font-size: 14px"></i></span>
+                  </span>
+                  <span v-else>
+                    <span v-if="position.availability_type.includes('Remote only')"><i class="fas fa-headset" style="font-size: 14px"></i></span>
+                    <span v-if="position.availability_type.includes('In-house only')"><i class="fa fa-user" style="font-size: 14px"></i></span>
+                    <span v-if="position.availability_type.includes('Group')"><i class="fa fa-users" style="font-size: 14px"></i></span>
+                  </span>
                 </span>
-                <span v-else>
-                <span v-if="position.availability_type.includes('Remote only')"><i class="fas fa-headset" style="font-size: 14px"></i></span>
-                <span v-if="position.availability_type.includes('In-house only')"><i class="fa fa-user" style="font-size: 14px"></i></span>
-                <span v-if="position.availability_type.includes('Group')"><i class="fa fa-users" style="font-size: 14px"></i></span>
-              </span>
               </el-col>
               <el-col :xs="6" :sm="5" :md="4" :lg="2" :xl="2" v-if="position.status === 'No Show'" :class="['list-no-show', 'list-item-btn']">
                 <span>VIEW</span>
