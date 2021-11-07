@@ -17,7 +17,7 @@
           <div class="right-detail-btnprofile" @click="showInfo()"><i class="fas fa-info"></i></div>
           <div class="right-list-sub">
             <div style="display: inline-block; float: left; margin-left: -15px;">
-              <country-flag v-if="selected.country_code === null" country='' size='normal'/>
+              <country-flag v-if="selected.country_code === null || selected.country_code === undefined" country='' size='normal'/>
               <country-flag v-else :country='selected.country_code' size='normal'/>
             </div>
             <div  v-if="selected.country === null || selected.country === '' || selected.country === undefined" class="right-detail-sub">No Specified Country</div>
