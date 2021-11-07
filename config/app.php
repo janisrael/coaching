@@ -154,7 +154,6 @@ return [
     'key' => env('APP_KEY'),
     'student_token' => env('APP_STUDENT_TOKEN'),
     'share_url' => env('APP_SHARE_URL'),
-    'check_url' => env('APP_CHECK_URL'),
     'cipher' => 'AES-256-CBC',
 
     /*

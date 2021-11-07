@@ -84,7 +84,7 @@ class CoachController extends Controller
      */
     public function check(Request $request)
     {
-        $apiURL = config('app.check_url') . '/v1/coaching/students/' .$request->id;
+        $apiURL = config('app.share_url') . '/v1/coaching/students/' .$request->id;
 
         $headers = [
             'Authorization' => 'Bearer '.config('app.student_token'),
