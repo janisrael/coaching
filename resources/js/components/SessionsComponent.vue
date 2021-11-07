@@ -35,6 +35,7 @@
             :picker-options="datePickerOptions"
             type="daterange"
             size="mini"
+            :default-value="currentDate"
             lang="en"
             clearable
             :range-separator="range_sep"
@@ -315,10 +316,6 @@ export default {
     can_book: {
       required: true,
       type: Boolean
-    },
-    date_filter: {
-      required: false,
-      type: Array
     }
   },
   data() {
@@ -417,7 +414,7 @@ export default {
   created: function() {
     this.loading = true
     this.session_data = this.selected.coaches
-    // this.firstLoad()
+    // this.datefilter = this.date_filter
     this.getDate()
   },
   methods: {
@@ -583,8 +580,7 @@ export default {
       this.dialogItem = false
     },
     getDate() {
-      // this.currentDate = new Date().toJSON().slice(0,10).replace(/-/g,'-');
-      // this.datefilter = this.date_filter
+      this.currentDate = new Date().toJSON().slice(0,10).replace(/-/g,'-');
       this.loading = false
     },
     dialogMentor(position) {
@@ -634,17 +630,6 @@ export default {
       }
 
     },
-    // firstLoad() {
-    //   this.loading = true
-    //   this.datefilter = this.date_filter
-    //   let data = []
-    //   data.push(this.$moment(this.datefilter[0]).format('YYYY-MM-DD'))
-    //   data.push(this.$moment(this.datefilter[1]).format('YYYY-MM-DD'))
-    //   this.$emit('filterData', { value: data })
-    //   this.date_collections = data
-    //   this.range_sep = '-'
-    //   this.loading = false
-    // },
     checkDate: function(){
       this.loading = true
       let data = []
@@ -660,7 +645,6 @@ export default {
         this.range_sep = '-'
         this.loading = false
       } else {
-
         data.push(this.$moment(this.datefilter[0]).format('YYYY-MM-DD'))
         data.push(this.$moment(this.datefilter[1]).format('YYYY-MM-DD'))
         this.$emit('filterData', { value: data })
