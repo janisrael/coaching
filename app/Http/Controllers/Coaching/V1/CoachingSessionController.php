@@ -107,7 +107,6 @@ class CoachingSessionController extends Controller
                         CoachingSessionFields::END_TIME => $session[CoachingSessionFields::END_TIME],
                         CoachingSessionFields::COACH => $session[CoachingSessionFields::COACH],
                         CoachingSessionFields::AVAILABILITY_TYPE => $session[CoachingSessionFields::AVAILABILITY_TYPE],
-                        CoachingSessionFields::LOCATION => '',
                     ]);
                     $result['message'] = 'Successfully Cancelled.';
                     $result['coaching_session_id'] = $coachingSessionId;
