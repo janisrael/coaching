@@ -322,7 +322,7 @@
         </el-row>
         <span slot="footer" class="dialog-footer">
           <div style="text-align: center; width: 100%; display:inline-block;">
-            <el-button @click="instanceModal = false" type="success">GO TO YOUR ACCOUNT PAGE</el-button>
+            <el-button @click="goToAccount()" type="success">GO TO YOUR ACCOUNT PAGE</el-button>
           </div>
         </span>
       </el-dialog>
@@ -372,7 +372,6 @@ import SessionComponent from './SessionsComponent.vue'
 import ShareModalComponent from './ShareModalComponent.vue'
 import Region from './region.json'
 // dummy data
-
 // import json_sales from './dummy_sales.json'
 // import json_coaches from './dummy_coaches.json'
 // import json_schedules from './dummy_schedules.json'
@@ -451,15 +450,16 @@ export default {
       canbook: true,
       instance_message: '',
       m_index: 0,
-      instanceModal: false,
-      display_message: false,
-      creditModal: false,
+      instanceModal: false, // default false
+      display_message: false, // default false
+      creditModal: false, // default false
       selected_row: {},
       region: Region,
+      base_url: window.location.origin + '#funds',
 // dummy
 //       dummy_sales: json_sales,
 //       dummy_schedules: json_schedules,
-//       dummy_coaches: json_coaches
+//       dummy_coaches: json_coaches,
     }
   },
   computed: {
@@ -476,7 +476,6 @@ export default {
       // }
       let coaches = this.coaches
       if(this.selectedTags.length === 0) {
-
         if(this.final_range[0] === 0 && this.final_range[1] === 100){
           return coaches
           // return coaches.filter(el => (el.has_booked === filter_booked));;
@@ -490,27 +489,27 @@ export default {
         }
       } else {
         this.coaches
-          .forEach(function(card) {
-            function cardContainsFilter(filter) {
-              let lang = card.languages
-              let markets = card.market_traded
-              let styles = card.style
-              let filt = filters
+        .forEach(function(card) {
+          function cardContainsFilter(filter) {
+            let lang = card.languages
+            let markets = card.market_traded
+            let styles = card.style
+            let filt = filters
 
-              let filteredArrLang = lang.filter(el => filt.includes(el));
-              let filteredArrMarket = markets.filter(el => filt.includes(el));
-              let filteredArrStyle = styles.filter(el => filt.includes(el));
-              if((filteredArrLang.length > 0) || (filteredArrMarket.length > 0) || (filteredArrStyle.length > 0)){
-                // if(card.experience >= start && card.experience <= end && card.has_booked === filter_booked) {
-                if(card.experience >= start && card.experience <= end) {
-                  activeCards.push(card);
-                }
+            let filteredArrLang = lang.filter(el => filt.includes(el));
+            let filteredArrMarket = markets.filter(el => filt.includes(el));
+            let filteredArrStyle = styles.filter(el => filt.includes(el));
+            if((filteredArrLang.length > 0) || (filteredArrMarket.length > 0) || (filteredArrStyle.length > 0)){
+              // if(card.experience >= start && card.experience <= end && card.has_booked === filter_booked) {
+              if(card.experience >= start && card.experience <= end) {
+                activeCards.push(card);
               }
             }
-            if(filters.every(cardContainsFilter)) {
-              activeCards.push(card);
-            }
-          });
+          }
+          if(filters.every(cardContainsFilter)) {
+            activeCards.push(card);
+          }
+        });
       }
       return activeCards;
     }
@@ -521,6 +520,9 @@ export default {
     this.setrange()
   },
   methods: {
+    goToAccount() {
+      window.location.href = this.base_url
+    },
     checkUser() {
       let user_id = this.portal_user_id
       let url = '/api/v1/check-student'
@@ -531,16 +533,10 @@ export default {
           }
         }
       ).then(response => {
-        console.log(response, 'response')
         if(response.data.is_student === true) {
           this.isStudent = true
           this.ifShare = true
           console.log('active student')
-          // this.$notify.success({
-          //   title: 'Success',
-          //   message: 'Live Account Shared!',
-          //   type: 'success'
-          // });
         } else {
           console.log('not-active')
           this.showShareModal()
@@ -567,7 +563,6 @@ export default {
         this.currentComponent = ShareModalComponent
         setTimeout(() => this.ex_call_modal(), 1);
       } else {
-        // this.currentComponent = null
         this.currentComponent = ShareModalComponent
         setTimeout(() => this.ex_call_modal(), 1);
       }
@@ -622,13 +617,11 @@ export default {
       this.final_range[1] = this.value_range[1]
     },
     filterData(value) {
-      // this.loading = true
       let sched_api = '/api/v1/coaches/schedule'
       let letcurrentDate = new Date().toJSON().slice(0,10).replace(/-/g,'-');
       let date1a = value.value[0]
       let date2a = value.value[1]
       let data = []
-
       let coachesraw = this.datacoach.coaches
       var user_id = coachesraw[0].id
       let hasbooked = false
@@ -664,27 +657,22 @@ export default {
             }));
           this.new_collections = []
           this.new_collections = mergeById(arr1, arr2); // merge scheds to coach
-
-
-          //  this.loading = true
           this.reset = this.coaches
-          // setTimeout(() => this.loadDefault(this.datacoach), 1)
           setTimeout(() => this.loadDefault(this.datacoach, this.index_load, this.m_index), 1)
-          // this.loadingSession = false
         })
         .catch(error => console.log(error))
     },
     async read(action) {
       this.loading = true
       let sched_api = '/api/v1/coaches/schedule'
-      let letcurrentDate = new Date().toJSON().slice(0,10).replace(/-/g,'-');
+      let currentDate = new Date().toJSON().slice(0,10).replace(/-/g,'-');
 
       //** assigning default schedule filter **//
       const today = new Date()
       const tomorrow = new Date(today)
       tomorrow.setDate(tomorrow.getDate() + 1)
 
-      let date1 = letcurrentDate
+      let date1 = currentDate
       let date2 = tomorrow.toJSON().slice(0,10).replace(/-/g,'-');
 
       // fetching data in all promise
@@ -726,6 +714,7 @@ export default {
 
         //** filter mentors if user customer_group is learn to trade **//
         this.portal_user_id = this.datasales.portal_user.portal_user_id
+        this.customer_region = this.datasales.portal_user.customer_region
         let mentor_id = ''
 
         if(this.datasales.sales.length > 0) {
@@ -774,18 +763,13 @@ export default {
                 }
               }
               if(this.customer_type.toLowerCase() === 'back end') {
-                // if(value.back_end === true) {
                 this.canbook = true
                 my_mentor = true
                 if(count === 1) {
                   index_load = index
                   this.index_load = index
                 }
-                // }
               }
-              // } else {
-              //   my_mentor = false
-              // }
               value['my_mentor'] = my_mentor
             })
           }
@@ -806,25 +790,24 @@ export default {
         var schedraw = this.schedules
         var hasbooked = true
 
-        // check and determine if mentors has booked
-        // coachesraw.forEach(function (value, index) {
-        //   schedraw.forEach(function (val, i) {
-        //     if(val.status !== 'Pending' && value.id === val.coach_id) {
-        //       hasbooked = false
-        //     }
-        //   })
-        //   value['has_booked'] = hasbooked
-        // })
-
         this.coaches = coachesraw  // assign mentors to global variables
         let m_index = 0
 
         //** get default sales index by id, index use to default selected mentor on page load **//
-
         let arrs = Region.data.region
+        // let has_coach_in_region = true
+
+        //** check if the customer and coach has match region **//
+        let fil_res = this.coaches.find(o => o.region.toLowerCase() === this.customer_region.toLowerCase());
+        if(!fil_res) {
+          console.log('has no')
+          this.display_message = true
+          this.loading = false
+        }
+
         this.coaches.forEach((value, index) => {
           let obj = arrs.find(o => o.code.toLowerCase() === value.region.toLowerCase());
-          console.log(obj.region, 'obj')
+
           if(obj.region) {
             value.region = obj.region
           } else {
@@ -843,7 +826,6 @@ export default {
         let arr1 = scheds.filter(function (sched) {
           return (sched.status === 'Pending' && sched.coach_id === user_id) || (sched.status !== 'Pending');
         });
-        // let arr1 = filtered
         let arr2 = coach
         const mergeById = (a1, a2) =>
           a1.map(itm => ({
@@ -871,20 +853,19 @@ export default {
     loadDefault(data, index_load, m_index) {
       this.$refs.singleTable.setCurrentRow(this.coaches[m_index])
       this.getSummary(data.coaches[m_index])
-
       this.loading = false
     },
     getSummary(row, index) {
       this.selected_row = row
       //** on pageload check if my_mentor exist **//
       if(this.customer_group.toLowerCase() === 'ltt') {
-        if(row.my_mentor !== '' || row.my_mentor !== null || row.my_mentor !== undefined) {
+        if(row.my_mentor !== '' || row.my_mentor !== null || true) {
           this.canbook = row.my_mentor
         } else {
           this.canbook = false
         }
       } else {
-        if(row.my_mentor !== '' || row.my_mentor !== null || row.my_mentor !== undefined) {
+        if(row.my_mentor !== '' || row.my_mentor !== null || true) {
           this.canbook = row.my_mentor
         } else {
           this.canbook = true
@@ -896,16 +877,10 @@ export default {
         this.selected_id = row.id
       }
 
-      if(this.customer_group.toLowerCase() === 'ltt') {
-        this.can_book = false
-      } else {
-        this.can_book = true
-      }
-
+      this.can_book = this.customer_group.toLowerCase() !== 'ltt';
 
       var scheds = this.schedules
       var coach = this.coaches
-
       var user_id = this.selected_id
       let arr1 = scheds.filter(function (sched) {
         return (sched.status === 'Pending' && sched.coach_id === user_id) || (sched.status !== 'Pending');
@@ -920,7 +895,7 @@ export default {
 
       //** filter schedules by selected coach_id **//
       let ret_data = datares.filter(function(ele){
-        return (ele.coach_id == row.id)
+        return (ele.coach_id = row.id)
       });
 
       var countBooked = 0;
@@ -938,12 +913,9 @@ export default {
         }
       })
 
-
-
       this.booked = countBooked
       this.Attended = countAttended
       this.Cancelled = countCancelled
-      // this.datamerge = datares
       this.datamerge = datares
       this.for_sessiondata = []
       this.for_sessiondata = this.datamerge
@@ -997,11 +969,7 @@ export default {
       this.selectedTags = []
       this.reset = this.preselectedTags
       this.selectedTags = this.preselectedTags
-      if(this.booked_options === 'You havent booked this mentor before') {
-        this.filter_booked = false
-      } else {
-        this.filter_booked = true
-      }
+      this.filter_booked = this.booked_options !== 'You havent booked this mentor before';
       this.final_range[0] = this.value_range[0]
       this.final_range[1] = this.value_range[1]
       this.filterDialog = false

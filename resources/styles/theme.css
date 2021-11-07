@@ -315,7 +315,7 @@ button.el-button.plain {
     /*background: rgba(54, 54, 54, 1) !important*/
     opacity: 0.5;
     cursor: not-allowed;
-    /*pointer-events: none !important;*/
+    pointer-events: none !important;
 }
 
 .list-item.active.class-disable {

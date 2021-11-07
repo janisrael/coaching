@@ -5,10 +5,13 @@
 /vendor
 .env
 .env.backup
-.idea/*
+.idea
 .phpunit.result.cache
 Homestead.json
 Homestead.yaml
 npm-debug.log
 yarn-error.log
 composer.lock
+/resources/js/components/dummy_schedules.json
+/resources/js/components/dummy_sales.json
+/resources/js/components/dummy_coaches.json
