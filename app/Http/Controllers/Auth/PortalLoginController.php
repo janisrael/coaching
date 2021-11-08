@@ -32,7 +32,7 @@ class PortalLoginController extends Controller
     public function sessionToken(Request $request, $token)
     {
         try {
-            $clientRequest = $this->client->post(config('app.portal_session_token_url'), [
+            $clientRequest = $this->client->post(config('app.portal_session_url'), [
                 'form_params' => [
                     'code' => $token
                 ],
