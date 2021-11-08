@@ -35,20 +35,19 @@
             :picker-options="datePickerOptions"
             type="daterange"
             size="mini"
-            :default-value="currentDate"
             lang="en"
             clearable
             :range-separator="range_sep"
-            :start-placeholder="currentDate"
-            end-placeholder=""
+            :start-placeholder="date_filter[0]"
+            :end-placeholder="date_filter[1]"
             @change="checkDate()"
             style="cursor: pointer;">
           </el-date-picker>
+
           <el-popover
             placement="bottom"
             title="Title"
             width="200"
-            trigger="click"
             content="this is content, this is content, this is content">
             <div class="icon-info"><i class="fas fa-info"></i></div>
           </el-popover>
@@ -316,6 +315,10 @@ export default {
     can_book: {
       required: true,
       type: Boolean
+    },
+    date_filter: {
+      required: false,
+      type: Array
     }
   },
   data() {
@@ -414,7 +417,6 @@ export default {
   created: function() {
     this.loading = true
     this.session_data = this.selected.coaches
-    // this.datefilter = this.date_filter
     this.getDate()
   },
   methods: {
@@ -580,7 +582,8 @@ export default {
       this.dialogItem = false
     },
     getDate() {
-      this.currentDate = new Date().toJSON().slice(0,10).replace(/-/g,'-');
+      // this.currentDate = this.date_filter[0] + '-' + this.date_filter[1]
+      this.range_sep = '-'
       this.loading = false
     },
     dialogMentor(position) {
@@ -636,7 +639,7 @@ export default {
       if(this.datefilter === null) {
         const today = new Date()
         const tomorrow = new Date(today)
-        tomorrow.setDate(tomorrow.getDate() + 1)
+        tomorrow.setDate(tomorrow.getDate() + 7)
         let date2 = tomorrow.toJSON().slice(0,10).replace(/-/g,'-');
         data.push(this.$moment(today).format('YYYY-MM-DD'))
         data.push(this.$moment(date2).format('YYYY-MM-DD'))
@@ -672,6 +675,13 @@ export default {
   padding: 40px 20px;
   box-sizing: border-box;
   margin-right: 20px;
+}
+
+.custom-date-picker{
+  width: 500px !important;
+  /*.el-date-picker__header{*/
+  /*// custom header style here*/
+  /*}*/
 }
 
 </style>
