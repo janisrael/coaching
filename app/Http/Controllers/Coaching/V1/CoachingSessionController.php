@@ -44,6 +44,7 @@ class CoachingSessionController extends Controller
                 resolve(CoachingSession::class)->update($request->schedule_id, [
                     CoachingSessionFields::STATUS => 'Booked',
                     CoachingSessionFields::SALE => $sessionsRemaining['id'],
+                    CoachingSessionFields::LOCATION => 'Remote',
                 ]);
                 $result = [
                     'status' => 'success',
@@ -105,7 +106,8 @@ class CoachingSessionController extends Controller
                         CoachingSessionFields::START_TIME => $session[CoachingSessionFields::START_TIME],
                         CoachingSessionFields::END_TIME => $session[CoachingSessionFields::END_TIME],
                         CoachingSessionFields::COACH => $session[CoachingSessionFields::COACH],
-                        CoachingSessionFields::LOCATION => 'Remote',
+                        CoachingSessionFields::AVAILABILITY_TYPE => $session[CoachingSessionFields::AVAILABILITY_TYPE],
+                        CoachingSessionFields::PREVIOUSLY_CANCELLED => true,
                     ]);
                     $result['message'] = 'Successfully Cancelled.';
                     $result['coaching_session_id'] = $coachingSessionId;
