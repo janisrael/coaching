@@ -64,7 +64,7 @@
                           </el-avatar>
                         </el-col>
                         <el-col :xs="20" :sm="19" :md="19" :lg="19" :xl="19" style="display: inline-block; padding-left: 10px;">
-                          <div class="flag-container">
+                          <div v-if="scope.region !== 'disable'" class="flag-container">
                             <country-flag v-if="scope.row.region === null" country='' size='normal'/>
                             <country-flag v-else :country='scope.row.region' size='normal'/>
                           </div>
@@ -791,10 +791,10 @@ export default {
         this.coaches.forEach((value, index) => {
           let obj = arrs.find(o => o.code.toLowerCase() === value.region.toLowerCase());
 
-          if(obj.region) {
+          if(obj) {
             value.region = obj.region
           } else {
-            value.region = 'GB'
+            value.region = 'disable'
           }
 
           if(value.id === mentor_id) {
