@@ -25,20 +25,3 @@ Route::group(['middleware' => 'portal.auth:portal'], function () {
     
     # require 'coaching/v2.php';
 });
-
-
-// Console Webtool 
-Route::group(['prefix' => 'console'], function () {
-    Auth::routes([
-        'register' => false,
-        'reset' => false,
-        'verify' => true,
-    ]);
-
-    Route::middleware(['auth', 'verified'])->namespace('Console')->group(function () {
-        
-        Route::get('/', 'DashboardController@index')->name('dashboard');
-        
-        //
-    });
-});
