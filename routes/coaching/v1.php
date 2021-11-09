@@ -3,9 +3,7 @@
 Route::group(['namespace' => 'Coaching\V1'], function () {
 
     Route::group(['prefix' => 'v1'], function () {
-        Route::get('{any?}', function () {
-            return view('layouts.coaching.v1');
-        });
+        Route::get('{any?}', 'IndexController@any');
     });
 
     Route::group(['prefix' => 'api/v1', 'middleware' => 'portal.instance'], function () {
