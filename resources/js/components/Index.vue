@@ -676,7 +676,11 @@ export default {
 
         if(this.datacoach.coaches.length === 0) {
           console.log('asdasd')
-          this.display_message = true
+          if(this.customer_type === 'back end') {
+            this.display_message = false
+          } else {
+            this.display_message = true
+          }
           this.loading = false
           return
         }
@@ -783,8 +787,13 @@ export default {
         //** check if the customer and coach has match region **//
         let fil_res = this.coaches.find(o => o.region.toLowerCase() === this.customer_region.toLowerCase());
         if(!fil_res) {
-          console.log('has no')
-          this.display_message = true
+          if(this.customer_type === 'back end') {
+            this.display_message = false
+          } else {
+            console.log('has no')
+            this.display_message = true
+          }
+
           this.loading = false
         }
 
@@ -820,10 +829,19 @@ export default {
         //** Check if coaches is 0  **//
         if(this.customer_group.toLowerCase() === 'ltt') {
           if(this.coaches.length === 0) {
-            this.display_message = true
+            if(this.customer_type === 'back end') {
+              this.display_message = false
+            } else {
+              this.display_message = true
+            }
           }
           if(this.mentor_id === null || this.mentor_id === '' || this.mentor_id === undefined) {
-            this.display_message = true
+
+            if(this.customer_type === 'back end') {
+              this.display_message = false
+            } else {
+              this.display_message = true
+            }
           }
         }
 
