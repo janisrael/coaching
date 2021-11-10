@@ -29,12 +29,13 @@ class SaleRepository implements SaleRepositoryInterface
     {
         $sales = [];
         foreach ($data as $key => $value) {
-            $value['is_child_sale'] = Str::contains($value['record_type_id'], config('app.sf_child_sale_id')) ? true : false;
+            $value['is_child_sale'] = Str::contains($value['record_type_id'], config('app.sf_child_sale_id'));
             $sales[] = $value;
         }
+        
         $total = collect($sales);
         $sessionsExpiry = $total->where('sessions_expiry', '!=', null)
-                                ->where('is_child_sale', false);
+                                ->where('is_child_sale', '=', false);
 
         $totalAvailable = $sessionsExpiry->count() > 0
                             ? $sessionsExpiry->where('sessions_expiry', '>', now()->format('Y-m-d'))->sum('sessions_remaining') 
@@ -43,9 +44,15 @@ class SaleRepository implements SaleRepositoryInterface
         $totalExpiry = $sessionsExpiry->count() > 0
                             ? $sessionsExpiry->where('sessions_expiry', '<', now()->format('Y-m-d'))->sum('sessions_remaining') 
                             : 0.0;
+
+        $childSaleSession = $total->where('is_child_sale', '=', true);
+        $totalChildSaleSession = $childSaleSession->count() > 0 
+                            ? $childSaleSession->sum('sessions_remaining') 
+                            : 0.0;
+
         return [
             'total_credits' => $total->sum('sessions'),
-            'total_available' => ($totalAvailable + $total->where('is_child_sale', true)->sum('sessions_remaining')),
+            'total_available' => ($totalAvailable + $totalChildSaleSession),
             'total_expired' => $totalExpiry,
             'total_refunded' => $total->sum('sessions_recredited'),
             'total_cancelled' => $total->sum('sessions_cancelled'),
@@ -58,7 +65,7 @@ class SaleRepository implements SaleRepositoryInterface
         $data = [];
 
         $sfCustomer = auth()->guard('portal')->check() ? 
-                      [SaleFields::CUSTOMER.' = \'0010C00000NelGF\''] : 
+                      [SaleFields::CUSTOMER.' = \''.$portalUser->salesforce_token.'\''] : 
                       [SaleFields::DATE.' >= '.date('Y-m-d')];
 
         $sfCustomer[] = SaleFields::RECORD_TYPE_ID. ' IN (\'' . implode('\',\'', config('app.sf_sale_record_type_id')) . '\')';
