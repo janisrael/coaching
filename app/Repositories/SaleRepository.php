@@ -55,6 +55,7 @@ class SaleRepository implements SaleRepositoryInterface
                       [SaleFields::CUSTOMER.' = \''.$portalUser->salesforce_token.'\''] : 
                       [SaleFields::DATE.' >= '.date('Y-m-d')];
 
+        $sfCustomer[] = SaleFields::RECORD_TYPE_ID. ' IN (\'' . implode('\',\'', config('app.sf_sale_record_type_id')) . '\')';
         $sf = resolve(Sale::class)->query(
             array_values(config('api.sf_sale')),
             $sfCustomer

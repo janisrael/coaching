@@ -99,6 +99,8 @@ return [
 
     'no_sale_defined_id' => env('NO_SALE_DEFINED_ID'),
 
+    'sf_sale_record_type_id' => explode(',', env('SF_SALE_RECORD_TYPE_ID')),
+
     /*
     |--------------------------------------------------------------------------
     | Application Locale Configuration
