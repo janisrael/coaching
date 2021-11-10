@@ -101,6 +101,12 @@ return [
 
     'sf_sale_record_type_id' => explode(',', env('SF_SALE_RECORD_TYPE_ID')),
 
+    'sf_child_sale_id' => env('SF_CHILD_SALE_ID'),
+
+    'sf_parent_sale_id' => env('SF_PARENT_SALE_ID'),
+
+    'sf_simple_sale_id' => env('SF_SIMPLE_SALE_ID'),
+
     /*
     |--------------------------------------------------------------------------
     | Application Locale Configuration
