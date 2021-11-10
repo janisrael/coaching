@@ -28,11 +28,13 @@ class SaleRepository implements SaleRepositoryInterface
     public function computedCredits(array $data): array
     {
         $sales = [];
-        foreach ($data as $key => $value) {
-            $value['is_child_sale'] = Str::contains($value['record_type_id'], config('app.sf_child_sale_id'));
-            $sales[] = $value;
+        if (count($data) > 0) {
+            foreach ($data as $key => $value) {
+                $value['is_child_sale'] = Str::contains($value['record_type_id'], config('app.sf_child_sale_id'));
+                $sales[] = $value;
+            } 
         }
-        
+
         $total = collect($sales);
         $sessionsExpiry = $total->where('sessions_expiry', '!=', null)
                                 ->where('is_child_sale', '=', false);
