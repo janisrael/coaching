@@ -76,7 +76,7 @@
         </div>
       </div>
 <!--      {{ filteredPositions }}-->
-      <el-col v-loading="loading" element-loading-text="Loading Schedules..." element-loading-spinner="el-icon-loading" element-loading-background="rgba(0, 0, 0, 0.5)":span="24" class="session-items-container">
+      <el-col v-loading="loading" element-loading-text="Loading Schedules..." element-loading-spinner="el-icon-loading" element-loading-background="rgba(0, 0, 0, 0.5)" :span="24" class="session-items-container">
         <div v-for="(position, index) in even(filteredPositions)" :key="index"  :class="['sessions-item-' + index]">
           <transition name="el-fade-in-linear" mode="out-in">
             <div v-if="position.status === 'Pending' && position.visible === true" class="list-item" @click="dialogMentor(position)">
@@ -84,7 +84,7 @@
               <el-col :xs="18" :sm="19" :md="20" :lg="22" :xl="22" :class="[(ifshare === false ? 'class-disable' : 'class-enable' && canbook === false ? 'class-disable' : 'class-enable' && position.disable_schedule === true ? 'class-disable' : 'class-enable'), 'list-' + position.status, 'session-listitem']">
                 <span style="width: 15px; display: inline-block"><i class="far fa-clock"></i></span>
                 <el-avatar :size="60" :src="position.coach_image" class="session-list-avatar">
-                  <img :src="position.coach_image"/>
+                  <img :src="position.coach_image" :alt="position.coach_image"/>
                 </el-avatar>
                 <span class="session-list-time">
                   {{ position.start_time }}  {{ $moment(position.date).format('dddd') }} {{ $moment(position.date).format('Do') }} {{ $moment(position.date).format('MMM')}}
@@ -111,7 +111,7 @@
                 <el-col :xs="18" :sm="19" :md="20" :lg="22" :xl="22" :class="[(ifshare === false ? 'class-disable' : 'class-enable' && canbook === false ? 'class-disable' : 'class-enable' && position.disable_schedule === true ? 'class-disable' : 'class-enable'), 'list-' + position.status, 'session-listitem']">
                   <span style="width: 15px; display: inline-block"><i class="fa fa-calendar-check" aria-hidden="true"></i></span>
                   <el-avatar :size="60" :src="position.coach_image" class="session-list-avatar">
-                    <img :src="selected.coach_image"/>
+                    <img :src="selected.coach_image" :alt="selected.coach_image"/>
                   </el-avatar>
                   <span class="session-list-time">
                   {{ position.start_time }}  {{ $moment(position.date).format('dddd') }} {{ $moment(position.date).format('Do') }} {{ $moment(position.date).format('MMM') }}
@@ -139,7 +139,7 @@
               <el-col :xs="18" :sm="19" :md="20" :lg="22" :xl="22" :class="[(ifshare === false ? 'class-disable' : 'class-enable' && canbook === false ? 'class-disable' : 'class-enable' && position.disable_schedule === true ? 'class-disable' : 'class-enable'), 'list-' + position.status, 'session-listitem']">
                 <span style="width: 15px; display: inline-block"> <i class="el-icon-circle-check"></i></span>
                 <el-avatar :size="60" :src="position.coach_image" class="session-list-avatar">
-                  <img :src="position.coach_image"/>
+                  <img :src="position.coach_image" :alt="position.coach_image"/>
                 </el-avatar>
                 <span class="session-list-time">
                   {{ position.start_time }}  {{ $moment(position.date).format('dddd') }} {{ $moment(position.date).format('Do') }} {{ $moment(position.date).format('MMM') }}
@@ -165,7 +165,7 @@
               <el-col :xs="18" :sm="19" :md="20" :lg="22" :xl="22" :class="[(ifshare === false ? 'class-disable' : 'class-enable' && canbook === false ? 'class-disable' : 'class-enable' && position.disable_schedule === true ? 'class-disable' : 'class-enable'), 'list-' + position.status, 'session-listitem']">
                 <span style="width: 15px; display: inline-block"><i class="fa fa-ban" aria-hidden="true"></i></span>
                 <el-avatar :size="60" :src="position.coach_image" class="session-list-avatar">
-                  <img :src="position.coach_image"/>
+                  <img :src="position.coach_image" :alt="position.coach_image"/>
                 </el-avatar>
                 <span class="session-list-time">
                   {{ position.start_time }}  {{ $moment(position.date).format('dddd') }} {{ $moment(position.date).format('Do') }} {{ $moment(position.date).format('MMM') }}
@@ -211,7 +211,7 @@
         <el-col :span="4">
           <div style="float:left; padding: 8px;">
             <el-avatar :size="80" :src="schedule_details.coach_image" class="dbl-border">
-              <img :src="schedule_details.coach_image"/>
+              <img :src="schedule_details.coach_image" :alt="schedule_details.coach_image"/>
             </el-avatar>
           </div>
         </el-col>
@@ -389,7 +389,7 @@ export default {
         return ret.sort((a, b) => (a.status > b.status) ? 1 : (a.status === b.status) ? ((a.date > b.date) ? 1 : -1) : -1 ) // sort data pending as end
       } else {
         if(this.datefilter.length > 1) {
-          var data = this.session_collection.filter(position => this.checkedFilters.includes(position.status));
+          let data = this.session_collection.filter(position => this.checkedFilters.includes(position.status));
           let ret = data.filter(position => (this.date_collections[0] <= position.date) && (this.date_collections[1] >= position.date))
           return ret.sort((a, b) => (a.status > b.status) ? 1 : (a.status === b.status) ? ((a.date > b.date) ? 1 : -1) : -1 ) // sort data pending as end
         }
@@ -434,14 +434,14 @@ export default {
 
       let diff = (dateTime - today)
       let calculated_time = (diff / (1000 * 60 * 60))
-
-      if (calculated_time > 24 ) {
+      console.log(calculated_time)
+      if (calculated_time > 24 || calculated_time < 0) {
         // The yourDate time is less than 1 days from now
         Notification.error({
           title: 'Unable to Cancel',
           dangerouslyUseHTMLString: true,
           message: '<p>You can only cancel sessions through SmartCharts more than 24 hours before the start of the booked session.</p>' +
-          'If you need help, please email <a href="mailto:info@smartchartsfx.com" class="text-link">info@smartchartsfx.com.</a></p>',
+          'If you need help, please email <a href="mailto:info@smartchartsfx.com" class="text-link" style="color: #15274B !important;">info@smartchartsfx.com.</a></p>',
           duration: 4 * 2000
         })
         this.loading = false
@@ -471,7 +471,7 @@ export default {
           schedule_details['status'] = 'Pending'
           // schedule_details['status'] = 'Pending'
           //** Update schedule by id **//
-          this.session_collection.forEach((item, index) => {
+          this.session_collection.forEach((item) => {
             if(item.id === schedule_details.id) {
               item['status'] = 'Pending'
               item.id = coaching_session_id
@@ -510,7 +510,7 @@ export default {
       console.log(value,'value')
       this.loading = true
       // let total_a_credits = 0
-      let total_a_credits = this.sales.computed_credits.total_available
+      // let total_a_credits = this.sales.computed_credits.total_available
       // console.log(this.sales.computed_credits.total_available)
       // if(total_a_credits === 0) {
       //   this.$notify.error({
@@ -531,7 +531,7 @@ export default {
             })
 
             //** Update schedule by id **//
-            this.session_collection.forEach((item, index) => {
+            this.session_collection.forEach((item) => {
               if(item.id === value.id) {
                 item['status'] = 'Booked'
               }
@@ -572,7 +572,7 @@ export default {
     },
     scrollToElement(options) {
       this.count_loading = true
-      var thisclass = 'sessions-item-' + this.count
+      let thisclass = 'sessions-item-' + this.count
       setTimeout(() => {
         this.count += 16
         this.session_collection = this.selected.slice(0, this.count)
