@@ -428,11 +428,14 @@ export default {
     handleDeleteBooking(schedule_details) {
       this.loading = true
       const today = new Date()
-      today.setDate(today.getDate() + 1) // add 1 day for date now
+      today.setDate(today.getDate()) // add 1 day for date now
       const sessionDate = schedule_details.date + ' ' + schedule_details.start_time
       const dateTime = new Date(sessionDate)
 
-      if (today < dateTime ) {
+      let diff = (dateTime - today)
+      let calculated_time = (diff / (1000 * 60 * 60))
+
+      if (calculated_time <= 24 ) {
         // The yourDate time is less than 1 days from now
         Notification.error({
           title: 'Unable to Cancel',
