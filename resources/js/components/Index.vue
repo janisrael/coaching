@@ -77,13 +77,13 @@
                             </div>
                             <div class="left-list-sub">
                               <span style="color: rgb(169, 169, 169);">Markets traded -</span>
-                              <span v-for="(mt, index) in scope.row.market_traded" :key="index" style="display: inline-block">
+                              <span v-for="(mt, index) in scope.row.market_traded" :key="index" style="display: inline-block; word-break: break-word;">
                                 <span>{{mt}}</span><span v-if="index+1 < scope.row.market_traded.length">,  </span>
                               </span>
                             </div>
                             <div class="left-list-sub">
                               <span style="color: rgb(169, 169, 169);">Style - </span>
-                              <span v-for="(st, index) in scope.row.style" :key="index" style="display: inline-block">
+                              <span v-for="(st, index) in scope.row.style" :key="index" style="display: inline-block; word-break: break-word;">
                                 <span>{{st}}</span><span v-if="index+1 < scope.row.style.length">, </span>
                               </span>
                             </div>
@@ -503,6 +503,7 @@ export default {
     this.loading = true
     this.read()
     this.setrange()
+    console.log('updated')
   },
   methods: {
     goToAccount() {
@@ -906,16 +907,18 @@ export default {
       datares.forEach(function (value, index) {
         value['disable_schedule'] = false
         if(value.status === 'Booked' && value.coach_id === user_id) {
-          countBooked++;
-        }
-        if(value.status === 'Attended' && value.coach_id === user_id) {
+          const today = new Date()
           const dateTime = this.$moment(`${value.date} ${value.start_time}`, 'YYYY-MM-DD HH:mm:ss').format();
           let calcDate = this.$moment().diff(this.$moment(dateTime), 'hours', true)
-          if (calcDate > 24) {
+          if (today > dateTime) {
             value['disable_schedule'] = true
           } else {
             value['disable_schedule'] = false
           }
+          countBooked++;
+        }
+        if(value.status === 'Attended' && value.coach_id === user_id) {
+          value['disable_schedule'] = false
           countAttended++;
         }
         if(value.status === 'Cancelled' && value.coach_id === user_id) {
