@@ -435,7 +435,7 @@ export default {
       let diff = (dateTime - today)
       let calculated_time = (diff / (1000 * 60 * 60))
       console.log(calculated_time)
-      if (calculated_time > 24 || calculated_time < 0) {
+      if (calculated_time < 24) {
         // The yourDate time is less than 1 days from now
         Notification.error({
           title: 'Unable to Cancel',
