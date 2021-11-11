@@ -81,13 +81,13 @@
           <transition name="el-fade-in-linear" mode="out-in">
             <div v-if="position.status === 'Pending'" class="list-item" @click="dialogMentor(position)">
               <!--            <div v-if="position.status === 'Pending'" class="list-item" @click="dialogMentor(position)">-->
-              <el-col :xs="18" :sm="19" :md="20" :lg="22" :xl="22" :class="[(ifshare === false ? 'class-disable' : 'class-enable' && canbook === false ? 'class-disable' : 'class-enable'), 'list-' + position.status, 'session-listitem']">
+              <el-col :xs="18" :sm="19" :md="20" :lg="22" :xl="22" :class="[(ifshare === false ? 'class-disable' : 'class-enable' && canbook === false ? 'class-disable' : 'class-enable' && position.disable_schedule === true ? 'class-disable' : 'class-enable'), 'list-' + position.status, 'session-listitem']">
                 <span style="width: 15px; display: inline-block"><i class="far fa-clock"></i></span>
                 <el-avatar :size="60" :src="position.coach_image" class="session-list-avatar">
                   <img :src="position.coach_image"/>
                 </el-avatar>
                 <span class="session-list-time">
-                  {{ position.start_time }}  {{ $moment(position.date).format('dddd') }}  {{ $moment(position.date).format('MM/DD')}}
+                  {{ position.start_time }}  {{ $moment(position.date).format('dddd') }} {{ $moment(position.date).format('Do') }} {{ $moment(position.date).format('MMM')}}
                 </span>
                 <span v-if="position.availability_type !== null || position.availability_type !== '' || position.availability_type !== undefined">
                   <span v-if="position.availability_type.includes('Can do either')">
@@ -114,7 +114,7 @@
                     <img :src="selected.coach_image"/>
                   </el-avatar>
                   <span class="session-list-time">
-                  {{ position.start_time }}  {{ $moment(position.date).format('dddd') }}  {{ $moment(position.date).format('MM/DD')}}
+                  {{ position.start_time }}  {{ $moment(position.date).format('dddd') }} {{ $moment(position.date).format('Do') }} {{ $moment(position.date).format('MMM') }}
                   </span>
                 <span v-if="position.availability_type !== null || position.availability_type !== '' || position.availability_type !== undefined">
                   <span v-if="position.availability_type.includes('Can do either')">
@@ -142,7 +142,7 @@
                   <img :src="position.coach_image"/>
                 </el-avatar>
                 <span class="session-list-time">
-                {{ position.start_time }}  {{ $moment(position.date).format('dddd') }}  {{ $moment(position.date).format('MM/DD')}}
+                  {{ position.start_time }}  {{ $moment(position.date).format('dddd') }} {{ $moment(position.date).format('Do') }} {{ $moment(position.date).format('MMM') }}
                 </span>
                 <span v-if="position.availability_type !== null || position.availability_type !== '' || position.availability_type !== undefined">
                   <span v-if="position.availability_type.includes('Can do either')">
@@ -168,7 +168,7 @@
                   <img :src="position.coach_image"/>
                 </el-avatar>
                 <span class="session-list-time">
-                  {{ position.start_time }}  {{ $moment(position.date).format('dddd') }}  {{ $moment(position.date).format('MM/DD')}}
+                  {{ position.start_time }}  {{ $moment(position.date).format('dddd') }} {{ $moment(position.date).format('Do') }} {{ $moment(position.date).format('MMM') }}
                 </span>
                 <span v-if="position.availability_type !== null || position.availability_type !== '' || position.availability_type !== undefined">
                   <span v-if="position.availability_type.includes('Can do either')">
@@ -427,12 +427,10 @@ export default {
     },
     handleDeleteBooking(schedule_details) {
       this.loading = true
-      console.log(schedule_details,'schedule_details')
-      const today = new Date()
-      const tomorrow = new Date(schedule_details.date)
-      tomorrow.setDate(tomorrow.getDate() + 1)
-      let date2 = tomorrow.toJSON().slice(0,10).replace(/-/g,'-');
-      if(today < date2) {
+      const newDate = new Date(schedule_details.date)
+      let calcDate = this.$moment().diff(this.$moment(newDate), 'hours', true)
+      if (calcDate > 24) {
+        // The yourDate time is less than 1 days from now
         Notification.error({
           title: 'Unable to Cancel',
           message: 'You can only cancel sessions through SmartCharts more than 24 hours before the start of the booked session. If you need help, please email info@smartchartsfx.com',
@@ -440,6 +438,7 @@ export default {
         })
         return
       }
+
       let url = "/api/v1/coaching-session/cancel?schedule_id=" + schedule_details.id;
       axios.post(url).then(response => {
         // console.log(value.id, 'id')

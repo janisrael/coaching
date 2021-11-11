@@ -354,6 +354,7 @@ import Loading from "vue-loading-overlay";
 import SessionComponent from './SessionsComponent.vue'
 import ShareModalComponent from './ShareModalComponent.vue'
 import Region from './region.json'
+import {Notification} from "element-ui";
 // dummy data
 // import json_sales from './dummy_sales.json'
 // import json_coaches from './dummy_coaches.json'
@@ -905,12 +906,21 @@ export default {
       datares.forEach(function (value, index) {
         if(value.status === 'Booked' && value.coach_id === user_id) {
           countBooked++;
+          value['disable_schedule'] = false
         }
         if(value.status === 'Attended' && value.coach_id === user_id) {
+          const dateTime = this.$moment(`${value.date} ${value.start_time}`, 'YYYY-MM-DD HH:mm:ss').format();
+          let calcDate = this.$moment().diff(this.$moment(dateTime), 'hours', true)
+          if (calcDate > 24) {
+            value['disable_schedule'] = true
+          } else {
+            value['disable_schedule'] = false
+          }
           countAttended++;
         }
         if(value.status === 'Cancelled' && value.coach_id === user_id) {
           countCancelled++;
+          value['disable_schedule'] = false
         }
       })
 
