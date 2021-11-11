@@ -904,9 +904,9 @@ export default {
       var countAttended = 0;
       var countCancelled = 0;
       datares.forEach(function (value, index) {
+        value['disable_schedule'] = false
         if(value.status === 'Booked' && value.coach_id === user_id) {
           countBooked++;
-          value['disable_schedule'] = false
         }
         if(value.status === 'Attended' && value.coach_id === user_id) {
           const dateTime = this.$moment(`${value.date} ${value.start_time}`, 'YYYY-MM-DD HH:mm:ss').format();

@@ -428,7 +428,8 @@ export default {
     handleDeleteBooking(schedule_details) {
       this.loading = true
       const newDate = new Date(schedule_details.date)
-      let calcDate = this.$moment().diff(this.$moment(newDate), 'hours', true)
+      const dateTime = this.$moment(`${schedule_details.date} ${schedule_details.start_time}`, 'YYYY-MM-DD HH:mm:ss').format();
+      let calcDate = this.$moment().diff(this.$moment(dateTime), 'hours', true)
       if (calcDate > 24) {
         // The yourDate time is less than 1 days from now
         Notification.error({
