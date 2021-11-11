@@ -79,7 +79,7 @@
       <el-col v-loading="loading" element-loading-text="Loading Schedules..." element-loading-spinner="el-icon-loading" element-loading-background="rgba(0, 0, 0, 0.5)":span="24" class="session-items-container">
         <div v-for="(position, index) in even(filteredPositions)" :key="index"  :class="['sessions-item-' + index]">
           <transition name="el-fade-in-linear" mode="out-in">
-            <div v-if="position.status === 'Pending'" class="list-item" @click="dialogMentor(position)">
+            <div v-if="position.status === 'Pending' && position.visible === true" class="list-item" @click="dialogMentor(position)">
               <!--            <div v-if="position.status === 'Pending'" class="list-item" @click="dialogMentor(position)">-->
               <el-col :xs="18" :sm="19" :md="20" :lg="22" :xl="22" :class="[(ifshare === false ? 'class-disable' : 'class-enable' && canbook === false ? 'class-disable' : 'class-enable' && position.disable_schedule === true ? 'class-disable' : 'class-enable'), 'list-' + position.status, 'session-listitem']">
                 <span style="width: 15px; display: inline-block"><i class="far fa-clock"></i></span>

@@ -773,19 +773,26 @@ export default {
 
         //** check availability_type if null set default value as Remote Only **//
         const today = new Date()
-
-        let new_array = []
+        // const today_time = today
         schedraw.forEach((value, index) => {
           let sched_date = value.date + ' ' + value.start_time
           let dateTime = new Date(sched_date)
-
             if(dateTime > today) {
-              new_array.push(value)
+              value['visible'] = true
+
               if(value.availability_type === null || value.availability_type === undefined || value.availability_type === '') {
-                new_array['availability_type'] = 'Remote only'
+                value['availability_type'] = 'Remote only'
               }
+
+            } else {
+              value['visible'] = false
+              if(value.availability_type === null || value.availability_type === undefined || value.availability_type === '') {
+                value['availability_type'] = 'Remote only'
+              }
+
             }
         })
+        console.log(schedraw,'new_array')
         var hasbooked = true
 
         this.coaches = coachesraw  // assign mentors to global variables
@@ -823,7 +830,7 @@ export default {
           }
         })
 
-        var scheds = new_array
+        var scheds = schedraw
         var coach = coachesraw
 
         let arr1 = scheds.filter(function (sched) {
@@ -916,16 +923,18 @@ export default {
       datares.forEach(function (value, index) {
         value['disable_schedule'] = false
         if(value.status === 'Booked' && value.coach_id === user_id) {
-          const today = new Date()
-          const sessionDate = value.date + ' ' + value.start_time
-          const dateTime = new Date(sessionDate)
-          // const dateTime = this.$moment(`${value.date} ${value.start_time}`, 'YYYY-MM-DD HH:mm:ss').format();
-          // let calcDate = this.$moment().diff(this.$moment(dateTime), 'hours', true)
-          if (today > dateTime) {
-            value['disable_schedule'] = true
-          } else {
-            value['disable_schedule'] = false
-          }
+          // const today = Date.now()
+          // const todayDate = new Date(today).getTime()
+          // const sessionDate = value.date + ' ' + value.start_time
+          // const dateTime = new Date(sessionDate).getTime()
+          // // const dateTime = this.$moment(`${value.date} ${value.start_time}`, 'YYYY-MM-DD HH:mm:ss').format();
+          // // let calcDate = this.$moment().diff(this.$moment(dateTime), 'hours', true)
+          // if (todayDate > dateTime) {
+          //   value['disable_schedule'] = true
+          // } else {
+          //   value['disable_schedule'] = false
+          // }
+          value['disable_schedule'] = false
           countBooked++;
         }
         if(value.status === 'Attended' && value.coach_id === user_id) {
