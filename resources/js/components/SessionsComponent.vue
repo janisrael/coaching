@@ -427,9 +427,9 @@ export default {
     },
     handleDeleteBooking(schedule_details) {
       this.loading = true
-      const today = Date.now()
+      const today = new Date()
       const sessionDate = schedule_details.date + ' ' + schedule_details.start_time
-      const dateTime = new Date(sessionDate).getTime()
+      const dateTime = new Date(sessionDate)
       // var dateTime = new Date(sessionDate).getTime() + (1 * 24 * 60 * 60 * 1000)
       // const dateTime = this.$moment(`${schedule_details.date} ${schedule_details.start_time}`, 'YYYY-MM-DD HH:mm:ss').format();
       // let calcDate = this.$moment().diff(this.$moment(dateTime), 'hours', true)
