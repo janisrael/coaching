@@ -2,6 +2,10 @@ input#searchBar {
     background-color: transparent !important;
 }
 
+.info-sub {
+    word-break: break-word !important;
+}
+
 .loader-container {
     position: absolute;
     width: 100%;
