@@ -908,8 +908,10 @@ export default {
         value['disable_schedule'] = false
         if(value.status === 'Booked' && value.coach_id === user_id) {
           const today = new Date()
-          const dateTime = this.$moment(`${value.date} ${value.start_time}`, 'YYYY-MM-DD HH:mm:ss').format();
-          let calcDate = this.$moment().diff(this.$moment(dateTime), 'hours', true)
+          const sessionDate = value.date + ' ' + value.start_time
+          const dateTime = new Date(sessionDate)
+          // const dateTime = this.$moment(`${value.date} ${value.start_time}`, 'YYYY-MM-DD HH:mm:ss').format();
+          // let calcDate = this.$moment().diff(this.$moment(dateTime), 'hours', true)
           if (today > dateTime) {
             value['disable_schedule'] = true
           } else {

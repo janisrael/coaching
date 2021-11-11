@@ -427,10 +427,13 @@ export default {
     },
     handleDeleteBooking(schedule_details) {
       this.loading = true
-      const newDate = new Date(schedule_details.date)
-      const dateTime = this.$moment(`${schedule_details.date} ${schedule_details.start_time}`, 'YYYY-MM-DD HH:mm:ss').format();
-      let calcDate = this.$moment().diff(this.$moment(dateTime), 'hours', true)
-      if (calcDate > 24) {
+      const today = new Date()
+      const sessionDate = schedule_details.date + ' ' + schedule_details.start_time
+
+      var dateTime = new Date(sessionDate).getTime() + (1 * 24 * 60 * 60 * 1000)
+      // const dateTime = this.$moment(`${schedule_details.date} ${schedule_details.start_time}`, 'YYYY-MM-DD HH:mm:ss').format();
+      // let calcDate = this.$moment().diff(this.$moment(dateTime), 'hours', true)
+      if (dateTime > today) {
         // The yourDate time is less than 1 days from now
         Notification.error({
           title: 'Unable to Cancel',
