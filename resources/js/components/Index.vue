@@ -778,6 +778,7 @@ export default {
         schedraw.forEach((value, index) => {
           let sched_date = value.date + ' ' + value.start_time
           let dateTime = new Date(sched_date)
+
             if(dateTime > today) {
               new_array.push(value)
               if(value.availability_type === null || value.availability_type === undefined || value.availability_type === '') {
@@ -787,7 +788,7 @@ export default {
         })
         var hasbooked = true
 
-        this.coaches = new_array  // assign mentors to global variables
+        this.coaches = coachesraw  // assign mentors to global variables
         let m_index = 0
 
         //** get default sales index by id, index use to default selected mentor on page load **//
