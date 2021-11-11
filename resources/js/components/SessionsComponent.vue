@@ -433,13 +433,14 @@ export default {
       var dateTime = new Date(sessionDate).getTime() + (1 * 24 * 60 * 60 * 1000)
       // const dateTime = this.$moment(`${schedule_details.date} ${schedule_details.start_time}`, 'YYYY-MM-DD HH:mm:ss').format();
       // let calcDate = this.$moment().diff(this.$moment(dateTime), 'hours', true)
-      if (dateTime > today) {
+      if (today > dateTime) {
         // The yourDate time is less than 1 days from now
         Notification.error({
           title: 'Unable to Cancel',
           message: 'You can only cancel sessions through SmartCharts more than 24 hours before the start of the booked session. If you need help, please email info@smartchartsfx.com',
           duration: 4 * 1000
         })
+        this.loading = false
         return
       }
 
