@@ -772,14 +772,22 @@ export default {
         var schedraw = this.schedules
 
         //** check availability_type if null set default value as Remote Only **//
+        const today = new Date()
+
+        let new_array = []
         schedraw.forEach((value, index) => {
-          if(value.availability_type === null || value.availability_type === undefined || value.availability_type === '') {
-            value['availability_type'] = 'Remote only'
-          }
+          let sched_date = value.date + ' ' + value.start_time
+          let dateTime = new Date(sched_date)
+            if(dateTime > today) {
+              new_array.push(value)
+              if(value.availability_type === null || value.availability_type === undefined || value.availability_type === '') {
+                new_array['availability_type'] = 'Remote only'
+              }
+            }
         })
         var hasbooked = true
 
-        this.coaches = coachesraw  // assign mentors to global variables
+        this.coaches = new_array  // assign mentors to global variables
         let m_index = 0
 
         //** get default sales index by id, index use to default selected mentor on page load **//
@@ -814,7 +822,7 @@ export default {
           }
         })
 
-        var scheds = schedraw
+        var scheds = new_array
         var coach = coachesraw
 
         let arr1 = scheds.filter(function (sched) {
