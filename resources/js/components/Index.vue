@@ -798,13 +798,11 @@ export default {
         schedraw.forEach((value, index) => {
           let sched_date = value.date + ' ' + value.start_time
           let dateTime = new Date(sched_date)
-            if(dateTime > today) {
+            if(today < dateTime) {
               value['visible'] = true
-
               if(value.availability_type === null || value.availability_type === undefined || value.availability_type === '') {
                 value['availability_type'] = 'Remote only'
               }
-
             } else {
               value['visible'] = false
               if(value.availability_type === null || value.availability_type === undefined || value.availability_type === '') {
