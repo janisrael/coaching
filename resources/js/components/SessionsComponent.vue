@@ -108,7 +108,7 @@
             </div>
             <div v-if="position.status === 'Booked'" class="list-item">
               <div @click="dialogMentor(position)" style="display: block;">
-                <el-col :xs="18" :sm="19" :md="20" :lg="22" :xl="22" :class="['list-' + position.status, 'session-listitem']">
+                <el-col :xs="18" :sm="19" :md="20" :lg="22" :xl="22" :class="[(ifshare === false ? 'class-disable' : 'class-enable' && canbook === false ? 'class-disable' : 'class-enable' && position.disable_schedule === true ? 'class-disable' : 'class-enable'), 'list-' + position.status, 'session-listitem']">
                   <span style="width: 15px; display: inline-block"><i class="fa fa-calendar-check" aria-hidden="true"></i></span>
                   <el-avatar :size="60" :src="position.coach_image" class="session-list-avatar">
                     <img :src="selected.coach_image"/>
@@ -130,13 +130,13 @@
                 </span>
                   <!-- <div class="session-list-time session-list-time-calendar"><i class="fas fa-calendar-plus" style="margin-right:10px;"></i><span class="session-calendar-caption">CALENDAR</span></div> -->
                 </el-col>
-                <el-col :xs="6" :sm="5" :md="4" :lg="2" :xl="2" v-if="position.status === 'Booked'" :class="['list-' + position.status, 'list-item-btn']" @click="dialogMentor(position)">
+                <el-col :xs="6" :sm="5" :md="4" :lg="2" :xl="2" v-if="position.status === 'Booked'" :class="[(ifshare === false ? 'class-disable' : 'class-enable' && canbook === false ? 'class-disable' : 'class-enable'), 'list-' + position.status, 'list-item-btn']" @click="dialogMentor(position)">
                   <span>VIEW</span>
                 </el-col>
               </div>
             </div>
             <div v-if="position.status === 'Attended'" class="list-item" @click="dialogMentor(position)">
-              <el-col :xs="18" :sm="19" :md="20" :lg="22" :xl="22" :class="['list-' + position.status, 'session-listitem']">
+              <el-col :xs="18" :sm="19" :md="20" :lg="22" :xl="22" :class="[(ifshare === false ? 'class-disable' : 'class-enable' && canbook === false ? 'class-disable' : 'class-enable' && position.disable_schedule === true ? 'class-disable' : 'class-enable'), 'list-' + position.status, 'session-listitem']">
                 <span style="width: 15px; display: inline-block"> <i class="el-icon-circle-check"></i></span>
                 <el-avatar :size="60" :src="position.coach_image" class="session-list-avatar">
                   <img :src="position.coach_image"/>
@@ -157,12 +157,12 @@
                   </span>
                 </span>
               </el-col>
-              <el-col :xs="6" :sm="5" :md="4" :lg="2" :xl="2" v-if="position.status === 'Attended'" :class="['list-' + position.status, 'list-item-btn']">
+              <el-col :xs="6" :sm="5" :md="4" :lg="2" :xl="2" v-if="position.status === 'Attended'" :class="[(ifshare === false ? 'class-disable' : 'class-enable' && canbook === false ? 'class-disable' : 'class-enable'), 'list-' + position.status, 'list-item-btn']">
                 <span>VIEW</span>
               </el-col>
             </div>
             <div v-if="position.status === 'No Show'" class="list-item" @click="dialogMentor(position)">
-              <el-col :xs="18" :sm="19" :md="20" :lg="22" :xl="22" :class="['list-no-show', 'session-listitem']">
+              <el-col :xs="18" :sm="19" :md="20" :lg="22" :xl="22" :class="[(ifshare === false ? 'class-disable' : 'class-enable' && canbook === false ? 'class-disable' : 'class-enable' && position.disable_schedule === true ? 'class-disable' : 'class-enable'), 'list-' + position.status, 'session-listitem']">
                 <span style="width: 15px; display: inline-block"><i class="fa fa-ban" aria-hidden="true"></i></span>
                 <el-avatar :size="60" :src="position.coach_image" class="session-list-avatar">
                   <img :src="position.coach_image"/>
@@ -183,7 +183,7 @@
                   </span>
                 </span>
               </el-col>
-              <el-col :xs="6" :sm="5" :md="4" :lg="2" :xl="2" v-if="position.status === 'No Show'" :class="['list-no-show', 'list-item-btn']">
+              <el-col :xs="6" :sm="5" :md="4" :lg="2" :xl="2" v-if="position.status === 'No Show'" :class="[(ifshare === false ? 'class-disable' : 'class-enable' && canbook === false ? 'class-disable' : 'class-enable'), 'list-' + position.status, 'list-no-show list-item-btn']">
                 <span>VIEW</span>
               </el-col>
             </div>
@@ -430,15 +430,15 @@ export default {
       const today = new Date()
       const sessionDate = schedule_details.date + ' ' + schedule_details.start_time
       const dateTime = new Date(sessionDate)
-      // var dateTime = new Date(sessionDate).getTime() + (1 * 24 * 60 * 60 * 1000)
-      // const dateTime = this.$moment(`${schedule_details.date} ${schedule_details.start_time}`, 'YYYY-MM-DD HH:mm:ss').format();
-      // let calcDate = this.$moment().diff(this.$moment(dateTime), 'hours', true)
+
       if (dateTime < today) {
         // The yourDate time is less than 1 days from now
         Notification.error({
           title: 'Unable to Cancel',
-          message: 'You can only cancel sessions through SmartCharts more than 24 hours before the start of the booked session. If you need help, please email info@smartchartsfx.com',
-          duration: 4 * 1000
+          dangerouslyUseHTMLString: true,
+          message: '<p>You can only cancel sessions through SmartCharts more than 24 hours before the start of the booked session.</p>' +
+          'If you need help, please email <a href="mailto:info@smartchartsfx.com" class="text-link">info@smartchartsfx.com.</a></p>',
+          duration: 4 * 2000
         })
         this.loading = false
         return
