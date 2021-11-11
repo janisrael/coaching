@@ -79,7 +79,7 @@
       <el-col v-loading="loading" element-loading-text="Loading Schedules..." element-loading-spinner="el-icon-loading" element-loading-background="rgba(0, 0, 0, 0.5)":span="24" class="session-items-container">
         <div v-for="(position, index) in even(filteredPositions)" :key="index"  :class="['sessions-item-' + index]">
           <transition name="el-fade-in-linear" mode="out-in">
-            <div v-if="position.status === 'Pending'" class="list-item" @click="dialogMentor(position)">
+            <div v-if="position.status === 'Pending' && position.visible === true" class="list-item" @click="dialogMentor(position)">
               <!--            <div v-if="position.status === 'Pending'" class="list-item" @click="dialogMentor(position)">-->
               <el-col :xs="18" :sm="19" :md="20" :lg="22" :xl="22" :class="[(ifshare === false ? 'class-disable' : 'class-enable' && canbook === false ? 'class-disable' : 'class-enable' && position.disable_schedule === true ? 'class-disable' : 'class-enable'), 'list-' + position.status, 'session-listitem']">
                 <span style="width: 15px; display: inline-block"><i class="far fa-clock"></i></span>
@@ -427,9 +427,9 @@ export default {
     },
     handleDeleteBooking(schedule_details) {
       this.loading = true
-      const today = new Date()
+      const today = Date.now()
       const sessionDate = schedule_details.date + ' ' + schedule_details.start_time
-      const dateTime = new Date(sessionDate)
+      const dateTime = new Date(sessionDate).getTime()
       // var dateTime = new Date(sessionDate).getTime() + (1 * 24 * 60 * 60 * 1000)
       // const dateTime = this.$moment(`${schedule_details.date} ${schedule_details.start_time}`, 'YYYY-MM-DD HH:mm:ss').format();
       // let calcDate = this.$moment().diff(this.$moment(dateTime), 'hours', true)
