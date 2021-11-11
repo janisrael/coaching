@@ -64,7 +64,7 @@ class ScheduleRepository implements ScheduleRepositoryInterface
                 $available = resolve(CoachingSession::class)->query(
                     array_values(config('api.sf_schedule')),
                     $whereAvailable,
-                    ['order' => CoachingSessionFields::DATE . ' ASC']
+                    ['order' => CoachingSessionFields::DATE . ' ASC, ' . CoachingSessionFields::START_TIME . ' ASC']
                 )['records'] ?? [];
 
                 $otherStatuses = resolve(CoachingSession::class)->query(
