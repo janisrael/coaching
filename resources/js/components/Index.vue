@@ -522,9 +522,9 @@ export default {
         if(response.data.is_student === true) {
           this.isStudent = true
           this.ifShare = true
-          console.log('active student')
+          console.log('active students')
         } else {
-          console.log('not-active')
+          console.log('not-actives')
           this.showShareModal()
           this.isStudent = false
           this.ifShare = false
