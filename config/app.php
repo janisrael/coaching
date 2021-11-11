@@ -107,6 +107,12 @@ return [
 
     'sf_simple_sale_id' => env('SF_SIMPLE_SALE_ID'),
 
+    'customer_default' => [
+        'group' => env('CUSTOMER_DEFAULT_GROUP'),
+        'region' => env('CUSTOMER_DEFAULT_REGION'),
+        'type' => env('CUSTOMER_DEFAULT_CUSTOMER_TYPE'),
+    ],
+
     /*
     |--------------------------------------------------------------------------
     | Application Locale Configuration

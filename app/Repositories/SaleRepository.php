@@ -91,9 +91,9 @@ class SaleRepository implements SaleRepositoryInterface
         if ($resource == '') {
             $portal_user = $portalUser->toArray();
             $person = resolve(Person::class)->get(auth()->guard('portal')->user()->salesforce_token);
-            $portal_user['customer_group'] = $person[PersonFields::CUSTOMER_GROUP] ? $person[PersonFields::CUSTOMER_GROUP] : "SC2";
-            $portal_user['customer_region'] = $person[PersonFields::REGION];
-            $portal_user['customer_type'] = $person[PersonFields::CUSTOMER_TYPE] ? $person[PersonFields::CUSTOMER_TYPE] : "Front End";
+            $portal_user['customer_group'] = $person[PersonFields::CUSTOMER_GROUP] ?: config('app.customer_default.group');
+            $portal_user['customer_region'] = $person[PersonFields::REGION] ?: config('app.customer_default.region');
+            $portal_user['customer_type'] = $person[PersonFields::CUSTOMER_TYPE] ?: config('app.customer_default.type');
             
             $this->result['portal_user'] = collect($portal_user)->except(['id', 'password']);
         }
