@@ -268,7 +268,7 @@
             title="To cancel a session you must give at least 24 hours notice."
             type="warning"
             show-icon
-            style="width: 60%; float:left;">
+            style="width: 50%; float:left;">
           </el-alert>
           <el-button :loading="loading" @click="handleDeleteBooking(schedule_details)" style="color: #fff; background-color: transparent !important; border: none !important;" size="small" type="primary">Cancel Booking</el-button>
           <el-button @click="handleClose()" size="small" type="success">Close</el-button>
@@ -464,6 +464,7 @@ export default {
           }
 
           schedule_details['coaching_session_id'] = coaching_session_id
+          schedule_details['status'] = 'Pending'
           // schedule_details['status'] = 'Pending'
           //** Update schedule by id **//
           this.session_collection.forEach((item, index) => {
@@ -472,7 +473,8 @@ export default {
               item.id = coaching_session_id
             }
           })
-          console.log(schedule_details)
+
+          console.log(schedule_details, this.session_collection)
           this.loading = false
           this.btn_loading = false
           this.dialogItem = false
