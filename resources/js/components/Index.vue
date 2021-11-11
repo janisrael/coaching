@@ -354,6 +354,7 @@ import Loading from "vue-loading-overlay";
 import SessionComponent from './SessionsComponent.vue'
 import ShareModalComponent from './ShareModalComponent.vue'
 import Region from './region.json'
+import {Notification} from "element-ui";
 // dummy data
 // import json_sales from './dummy_sales.json'
 // import json_coaches from './dummy_coaches.json'
@@ -676,7 +677,11 @@ export default {
 
         if(this.datacoach.coaches.length === 0) {
           console.log('asdasd')
-          this.display_message = true
+          if(this.customer_type === 'back end') {
+            this.display_message = false
+          } else {
+            this.display_message = true
+          }
           this.loading = false
           return
         }
@@ -783,8 +788,13 @@ export default {
         //** check if the customer and coach has match region **//
         let fil_res = this.coaches.find(o => o.region.toLowerCase() === this.customer_region.toLowerCase());
         if(!fil_res) {
-          console.log('has no')
-          this.display_message = true
+          if(this.customer_type === 'back end') {
+            this.display_message = false
+          } else {
+            console.log('has no')
+            this.display_message = true
+          }
+
           this.loading = false
         }
 
@@ -820,10 +830,19 @@ export default {
         //** Check if coaches is 0  **//
         if(this.customer_group.toLowerCase() === 'ltt') {
           if(this.coaches.length === 0) {
-            this.display_message = true
+            if(this.customer_type === 'back end') {
+              this.display_message = false
+            } else {
+              this.display_message = true
+            }
           }
           if(this.mentor_id === null || this.mentor_id === '' || this.mentor_id === undefined) {
-            this.display_message = true
+
+            if(this.customer_type === 'back end') {
+              this.display_message = false
+            } else {
+              this.display_message = true
+            }
           }
         }
 
@@ -885,14 +904,23 @@ export default {
       var countAttended = 0;
       var countCancelled = 0;
       datares.forEach(function (value, index) {
+        value['disable_schedule'] = false
         if(value.status === 'Booked' && value.coach_id === user_id) {
           countBooked++;
         }
         if(value.status === 'Attended' && value.coach_id === user_id) {
+          const dateTime = this.$moment(`${value.date} ${value.start_time}`, 'YYYY-MM-DD HH:mm:ss').format();
+          let calcDate = this.$moment().diff(this.$moment(dateTime), 'hours', true)
+          if (calcDate > 24) {
+            value['disable_schedule'] = true
+          } else {
+            value['disable_schedule'] = false
+          }
           countAttended++;
         }
         if(value.status === 'Cancelled' && value.coach_id === user_id) {
           countCancelled++;
+          value['disable_schedule'] = false
         }
       })
 
