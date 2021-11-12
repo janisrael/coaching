@@ -794,10 +794,13 @@ export default {
 
         //** check availability_type if null set default value as Remote Only **//
         const today = new Date()
+        console.log(today,'today')
         // const today_time = today
         schedraw.forEach((value, index) => {
+          // 2021-11-19 20:00
           let sched_date = value.date + ' ' + value.start_time
-          let dateTime = new Date(sched_date)
+          let str_date = sched_date.replaceAll('-', '/')
+          let dateTime = new Date(str_date)
             if(today < dateTime) {
               value['visible'] = true
               if(value.availability_type === null || value.availability_type === undefined || value.availability_type === '') {
@@ -805,6 +808,7 @@ export default {
               }
             } else {
               value['visible'] = false
+              console.log('false')
               if(value.availability_type === null || value.availability_type === undefined || value.availability_type === '') {
                 value['availability_type'] = 'Remote only'
               }

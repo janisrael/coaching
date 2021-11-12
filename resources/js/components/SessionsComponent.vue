@@ -79,8 +79,8 @@
       <el-col v-loading="loading" element-loading-text="Loading Schedules..." element-loading-spinner="el-icon-loading" element-loading-background="rgba(0, 0, 0, 0.5)" :span="24" class="session-items-container">
         <div v-for="(position, index) in even(filteredPositions)" :key="index"  :class="['sessions-item-' + index]">
           <transition name="el-fade-in-linear" mode="out-in">
-            <div v-if="position.status === 'Pending' && position.visible === true" class="list-item" @click="dialogMentor(position)">
-              <!--            <div v-if="position.status === 'Pending'" class="list-item" @click="dialogMentor(position)">-->
+            <div v-if="position.status === 'Pending' && position.visible === true" class="list-item">
+              <div @click="dialogMentor(position)" style="display: block !important;">
               <el-col :xs="18" :sm="19" :md="20" :lg="22" :xl="22" :class="[(ifshare === false ? 'class-disable' : 'class-enable' && canbook === false ? 'class-disable' : 'class-enable' && position.disable_schedule === true ? 'class-disable' : 'class-enable'), 'list-' + position.status, 'session-listitem']">
                 <span style="width: 15px; display: inline-block"><i class="far fa-clock"></i></span>
                 <el-avatar :size="60" :src="position.coach_image" class="session-list-avatar">
@@ -105,6 +105,7 @@
               <el-col :xs="6" :sm="5" :md="4" :lg="2" :xl="2" v-if="position.status === 'Pending'" v-bind:class="[(ifshare === false ? 'class-disable' : 'class-enable' && canbook === false ? 'class-disable' : 'class-enable'), 'list-' + position.status, 'list-item-btn']" >
                 <span>BOOK</span>
               </el-col>
+              </div>
             </div>
             <div v-if="position.status === 'Booked'" class="list-item">
               <div @click="dialogMentor(position)" style="display: block;">
@@ -162,7 +163,7 @@
               </el-col>
             </div>
             <div v-if="position.status === 'No Show'" class="list-item" @click="dialogMentor(position)">
-              <el-col :xs="18" :sm="19" :md="20" :lg="22" :xl="22" :class="[(ifshare === false ? 'class-disable' : 'class-enable' && canbook === false ? 'class-disable' : 'class-enable' && position.disable_schedule === true ? 'class-disable' : 'class-enable'), 'list-' + position.status, 'session-listitem']">
+              <el-col :xs="18" :sm="19" :md="20" :lg="22" :xl="22" :class="[(ifshare === false ? 'class-disable' : 'class-enable' && canbook === false ? 'class-disable' : 'class-enable' && position.disable_schedule === true ? 'class-disable' : 'class-enable'), 'list-' + position.status, 'list-no-show session-listitem']">
                 <span style="width: 15px; display: inline-block"><i class="fa fa-ban" aria-hidden="true"></i></span>
                 <el-avatar :size="60" :src="position.coach_image" class="session-list-avatar">
                   <img :src="position.coach_image" :alt="position.coach_image"/>
@@ -430,7 +431,8 @@ export default {
       const today = new Date()
       today.setDate(today.getDate()) // add 1 day for date now
       const sessionDate = schedule_details.date + ' ' + schedule_details.start_time
-      const dateTime = new Date(sessionDate)
+      let str_date = sessionDate.replaceAll('-', '/')
+      const dateTime = new Date(str_date)
 
       let diff = (dateTime - today)
       let calculated_time = (diff / (1000 * 60 * 60))
