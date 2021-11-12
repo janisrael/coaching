@@ -11,9 +11,12 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use GuzzleHttp\Exception\GuzzleException;
 use GuzzleHttp\Client;
+use App\Traits\ValidateSessionTrait;
 
 class CoachController extends Controller
 {
+    use ValidateSessionTrait;
+
     private $coachRepository;
     private $scheduleRepository;
 
@@ -28,8 +31,10 @@ class CoachController extends Controller
      *
      * @return json
      */
-    public function all()
+    public function all(Request $request)
     {
+        $this->validateSession($request);
+
         return CoachResource::collection(collect($this->coachRepository->all()));
     }
 
@@ -40,6 +45,8 @@ class CoachController extends Controller
      */
     public function schedule($date_from=null, $date_to=null, Request $request)
     {
+        $this->validateSession($request);
+
         if (!is_null($date_from) and !is_null($date_to)) {
             $this->scheduleRepository->setDate($date_from, $date_to);
         }

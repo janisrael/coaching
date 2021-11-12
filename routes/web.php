@@ -19,9 +19,4 @@ Route::get('logout', 'Auth\PortalLoginController@logout');
 Route::get('session/token/{token}', 'Auth\PortalLoginController@sessionToken');
 
 // Portal Session
-Route::group(['middleware' => 'portal.auth:portal'], function () {
-    
-    require 'coaching/v1.php';
-    
-    # require 'coaching/v2.php';
-});
+require 'coaching/v1.php';
