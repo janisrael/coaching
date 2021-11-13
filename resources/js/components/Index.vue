@@ -514,7 +514,7 @@ export default {
   methods: {
     getCoachUrl() {
       console.log('mounted')
-      this.coach_token = document.getElementById("ctrMain").src
+      this.coach_token = document.referer
       console.log(this.coach_token,'token')
       // https://dev-coaching.smartchartsfx.com/session/token/dcxXCVvu0qMTvvBaoUOia1Y5rHXg6cijqzmRpdvZWULxOEvQvXzq1xpyyAZDLg8fjH4ckd7KNfdF7gDeu09myv08ugrETO8RWTrJ#wid=17d17b22c45cdaf14efff705c9ae000e&title=Widget
       const str = this.coach_token
