@@ -526,9 +526,13 @@ export default {
       //   this.loading = false
       //   return
       // }
-
       let url = "/api/v1/coaching-session/book?schedule_id=" + value.id + '&pl=' + this.coach_token;
-      axios.post(url).then(response => {
+      axios.post(url, {
+        headers: {
+          'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
+          'X-Requested-With': 'XMLHttpRequest'
+        }
+      }).then(response => {
           if(response.data.data.status === 'success') {
             Notification.success({
               title: 'Success',
