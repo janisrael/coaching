@@ -391,15 +391,15 @@ export default {
     filteredPositions () {
       if(this.datefilter === '' || this.datefilter === null) {
         let ret = this.session_collection.filter(position => this.checkedFilters.includes(position.status));
-        return ret.sort((a, b) => (a.status > b.status) ? 1 : (a.status === b.status) ? ((a.date > b.date) ? 1 : -1) : -1 ) // sort data pending as end
+        return ret.sort((a, b) => (a.status > b.status) ? 1 : (a.status === b.status)) // sort data pending as end
       } else {
         if(this.datefilter.length > 1) {
           let data = this.session_collection.filter(position => this.checkedFilters.includes(position.status));
           let ret = data.filter(position => (this.date_collections[0] <= position.date) && (this.date_collections[1] >= position.date))
-          return ret.sort((a, b) => (a.status > b.status) ? 1 : (a.status === b.status) ? ((a.date > b.date) ? 1 : -1) : -1 ) // sort data pending as end
+          return ret.sort((a, b) => (a.status > b.status) ? 1 : (a.status === b.status) ) // sort data pending as end
         }
         let ret = this.session_collection.filter(position => this.checkedFilters.includes(position.status));
-        return ret.sort((a, b) => (a.status > b.status) ? 1 : (a.status === b.status) ? ((a.date > b.date) ? 1 : -1) : -1 ) // sort data pending as end
+        return ret.sort((a, b) => (a.status > b.status) ? 1 : (a.status === b.status)) // sort data pending as end
       }
     },
     noMore () {
