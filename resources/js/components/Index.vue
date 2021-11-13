@@ -502,15 +502,9 @@ export default {
     }
   },
   mounted() {
-console.log('mounted')
-    this.coach_token = document.getElementById("ctrMain").src
-    // https://dev-coaching.smartchartsfx.com/session/token/dcxXCVvu0qMTvvBaoUOia1Y5rHXg6cijqzmRpdvZWULxOEvQvXzq1xpyyAZDLg8fjH4ckd7KNfdF7gDeu09myv08ugrETO8RWTrJ#wid=17d17b22c45cdaf14efff705c9ae000e&title=Widget
-    const str = this.coach_token
-    const slug = str.split('v1?pl=').pop()
-    let str_res = slug.replaceAll('&title=Widget', '')
-    this.coach_token = str_res
-    this.read()
-    this.setrange()
+
+    setTimeout(() => this.getCoachUrl(), 1000)
+
   },
   created: function() {
     this.loading = true
@@ -518,6 +512,18 @@ console.log('mounted')
     console.log('updated')
   },
   methods: {
+    getCoachUrl() {
+      console.log('mounted')
+      this.coach_token = document.getElementById("ctrMain").src
+      console.log(this.coach_token,'token')
+      // https://dev-coaching.smartchartsfx.com/session/token/dcxXCVvu0qMTvvBaoUOia1Y5rHXg6cijqzmRpdvZWULxOEvQvXzq1xpyyAZDLg8fjH4ckd7KNfdF7gDeu09myv08ugrETO8RWTrJ#wid=17d17b22c45cdaf14efff705c9ae000e&title=Widget
+      const str = this.coach_token
+      const slug = str.split('v1?pl=').pop()
+      let str_res = slug.replaceAll('&title=Widget', '')
+      this.coach_token = str_res
+      this.read()
+      this.setrange()
+    },
     goToAccount() {
       window.location.href = this.base_url
     },
