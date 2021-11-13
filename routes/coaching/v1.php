@@ -18,10 +18,16 @@ Route::group(['namespace' => 'Coaching\V1'], function () {
 
         Route::post('coaching-session/book', 'CoachingSessionController@book');
 
+        Route::post('coaching-session/cancel', 'CoachingSessionController@cancel');
+    });
+
+
+    Route::group(['prefix' => 'api/v1'], function () {
+
         Route::get('share', 'CoachController@share');
 
         Route::get('check-student', 'CoachController@check');
-
-        Route::post('coaching-session/cancel', 'CoachingSessionController@cancel');
     });
+
+
 });
