@@ -488,7 +488,7 @@ export default {
           this.loading = false
           this.btn_loading = false
           this.dialogItem = false
-          this.$emit('reload', schedule_details)
+          this.$emit('reload', schedule_details, 'cancel')
 
           // this.session_collection = []
           // this.session_collection = response.data.data.schedules
@@ -545,7 +545,7 @@ export default {
             this.loading = false
             this.btn_loading = false
             this.dialogItem = false
-            this.$emit('reload', value)
+            this.$emit('reload', value, 'book')
 
             // this.session_collection = []
             // this.session_collection = response.data.data.schedules

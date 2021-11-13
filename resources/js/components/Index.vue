@@ -570,13 +570,24 @@ export default {
         return 'this-is-active';
       }
     },
-    reloadData(value) {
-      this.schedules.forEach((sched, i) => {
-        if(sched.id === value.id) {
-          sched['status'] = 'Pending'
-          sched.id = value.coaching_session_id
-        }
-      })
+    reloadData(value, action) {
+      if(action === 'book') {
+        this.schedules.forEach((sched, i) => {
+          if(sched.id === value.id) {
+            sched['status'] = 'Booked'
+            // sched.id = value.coaching_session_id
+          }
+        })
+      } else {
+        this.schedules.forEach((sched, i) => {
+          if(sched.id === value.id) {
+            sched['status'] = 'Pending'
+            sched.id = value.coaching_session_id
+          }
+        })
+      }
+
+      console.log(this.schedules)
       // this.new_collections.forEach((item, index) => {
       //   if(item.id === value.id) {
       //     item['status'] = 'Booked'
