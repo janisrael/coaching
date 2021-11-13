@@ -17,15 +17,16 @@ class AuthenticateInstance
     public function handle($request, Closure $next)
     {
         $referer = parse_url($request->headers->get('referer'));
-        parse_str($referer['query'], $query);
-        if (! isset($query['pl'])) {
-            abort(response()->json([
-                'error_code' => 403,
-                'error_message' => 'Forbidden',
-            ], 200));
+        if ($request->has('pl') === false and isset($referer['query'])) {
+            parse_str($referer['query'], $query);
+            if (! isset($query['pl'])) {
+                abort(response()->json([
+                    'error_code' => 403,
+                    'error_message' => 'Forbidden',
+                ], 200));
+            }
+            $request->merge(['pl'=>$query['pl']]);
         }
-
-        $request->merge(['pl'=>$query['pl']]);
         
         if ($request->has('pl')) {
             $portalUser = PortalLogin::where('api_token', $request->pl)->first();
