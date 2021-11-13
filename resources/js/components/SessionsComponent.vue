@@ -433,6 +433,7 @@ export default {
     handleDeleteBooking(schedule_details) {
       this.loading = true
       const today = new Date()
+      let session_id = schedule_details.id
       today.setDate(today.getDate()) // add 1 day for date now
       const sessionDate = schedule_details.date + ' ' + schedule_details.start_time
       let str_date = sessionDate.replaceAll('-', '/')
@@ -440,7 +441,6 @@ export default {
 
       let diff = (dateTime - today)
       let calculated_time = (diff / (1000 * 60 * 60))
-      console.log(calculated_time)
       if (calculated_time < 24) {
         // The yourDate time is less than 1 days from now
         Notification.error({
@@ -456,11 +456,7 @@ export default {
 
       let url = "/api/v1/coaching-session/cancel?schedule_id=" + schedule_details.id + '&pl=' + this.coach_token;
       axios.post(url).then(response => {
-        // console.log(value.id, 'id')
-        // console.log(response, 'response')
         if(response.data.data.status === 'success') {
-          // console.log(response.data.data.status,'success')
-          // this.
           Notification.success({
             title: 'Success',
             message: 'Booking cancellation request sent!',
@@ -484,11 +480,10 @@ export default {
             }
           })
 
-          console.log(schedule_details, this.session_collection)
           this.loading = false
           this.btn_loading = false
           this.dialogItem = false
-          this.$emit('reload', schedule_details, 'cancel')
+          this.$emit('reload', schedule_details, 'cancel', session_id)
 
           // this.session_collection = []
           // this.session_collection = response.data.data.schedules
@@ -513,7 +508,6 @@ export default {
     },
     handleBook(value) {
       this.btn_loading = true
-      console.log(value,'value')
       this.loading = true
       // let total_a_credits = 0
       // let total_a_credits = this.sales.computed_credits.total_available

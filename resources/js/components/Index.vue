@@ -503,7 +503,6 @@ export default {
   },
   created: function() {
     this.loading = true
-    console.log(this.coach_token,'token')
     let str = this.coach_token
     if(this.coach_token === undefined || this.coach_token === null) {
       str = ''
@@ -530,9 +529,7 @@ export default {
         if(response.data.is_student === true) {
           this.isStudent = true
           this.ifShare = true
-          console.log('active students')
         } else {
-          console.log('not-actives')
           this.showShareModal()
           this.isStudent = false
           this.ifShare = false
@@ -570,7 +567,7 @@ export default {
         return 'this-is-active';
       }
     },
-    reloadData(value, action) {
+    reloadData(value, action, session_id) {
       if(action === 'book') {
         this.schedules.forEach((sched, i) => {
           if(sched.id === value.id) {
@@ -578,16 +575,18 @@ export default {
             // sched.id = value.coaching_session_id
           }
         })
-      } else {
+      }
+      if(action === 'cancel'){
         this.schedules.forEach((sched, i) => {
-          if(sched.id === value.id) {
-            sched['status'] = 'Pending'
+          if(sched.id === session_id) {
             sched.id = value.coaching_session_id
+            sched['status'] = 'Pending'
           }
         })
       }
 
-      console.log(this.schedules)
+
+
       // this.new_collections.forEach((item, index) => {
       //   if(item.id === value.id) {
       //     item['status'] = 'Booked'
@@ -812,7 +811,6 @@ export default {
 
         //** check availability_type if null set default value as Remote Only **//
         const today = new Date()
-        console.log(today,'today')
         // const today_time = today
         schedraw.forEach((value, index) => {
           // 2021-11-19 20:00
@@ -826,14 +824,12 @@ export default {
               }
             } else {
               value['visible'] = false
-              console.log('false')
               if(value.availability_type === null || value.availability_type === undefined || value.availability_type === '') {
                 value['availability_type'] = 'Remote only'
               }
 
             }
         })
-        console.log(schedraw,'new_array')
         var hasbooked = true
 
         this.coaches = coachesraw  // assign mentors to global variables
@@ -849,7 +845,6 @@ export default {
           if(this.customer_type === 'back end') {
             this.display_message = false
           } else {
-            console.log('has no')
             this.display_message = true
           }
 
@@ -938,8 +933,8 @@ export default {
       }
 
       this.can_book = this.customer_group.toLowerCase() !== 'ltt';
-      console.log(this.schedules,'schedules')
       var scheds = this.schedules
+
       var coach = this.coaches
       var user_id = this.selected_id
       let arr1 = scheds.filter(function (sched) {
@@ -954,9 +949,9 @@ export default {
       var datares = mergeById(arr1, arr2)
 
       //** filter schedules by selected coach_id **//
-      let ret_data = datares.filter(function(ele){
-        return (ele.coach_id = row.id)
-      });
+      // let ret_data = datares.filter(function(ele){
+      //   return (ele.coach_id = row.id)
+      // });
 
       var countBooked = 0;
       var countAttended = 0;
