@@ -71,7 +71,8 @@ class ScheduleRepository implements ScheduleRepositoryInterface
                 [
                     CoachingSessionFields::SALE . ' IN (\'' . implode('\',\'', $saleId) . '\') and ' .
                     CoachingSessionFields::STATUS . ' IN (\'' . implode('\',\'', $this->statuses) . '\') ', 
-                ]
+                ],
+                ['order' => CoachingSessionFields::DATE . ' ASC, ' . CoachingSessionFields::START_TIME . ' ASC']
             )['records'] ?? [];
 
             $sf['records'] = array_merge($otherStatuses, $available);
