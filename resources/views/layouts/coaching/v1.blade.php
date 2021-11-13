@@ -81,6 +81,7 @@
 
     <script>
         window.ENV = {
+            APP_TOKEN: '{{ $appToken ?? "" }}',
             APP_URL: '{{ config('app.coaching_url') }}',
             APP_DEBUG: '{{ config('app.debug') }}',
         };
