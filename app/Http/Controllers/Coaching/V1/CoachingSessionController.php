@@ -11,9 +11,12 @@ use App\Repositories\Interfaces\SaleRepositoryInterface;
 use App\Repositories\Interfaces\ScheduleRepositoryInterface;
 use learntotrade\salesforce\Exceptions\SalesforceException;
 use Carbon\Carbon;
+use App\Traits\ValidateSessionTrait;
 
 class CoachingSessionController extends Controller
 {
+    use ValidateSessionTrait;
+    
     private $saleRepository;
     private $scheduleRepository;
 
@@ -25,6 +28,8 @@ class CoachingSessionController extends Controller
     
     public function book(CoachingSessionRequest $request)
     {
+        $this->validateSession($request);
+
         $sfSales = $this->saleRepository->all('sales');
 
         $computedCredits = $this->saleRepository->computedCredits($sfSales['sales']);
@@ -66,6 +71,8 @@ class CoachingSessionController extends Controller
 
     public function cancel(CoachingSessionRequest $request)
     {
+        $this->validateSession($request);
+
         $result = [
             'status' => 'error',
             'coaching_session_id' => null
@@ -130,7 +137,6 @@ class CoachingSessionController extends Controller
     {
         return [
             'computed_credits' => $this->saleRepository->computedCredits($this->saleRepository->all()['sales']),
-            //'schedules' => $this->scheduleRepository->all()['schedules'],
         ];
     }
 }

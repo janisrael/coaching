@@ -2,6 +2,7 @@
 
 namespace App\Http\Middleware\Portal;
 use Closure;
+use App\Models\PortalLogin;
 
 class AuthenticateInstance
 {
@@ -15,12 +16,26 @@ class AuthenticateInstance
      */
     public function handle($request, Closure $next)
     {
-        if ($request->session()->has('portal_instance')) {
-            $portalnstace = explode('\\', session('portal_instance'));
-            return response()->json([
+        $referer = parse_url($request->headers->get('referer'));
+        parse_str($referer['query'], $query);
+        if (! isset($query['pl'])) {
+            abort(response()->json([
                 'error_code' => 403,
-                'error_message' => 'Unable to load ' . ($portalnstace[2] ?? session('portal_instance')) . ' environment.',
-            ], 200);
+                'error_message' => 'Forbidden',
+            ], 200));
+        }
+
+        $request->merge(['pl'=>$query['pl']]);
+        
+        if ($request->has('pl')) {
+            $portalUser = PortalLogin::where('api_token', $request->pl)->first();
+            if ($portalUser and !$portalUser->can_access_coaching) {
+                $portalnstace = explode('\\', session('portal_instance'));
+                return response()->json([
+                    'error_code' => 403,
+                    'error_message' => 'Unable to load ' . ($portalnstace[2] ?? session('portal_instance')) . ' environment.',
+                ], 200);
+            }
         }
 
         return $next($request);

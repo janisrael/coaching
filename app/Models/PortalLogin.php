@@ -16,7 +16,8 @@ class PortalLogin extends Authenticatable
         'api_token',
         'expired_at',
         'last_login_at',
-        'last_login_ip'
+        'last_login_ip',
+        'can_access_coaching'
     ];
 
     protected $dates = [

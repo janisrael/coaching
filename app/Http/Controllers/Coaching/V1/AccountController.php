@@ -7,9 +7,13 @@ use App\Http\Resources\AccountResource;
 use Illuminate\Support\Facades\Auth;
 use App\Repositories\Interfaces\SaleRepositoryInterface;
 use App\Http\Resources\SaleResource;
+use App\Traits\ValidateSessionTrait;
+use Illuminate\Http\Request;
 
 class AccountController extends Controller
 {
+    use ValidateSessionTrait;
+    
     private $saleRepository;
 
     public function __construct(SaleRepositoryInterface $saleRepository)
@@ -22,9 +26,11 @@ class AccountController extends Controller
      * 
      * @return json
      */
-    public function person()
+    public function person(Request $request)
     {
-        return new AccountResource(Auth::guard('portal')->user());
+        $this->validateSession($request);
+        
+        return new AccountResource(session('portal_user'));
     }
     
     /**
@@ -32,8 +38,10 @@ class AccountController extends Controller
      * 
      * @return json
      */
-    public function sales()
+    public function sales(Request $request)
     {
+        $this->validateSession($request);
+        
         $data = $this->saleRepository->all();
 
         $data['computed_credits'] = $this->saleRepository->computedCredits($data['sales']);

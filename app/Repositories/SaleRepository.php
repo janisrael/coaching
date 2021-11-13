@@ -63,12 +63,10 @@ class SaleRepository implements SaleRepositoryInterface
 
     public function live($resource=''): void
     {
-        $portalUser = auth()->guard('portal')->user();
+        $portalUser = session('portal_user');
         $data = [];
 
-        $sfCustomer = auth()->guard('portal')->check() ? 
-                      [SaleFields::CUSTOMER.' = \''.$portalUser->salesforce_token.'\''] : 
-                      [SaleFields::DATE.' >= '.date('Y-m-d')];
+        $sfCustomer = [SaleFields::CUSTOMER.' = \''.$portalUser->salesforce_token.'\''];
 
         $sfCustomer[] = SaleFields::RECORD_TYPE_ID. ' IN (\'' . implode('\',\'', config('app.sf_sale_record_type_id')) . '\')';
         $sf = resolve(Sale::class)->query(
@@ -90,7 +88,7 @@ class SaleRepository implements SaleRepositoryInterface
 
         if ($resource == '') {
             $portal_user = $portalUser->toArray();
-            $person = resolve(Person::class)->get(auth()->guard('portal')->user()->salesforce_token);
+            $person = resolve(Person::class)->get($portalUser->salesforce_token);
             $portal_user['customer_group'] = $person[PersonFields::CUSTOMER_GROUP] ?: config('app.customer_default.group');
             $portal_user['customer_region'] = $person[PersonFields::REGION] ?: config('app.customer_default.region');
             $portal_user['customer_type'] = $person[PersonFields::CUSTOMER_TYPE] ?: config('app.customer_default.type');

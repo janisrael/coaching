@@ -68,10 +68,6 @@ class PortalLoginController extends Controller
     private function processLogin($request, $clientRequest)
     {
         $clientResponse = json_decode($clientRequest->getBody()->getContents());
-        $request->session()->forget('portal_instance');
-        if ($clientResponse->user->accessControlList->coaching === false) {
-            $request->session()->put('portal_instance', $clientResponse->user->instance);
-        }
 
         $password = $clientResponse->user->id . $clientResponse->token . config('app.coaching_url');
 
@@ -84,7 +80,8 @@ class PortalLoginController extends Controller
                 'password' => $password,
                 'expired_at' => $clientResponse->expires_at,
                 'last_login_at' => now(),
-                'last_login_ip' => $request->ip()
+                'last_login_ip' => $request->ip(),
+                'can_access_coaching' => $clientResponse->user->accessControlList->coaching,
             ]);
 
         $request->merge([
@@ -92,7 +89,7 @@ class PortalLoginController extends Controller
                 'password' => $password
                 ]);
 
-        return $this->login($request);
+        return redirect('/v1/?pl='.$clientResponse->token);
     }
 
     public function logout(Request $request)
