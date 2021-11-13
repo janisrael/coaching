@@ -440,7 +440,7 @@ export default {
       selected_row: {},
       region: Region,
       base_url: window.location.origin + '#funds',
-      coach_url: document.getElementById("ctrMain").src,
+      coach_url: '',
       coach_token: '',
       datefilter: [],
 // dummy
@@ -503,7 +503,7 @@ export default {
   },
   created: function() {
     this.loading = true
-
+    this.coach_token = document.getElementById("ctrMain").src
     // https://dev-coaching.smartchartsfx.com/session/token/dcxXCVvu0qMTvvBaoUOia1Y5rHXg6cijqzmRpdvZWULxOEvQvXzq1xpyyAZDLg8fjH4ckd7KNfdF7gDeu09myv08ugrETO8RWTrJ#wid=17d17b22c45cdaf14efff705c9ae000e&title=Widget
     const str = this.coach_token
     const slug = str.split('token/').pop()
