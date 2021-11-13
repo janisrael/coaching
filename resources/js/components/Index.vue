@@ -927,7 +927,7 @@ export default {
       }
 
       this.can_book = this.customer_group.toLowerCase() !== 'ltt';
-
+      console.log(this.schedules,'schedules')
       var scheds = this.schedules
       var coach = this.coaches
       var user_id = this.selected_id
@@ -953,17 +953,6 @@ export default {
       datares.forEach(function (value, index) {
         value['disable_schedule'] = false
         if(value.status === 'Booked' && value.coach_id === user_id) {
-          // const today = Date.now()
-          // const todayDate = new Date(today).getTime()
-          // const sessionDate = value.date + ' ' + value.start_time
-          // const dateTime = new Date(sessionDate).getTime()
-          // // const dateTime = this.$moment(`${value.date} ${value.start_time}`, 'YYYY-MM-DD HH:mm:ss').format();
-          // // let calcDate = this.$moment().diff(this.$moment(dateTime), 'hours', true)
-          // if (todayDate > dateTime) {
-          //   value['disable_schedule'] = true
-          // } else {
-          //   value['disable_schedule'] = false
-          // }
           value['disable_schedule'] = false
           countBooked++;
         }
