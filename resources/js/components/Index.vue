@@ -213,7 +213,7 @@
         </el-col>
         <el-col :xs="12" :sm="17" :md="16" :lg="18" :xl="18" class="full-height index-col-right" style="background-image: url('../../images/background.jpg'); background-size: cover;">
           <content-component v-if="loading === false" :selected="passData" :ifshare="ifShare" :canbook="canbook" @showModal="showShareModal" ></content-component>
-          <session-component v-if="loading === false" ref="sessionComponent" :date_filter="datefilter" :selected="for_sessiondata" :canbook="canbook" :user_id="coach_id" :sales="datasales" :ifshare="ifShare" :can_book="can_book" @reload="reloadData" @showModal="showShareModal" @filterData="filterData"></session-component>
+          <session-component v-if="loading === false" ref="sessionComponent" :coach_token="coach_token" :date_filter="datefilter" :selected="for_sessiondata" :canbook="canbook" :user_id="coach_id" :sales="datasales" :ifshare="ifShare" :can_book="can_book" @reload="reloadData" @showModal="showShareModal" @filterData="filterData"></session-component>
         </el-col>
       </el-col>
 
@@ -440,6 +440,8 @@ export default {
       selected_row: {},
       region: Region,
       base_url: window.location.origin + '#funds',
+      coach_url: document.getElementById("ctrMain").src,
+      coach_token: '',
       datefilter: [],
 // dummy
 //       dummy_sales: json_sales,
@@ -501,6 +503,12 @@ export default {
   },
   created: function() {
     this.loading = true
+
+    // https://dev-coaching.smartchartsfx.com/session/token/dcxXCVvu0qMTvvBaoUOia1Y5rHXg6cijqzmRpdvZWULxOEvQvXzq1xpyyAZDLg8fjH4ckd7KNfdF7gDeu09myv08ugrETO8RWTrJ#wid=17d17b22c45cdaf14efff705c9ae000e&title=Widget
+    const str = this.coach_token
+    const slug = str.split('token/').pop()
+    let str_res = slug.replaceAll('&title=Widget', '')
+    this.coach_token = str_res
     this.read()
     this.setrange()
     console.log('updated')
@@ -590,7 +598,7 @@ export default {
       let hasbooked = false
       // let coachesraw = []
       axios
-        .get(sched_api + '/' + date1a + '/' + date2a + '?status=all')
+        .get(sched_api + '/' + date1a + '/' + date2a + '?status=all&pl=' + this.coach_token)
         .then(response => {
           data = response.data.data.schedules
           this.schedules = data
@@ -670,9 +678,9 @@ export default {
 
         // fetching data in all promise
       Promise.all([
-        await fetch('/api/v1/coaches').then(res => res.ok && res.json() || Promise.reject(res)),
-        await fetch(sched_api + '/' + date1 + '/' + date2 + '?status=all').then(res => res.ok && res.json() || Promise.reject(res)),
-        await fetch('/api/v1/account/sales').then(res => res.ok && res.json() || Promise.reject(res))
+        await fetch('/api/v1/coaches?pl=' + this.coach_token).then(res => res.ok && res.json() || Promise.reject(res)),
+        await fetch(sched_api + '/' + date1 + '/' + date2 + '?status=all&pl=' + this.coach_token).then(res => res.ok && res.json() || Promise.reject(res)),
+        await fetch('/api/v1/account/sales?pl=' + this.coach_token).then(res => res.ok && res.json() || Promise.reject(res))
       ]).then(data => {
 
         //** for test mode using local data, change to true **//
@@ -698,7 +706,6 @@ export default {
         this.datasales = data[2].data // sales
 
         if(this.datacoach.coaches.length === 0) {
-          console.log('asdasd')
           if(this.customer_type === 'back end') {
             this.display_message = false
           } else {

@@ -320,6 +320,10 @@ export default {
     date_filter: {
       required: false,
       type: Array
+    },
+    coach_token: {
+      required: true,
+      type: String
     }
   },
   data() {
@@ -440,7 +444,7 @@ export default {
       if (calculated_time < 24) {
         // The yourDate time is less than 1 days from now
         Notification.error({
-          title: 'Unable to Cancel',
+          title: "You can't cancel this session",
           dangerouslyUseHTMLString: true,
           message: '<p>You can only cancel sessions through SmartCharts more than 24 hours before the start of the booked session.</p>' +
           'If you need help, please email <a href="mailto:info@smartchartsfx.com" class="text-link" style="color: #15274B !important;">info@smartchartsfx.com.</a></p>',
@@ -450,7 +454,7 @@ export default {
         return
       }
 
-      let url = "/api/v1/coaching-session/cancel?schedule_id=" + schedule_details.id;
+      let url = "/api/v1/coaching-session/cancel?schedule_id=" + schedule_details.id + '&pl=' + this.coach_token;
       axios.post(url).then(response => {
         // console.log(value.id, 'id')
         // console.log(response, 'response')
@@ -523,7 +527,7 @@ export default {
       //   return
       // }
 
-      let url = "/api/v1/coaching-session/book?schedule_id=" + value.id;
+      let url = "/api/v1/coaching-session/book?schedule_id=" + value.id + '&pl=' + this.coach_token;
       axios.post(url).then(response => {
           if(response.data.data.status === 'success') {
             Notification.success({
