@@ -36,26 +36,25 @@ class SaleRepository implements SaleRepositoryInterface
         }
 
         $total = collect($sales);
-        $sessionsExpiry = $total->where('sessions_expiry', '!=', null)
-                                ->where('is_child_sale', '=', false);
-
-        $childSaleSession = $total->where('is_child_sale', '=', true);
-        $totalChildSaleSession = $childSaleSession->count() > 0 
-                            ? $childSaleSession->sum('sessions_remaining') 
-                            : 0.0;
+        $sessionsExpiry = $total->where('sessions_expiry', '!=', null);
+        $emptyExpiry = $total->where('sessions_expiry', '=', null);
 
         $totalAvailable = $sessionsExpiry->count() > 0
-                            ? ($sessionsExpiry->where('sessions_expiry', '>', now()->format('Y-m-d'))->sum('sessions_remaining') + $totalChildSaleSession) 
+                            ? $sessionsExpiry->where('sessions_expiry', '>', now()->format('Y-m-d'))->sum('sessions_remaining') 
                             : $total->sum('sessions_remaining');
 
         $totalExpiry = $sessionsExpiry->count() > 0
                             ? $sessionsExpiry->where('sessions_expiry', '<', now()->format('Y-m-d'))->sum('sessions_remaining') 
                             : 0.0;
 
+        $totalEmptyExpiry = $emptyExpiry->count() > 0
+                            ? $emptyExpiry->sum('sessions_remaining')
+                            : 0.0;
+
         return [
             'total_credits' => $total->sum('sessions'),
             'total_available' => $totalAvailable,
-            'total_expired' => $totalExpiry,
+            'total_expired' => ($totalExpiry + $totalEmptyExpiry),
             'total_refunded' => $total->sum('sessions_recredited'),
             'total_cancelled' => $total->sum('sessions_cancelled'),
         ];
