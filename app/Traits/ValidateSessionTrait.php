@@ -16,7 +16,10 @@ trait ValidateSessionTrait
 
             if (is_null($user)) {
                 session()->forget('portal_user');
-                abort(401);
+                abort(response()->json([
+                    'error_code' => 401,
+                    'error_message' => 'Unauthorized',
+                ], 200));
 
             } else {
                 if (! Cache::has($request->pl)) {
