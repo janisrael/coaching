@@ -6,10 +6,13 @@
 
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
-
+    <meta name="app-token" content="{{ $appToken ?? "" }}">
     <title>{{ config('app.name', 'Laravel') }}</title>
 
     <!-- Scripts -->
+    <script>
+        let APP_TOKEN = '{{ $appToken ?? "" }}';
+    </script>
     <script src="{{ asset('js/app.js').'?d='.time() }}" defer></script>
 
     <!-- Fonts -->
@@ -81,7 +84,6 @@
 
     <script>
         window.ENV = {
-            APP_TOKEN: '{{ $appToken ?? "" }}',
             APP_URL: '{{ config('app.coaching_url') }}',
             APP_DEBUG: '{{ config('app.debug') }}',
         };

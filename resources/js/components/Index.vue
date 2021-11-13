@@ -441,7 +441,7 @@ export default {
       region: Region,
       base_url: window.location.origin + '#funds',
       coach_url: '',
-      coach_token: window.env.APP_TOKEN,
+      coach_token: APP_TOKEN,
       datefilter: [],
 // dummy
 //       dummy_sales: json_sales,
