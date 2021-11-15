@@ -70,6 +70,7 @@ return [
         'location' => $coachingSessionFields::LOCATION,
         'sale_id' => $coachingSessionFields::SALE,
         'customer_name' => $coachingSessionFields::CUSTOMER_NAME,
+        'coaching_expiry_date' => $coachingSessionFields::COACHING_EXPIRY_DATE,
         // 'zoom_url' => $coachingSessionFields::ZOOM_URL,
     ],
 
