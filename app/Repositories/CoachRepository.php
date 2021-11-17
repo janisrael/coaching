@@ -53,6 +53,9 @@ class CoachRepository implements CoachRepositoryInterface
         $options = [];
         $person = resolve(Person::class)->get(session('portal_user')->salesforce_token);
         $customerGroup = $this->customer_group[$person[PersonFields::CUSTOMER_GROUP]] ?? $this->customer_group['SC2'];
+        if ($customerGroup == 'LTT Legacy') {
+            $customerGroup = $customerGroup['LTT'];
+        }
 
         $customerType = [
             'Front End' => UserFields::CAN_COACH_FRONT_END.' = true',
