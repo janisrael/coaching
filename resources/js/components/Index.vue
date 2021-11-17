@@ -24,8 +24,7 @@
               </el-input>
             </div>
 
-            <el-col v-if="display_message
-" :span="24" style="padding: 10px;">
+            <el-col v-if="display_message" :span="24" style="padding: 10px;">
               <span class="no-available-coach">
                 You don’t currently have a coach allocated you. <br> To request that a coach is allocated to your account, <br>
                 please email <a href="mailto:info@smartchartsfx.com" class="text-link">info@smartchartsfx.com.</a>
