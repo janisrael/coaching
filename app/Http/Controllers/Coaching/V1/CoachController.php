@@ -46,16 +46,20 @@ class CoachController extends Controller
     public function schedule($date_from=null, $date_to=null, Request $request)
     {
         $this->validateSession($request);
+        $this->setLog('SCHEDULE_LIST: REQUEST', $request->all());
 
         if (!is_null($date_from) and !is_null($date_to)) {
             $this->scheduleRepository->setDate($date_from, $date_to);
+            $this->setLog('SCHEDULE_LIST: DATE', ['from'=>$date_from, 'to'=>$date_to]);
         }
 
         if ($request->has('status')) {
             $this->scheduleRepository->setStatus($request->status);
+            $this->setLog('SCHEDULE_LIST: STATUS', $request->status);
         }
 
         $data = $this->scheduleRepository->all();
+        $this->setLog('SCHEDULE_LIST: TOTAL', count($data['schedules']));
 
         return ScheduleResource::collection(collect($data));
     }

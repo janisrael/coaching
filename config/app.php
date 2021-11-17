@@ -113,6 +113,8 @@ return [
         'type' => env('CUSTOMER_DEFAULT_CUSTOMER_TYPE'),
     ],
 
+    'enable_log' => env('ENABLE_LOG') ? explode(',', env('ENABLE_LOG')) : [],
+
     /*
     |--------------------------------------------------------------------------
     | Application Locale Configuration
