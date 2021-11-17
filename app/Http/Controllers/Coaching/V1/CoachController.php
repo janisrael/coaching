@@ -34,8 +34,12 @@ class CoachController extends Controller
     public function all(Request $request)
     {
         $this->validateSession($request);
+        $this->setLog('COACHES: REQUEST', $request->all());
 
-        return CoachResource::collection(collect($this->coachRepository->all()));
+        $data = $this->coachRepository->all();
+        $this->setLog('COACHES: TOTAL', count($data['coaches']));
+
+        return CoachResource::collection(collect($data));
     }
 
     /**
@@ -46,20 +50,20 @@ class CoachController extends Controller
     public function schedule($date_from=null, $date_to=null, Request $request)
     {
         $this->validateSession($request);
-        $this->setLog('SCHEDULE_LIST: REQUEST', $request->all());
+        $this->setLog('SCHEDULES: REQUEST', $request->all());
 
         if (!is_null($date_from) and !is_null($date_to)) {
             $this->scheduleRepository->setDate($date_from, $date_to);
-            $this->setLog('SCHEDULE_LIST: DATE', ['from'=>$date_from, 'to'=>$date_to]);
+            $this->setLog('SCHEDULES: DATE', ['from'=>$date_from, 'to'=>$date_to]);
         }
 
         if ($request->has('status')) {
             $this->scheduleRepository->setStatus($request->status);
-            $this->setLog('SCHEDULE_LIST: STATUS', $request->status);
+            $this->setLog('SCHEDULES: STATUS', $request->status);
         }
 
         $data = $this->scheduleRepository->all();
-        $this->setLog('SCHEDULE_LIST: TOTAL', count($data['schedules']));
+        $this->setLog('SCHEDULES: TOTAL', count($data['schedules']));
 
         return ScheduleResource::collection(collect($data));
     }

@@ -48,7 +48,7 @@ class AccountController extends Controller
         $data['computed_credits'] = $this->saleRepository->computedCredits($data['sales']);
         
         $this->setLog('SALES:', $data['sales']);
-        $this->setLog('SALES: PORTAL_LOGIN', $data['portal_user']);
+        $this->setLog('SALES: PORTAL_USER', $data['portal_user']->except('portal_user_details'));
         $this->setLog('SALES: COMPUTED_CREDITS', $data['computed_credits']);
 
         return SaleResource::collection(collect($data));

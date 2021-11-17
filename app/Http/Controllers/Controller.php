@@ -41,7 +41,10 @@ class Controller extends BaseController
                 $this->benchMarkLog = strtoupper('REF#'.Str::random(5));
                 Log::{$type}('['.$this->benchMarkLog.'] CUSTOMER');
                 Log::{$type}(json_encode(session('portal_user')->only('salesforce_token', 'email')));
+                Log::{$type}('HTTP METHOD: ' . request()->method());
+                Log::{$type}('FULL URL: ' . request()->fullUrl());
                 Log::{$type}('-------');
+
                 $this->prependCustomerLog = false;
             }
 
