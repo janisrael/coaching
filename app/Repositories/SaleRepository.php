@@ -65,7 +65,10 @@ class SaleRepository implements SaleRepositoryInterface
         $portalUser = session('portal_user');
         $data = [];
 
-        $sfCustomer = [SaleFields::CUSTOMER.' = \''.$portalUser->salesforce_token.'\''];
+        $sfCustomer = [
+            SaleFields::CUSTOMER.' = \''.$portalUser->salesforce_token.'\' and ' .
+            SaleFields::PAYMENT_SCHEDULE.' = \'Fully Paid\''
+        ];
 
         $sfCustomer[] = SaleFields::RECORD_TYPE_ID. ' IN (\'' . implode('\',\'', config('app.sf_sale_record_type_id')) . '\')';
         $sf = resolve(Sale::class)->query(

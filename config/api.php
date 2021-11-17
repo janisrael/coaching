@@ -87,5 +87,6 @@ return [
         'sessions_recredited' => $saleFields::SESSIONS_RECREDITED,
         'sessions_expiry' => $saleFields::SESSIONS_EXPIRY,
         'coach' => $saleFields::COACH,
+        'payment_schedule' => $saleFields::PAYMENT_SCHEDULE,
     ]
 ];
