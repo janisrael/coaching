@@ -36,11 +36,22 @@ class SaleRepository implements SaleRepositoryInterface
         }
 
         $total = collect($sales);
-        $sessionsExpiry = $total->where('sessions_expiry', '!=', null);
+
         $emptyExpiry = $total->where('sessions_expiry', '=', null);
 
+        $sessionsExpiry = $total->where('sessions_expiry', '!=', null)
+                                ->where('payment_schedule', '=', 'Fully Paid');
+        
+        $childSale = $total->where('sessions_expiry', '!=', null)
+                           ->where('is_child_sale', '=', true)
+                           ->where('payment_schedule', '=', null);
+
+        $totalChildSale = $childSale->count() > 0
+                            ? $childSale->where('sessions_expiry', '>', now()->format('Y-m-d'))->sum('sessions_remaining')
+                            : 0.0;
+
         $totalAvailable = $sessionsExpiry->count() > 0
-                            ? $sessionsExpiry->where('sessions_expiry', '>', now()->format('Y-m-d'))->sum('sessions_remaining') 
+                            ? ($sessionsExpiry->where('sessions_expiry', '>', now()->format('Y-m-d'))->sum('sessions_remaining') + $totalChildSale) 
                             : $total->sum('sessions_remaining');
 
         $totalExpiry = $sessionsExpiry->count() > 0
@@ -66,8 +77,7 @@ class SaleRepository implements SaleRepositoryInterface
         $data = [];
 
         $sfCustomer = [
-            SaleFields::CUSTOMER.' = \''.$portalUser->salesforce_token.'\' and ' .
-            SaleFields::PAYMENT_SCHEDULE.' = \'Fully Paid\''
+            SaleFields::CUSTOMER.' = \''.$portalUser->salesforce_token.'\''
         ];
 
         $sfCustomer[] = SaleFields::RECORD_TYPE_ID. ' IN (\'' . implode('\',\'', config('app.sf_sale_record_type_id')) . '\')';
