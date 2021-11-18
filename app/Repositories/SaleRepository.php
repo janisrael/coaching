@@ -41,18 +41,26 @@ class SaleRepository implements SaleRepositoryInterface
 
         $sessionsExpiry = $total->where('sessions_expiry', '!=', null)
                                 ->where('payment_schedule', '=', 'Fully Paid');
+
+        $notFullyPaid = $total->where('sessions_expiry', '!=', null)
+                                ->where('payment_schedule', '!=', null)
+                                ->where('payment_schedule', '!=', 'Fully Paid');
         
         $childSale = $total->where('sessions_expiry', '!=', null)
                            ->where('is_child_sale', '=', true)
                            ->where('payment_schedule', '=', null);
+
+        $totalNotFullyPaid = $notFullyPaid->count() > 0
+                            ? $notFullyPaid->sum('sessions_remaining')
+                            : 0.0;
 
         $totalChildSale = $childSale->count() > 0
                             ? $childSale->where('sessions_expiry', '>', now()->format('Y-m-d'))->sum('sessions_remaining')
                             : 0.0;
 
         $totalAvailable = $sessionsExpiry->count() > 0
-                            ? ($sessionsExpiry->where('sessions_expiry', '>', now()->format('Y-m-d'))->sum('sessions_remaining') + $totalChildSale) 
-                            : $total->sum('sessions_remaining');
+                            ? $sessionsExpiry->where('sessions_expiry', '>', now()->format('Y-m-d'))->sum('sessions_remaining') 
+                            : 0.0;
 
         $totalExpiry = $sessionsExpiry->count() > 0
                             ? $sessionsExpiry->where('sessions_expiry', '<', now()->format('Y-m-d'))->sum('sessions_remaining') 
@@ -64,8 +72,9 @@ class SaleRepository implements SaleRepositoryInterface
 
         return [
             'total_credits' => $total->sum('sessions'),
-            'total_available' => $totalAvailable,
+            'total_available' => ($totalAvailable + $totalChildSale),
             'total_expired' => ($totalExpiry + $totalEmptyExpiry),
+            'total_not_fully_paid' => $totalNotFullyPaid,
             'total_refunded' => $total->sum('sessions_recredited'),
             'total_cancelled' => $total->sum('sessions_cancelled'),
         ];

@@ -12,6 +12,7 @@ use App\Repositories\Interfaces\ScheduleRepositoryInterface;
 use learntotrade\salesforce\Exceptions\SalesforceException;
 use Carbon\Carbon;
 use App\Traits\ValidateSessionTrait;
+use Illuminate\Support\Str;
 
 class CoachingSessionController extends Controller
 {
@@ -42,16 +43,33 @@ class CoachingSessionController extends Controller
         ];
 
         if ($computedCredits['total_available'] > 0) {
+            $sales = [];
+            if (count($sfSales['sales']) > 0) {
+                foreach ($sfSales['sales'] as $key => $value) {
+                    $value['is_child_sale'] = Str::contains($value['record_type_id'], config('app.sf_child_sale_id'));
+                    $sales[] = $value;
+                } 
+            }
+            $sales = collect($sales);
 
-            $sessionsRemaining = collect($sfSales['sales'])->sortBy('date')
-                                                           ->where('sessions_remaining', '>', 0)
-                                                           ->first();
-            $this->setLog('BOOK: SALE_SESSION_REMAINING', $sessionsRemaining);
+            $sessionsRemaining = $sales->where('sessions_expiry', '>', now()->format('Y-m-d'))
+                                        ->where('sessions_remaining', '>', 0);
+
+            $getSale = $sessionsRemaining->where('payment_schedule', '=', 'Fully Paid');
+
+            if ($getSale->count() == 0) {
+                $getSale = $sessionsRemaining->where('payment_schedule', '=', null)
+                                             ->where('is_child_sale', '=', true);
+            }
+
+            $getSale = $getSale->sortBy('sessions_expiry')->first();
+
+            $this->setLog('BOOK: SALE_SESSION_REMAINING', $getSale);
 
             try {
                 $coachingSessionData = [
                     CoachingSessionFields::STATUS => 'Booked',
-                    CoachingSessionFields::SALE => $sessionsRemaining['id'],
+                    CoachingSessionFields::SALE => $getSale['id'],
                     CoachingSessionFields::LOCATION => 'Remote',
                 ];
                 $this->setLog('BOOK: PREPARE_UPDATE', ['schedule_id' => $request->schedule_id, 'data'=>$coachingSessionData]);
