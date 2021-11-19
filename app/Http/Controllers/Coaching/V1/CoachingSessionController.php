@@ -32,9 +32,9 @@ class CoachingSessionController extends Controller
         $this->validateSession($request);
         $this->setLog('BOOK: REQUEST', $request->all());
 
-        $sfSales = $this->saleRepository->all('sales');
+        $sfSales = $this->saleRepository->all('sales')['sales'];
 
-        $computedCredits = $this->saleRepository->computedCredits($sfSales['sales']);
+        $computedCredits = $this->saleRepository->computedCredits($sfSales);
         $this->setLog('BOOK: COMPUTED_CREDIT', $computedCredits);
 
         $result = [
@@ -43,14 +43,7 @@ class CoachingSessionController extends Controller
         ];
 
         if ($computedCredits['total_available'] > 0) {
-            $sales = [];
-            if (count($sfSales['sales']) > 0) {
-                foreach ($sfSales['sales'] as $key => $value) {
-                    $value['is_child_sale'] = Str::contains($value['record_type_id'], config('app.sf_child_sale_id'));
-                    $sales[] = $value;
-                } 
-            }
-            $sales = collect($sales);
+            $sales = collect($sfSales);
 
             $sessionsRemaining = $sales->where('sessions_expiry', '>', now()->format('Y-m-d'))
                                         ->where('sessions_remaining', '>', 0);
@@ -62,14 +55,13 @@ class CoachingSessionController extends Controller
                                              ->where('is_child_sale', '=', true);
             }
 
-            $getSale = $getSale->sortBy('sessions_expiry')->first();
-
-            $this->setLog('BOOK: SALE_SESSION_REMAINING', $getSale);
+            $sale = $getSale->sortBy('sessions_expiry')->first();
+            $this->setLog('BOOK: SALE_SESSION_REMAINING', $sale);
 
             try {
                 $coachingSessionData = [
                     CoachingSessionFields::STATUS => 'Booked',
-                    CoachingSessionFields::SALE => $getSale['id'],
+                    CoachingSessionFields::SALE => $sale['id'],
                     CoachingSessionFields::LOCATION => 'Remote',
                 ];
                 $this->setLog('BOOK: PREPARE_UPDATE', ['schedule_id' => $request->schedule_id, 'data'=>$coachingSessionData]);

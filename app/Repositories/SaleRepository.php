@@ -27,43 +27,27 @@ class SaleRepository implements SaleRepositoryInterface
 
     public function computedCredits(array $data): array
     {
-        $sales = [];
-        if (count($data) > 0) {
-            foreach ($data as $key => $value) {
-                $value['is_child_sale'] = Str::contains($value['record_type_id'], config('app.sf_child_sale_id'));
-                $sales[] = $value;
-            } 
-        }
-
-        $total = collect($sales);
+        $total = collect($data);
 
         $emptyExpiry = $total->where('sessions_expiry', '=', null);
 
-        $sessionsExpiry = $total->where('sessions_expiry', '!=', null)
-                                ->where('payment_schedule', '=', 'Fully Paid');
-
-        $notFullyPaid = $total->where('sessions_expiry', '!=', null)
-                                ->where('payment_schedule', '!=', null)
-                                ->where('payment_schedule', '!=', 'Fully Paid');
+        $fullyPaid = $total->where('sessions_expiry', '!=', null)
+                           ->where('payment_schedule', '=', 'Fully Paid');
         
         $childSale = $total->where('sessions_expiry', '!=', null)
                            ->where('is_child_sale', '=', true)
                            ->where('payment_schedule', '=', null);
 
-        $totalNotFullyPaid = $notFullyPaid->count() > 0
-                            ? $notFullyPaid->sum('sessions_remaining')
-                            : 0.0;
-
         $totalChildSale = $childSale->count() > 0
                             ? $childSale->where('sessions_expiry', '>', now()->format('Y-m-d'))->sum('sessions_remaining')
                             : 0.0;
 
-        $totalAvailable = $sessionsExpiry->count() > 0
-                            ? $sessionsExpiry->where('sessions_expiry', '>', now()->format('Y-m-d'))->sum('sessions_remaining') 
+        $totalAvailable = $fullyPaid->count() > 0
+                            ? $fullyPaid->where('sessions_expiry', '>', now()->format('Y-m-d'))->sum('sessions_remaining') 
                             : 0.0;
 
-        $totalExpiry = $sessionsExpiry->count() > 0
-                            ? $sessionsExpiry->where('sessions_expiry', '<', now()->format('Y-m-d'))->sum('sessions_remaining') 
+        $totalExpiry = $fullyPaid->count() > 0
+                            ? $fullyPaid->where('sessions_expiry', '<', now()->format('Y-m-d'))->sum('sessions_remaining') 
                             : 0.0;
 
         $totalEmptyExpiry = $emptyExpiry->count() > 0
@@ -74,7 +58,6 @@ class SaleRepository implements SaleRepositoryInterface
             'total_credits' => $total->sum('sessions'),
             'total_available' => ($totalAvailable + $totalChildSale),
             'total_expired' => ($totalExpiry + $totalEmptyExpiry),
-            'total_not_fully_paid' => $totalNotFullyPaid,
             'total_refunded' => $total->sum('sessions_recredited'),
             'total_cancelled' => $total->sum('sessions_cancelled'),
         ];
@@ -100,6 +83,9 @@ class SaleRepository implements SaleRepositoryInterface
                 foreach (config('api.sf_sale') as $key => $val) {
                     if (in_array($val, array_keys($value))) {
                         $data[$field][$key] = $value[$val];
+                        if ($key == 'record_type_id') {
+                            $data[$field]['is_child_sale'] = Str::contains($value[$val], config('app.sf_child_sale_id'));
+                        }
                     }
                 }
             }
