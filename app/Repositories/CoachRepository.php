@@ -63,7 +63,7 @@ class CoachRepository implements CoachRepositoryInterface
         ];
         
         $filteredCoaches = [
-            UserFields::REGION.' = \''.$person[PersonFields::REGION].'\'',
+            UserFields::COACH_ASSIGNED_REGION.' includes (\''.$person[PersonFields::REGION].'\')',
             UserFields::BUSINESS_DIVISION.' includes (\''.$customerGroup.'\')',
         ];
 
@@ -76,7 +76,7 @@ class CoachRepository implements CoachRepositoryInterface
             $filteredCoaches
         );
 
-        if (count($sf)) {
+        if (count($sf) > 0 and isset($sf['records'])) {
             foreach ($sf['records'] as $field => $value) {
                 foreach (config('api.sf_coaches') as $key => $val) {
                     if (in_array($key, $this->api_options)) {
@@ -96,6 +96,7 @@ class CoachRepository implements CoachRepositoryInterface
                 if (isset($data[$field])) {
                     $data[$field]['country'] = __('country.'.$person[PersonFields::REGION]);
                     $data[$field]['region'] = $person[PersonFields::REGION];
+                    $data[$field]['assigned_region'] = explode(';',$data[$field]['assigned_region']);
                 }
             }
         }
