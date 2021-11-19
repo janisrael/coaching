@@ -96,6 +96,7 @@ class CoachRepository implements CoachRepositoryInterface
                 if (isset($data[$field])) {
                     $data[$field]['country'] = __('country.'.$person[PersonFields::REGION]);
                     $data[$field]['region'] = $person[PersonFields::REGION];
+                    $data[$field]['country_code'] = $person[PersonFields::REGION];
                     $data[$field]['assigned_region'] = explode(';',$data[$field]['assigned_region']);
                 }
             }
