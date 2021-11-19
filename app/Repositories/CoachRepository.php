@@ -94,11 +94,8 @@ class CoachRepository implements CoachRepositoryInterface
                 }
 
                 if (isset($data[$field])) {
-                    $country = null;
-                    if (isset($value[UserFields::COACH_COUNTRY])) {
-                        $country = __('country.'.$value[UserFields::COACH_COUNTRY]);
-                    }
-                    $data[$field]['country'] = $country;
+                    $data[$field]['country'] = __('country.'.$person[PersonFields::REGION]);
+                    $data[$field]['region'] = $person[PersonFields::REGION];
                 }
             }
         }
