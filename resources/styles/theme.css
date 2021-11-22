@@ -160,7 +160,8 @@ label#id-4 span {
     background-color: #92505e !important;
     transition: 0.3s;
 }
-.list-item:hover .list-Pending.session-listitem, .list-item.hover .list-Pending.session-listitem {
+.list-item:hover .list-Pending.session-listitem, .list-item.hover .list-Pending.session-listitem,
+.list-item:active .list-Pending.session-listitem, .list-item.active .list-Pending.session-listitem{
     background: #91b98c !important;
 }
 .list-item:hover .list-Pending.list-item-btn, .list-item.hover .list-Pending.list-item-btn {

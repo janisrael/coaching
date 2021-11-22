@@ -212,8 +212,8 @@
           </div>
         </el-col>
         <el-col :xs="12" :sm="17" :md="16" :lg="18" :xl="18" class="full-height index-col-right" style="background-image: url('../../images/background.jpg'); background-size: cover;">
-          <content-component v-if="loading === false" :selected="passData" :ifshare="ifShare" :canbook="canbook" @showModal="showShareModal" ></content-component>
-          <session-component v-if="loading === false" ref="sessionComponent" :coach_token="coach_token" :date_filter="datefilter" :selected="for_sessiondata" :canbook="canbook" :user_id="coach_id" :sales="datasales" :ifshare="ifShare" :can_book="can_book" @reload="reloadData" @showModal="showShareModal" @filterData="filterData"></session-component>
+          <content-component v-if="instanceCheck === true" :selected="passData" :ifshare="ifShare" :canbook="canbook" @showModal="showShareModal" ></content-component>
+          <session-component v-if="instanceCheck === true" ref="sessionComponent" :coach_token="coach_token" :date_filter="datefilter" :selected="for_sessiondata" :canbook="canbook" :user_id="coach_id" :sales="datasales" :ifshare="ifShare" :can_book="can_book" @reload="reloadData" @showModal="showShareModal" @filterData="filterData"></session-component>
         </el-col>
       </el-col>
 
@@ -434,6 +434,7 @@ export default {
       canbook: true,
       instance_message: '',
       m_index: 0,
+      instanceCheck: false,
       instanceModal: false, // default false
       display_message: false, // default false
       creditModal: false, // default false
@@ -706,10 +707,13 @@ export default {
         //** Check Instance **//
         if(data[0].error_code) {
           this.loading = false
+          this.instanceCheck = false
           this.instanceModal = true
           this.instance_message = data[0].error_message
           return
         }
+        this.instanceCheck = true
+
         //** Assigning Response **//
         this.datacoach = data[0].data // mentors
         this.datasched = data[1].data // schedules
