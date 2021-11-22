@@ -44,10 +44,9 @@ class ScheduleRepository implements ScheduleRepositoryInterface
         $data = [];
 
         $coach = resolve(CoachRepositoryInterface::class)->all();
-        $coaches = Arr::pluck($coach['coaches'], 'country_code', 'id');
-
+        $coaches = Arr::pluck($coach['coaches'], 'country', 'id');
         $salesforceToken = session('portal_user')->salesforce_token;
-        
+        $countries = array_flip(array_reverse(__('country')));
         $person = resolve(Person::class)->get($salesforceToken);
 
         $sale = resolve(SaleRepositoryInterface::class)->all();
@@ -102,7 +101,8 @@ class ScheduleRepository implements ScheduleRepositoryInterface
                 }
 
                 if (isset($coaches[$data[$field]['coach_id']])) {
-                    $coachTimezone = \DateTimeZone::listIdentifiers(\DateTimeZone::PER_COUNTRY, $coaches[$data[$field]['coach_id']])[0];
+                    $countryCode = $countries[$coaches[$data[$field]['coach_id']]] ?: false;
+                    $coachTimezone = \DateTimeZone::listIdentifiers(\DateTimeZone::PER_COUNTRY, $countryCode)[0];
                     $start = Carbon::createFromFormat('Y-m-d H:i', $data[$field]['date'] . ' ' . $data[$field]['start_time'], $coachTimezone);
                     $end = Carbon::createFromFormat('Y-m-d H:i', $data[$field]['date'] . ' ' . $data[$field]['end_time'], $coachTimezone);
 

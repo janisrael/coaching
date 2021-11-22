@@ -47,7 +47,7 @@ return [
         'market_traded_summary' => $userFields::MARKET_TRADED_SUMMARY,
         'style' => $userFields::TRADING_STYLE,
         'style_summary' => $userFields::TRADING_STYLE_SUMMARY,
-        'country_code' => $userFields::COACH_COUNTRY,
+        // 'country_code' => $userFields::COACH_COUNTRY,
         'languages' => $userFields::LANGUAGES,
         'coach_image' => $userFields::COACH_IMAGE,
         'email' => $userFields::EMAIL,
@@ -57,6 +57,7 @@ return [
         'region' => $userFields::REGION,
         'front_end' => $userFields::CAN_COACH_FRONT_END,
         'back_end' => $userFields::CAN_COACH_BACK_END,
+        'assigned_region' => $userFields::COACH_ASSIGNED_REGION,
     ],
 
     'sf_schedule' => [
@@ -87,5 +88,6 @@ return [
         'sessions_recredited' => $saleFields::SESSIONS_RECREDITED,
         'sessions_expiry' => $saleFields::SESSIONS_EXPIRY,
         'coach' => $saleFields::COACH,
+        'payment_schedule' => $saleFields::PAYMENT_SCHEDULE,
     ]
 ];

@@ -53,6 +53,9 @@ class CoachRepository implements CoachRepositoryInterface
         $options = [];
         $person = resolve(Person::class)->get(session('portal_user')->salesforce_token);
         $customerGroup = $this->customer_group[$person[PersonFields::CUSTOMER_GROUP]] ?? $this->customer_group['SC2'];
+        if ($customerGroup == 'LTT Legacy') {
+            $customerGroup = $this->customer_group['LTT'];
+        }
 
         $customerType = [
             'Front End' => UserFields::CAN_COACH_FRONT_END.' = true',
@@ -60,7 +63,7 @@ class CoachRepository implements CoachRepositoryInterface
         ];
         
         $filteredCoaches = [
-            UserFields::REGION.' = \''.$person[PersonFields::REGION].'\'',
+            UserFields::COACH_ASSIGNED_REGION.' includes (\''.$person[PersonFields::REGION].'\')',
             UserFields::BUSINESS_DIVISION.' includes (\''.$customerGroup.'\')',
         ];
 
@@ -73,7 +76,7 @@ class CoachRepository implements CoachRepositoryInterface
             $filteredCoaches
         );
 
-        if (count($sf)) {
+        if (count($sf) > 0 and isset($sf['records'])) {
             foreach ($sf['records'] as $field => $value) {
                 foreach (config('api.sf_coaches') as $key => $val) {
                     if (in_array($key, $this->api_options)) {
@@ -91,11 +94,10 @@ class CoachRepository implements CoachRepositoryInterface
                 }
 
                 if (isset($data[$field])) {
-                    $country = null;
-                    if (isset($value[UserFields::COACH_COUNTRY])) {
-                        $country = __('country.'.$value[UserFields::COACH_COUNTRY]);
-                    }
-                    $data[$field]['country'] = $country;
+                    $data[$field]['country'] = __('country.'.$person[PersonFields::REGION]);
+                    $data[$field]['region'] = $person[PersonFields::REGION];
+                    $data[$field]['country_code'] = $person[PersonFields::REGION];
+                    $data[$field]['assigned_region'] = explode(';',$data[$field]['assigned_region']);
                 }
             }
         }

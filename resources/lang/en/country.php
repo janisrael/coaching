@@ -239,5 +239,9 @@ return [
     "EH" => "Western Sahara",
     "YE" => "Yemen",
     "ZM" => "Zambia",
-    "ZW" => "Zimbabwe"
+    "ZW" => "Zimbabwe",
+
+    // SH!T Override problematic non-standard iso from SF.
+    "UK" => "United Kingdom", 
+    "PHL" => "Philippines",
 ];
