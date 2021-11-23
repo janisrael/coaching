@@ -58,6 +58,7 @@ return [
         'front_end' => $userFields::CAN_COACH_FRONT_END,
         'back_end' => $userFields::CAN_COACH_BACK_END,
         'assigned_region' => $userFields::COACH_ASSIGNED_REGION,
+        'timezone' => $userFields::COACH_TIME_ZONE,
     ],
 
     'sf_schedule' => [
