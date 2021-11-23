@@ -175,13 +175,12 @@ class ScheduleRepository implements ScheduleRepositoryInterface
         }
 
         $country = optional($countries)[$coachId];
-
+        /*
         if (is_null($country)) {
-            // $sfCoach = resolve(CoachRepositoryInterface::class)->getCoachById($coachId);
-            // $country = $sfCoach[UserFields::COACH_TIME_ZONE];
-            $country = null; 
+            $sfCoach = resolve(CoachRepositoryInterface::class)->getCoachById($coachId);
+            $country = $sfCoach[UserFields::COACH_TIME_ZONE];
         }
-
+        */
         return $country;
     }
 
