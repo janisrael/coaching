@@ -47,7 +47,7 @@ class CoachingSessionController extends Controller
             $sessionsRemaining = $sales->where('sessions_expiry', '>', now()->format('Y-m-d'))
                                         ->where('sessions_remaining', '>', 0);
 
-            $getSale = $sessionsRemaining->where('payment_schedule', '=', 'Fully Paid');
+            $getSale = $sessionsRemaining->where('date_fully_paid', '!=', null);
 
             if ($getSale->count() == 0) {
                 $getSale = $sessionsRemaining->where('payment_schedule', '=', null)
