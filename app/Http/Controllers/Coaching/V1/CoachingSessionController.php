@@ -50,8 +50,7 @@ class CoachingSessionController extends Controller
             $getSale = $sessionsRemaining->where('date_fully_paid', '!=', null);
 
             if ($getSale->count() == 0) {
-                $getSale = $sessionsRemaining->where('payment_schedule', '=', null)
-                                             ->where('is_child_sale', '=', true);
+                $getSale = $sessionsRemaining->where('is_child_sale', '=', true);
             }
 
             $sale = $getSale->sortBy('sessions_expiry')->first();
