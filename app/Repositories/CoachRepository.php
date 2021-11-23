@@ -5,7 +5,6 @@ namespace App\Repositories;
 use App\Repositories\Interfaces\CoachRepositoryInterface;
 use Faker\Factory;
 use learntotrade\salesforce\User;
-use learntotrade\salesforce\Person;
 use learntotrade\salesforce\fields\UserFields;
 use learntotrade\salesforce\fields\PersonFields;
 
@@ -51,7 +50,7 @@ class CoachRepository implements CoachRepositoryInterface
     {
         $data = [];
         $options = [];
-        $person = resolve(Person::class)->get(session('portal_user')->salesforce_token);
+        $person = session('sf_customer');
         $customerGroup = $this->customer_group[$person[PersonFields::CUSTOMER_GROUP]] ?? $this->customer_group['SC2'];
         if ($customerGroup == 'LTT Legacy') {
             $customerGroup = $this->customer_group['LTT'];
@@ -106,6 +105,11 @@ class CoachRepository implements CoachRepositoryInterface
             'coaches' => $data,
             'options' => $options,
         ];
+    }
+
+    public function getCoachById(string $coachId)
+    {
+        return resolve(User::class)->get($coachId);
     }
 
     public function dummy(): void

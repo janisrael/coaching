@@ -5,7 +5,6 @@ namespace App\Repositories;
 use App\Repositories\Interfaces\SaleRepositoryInterface;
 use learntotrade\salesforce\Sale;
 use learntotrade\salesforce\fields\SaleFields;
-use learntotrade\salesforce\Person;
 use learntotrade\salesforce\fields\PersonFields;
 use Illuminate\Support\Str;
 
@@ -95,7 +94,7 @@ class SaleRepository implements SaleRepositoryInterface
 
         if ($resource == '') {
             $portal_user = $portalUser->toArray();
-            $person = resolve(Person::class)->get($portalUser->salesforce_token);
+            $person = session('sf_customer');
             $portal_user['customer_group'] = $person[PersonFields::CUSTOMER_GROUP] ?: config('app.customer_default.group');
             $portal_user['customer_region'] = $person[PersonFields::REGION] ?: config('app.customer_default.region');
             $portal_user['customer_type'] = $person[PersonFields::CUSTOMER_TYPE] ?: config('app.customer_default.type');
