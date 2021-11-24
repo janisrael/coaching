@@ -213,7 +213,7 @@
         </el-col>
         <el-col :xs="12" :sm="17" :md="16" :lg="18" :xl="18" class="full-height index-col-right" style="background-image: url('../../images/background.jpg'); background-size: cover;">
           <content-component v-if="instanceCheck === true" :selected="passData" :ifshare="ifShare" :canbook="canbook" @showModal="showShareModal" ></content-component>
-          <session-component v-if="instanceCheck === true" ref="sessionComponent" :coach_token="coach_token" :date_filter="datefilter" :selected="for_sessiondata" :canbook="canbook" :user_id="coach_id" :sales="datasales" :ifshare="ifShare" :can_book="can_book" @reload="reloadData" @showModal="showShareModal" @filterData="filterData"></session-component>
+          <session-component v-if="instanceCheck === true" ref="sessionComponent" :coach_token="coach_token" :date_filter="datefilter" :selected="for_sessiondata" :canbook="canbook" :user_id="coach_id" :sales="datasales" :ifshare="ifShare" :can_book="can_book" :timezone="timezone" @reload="reloadData" @showModal="showShareModal" @filterData="filterData"></session-component>
         </el-col>
       </el-col>
 
@@ -439,6 +439,7 @@ export default {
       display_message: false, // default false
       creditModal: false, // default false
       selected_row: {},
+      timezone: '',
       region: Region,
       base_url: window.location.origin + '#funds',
       coach_url: '',
@@ -679,7 +680,7 @@ export default {
       //** assigning default schedule filter **//
       const today = new Date()
       const tomorrow = new Date(today)
-      tomorrow.setDate(tomorrow.getDate() + 7)
+      tomorrow.setDate(tomorrow.getDate() + 30)
 
 
       let date1 = currentDate
@@ -916,6 +917,7 @@ export default {
     },
     getSummary(row, index) {
       this.selected_row = row
+      this.timezone = row.timezone
       //** on pageload check if my_mentor exist **//
       if(this.customer_group.toLowerCase() === 'ltt') {
         if(row.my_mentor !== '' || row.my_mentor !== null || true) {
@@ -982,7 +984,7 @@ export default {
       this.datamerge = datares
       this.for_sessiondata = []
       this.for_sessiondata = this.datamerge
-
+      console.log(this.selected_row, 'selected_row')
       setTimeout(() => this.ex_call_session(), 1)
     },
     ex_call_session() {
