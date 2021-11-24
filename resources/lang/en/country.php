@@ -244,4 +244,5 @@ return [
     // SH!T Override problematic non-standard iso from SF.
     "UK" => "United Kingdom", 
     "PHL" => "Philippines",
+    "AUS" => "Australia",
 ];

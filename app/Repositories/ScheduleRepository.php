@@ -5,12 +5,12 @@ namespace App\Repositories;
 use App\Repositories\Interfaces\ScheduleRepositoryInterface;
 use learntotrade\salesforce\CoachingSession;
 use learntotrade\salesforce\fields\CoachingSessionFields;
-use learntotrade\salesforce\Person;
 use learntotrade\salesforce\fields\PersonFields;
 use Carbon\Carbon;
 use Illuminate\Support\Arr;
 use App\Repositories\Interfaces\CoachRepositoryInterface;
 use App\Repositories\Interfaces\SaleRepositoryInterface;
+use learntotrade\salesforce\fields\UserFields;
 
 class ScheduleRepository implements ScheduleRepositoryInterface
 {
@@ -40,31 +40,16 @@ class ScheduleRepository implements ScheduleRepositoryInterface
 
     public function live($resource=''): void
     {
-        $sf = [];
-        $data = [];
-
-        $coach = resolve(CoachRepositoryInterface::class)->all();
-        $coaches = Arr::pluck($coach['coaches'], 'country', 'id');
-        $salesforceToken = session('portal_user')->salesforce_token;
-        $countries = array_flip(array_reverse(__('country')));
-        $person = resolve(Person::class)->get($salesforceToken);
-
+        $coachingSessions = [];
         $sale = resolve(SaleRepositoryInterface::class)->all();
         $saleId = Arr::pluck($sale['sales'], 'id');
-        $where = [CoachingSessionFields::STATUS . ' = \'Pending\''];
+        $coachCountry = $this->getCoaches();
+        $where = [
+            CoachingSessionFields::COACH . ' IN (\'' . implode('\',\'', array_keys($coachCountry)) . '\') and ' .
+            CoachingSessionFields::STATUS . ' = \'Pending\''
+        ];
 
         if ($this->coachingSessionStatus == "all") {
-            $whereAvailable = [CoachingSessionFields::STATUS . ' = \'Pending\''];
-            if (! empty($this->scheduleDate)) {
-                $whereAvailable[] = CoachingSessionFields::DATE . ' >= '.$this->scheduleDate['from'] .' and ' .
-                                    CoachingSessionFields::DATE . ' <= '.$this->scheduleDate['to'];
-            } 
-            $available = resolve(CoachingSession::class)->query(
-                array_values(config('api.sf_schedule')),
-                $whereAvailable,
-                ['order' => CoachingSessionFields::DATE . ' ASC, ' . CoachingSessionFields::START_TIME . ' ASC']
-            )['records'] ?? [];
-
             $otherStatuses = resolve(CoachingSession::class)->query(
                 array_values(config('api.sf_schedule')),
                 [
@@ -74,10 +59,19 @@ class ScheduleRepository implements ScheduleRepositoryInterface
                 ['order' => CoachingSessionFields::DATE . ' ASC, ' . CoachingSessionFields::START_TIME . ' ASC']
             )['records'] ?? [];
 
-            $sf['records'] = array_merge($otherStatuses, $available);
+            if (! empty($this->scheduleDate)) {
+                $where[] = CoachingSessionFields::DATE . ' >= '.$this->scheduleDate['from'] .' and ' .
+                           CoachingSessionFields::DATE . ' <= '.$this->scheduleDate['to'];
+            } 
+            $available = resolve(CoachingSession::class)->query(
+                array_values(config('api.sf_schedule')),
+                $where,
+                ['order' => CoachingSessionFields::DATE . ' ASC, ' . CoachingSessionFields::START_TIME . ' ASC']
+            )['records'] ?? [];
+
+            $coachingSessions = array_merge($otherStatuses, $available);
 
         } else {
-        
             if (! is_null($this->coachingSessionStatus) and in_array($this->coachingSessionStatus, array_keys($this->statuses))) {
                 $where = ['(' . CoachingSessionFields::SALE . ' IN (\'' . implode('\',\'', $saleId) . '\') and ' . 
                                 CoachingSessionFields::STATUS . ' = \''.$this->statuses[$this->coachingSessionStatus].'\')'];
@@ -88,39 +82,16 @@ class ScheduleRepository implements ScheduleRepositoryInterface
                             CoachingSessionFields::DATE . ' <= '.$this->scheduleDate['to'];
             }
 
-            $sf = resolve(CoachingSession::class)->query(
-                array_values(config('api.sf_schedule')),
-                $where
-            );
+            $coachingSessions = resolve(CoachingSession::class)->query(
+                                    array_values(config('api.sf_schedule')),
+                                    $where
+                                )['records'] ?? [];
         }
 
-        if (count($sf) > 0) {
-            foreach ($sf['records'] as $field => $value) {
-                foreach (config('api.sf_schedule') as $key => $val) {
-                    $data[$field][$key] = $value[$val];
-                }
-
-                if (isset($coaches[$data[$field]['coach_id']])) {
-                    $countryCode = $countries[$coaches[$data[$field]['coach_id']]] ?: false;
-                    $coachTimezone = \DateTimeZone::listIdentifiers(\DateTimeZone::PER_COUNTRY, $countryCode)[0];
-                    $start = Carbon::createFromFormat('Y-m-d H:i', $data[$field]['date'] . ' ' . $data[$field]['start_time'], $coachTimezone);
-                    $end = Carbon::createFromFormat('Y-m-d H:i', $data[$field]['date'] . ' ' . $data[$field]['end_time'], $coachTimezone);
-
-                    if (isset($person)) {
-                        $start->setTimezone($person[PersonFields::TIMEZONE]);
-                        $end->setTimezone($person[PersonFields::TIMEZONE]);
-                    }
-
-                    $start = explode(' ', $start->format('Y-m-d h:i'));
-                    $end = explode(' ', $end->format('Y-m-d h:i'));
-                    
-                    $data[$field]['converted_date'] = $start[0];
-                    $data[$field]['converted_start_time'] = $start[1];
-                    $data[$field]['converted_end_time'] = $end[1];
-                
-                } else {
-                    unset($data[$field]);
-                }
+        $data = [];
+        if (count($coachingSessions) > 0) {
+            foreach ($coachingSessions as $coachSession) {
+                $data[] = $this->mapColumn($coachSession, $coachCountry);
             }
         }
 
@@ -129,10 +100,43 @@ class ScheduleRepository implements ScheduleRepositoryInterface
         ];
     }
 
-    public function dummy(): void
+    public function mapColumn(array $coachSession, array $coachCountry=[])
     {
-        $this->result = [
-            'schedules' => [],
+        return collect($this->getFields())->map(function($val, $key) use($coachSession) {
+            return $coachSession[$val];
+        })->merge($this->convertDateTime($coachSession, $coachCountry));
+    }
+
+    public function convertDateTime(array $coachSession, array $coachCountry=[])
+    {
+        $customerTimeZone = session('sf_customer')[PersonFields::TIMEZONE];
+        $coachId = $coachSession[$this->getFields('coach_id')];
+        $coachDate = $coachSession[$this->getFields('date')];
+        $coachStartTime = $coachSession[$this->getFields('start_time')];
+        $coachEndTime = $coachSession[$this->getFields('end_time')];
+        $coachCountry = $coachCountry[$coachId] ?? $this->getCoaches($coachId);
+        $startTime = [];
+        $endTime = [];
+
+        if (! is_null($coachCountry)) {
+            $countryCode = $this->getCountries($coachCountry) ?: false;
+            $coachTimezone = \DateTimeZone::listIdentifiers(\DateTimeZone::PER_COUNTRY, $countryCode)[0];
+            $startTime = Carbon::createFromFormat('Y-m-d H:i', $coachDate . ' ' . $coachStartTime, $coachTimezone);
+            $endTime = Carbon::createFromFormat('Y-m-d H:i', $coachDate . ' ' . $coachEndTime, $coachTimezone);
+
+            $startTime->setTimezone($customerTimeZone);
+            $endTime->setTimezone($customerTimeZone);
+
+            $startTime = explode(' ', $startTime->format('Y-m-d h:i'));
+            $endTime = explode(' ', $endTime->format('Y-m-d h:i'));
+        }
+
+        return [
+            'converted_date' => $startTime[0] ?? '',
+            'converted_start_time' => $startTime[1] ?? '',
+            'converted_end_time' => $endTime[1] ?? '',
+            'customer_timezone' => $customerTimeZone,
+            'coach_timezone' => $coachTimezone ?? '',
         ];
     }
 
@@ -147,5 +151,54 @@ class ScheduleRepository implements ScheduleRepositoryInterface
     public function setStatus($status): void
     {
         $this->coachingSessionStatus = $status;
+    }
+
+    public function getCountries(string $name='')
+    {
+        $countries = array_flip(array_reverse(__('country')));
+
+        if (empty($name)) {
+            return $countries;
+        }
+
+        return optional($countries)[$name];
+    }
+
+    public function getCoaches(string $coachId='')
+    {
+        $coach = resolve(CoachRepositoryInterface::class)->all();
+        
+        $countries = Arr::pluck($coach['coaches'], 'country', 'id');
+
+        if (empty($coachId)) {
+            return $countries;
+        }
+
+        $country = optional($countries)[$coachId];
+        /*
+        if (is_null($country)) {
+            $sfCoach = resolve(CoachRepositoryInterface::class)->getCoachById($coachId);
+            $country = $sfCoach[UserFields::COACH_TIME_ZONE];
+        }
+        */
+        return $country;
+    }
+
+    public function getFields(string $name='')
+    {
+        $fields = config('api.sf_schedule');
+        
+        if (empty($name)) {
+            return $fields;
+        }
+
+        return optional($fields)[$name];
+    }
+
+    public function dummy(): void
+    {
+        $this->result = [
+            'schedules' => [],
+        ];
     }
 }

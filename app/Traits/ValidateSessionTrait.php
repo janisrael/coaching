@@ -6,6 +6,8 @@ use App\Jobs\Jobs\ValidateSesionJob;
 use App\Models\PortalLogin;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
+use learntotrade\salesforce\Person;
+use learntotrade\salesforce\Exceptions\SalesforceException;
 
 trait ValidateSessionTrait
 {
@@ -26,8 +28,18 @@ trait ValidateSessionTrait
                     Cache::put($request->pl, time(), 120);
                     ValidateSesionJob::dispatch($request->pl);
                 }
-                
-                session(['portal_user' => $user]);
+
+                try {
+                    $sfCustomer = resolve(Person::class)->get($user->salesforce_token);
+                    
+                } catch (SalesforceException $e) {
+                    $sfCustomer = [];
+                }
+
+                session([
+                    'portal_user' => $user,
+                    'sf_customer' => $sfCustomer
+                ]);
             }
         }
     }

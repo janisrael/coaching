@@ -12,7 +12,6 @@ use App\Repositories\Interfaces\ScheduleRepositoryInterface;
 use learntotrade\salesforce\Exceptions\SalesforceException;
 use Carbon\Carbon;
 use App\Traits\ValidateSessionTrait;
-use Illuminate\Support\Str;
 
 class CoachingSessionController extends Controller
 {
@@ -48,32 +47,50 @@ class CoachingSessionController extends Controller
             $sessionsRemaining = $sales->where('sessions_expiry', '>', now()->format('Y-m-d'))
                                         ->where('sessions_remaining', '>', 0);
 
-            $getSale = $sessionsRemaining->where('payment_schedule', '=', 'Fully Paid');
+            $getSale = $sessionsRemaining->where('date_fully_paid', '!=', null);
 
             if ($getSale->count() == 0) {
-                $getSale = $sessionsRemaining->where('payment_schedule', '=', null)
-                                             ->where('is_child_sale', '=', true);
+                $getSale = $sessionsRemaining->where('is_child_sale', '=', true);
             }
 
             $sale = $getSale->sortBy('sessions_expiry')->first();
             $this->setLog('BOOK: SALE_SESSION_REMAINING', $sale);
 
             try {
-                $coachingSessionData = [
-                    CoachingSessionFields::STATUS => 'Booked',
-                    CoachingSessionFields::SALE => $sale['id'],
-                    CoachingSessionFields::LOCATION => 'Remote',
-                ];
-                $this->setLog('BOOK: PREPARE_UPDATE', ['schedule_id' => $request->schedule_id, 'data'=>$coachingSessionData]);
-                
-                resolve(CoachingSession::class)->update($request->schedule_id, $coachingSessionData);
-                $result = [
-                    'status' => 'success',
-                    'message' => 'Successfully Booked.'
-                ];
-                
+                $coachSession = resolve(CoachingSession::class)->get($request->schedule_id);
+                $convertedTimeDate = $this->scheduleRepository->convertDateTime($coachSession);
+
             } catch (SalesforceException $e) {
                 $result['message'] = parent::catchSalesforceException($e);
+            }
+
+            if (isset($convertedTimeDate)) {
+                try {
+                    $translatedDate = explode('-', $convertedTimeDate['converted_date']);
+                    $coachingSessionData = [
+                        CoachingSessionFields::STATUS => 'Booked',
+                        CoachingSessionFields::SALE => $sale['id'],
+                        CoachingSessionFields::LOCATION => 'Remote',
+
+                        CoachingSessionFields::TRANSLATED_DESTINATION_TIME_ZONE => $convertedTimeDate['customer_timezone'],
+                        CoachingSessionFields::TRANSLATED_SOURCE_TIME_ZONE => $convertedTimeDate['coach_timezone'],
+                        CoachingSessionFields::TRANSLATED_MONTH => optional($translatedDate)[1],
+                        CoachingSessionFields::TRANSLATED_DAY => optional($translatedDate)[2],
+                        CoachingSessionFields::TRANSLATED_YEAR => optional($translatedDate)[0],
+                        CoachingSessionFields::TRANSLATED_START_TIME => $convertedTimeDate['converted_start_time'],
+                        CoachingSessionFields::TRANSLATED_END_TIME => $convertedTimeDate['converted_end_time'],
+                    ];
+                    $this->setLog('BOOK: PREPARE_UPDATE', ['schedule_id' => $request->schedule_id, 'data'=>$coachingSessionData]);
+                    
+                    resolve(CoachingSession::class)->update($request->schedule_id, $coachingSessionData);
+                    $result = [
+                        'status' => 'success',
+                        'message' => 'Successfully Booked.'
+                    ];
+                    
+                } catch (SalesforceException $e) {
+                    $result['message'] = parent::catchSalesforceException($e);
+                }
             }
 
         } else {

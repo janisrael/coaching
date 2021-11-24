@@ -90,5 +90,6 @@ return [
         'sessions_expiry' => $saleFields::SESSIONS_EXPIRY,
         'coach' => $saleFields::COACH,
         'payment_schedule' => $saleFields::PAYMENT_SCHEDULE,
+        'date_fully_paid' => $saleFields::DATE_FULLY_PAID,
     ]
 ];
