@@ -59,6 +59,7 @@ return [
         'back_end' => $userFields::CAN_COACH_BACK_END,
         'assigned_region' => $userFields::COACH_ASSIGNED_REGION,
         'timezone' => $userFields::COACH_TIME_ZONE,
+        'timezone_sid_key' => $userFields::COACH_TIME_ZONE_SID_KEY,
     ],
 
     'sf_schedule' => [
@@ -91,5 +92,7 @@ return [
         'coach' => $saleFields::COACH,
         'payment_schedule' => $saleFields::PAYMENT_SCHEDULE,
         'date_fully_paid' => $saleFields::DATE_FULLY_PAID,
+        'date_fully_paid_not_null_parent' => $saleFields::DATE_FULLY_PAID_NOT_NULL_PARENT,
+        'date_fully_paid_not_null' => $saleFields::DATE_FULLY_PAID_NOT_NULL,
     ]
 ];

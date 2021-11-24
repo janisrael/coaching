@@ -31,11 +31,12 @@ class SaleRepository implements SaleRepositoryInterface
         $emptyExpiry = $total->where('sessions_expiry', '=', null);
 
         $fullyPaid = $total->where('sessions_expiry', '!=', null)
-                           ->where('date_fully_paid', '!=', null)
-                           ->where('is_child_sale', '=', false);
+                           ->where('is_child_sale', '=', false)
+                           ->where('date_fully_paid_not_null', '=', true);
         
         $childSale = $total->where('sessions_expiry', '!=', null)
-                           ->where('is_child_sale', '=', true);
+                           ->where('is_child_sale', '=', true)
+                           ->where('date_fully_paid_not_null_parent', '=', true);
 
         $totalChildSale = $childSale->count() > 0
                             ? $childSale->where('sessions_expiry', '>', now()->format('Y-m-d'))->sum('sessions_remaining')
@@ -98,7 +99,7 @@ class SaleRepository implements SaleRepositoryInterface
             $portal_user['customer_group'] = $person[PersonFields::CUSTOMER_GROUP] ?: config('app.customer_default.group');
             $portal_user['customer_region'] = $person[PersonFields::REGION] ?: config('app.customer_default.region');
             $portal_user['customer_type'] = $person[PersonFields::CUSTOMER_TYPE] ?: config('app.customer_default.type');
-            
+            $portal_user['customer_timezone'] = session('sf_customer')[PersonFields::TIMEZONE];
             $this->result['portal_user'] = collect($portal_user)->except(['id', 'password']);
         }
     }

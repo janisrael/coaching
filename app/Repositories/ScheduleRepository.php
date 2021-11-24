@@ -41,9 +41,14 @@ class ScheduleRepository implements ScheduleRepositoryInterface
     public function live($resource=''): void
     {
         $coachingSessions = [];
+
         $sale = resolve(SaleRepositoryInterface::class)->all();
         $saleId = Arr::pluck($sale['sales'], 'id');
-        $coachCountry = $this->getCoaches();
+
+        $coaches = resolve(CoachRepositoryInterface::class)->all();
+        $coachCountry = $this->getCoachesCountry($coaches);
+        $coachTimeZone = $this->getCoachesTimezone($coaches);
+        
         $where = [
             CoachingSessionFields::COACH . ' IN (\'' . implode('\',\'', array_keys($coachCountry)) . '\') and ' .
             CoachingSessionFields::STATUS . ' = \'Pending\''
@@ -91,7 +96,7 @@ class ScheduleRepository implements ScheduleRepositoryInterface
         $data = [];
         if (count($coachingSessions) > 0) {
             foreach ($coachingSessions as $coachSession) {
-                $data[] = $this->mapColumn($coachSession, $coachCountry);
+                $data[] = $this->mapColumn($coachSession, $coachCountry, $coachTimeZone);
             }
         }
 
@@ -100,29 +105,27 @@ class ScheduleRepository implements ScheduleRepositoryInterface
         ];
     }
 
-    public function mapColumn(array $coachSession, array $coachCountry=[])
+    public function mapColumn(array $coachSession, array $coachCountry=[], array $coachTimeZone=[])
     {
         return collect($this->getFields())->map(function($val, $key) use($coachSession) {
             return $coachSession[$val];
-        })->merge($this->convertDateTime($coachSession, $coachCountry));
+        })->merge($this->convertDateTime($coachSession, $coachCountry, $coachTimeZone));
     }
 
-    public function convertDateTime(array $coachSession, array $coachCountry=[])
+    public function convertDateTime(array $coachSession, array $coachCountry=[], array $timeZone=[])
     {
         $customerTimeZone = session('sf_customer')[PersonFields::TIMEZONE];
         $coachId = $coachSession[$this->getFields('coach_id')];
         $coachDate = $coachSession[$this->getFields('date')];
         $coachStartTime = $coachSession[$this->getFields('start_time')];
         $coachEndTime = $coachSession[$this->getFields('end_time')];
-        $coachCountry = $coachCountry[$coachId] ?? $this->getCoaches($coachId);
+        $coachTimeZone = $timeZone[$coachId] ?? '';
         $startTime = [];
         $endTime = [];
 
-        if (! is_null($coachCountry)) {
-            $countryCode = $this->getCountries($coachCountry) ?: false;
-            $coachTimezone = \DateTimeZone::listIdentifiers(\DateTimeZone::PER_COUNTRY, $countryCode)[0];
-            $startTime = Carbon::createFromFormat('Y-m-d H:i', $coachDate . ' ' . $coachStartTime, $coachTimezone);
-            $endTime = Carbon::createFromFormat('Y-m-d H:i', $coachDate . ' ' . $coachEndTime, $coachTimezone);
+        if (! empty($coachTimeZone)) {
+            $startTime = Carbon::createFromFormat('Y-m-d H:i', $coachDate . ' ' . $coachStartTime, $coachTimeZone);
+            $endTime = Carbon::createFromFormat('Y-m-d H:i', $coachDate . ' ' . $coachEndTime, $coachTimeZone);
 
             $startTime->setTimezone($customerTimeZone);
             $endTime->setTimezone($customerTimeZone);
@@ -132,11 +135,16 @@ class ScheduleRepository implements ScheduleRepositoryInterface
         }
 
         return [
-            'converted_date' => $startTime[0] ?? '',
-            'converted_start_time' => $startTime[1] ?? '',
-            'converted_end_time' => $endTime[1] ?? '',
-            'customer_timezone' => $customerTimeZone,
-            'coach_timezone' => $coachTimezone ?? '',
+            'date' => $startTime[0] ?? '',
+            'start_time' => $startTime[1] ?? '',
+            'end_time' => $endTime[1] ?? '',
+            'timezone' => $customerTimeZone,
+            'schedule' => [
+                'timezone' => $coachTimeZone,
+                'start_time' => $coachStartTime,
+                'end_time' => $coachEndTime,
+                'date' => $coachDate
+            ],
         ];
     }
 
@@ -164,24 +172,20 @@ class ScheduleRepository implements ScheduleRepositoryInterface
         return optional($countries)[$name];
     }
 
-    public function getCoaches(string $coachId='')
+    public function getCoachesCountry($coaches, string $coachId='')
     {
-        $coach = resolve(CoachRepositoryInterface::class)->all();
-        
-        $countries = Arr::pluck($coach['coaches'], 'country', 'id');
+        $countries = Arr::pluck($coaches['coaches'], 'country', 'id');
 
         if (empty($coachId)) {
             return $countries;
         }
 
-        $country = optional($countries)[$coachId];
-        /*
-        if (is_null($country)) {
-            $sfCoach = resolve(CoachRepositoryInterface::class)->getCoachById($coachId);
-            $country = $sfCoach[UserFields::COACH_TIME_ZONE];
-        }
-        */
-        return $country;
+        return optional($countries)[$coachId];
+    }
+
+    public function getCoachesTimezone($coaches)
+    {
+        return Arr::pluck($coaches['coaches'], 'timezone_sid_key', 'id');
     }
 
     public function getFields(string $name='')
