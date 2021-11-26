@@ -67,7 +67,7 @@ class CoachingSessionController extends Controller
 
             if (isset($convertedTimeDate)) {
                 try {
-                    $translatedDate = explode('-', $convertedTimeDate['converted_date']);
+                    $translatedDate = explode('-', $convertedTimeDate['date']);
                     $coachingSessionData = [
                         CoachingSessionFields::STATUS => 'Booked',
                         CoachingSessionFields::SALE => $sale['id'],
@@ -78,8 +78,8 @@ class CoachingSessionController extends Controller
                         CoachingSessionFields::TRANSLATED_MONTH => optional($translatedDate)[1],
                         CoachingSessionFields::TRANSLATED_DAY => optional($translatedDate)[2],
                         CoachingSessionFields::TRANSLATED_YEAR => optional($translatedDate)[0],
-                        CoachingSessionFields::TRANSLATED_START_TIME => $convertedTimeDate['converted_start_time'],
-                        CoachingSessionFields::TRANSLATED_END_TIME => $convertedTimeDate['converted_end_time'],
+                        CoachingSessionFields::TRANSLATED_START_TIME => $convertedTimeDate['start_time'],
+                        CoachingSessionFields::TRANSLATED_END_TIME => $convertedTimeDate['end_time'],
                     ];
                     $this->setLog('BOOK: PREPARE_UPDATE', ['schedule_id' => $request->schedule_id, 'data'=>$coachingSessionData]);
                     
