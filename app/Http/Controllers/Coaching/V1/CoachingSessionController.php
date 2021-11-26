@@ -73,7 +73,7 @@ class CoachingSessionController extends Controller
                         CoachingSessionFields::SALE => $sale['id'],
                         CoachingSessionFields::LOCATION => 'Remote',
 
-                        CoachingSessionFields::TRANSLATED_DESTINATION_TIME_ZONE => $convertedTimeDate['customer_timezone'],
+                        CoachingSessionFields::TRANSLATED_DESTINATION_TIME_ZONE => $convertedTimeDate['timezone'],
                         CoachingSessionFields::TRANSLATED_SOURCE_TIME_ZONE => $convertedTimeDate['coach_timezone'],
                         CoachingSessionFields::TRANSLATED_MONTH => optional($translatedDate)[1],
                         CoachingSessionFields::TRANSLATED_DAY => optional($translatedDate)[2],
