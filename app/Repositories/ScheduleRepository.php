@@ -10,7 +10,6 @@ use Carbon\Carbon;
 use Illuminate\Support\Arr;
 use App\Repositories\Interfaces\CoachRepositoryInterface;
 use App\Repositories\Interfaces\SaleRepositoryInterface;
-use learntotrade\salesforce\fields\UserFields;
 
 class ScheduleRepository implements ScheduleRepositoryInterface
 {
@@ -46,8 +45,8 @@ class ScheduleRepository implements ScheduleRepositoryInterface
         $saleId = Arr::pluck($sale['sales'], 'id');
 
         $coaches = resolve(CoachRepositoryInterface::class)->all();
+        $coachesTimezone = $this->getCoachesTimezone($coaches);
         $coachCountry = $this->getCoachesCountry($coaches);
-        $coachTimeZone = $this->getCoachesTimezone($coaches);
         
         $where = [
             CoachingSessionFields::COACH . ' IN (\'' . implode('\',\'', array_keys($coachCountry)) . '\') and ' .
@@ -96,7 +95,7 @@ class ScheduleRepository implements ScheduleRepositoryInterface
         $data = [];
         if (count($coachingSessions) > 0) {
             foreach ($coachingSessions as $coachSession) {
-                $data[] = $this->mapColumn($coachSession, $coachCountry, $coachTimeZone);
+                $data[] = $this->mapColumn($coachSession, $coachesTimezone);
             }
         }
 
@@ -105,30 +104,30 @@ class ScheduleRepository implements ScheduleRepositoryInterface
         ];
     }
 
-    public function mapColumn(array $coachSession, array $coachCountry=[], array $coachTimeZone=[])
+    public function mapColumn(array $coachSession, array $coachesTimezone=[])
     {
         return collect($this->getFields())->map(function($val, $key) use($coachSession) {
             return $coachSession[$val];
-        })->merge($this->convertDateTime($coachSession, $coachCountry, $coachTimeZone));
+        })->merge($this->convertDateTime($coachSession, $coachesTimezone));
     }
 
-    public function convertDateTime(array $coachSession, array $coachCountry=[], array $timeZone=[])
+    public function convertDateTime(array $coachSession, array $coachesTimezone=[])
     {
-        $customerTimeZone = session('sf_customer')[PersonFields::TIMEZONE];
+        $customerTimezone = session('sf_customer')[PersonFields::TIMEZONE];
         $coachId = $coachSession[$this->getFields('coach_id')];
         $coachDate = $coachSession[$this->getFields('date')];
         $coachStartTime = $coachSession[$this->getFields('start_time')];
         $coachEndTime = $coachSession[$this->getFields('end_time')];
-        $coachTimeZone = $timeZone[$coachId] ?? '';
+        $coachTimezone = $coachesTimezone[$coachId] ?? '';
         $startTime = [];
         $endTime = [];
 
-        if (! empty($coachTimeZone)) {
-            $startTime = Carbon::createFromFormat('Y-m-d H:i', $coachDate . ' ' . $coachStartTime, $coachTimeZone);
-            $endTime = Carbon::createFromFormat('Y-m-d H:i', $coachDate . ' ' . $coachEndTime, $coachTimeZone);
+        if (! empty($coachTimezone)) {
+            $startTime = Carbon::createFromFormat('Y-m-d H:i', $coachDate . ' ' . $coachStartTime, $coachTimezone);
+            $endTime = Carbon::createFromFormat('Y-m-d H:i', $coachDate . ' ' . $coachEndTime, $coachTimezone);
 
-            $startTime->setTimezone($customerTimeZone);
-            $endTime->setTimezone($customerTimeZone);
+            $startTime->setTimezone($customerTimezone);
+            $endTime->setTimezone($customerTimezone);
 
             $startTime = explode(' ', $startTime->format('Y-m-d h:i'));
             $endTime = explode(' ', $endTime->format('Y-m-d h:i'));
@@ -138,9 +137,9 @@ class ScheduleRepository implements ScheduleRepositoryInterface
             'date' => $startTime[0] ?? '',
             'start_time' => $startTime[1] ?? '',
             'end_time' => $endTime[1] ?? '',
-            'timezone' => $customerTimeZone,
+            'timezone' => $customerTimezone,
             'schedule' => [
-                'timezone' => $coachTimeZone,
+                'timezone' => $coachTimezone,
                 'start_time' => $coachStartTime,
                 'end_time' => $coachEndTime,
                 'date' => $coachDate

@@ -12,6 +12,7 @@ use App\Repositories\Interfaces\ScheduleRepositoryInterface;
 use learntotrade\salesforce\Exceptions\SalesforceException;
 use Carbon\Carbon;
 use App\Traits\ValidateSessionTrait;
+use App\Repositories\Interfaces\CoachRepositoryInterface;
 
 class CoachingSessionController extends Controller
 {
@@ -58,8 +59,11 @@ class CoachingSessionController extends Controller
             $this->setLog('BOOK: SALE_SESSION_REMAINING', $sale);
 
             try {
+                $coaches = resolve(CoachRepositoryInterface::class)->all();
+                $coachesTimezone = $this->scheduleRepository->getCoachesTimezone($coaches);
+
                 $coachSession = resolve(CoachingSession::class)->get($request->schedule_id);
-                $convertedTimeDate = $this->scheduleRepository->convertDateTime($coachSession);
+                $convertedTimeDate = $this->scheduleRepository->convertDateTime($coachSession, $coachesTimezone);
 
             } catch (SalesforceException $e) {
                 $result['message'] = parent::catchSalesforceException($e);
