@@ -286,13 +286,21 @@ span.el-radio__label {
     padding: 0 !important;
     border: none !important;
 }
-tr.el-table__row.current-row.this-is-active .coaches-list-icons {
+tr.el-table__row.current-row.current-row .coaches-list-icons {
     /*display: block !important;*/
+    /*transition: opacity 1s;*/
+    /*visibility: visible;*/
     visibility: visible;
+    opacity: 1;
+    transition: visibility 0s linear 0s, opacity 300ms;
 }
+
 .coaches-list-icons {
     visibility: hidden;
+    opacity: 0;
+    transition: visibility 0s linear 300ms, opacity 300ms;
 }
+
 .el-input__inner {
     border: 1px solid rgba(220, 223, 230, 0.35) !important;
     color: #d6d6d6 !important;
