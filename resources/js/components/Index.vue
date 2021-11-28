@@ -986,7 +986,6 @@ export default {
       this.datamerge = datares
       this.for_sessiondata = []
       this.for_sessiondata = this.datamerge
-      console.log(this.selected_row, 'selected_row')
       setTimeout(() => this.ex_call_session(), 1)
     },
     ex_call_session() {
