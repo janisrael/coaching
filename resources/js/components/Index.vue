@@ -5,9 +5,7 @@
         <transition name="el-fade-in">
           <div v-if="loading" class="loader-container">
             <div class="main-loader">
-              <div>
-                <svg viewBox='0 0 105 105' xmlns='http:||//www.w3.org/2000/svg' fill='#fff'><circle cx='12.5' cy='12.5' r='12.5'><animate attributeName='fill-opacity' begin='0s' dur='1s' values='1;.2;1' calcMode='linear' repeatCount='indefinite'/></circle><circle cx='12.5' cy='52.5' r='12.5' fill-opacity='.5'><animate attributeName='fill-opacity' begin='100ms' dur='1s' values='1;.2;1' calcMode='linear' repeatCount='indefinite'/></circle><circle cx='52.5' cy='12.5' r='12.5'><animate attributeName='fill-opacity' begin='300ms' dur='1s' values='1;.2;1' calcMode='linear' repeatCount='indefinite'/></circle><circle cx='52.5' cy='52.5' r='12.5'><animate attributeName='fill-opacity' begin='600ms' dur='1s' values='1;.2;1' calcMode='linear' repeatCount='indefinite'/></circle><circle cx='92.5' cy='12.5' r='12.5'><animate attributeName='fill-opacity' begin='800ms' dur='1s' values='1;.2;1' calcMode='linear' repeatCount='indefinite'/></circle><circle cx='92.5' cy='52.5' r='12.5'><animate attributeName='fill-opacity' begin='400ms' dur='1s' values='1;.2;1' calcMode='linear' repeatCount='indefinite'/></circle><circle cx='12.5' cy='92.5' r='12.5'><animate attributeName='fill-opacity' begin='700ms' dur='1s' values='1;.2;1' calcMode='linear' repeatCount='indefinite'/></circle><circle cx='52.5' cy='92.5' r='12.5'><animate attributeName='fill-opacity' begin='500ms' dur='1s' values='1;.2;1' calcMode='linear' repeatCount='indefinite'/></circle><circle cx='92.5' cy='92.5' r='12.5'><animate attributeName='fill-opacity' begin='200ms' dur='1s' values='1;.2;1' calcMode='linear' repeatCount='indefinite'/></circle></svg>
-              </div>
+              <sc-loader :color="'white'"/>
             </div>
           </div>
         </transition>
@@ -354,6 +352,7 @@ import Loading from "vue-loading-overlay";
 import SessionComponent from './SessionsComponent.vue'
 import ShareModalComponent from './ShareModalComponent.vue'
 import Region from './region.json'
+import ScLoader from "./Loader/ScLoaderComponent";
 import {Notification} from "element-ui";
 // dummy data
 // import json_sales from './dummy_sales.json'
@@ -364,6 +363,7 @@ export default {
   name: 'Index',
   components: {
     Loading,
+    ScLoader,
     ContentComponent,
     SessionComponent,
     ShareModalComponent
@@ -453,11 +453,11 @@ export default {
   },
   computed: {
     activeCards: function() {
-      var activeCards = [];
-      var filters = this.selectedTags;
-      var start = this.final_range[0]
-      var end = this.final_range[1]
-      var filter_booked = this.filter_booked
+      let activeCards = [];
+      let filters = this.selectedTags;
+      let start = this.final_range[0]
+      let end = this.final_range[1]
+      let filter_booked = this.filter_booked
       // if(this.booked_options === 'You havent booked this mentor before') {
       //   filter_booked = false
       // // } else {
@@ -586,14 +586,6 @@ export default {
           }
         })
       }
-
-
-
-      // this.new_collections.forEach((item, index) => {
-      //   if(item.id === value.id) {
-      //     item['status'] = 'Booked'
-      //   }
-      // })
     },
     setrange() {
       this.final_range[0] = this.value_range[0]
@@ -601,38 +593,22 @@ export default {
     },
     filterData(value) {
       let sched_api = '/api/v1/coaches/schedule'
-      let letcurrentDate = new Date().toJSON().slice(0,10).replace(/-/g,'-');
-      let date1a = value.value[0]
-      let date2a = value.value[1]
+      let start_date = value.value[0]
+      let end_date = value.value[1]
       let data = []
       let coachesraw = this.datacoach.coaches
-      var user_id = coachesraw[0].id
-      let hasbooked = false
-      // let coachesraw = []
+      let user_id = coachesraw[0].id
+
       axios
-        .get(sched_api + '/' + date1a + '/' + date2a + '?status=all&pl=' + this.coach_token)
+        .get(sched_api + '/' + start_date + '/' + end_date + '?status=all&pl=' + this.coach_token)
         .then(response => {
           data = response.data.data.schedules
           this.schedules = data
-          // this.schedules = this.dummyschedules // dummy
-
-          // coachesraw.forEach(function (value, index) {
-          //   data.forEach(function (val, index) {
-          //     if(val.status !== 'Pending' && value.id === val.coach_id) {
-          //       hasbooked = true
-          //     }
-          //   })
-          //   value['has_booked'] = hasbooked
-          // })
-
-          var schedraw = this.schedules
-          //** check availability_type if null set default value as Remote Only **//
+          let schedraw = this.schedules
 
           //** check availability_type if null set default value as Remote Only **//
           const today = new Date()
-          // const today_time = today
           schedraw.forEach((value, index) => {
-            // 2021-11-19 20:00
             let sched_date = value.date + ' ' + value.start_time
             let str_date = sched_date.replaceAll('-', '/')
             let dateTime = new Date(str_date)
@@ -649,19 +625,12 @@ export default {
 
             }
           })
-          //
-          // schedraw.forEach((value, index) => {
-          //   if(value.availability_type === null || value.availability_type === undefined || value.availability_type === '') {
-          //     value['availability_type'] = 'Remote only'
-          //   }
-          // })
-          var coach = coachesraw
 
           let arr1 = schedraw.filter(function (sched) {
             return (sched.status === 'Pending' && sched.coach_id === user_id) || (sched.status !== 'Pending');
           });
 
-          let arr2 = coach
+          let arr2 = coachesraw
           const mergeById = (a1, a2) =>
             a1.map(itm => ({
               ...a2.find((item) => (item.id === itm.coach_id) && item),
@@ -681,19 +650,18 @@ export default {
 
       //** assigning default schedule filter **//
       const today = new Date()
-      const tomorrow = new Date(today)
-      tomorrow.setDate(tomorrow.getDate() + 30)
+      const endDate = new Date(today)
+      endDate.setDate(endDate.getDate() + 30)
 
-
-      let date1 = currentDate
-      let date2 = tomorrow.toJSON().slice(0,10).replace(/-/g,'-');
-      this.datefilter[0] = date1
-      this.datefilter[1] = date2
+      let start_date = currentDate
+      let end_date = endDate.toJSON().slice(0,10).replace(/-/g,'-');
+      this.datefilter[0] = start_date
+      this.datefilter[1] = end_date
 
         // fetching data in all promise
       Promise.all([
         await fetch('/api/v1/coaches?pl=' + this.coach_token).then(res => res.ok && res.json() || Promise.reject(res)),
-        await fetch(sched_api + '/' + date1 + '/' + date2 + '?status=all&pl=' + this.coach_token).then(res => res.ok && res.json() || Promise.reject(res)),
+        await fetch(sched_api + '/' + start_date + '/' + end_date + '?status=all&pl=' + this.coach_token).then(res => res.ok && res.json() || Promise.reject(res)),
         await fetch('/api/v1/account/sales?pl=' + this.coach_token).then(res => res.ok && res.json() || Promise.reject(res))
       ]).then(data => {
 
@@ -746,10 +714,7 @@ export default {
 
         if(this.datasales.sales.length > 0) {
           mentor_id = this.datasales.sales[0].coach
-          this.mentor_id = this.datasales.sales[0].coach
-          // let ret = this.datasales.sales.sort((a, b) => new Date(a.date) - new Date(b.date))
-          // mentor_id = ret[0].coach
-          // this.mentor_id = ret[0].coach
+          this.mentor_id = this.datasales.sales[0].coach // assign mentor id to pass for other component
         }
 
         let my_mentor = false
@@ -810,17 +775,15 @@ export default {
           }
         }
 
-        var user_id = coachesraw[0].id
-        this.user_id = user_id // assign global user_id
+        let user_id = coachesraw[0].id
+        this.user_id = user_id // assign global user_id for other component
 
         this.schedules = this.datasched.schedules // assign schedules to global variables
-        var schedraw = this.schedules
+        let schedraw = this.schedules
 
-        //** check availability_type if null set default value as Remote Only **//
+        //** filter schedules date range **//
         const today = new Date()
-        // const today_time = today
         schedraw.forEach((value, index) => {
-          // 2021-11-19 20:00
           let sched_date = value.date + ' ' + value.start_time
           let str_date = sched_date.replaceAll('-', '/')
           let dateTime = new Date(str_date)
@@ -837,14 +800,11 @@ export default {
 
             }
         })
-        var hasbooked = true
-
         this.coaches = coachesraw  // assign mentors to global variables
         let m_index = 0
 
         //** get default sales index by id, index use to default selected mentor on page load **//
-        let arrs = Region.data.region
-        // let has_coach_in_region = true
+        let regions = Region.data.region
 
         //** check if the customer and coach has match region **//
         let fil_res = this.coaches.find(o => o.region.toLowerCase() === this.customer_region.toLowerCase());
@@ -859,7 +819,7 @@ export default {
         }
 
         this.coaches.forEach((value, index) => {
-          let obj = arrs.find(o => o.code.toLowerCase() === value.region.toLowerCase());
+          let obj = regions.find(o => o.code.toLowerCase() === value.region.toLowerCase());
 
           if(obj) {
             value.region = obj.region
@@ -873,13 +833,10 @@ export default {
           }
         })
 
-        var scheds = schedraw
-        var coach = coachesraw
-
-        let arr1 = scheds.filter(function (sched) {
+        let arr1 = schedraw.filter(function (sched) {
           return (sched.status === 'Pending' && sched.coach_id === user_id) || (sched.status !== 'Pending');
         });
-        let arr2 = coach
+        let arr2 = coachesraw
         const mergeById = (a1, a2) =>
           a1.map(itm => ({
             ...a2.find((item) => (item.id === itm.coach_id) && item),
@@ -890,19 +847,10 @@ export default {
         //** Check if coaches is 0  **//
         if(this.customer_group.toLowerCase() === 'ltt' || this.customer_group.toLowerCase() === 'ltt legacy') {
           if(this.coaches.length === 0) {
-            if(this.customer_type === 'back end') {
-              this.display_message = false
-            } else {
-              this.display_message = true
-            }
+            this.display_message = this.customer_type !== 'back end';
           }
           if(this.mentor_id === null || this.mentor_id === '' || this.mentor_id === undefined) {
-
-            if(this.customer_type === 'back end') {
-              this.display_message = false
-            } else {
-              this.display_message = true
-            }
+            this.display_message = this.customer_type !== 'back end';
           }
         }
 
@@ -920,7 +868,7 @@ export default {
     getSummary(row, index) {
       this.selected_row = row
       this.timezone = row.timezone
-      //** on pageload check if my_mentor exist **//
+      //** on page load check if my_mentor exist **//
       if(this.customer_group.toLowerCase() === 'ltt') {
         if(row.my_mentor !== '' || row.my_mentor !== null || true) {
           this.canbook = row.my_mentor
@@ -941,10 +889,10 @@ export default {
       }
 
       this.can_book = this.customer_group.toLowerCase() !== 'ltt';
-      var scheds = this.schedules
+      let scheds = this.schedules
 
-      var coach = this.coaches
-      var user_id = this.selected_id
+      let coach = this.coaches
+      let user_id = this.selected_id
       let arr1 = scheds.filter(function (sched) {
         return (sched.status === 'Pending' && sched.coach_id === user_id) || (sched.status !== 'Pending');
       });
@@ -954,16 +902,11 @@ export default {
           ...a2.find((item) => (item.id === itm.coach_id) && item),
           ...itm
         }));
-      var datares = mergeById(arr1, arr2)
+      let datares = mergeById(arr1, arr2)
 
-      //** filter schedules by selected coach_id **//
-      // let ret_data = datares.filter(function(ele){
-      //   return (ele.coach_id = row.id)
-      // });
-
-      var countBooked = 0;
-      var countAttended = 0;
-      var countCancelled = 0;
+      let countBooked = 0;
+      let countAttended = 0;
+      let countCancelled = 0;
       datares.forEach(function (value, index) {
         value['disable_schedule'] = false
         if(value.status === 'Booked' && value.coach_id === user_id) {

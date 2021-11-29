@@ -29,7 +29,11 @@
         </div>
       </div>
       <span slot="footer" class="dialog-footer">
-        <el-button v-if="ifshare === false" :loading="loading" type="success" @click="onShare()">SHARE READ ONLY LIVE ACCOUNT</el-button>
+        <el-button class="sc-button" v-if="ifshare === false" :loading="loading" type="success" @click="onShare()">
+          <div v-if="loading === true" class="button-loader">
+            <sc-loader/>
+          </div>
+          SHARE READ ONLY LIVE ACCOUNT</el-button>
         <el-button v-if="ifshare === true" type="success" @click="dialogShare = false">Close</el-button>
       </span>
     </el-dialog>
@@ -37,8 +41,14 @@
 </template>
 
 <script>
+import ScLoader from "./Loader/ScLoaderComponent";
+import Loading from "vue-loading-overlay";
   export default {
     name: 'ShareModalComponent',
+    components: {
+      // ModalReview,
+      ScLoader
+    },
     props: {
       datasales: {
         require: true,

@@ -79,9 +79,16 @@
         </div>
       </div>
 <!--      {{ filteredPositions }}-->
-      <el-col v-loading="loading" element-loading-text="Loading Schedules..." element-loading-spinner="el-icon-loading" element-loading-background="rgba(0, 0, 0, 0.5)" :span="24" class="session-items-container">
+      <el-col id="session-main-container" v-loading="loading" element-loading-background="rgba(0, 0, 0, 0.5)" :span="24" class="session-items-wrapper">
+        <transition name="el-fade-in">
+          <div v-if="loading" class="loader-container">
+            <div class="window-loader">
+              <sc-loader/>
+            </div>
+          </div>
+        </transition>
+      <el-col :span="24" class="session-items-container">
         <div v-for="(position, index) in even(filteredPositions)" :key="index"  :class="['sessions-item-' + index]">
-
             <div v-if="position.status === 'Pending' && position.visible === true" class="list-item">
               <div @click="dialogMentor(position)" style="display: block !important;">
               <el-col :xs="18" :sm="19" :md="20" :lg="22" :xl="22" :class="[(ifshare === false ? 'class-disable' : 'class-enable' && canbook === false ? 'class-disable' : 'class-enable' && position.disable_schedule === true ? 'class-disable' : 'class-enable'), 'list-' + position.status, 'session-listitem']">
@@ -196,6 +203,7 @@
         <p v-if="count_loading">Loading...</p>
         <!--        <p v-if="noMore">No more</p>-->
       </el-col>
+      </el-col>
     </el-col>
     <el-dialog
       id="sessionProfiledialog"
@@ -263,7 +271,12 @@
       </el-row>
       <span slot="footer" class="dialog-footer">
         <span v-if="session_type === 'Pending'">
-          <el-button @click="handleBook(schedule_details)" size="small" type="success" style="margin-right: 20px;" :loading="btn_loading">Confirm</el-button>
+          <el-button @click="handleBook(schedule_details)" size="small" type="success" style="margin-right: 20px;" class="sc-button" :loading="btn_loading">
+            <div v-if="btn_loading === true" class="button-loader">
+              <sc-loader/>
+            </div>
+            Confirm
+          </el-button>
           <el-link @click="handleClose()" style="color: #fff;">Cancel</el-link>
         </span>
         <span v-else-if="session_type === 'Booked'">
@@ -274,7 +287,12 @@
             show-icon
             style="width: 50%; float:left;">
           </el-alert>
-          <el-button :loading="loading" @click="handleDeleteBooking(schedule_details)" style="color: #fff; background-color: transparent !important; border: none !important;" size="small" type="primary">Cancel Booking</el-button>
+          <el-button :loading="loading" @click="handleDeleteBooking(schedule_details)" style="color: #fff; background-color: transparent !important; border: none !important;" size="small" type="primary" class="sc-button">
+            <div v-if="loading === true" class="button-loader">
+              <sc-loader/>
+            </div>
+            Cancel Booking
+          </el-button>
           <el-button @click="handleClose()" size="small" type="success">Close</el-button>
         </span>
         <span v-else>
@@ -288,12 +306,14 @@
 <script>
 import { Notification } from 'element-ui';
 import Loading from "vue-loading-overlay";
+import ScLoader from "./Loader/ScLoaderComponent";
 import "vue-loading-overlay/dist/vue-loading.css";
 export default {
   name: 'SessionsComponent',
   components: {
     // ModalReview,
     Loading,
+    ScLoader
   },
   props: {
     selected: {
@@ -362,7 +382,7 @@ export default {
           id: 4
         }
       ],
-      range_sep: "",
+      range_sep: "-",
       checkedFilters: ['Pending', 'Booked'],
       // checkedFilters: ['Pending'],
       datefilter: [],
@@ -429,7 +449,8 @@ export default {
   created: function() {
     this.loading = true
     this.session_data = this.selected.coaches
-    this.getDate()
+    // this.getDate()
+    this.loading = false
   },
   methods: {
     even: function(arr) {
@@ -478,8 +499,6 @@ export default {
 
           schedule_details['coaching_session_id'] = coaching_session_id
           schedule_details['status'] = 'Pending'
-          // schedule_details['status'] = 'Pending'
-          //** Update schedule by id **//
           this.session_collection.forEach((item) => {
             if(item.id === schedule_details.id) {
               item['status'] = 'Pending'
@@ -491,13 +510,6 @@ export default {
           this.btn_loading = false
           this.dialogItem = false
           this.$emit('reload', schedule_details, 'cancel', session_id)
-
-          // this.session_collection = []
-          // this.session_collection = response.data.data.schedules
-
-          // this.loading = false
-          // this.dialogItem = false
-          // this.$emit('reload', response.data.data.schedules)
         } else {
           Notification.error({
             title: 'Error',
@@ -510,23 +522,11 @@ export default {
         .catch(error => {
           console.log(error)
           this.loading = false
-          // this.isLoading = false
         })
     },
     handleBook(value) {
       this.btn_loading = true
       this.loading = true
-      // let total_a_credits = 0
-      // let total_a_credits = this.sales.computed_credits.total_available
-      // console.log(this.sales.computed_credits.total_available)
-      // if(total_a_credits === 0) {
-      //   this.$notify.error({
-      //     title: 'Unable to Book!',
-      //     message: 'No Available Credits!',
-      //   });
-      //   this.loading = false
-      //   return
-      // }
       let url = "/api/v1/coaching-session/book?schedule_id=" + value.id + '&pl=' + this.coach_token;
       axios.post(url).then(response => {
           if(response.data.data.status === 'success') {
@@ -547,9 +547,6 @@ export default {
             this.btn_loading = false
             this.dialogItem = false
             this.$emit('reload', value, 'book')
-
-            // this.session_collection = []
-            // this.session_collection = response.data.data.schedules
           } else {
             Notification.error({
               title: 'Error',
@@ -564,7 +561,6 @@ export default {
           console.log(error)
           this.loading = false
           this.btn_loading = false
-          // this.isLoading = false
         })
     },
     scrollToTop(options) {
@@ -597,15 +593,9 @@ export default {
       this.profileTitle = ''
       this.dialogItem = false
     },
-    getDate() {
-      // this.currentDate = this.date_filter[0] + '-' + this.date_filter[1]
-      this.range_sep = '-'
-      this.loading = false
-    },
     dialogMentor(position) {
       this.session_type = ''
       this.profileTitle = ''
-      // this.schedule_profile = position.coaches
       if(position.status === 'Pending') {
         if(this.ifshare === false) {
           this.$emit('showModal', { value: false })
@@ -654,15 +644,15 @@ export default {
       let data = []
       if(this.datefilter === null) {
         const today = new Date()
-        const tomorrow = new Date(today)
-        tomorrow.setDate(tomorrow.getDate() + 7)
-        let date2 = tomorrow.toJSON().slice(0,10).replace(/-/g,'-');
+        const endDate = new Date(today)
+        endDate.setDate(endDate.getDate() + 30)
+        let end_date = endDate.toJSON().slice(0,10).replace(/-/g,'-');
         data.push(this.$moment(today).format('YYYY-MM-DD'))
-        data.push(this.$moment(date2).format('YYYY-MM-DD'))
-        this.$emit('filterData', { value: data })
+        data.push(this.$moment(end_date).format('YYYY-MM-DD'))
         this.date_collections = data
+        this.$emit('filterData', { value: data })
         this.range_sep = '-'
-        this.loading = false
+
       } else {
         data.push(this.$moment(this.datefilter[0]).format('YYYY-MM-DD'))
         data.push(this.$moment(this.datefilter[1]).format('YYYY-MM-DD'))
