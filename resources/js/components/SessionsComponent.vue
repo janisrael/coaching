@@ -79,7 +79,7 @@
         </div>
       </div>
 <!--      {{ filteredPositions }}-->
-      <el-col id="session-main-container" v-loading="loading" element-loading-background="rgba(0, 0, 0, 0.5)" :span="24" class="session-items-wrapper">
+      <el-col id="session-main-container" v-loading="loading" element-loading-background="rgba(0, 0, 0, 0.2)" :span="24" class="session-items-wrapper">
         <transition name="el-fade-in">
           <div v-if="loading" class="loader-container">
             <div class="window-loader">
@@ -420,11 +420,12 @@ export default {
         let ret = this.session_collection.filter(position => this.checkedFilters.includes(position.status));
         return ret.sort((a, b) => (a.status > b.status) ? 1 : (a.status === b.status)) // sort data pending as end
       } else {
-        // if(this.datefilter.length > 1) {
-        //   let data = this.session_collection.filter(position => this.checkedFilters.includes(position.status));
-        //   let ret = data.filter(position => (this.date_collections[0] <= position.date) && (this.date_collections[1] >= position.date))
-        //   return ret.sort((a, b) => (a.status > b.status) ? 1 : (a.status === b.status) ) // sort data pending as end
-        // }
+        if(this.datefilter.length > 1) {
+          let data = this.session_collection.filter(position => this.checkedFilters.includes(position.status));
+          // let ret = data.filter(position => (this.date_collections[0] <= position.date) && (this.date_collections[1] >= position.date))
+          let ret = data.filter(position => (position.status === 'Pending' && this.date_collections[0] <= position.date && this.date_collections[1] >= position.date) || (position.status !== 'Pending'))
+          return ret.sort((a, b) => (a.status > b.status) ? 1 : (a.status === b.status) ) // sort data pending as end
+        }
         let ret = this.session_collection.filter(position => this.checkedFilters.includes(position.status));
         return ret.sort((a, b) => (a.status > b.status) ? 1 : (a.status === b.status)) // sort data pending as end
       }

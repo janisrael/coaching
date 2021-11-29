@@ -658,13 +658,23 @@ export default {
       this.datefilter[0] = start_date
       this.datefilter[1] = end_date
 
-        // fetching data in all promise
+      // fetching data in all promise
       Promise.all([
-        await fetch('/api/v1/coaches?pl=' + this.coach_token).then(res => res.ok && res.json() || Promise.reject(res)),
-        await fetch(sched_api + '/' + start_date + '/' + end_date + '?status=all&pl=' + this.coach_token).then(res => res.ok && res.json() || Promise.reject(res)),
-        await fetch('/api/v1/account/sales?pl=' + this.coach_token).then(res => res.ok && res.json() || Promise.reject(res))
+        // await fetch('/api/v1/coaches?pl=' + this.coach_token).then(res => res.ok && res.json() || Promise.reject(res)),
+        await fetch('/api/v1/coaches?pl=' + this.coach_token).then(res => res.ok && res.json()),
+        await fetch(sched_api + '/' + start_date + '/' + end_date + '?status=all&pl=' + this.coach_token).then(res => res.ok && res.json()),
+        await fetch('/api/v1/account/sales?pl=' + this.coach_token).then(res => res.ok && res.json())
       ]).then(data => {
-
+        let check_promise = data.filter(elem => (elem === false))
+        if(check_promise.length > 0) {
+          Notification.error({
+            title: 'Error',
+            message: 'Unable to fetch data from server, please check your internet connection.',
+            duration: 4 * 10000
+          })
+          this.loading = true
+          return
+        }
         //** for test mode using local data, change to true **//
         // let test_mode = true
         // let data = []
