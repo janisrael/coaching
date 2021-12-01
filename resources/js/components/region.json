@@ -1,0 +1,71 @@
+{
+  "data": {
+    "region": [
+      {
+        "code": "AUS",
+        "region": "AUS",
+        "country": "Australia"
+      },
+      {
+        "code": "ES",
+        "region": "ES",
+        "country": "Spain"
+      },
+      {
+        "code": "ID",
+        "region": "ID",
+        "country": "Indonesia"
+      },
+      {
+        "code": "IND",
+        "region": "IND",
+        "country": "India"
+      },
+      {
+        "code": "MX",
+        "region": "MX",
+        "country": "Mexico"
+      },
+      {
+        "code": "NG",
+        "region": "NG",
+        "country": "Nigeria"
+      },
+      {
+        "code": "NOR",
+        "region": "NOR",
+        "country": "Norway"
+      },
+      {
+        "code": "PHL",
+        "region": "PHL",
+        "country": "Philippines"
+      },
+      {
+        "code": "PL",
+        "region": "PL",
+        "country": "Poland"
+      },
+      {
+        "code": "SG",
+        "region": "SG",
+        "country": "Singapore"
+      },
+      {
+        "code": "UK",
+        "region": "GB",
+        "country": "United Kingdom"
+      },
+      {
+        "code": "US",
+        "region": "US",
+        "country": "Unites States Of America"
+      },
+      {
+        "code": "ZA",
+        "region": "ZA",
+        "country": "South Africa"
+      }
+    ]
+  }
+}
