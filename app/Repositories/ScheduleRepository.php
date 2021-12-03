@@ -184,7 +184,7 @@ class ScheduleRepository implements ScheduleRepositoryInterface
 
     public function getCoachesTimezone($coaches)
     {
-        return Arr::pluck($coaches['coaches'], 'timezone_sid_key', 'id');
+        return Arr::pluck($coaches['coaches'], 'timezone', 'id');
     }
 
     public function getFields(string $name='')
