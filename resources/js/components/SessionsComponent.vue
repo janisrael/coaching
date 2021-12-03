@@ -8,7 +8,7 @@
     </div>
     <span style="color: rgba(255, 255, 255, 0.7); padding-top: 12px; display: inline-block;padding-left: 10px;">{{ sales.computed_credits.total_available }} sessions left to book</span>
     <br>
-    <span v-if="timezone !== null || timezone !== ''" style="margin-right: 10px; color: rgba(255, 255, 255, 0.7); padding-top: 12px; font-size: 14px; padding-top: 0px; display: inline-block;padding-left: 10px;">
+    <span v-if="timezone !== null || timezone !== ''" style="color: rgba(255, 255, 255, 0.7); padding-top: 12px; font-size: 14px; display: inline-block;padding-left: 10px;">
       <i class="fas fa-globe-asia" style="color: #fff;"></i>  {{ timezone }}
     </span>
     
