@@ -300,8 +300,8 @@
             show-icon
             style="width: 50%; float:left;">
           </el-alert>
-          <el-button :loading="loading" @click="handleDeleteBooking(schedule_details)" style="color: #fff; background-color: transparent !important; border: none !important;" size="small" type="primary" class="sc-button">
-            <div v-if="loading === true" class="button-loader">
+          <el-button :loading="btn_loading" @click="handleDeleteBooking(schedule_details)" style="color: #fff; background-color: transparent !important; border: none !important;" size="small" type="primary" class="sc-button">
+            <div v-if="btn_loading === true" class="button-loader">
               <sc-loader/>
             </div>
             Cancel Booking
@@ -526,7 +526,7 @@ export default {
       return strTime
     },
     handleDeleteBooking(schedule_details) {
-      this.loading = true
+      this.btn_loading = true
       const today = new Date()
       let session_id = schedule_details.id
       today.setDate(today.getDate()) // add 1 day for date now
@@ -593,7 +593,7 @@ export default {
     },
     handleBook(value) {
       this.btn_loading = true
-      this.loading = true
+      // this.loading = true
       let url = "/api/v1/coaching-session/book?schedule_id=" + value.id + '&pl=' + this.coach_token;
       axios.post(url).then(response => {
           if(response.data.data.status === 'success') {
