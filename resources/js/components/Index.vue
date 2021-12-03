@@ -719,6 +719,7 @@ export default {
 
         //** filter mentors if user customer_group is learn to trade **//
         this.portal_user_id = this.datasales.portal_user.portal_user_id
+        this.timezone = this.datasales.portal_user.customer_timezone
         this.customer_region = this.datasales.portal_user.customer_region
         let mentor_id = ''
 

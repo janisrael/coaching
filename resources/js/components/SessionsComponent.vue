@@ -7,8 +7,8 @@
       <i class="fa fa-angle-up" aria-hidden="true"></i>
     </div>
     <span style="color: rgba(255, 255, 255, 0.7); padding-top: 12px; display: inline-block;padding-left: 10px;">{{ sales.computed_credits.total_available }} sessions left to book</span>
-    <br>
-    <span v-if="timezone !== null || timezone !== ''" style="color: rgba(255, 255, 255, 0.7); padding-top: 12px; display: inline-block;padding-left: 10px;">{{ timezone }}</span>
+    
+    
 <!--    <span style="color: rgba(255, 255, 255, 0.7); padding-top: 12px; display: inline-block;padding-left: 10px;">Europe / London</span>-->
     <el-button size="small" class="btn-buy-session" type="primary" style="float:right; display: none;">BUY SESSIONS</el-button>
     <el-col :span="24">
@@ -46,7 +46,7 @@
             @change="checkDate()"
             style="cursor: pointer;">
           </el-date-picker>
-
+<span v-if="timezone !== null || timezone !== ''" style="color: rgba(255, 255, 255, 0.7); padding-top: 12px; display: inline-block;padding-left: 10px;">{{ timezone }}</span>
           <el-popover
             placement="bottom"
             title="Title"
