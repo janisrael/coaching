@@ -46,7 +46,18 @@
             @change="checkDate()"
             style="cursor: pointer;">
           </el-date-picker>
-<span v-if="timezone !== null || timezone !== ''" style="color: rgba(255, 255, 255, 0.7); padding-top: 12px; display: inline-block;padding-left: 10px;">{{ timezone }}</span>
+          <span v-if="timezone !== null || timezone !== ''" style="margin-right: 10px; color: rgba(255, 255, 255, 0.7); padding-top: 12px; font-size: 14px; padding-top: 0px; display: inline-block;padding-left: 10px;">
+          <i class="fas fa-globe-asia" style="color: #fff;"></i>  {{ timezone }}
+<!--     
+          <el-select v-model="value" filterable placeholder="Select" @change="convertDate(value)">
+            <el-option
+              v-for="(item, i) in timeZonesList"
+              :key="i"
+              :label="item"
+              :value="item">
+            </el-option>
+          </el-select> -->
+          </span>
           <el-popover
             placement="bottom"
             title="Title"
@@ -306,6 +317,7 @@
 <script>
 import { Notification } from 'element-ui';
 import Loading from "vue-loading-overlay";
+import momentTZ from 'moment-timezone';
 import ScLoader from "./Loader/ScLoaderComponent";
 import "vue-loading-overlay/dist/vue-loading.css";
 export default {
@@ -411,7 +423,10 @@ export default {
         disabledDate (time) {
           return time.getTime() < Date.now() - 8.64e7;
         }
-      }
+      },
+      defaultTimeZone: momentTZ.tz.guess(),
+      timeZonesList: momentTZ.tz.names(),
+      value: [],
     }
   },
   computed: {
@@ -452,12 +467,61 @@ export default {
     this.session_data = this.selected.coaches
     // this.getDate()
     this.loading = false
+    this.value = this.timezone
+    // this.datefilter = this.date_filter
   },
   methods: {
     even: function(arr) {
       return arr.slice().sort(function(a, b) {
         return a.date - b.date;
       });
+    },
+    convertDate(value) {
+      let s_date = ''
+      let e_date = ''
+      if(this.datefilter === null || this.datefilter === '') {
+        s_date = this.date_filter[0]
+        e_date = this.date_filter[1]  
+      } else {
+        s_date = this.datefilter[0]
+        e_date = this.datefilter[1]
+      }
+      
+      let startDate = new Date(s_date)
+      let endDate = new Date(e_date)
+      let start_date = this.getConvertedDate(startDate, value)
+      let end_date = this.getConvertedDate(endDate, value)
+     
+      let date1 = start_date.replaceAll('/', '-')
+      let date2 = end_date.replaceAll('/', '-')
+      
+      let data = []
+      
+      data.push(this.$moment(date1).format('YYYY-MM-DD'))
+      data.push(this.$moment(date2).format('YYYY-MM-DD'))
+      this.date_collections = []
+      this.date_collections = data
+      this.datefilter = []
+      this.datefilter = data
+      console.log(data,'data', value)
+      // this.datefilter[0] = start_date
+      // this.datefilter[1] = end_date
+      // this.datefilter[0] = value
+      //   console.log(value, strTime);
+      // aryIannaTimeZones.forEach((timeZone) => {
+
+      //   let strTime = date.toLocaleString("en-US", {
+      //     timeZone: `${timeZone}`
+      //   });
+
+      // });
+    },
+    getConvertedDate(date, v) {
+      let strTime = date.toLocaleString("en-US", {
+        value: `${v}`
+      });
+
+      return strTime
     },
     handleDeleteBooking(schedule_details) {
       this.loading = true

@@ -878,7 +878,7 @@ export default {
     },
     getSummary(row, index) {
       this.selected_row = row
-      this.timezone = row.timezone
+      // this.timezone = row.timezone
       //** on page load check if my_mentor exist **//
       if(this.customer_group.toLowerCase() === 'ltt') {
         if(row.my_mentor !== '' || row.my_mentor !== null || true) {
