@@ -9,10 +9,16 @@
     <span style="color: rgba(255, 255, 255, 0.7); padding-top: 12px; display: inline-block;padding-left: 10px;">{{ sales.computed_credits.total_available }} sessions left to book</span>
     <br>
     <span v-if="timezone !== null || timezone !== ''" style="color: rgba(255, 255, 255, 0.7); padding-top: 12px; font-size: 14px; display: inline-block;padding-left: 10px;">
-      <i class="fas fa-globe-asia" style="color: #fff;"></i>  {{ timezone }}
+      <i class="fas fa-globe-americas" style="color: #fff"></i>
+        <el-select id="tzSelect" class="tz-select" v-model="value" size="small" filterable placeholder="Select" @change="convertDate(value)">
+          <el-option
+            v-for="(item, i) in timeZonesList"
+            :key="i"
+            :label="item"
+            :value="item">
+          </el-option>
+        </el-select>
     </span>
-    
-    <!--    <span style="color: rgba(255, 255, 255, 0.7); padding-top: 12px; display: inline-block;padding-left: 10px;">Europe / London</span>-->
     <el-button size="small" class="btn-buy-session" type="primary" style="float:right; display: none;">BUY SESSIONS</el-button>
     <el-col :span="24">
       <div style="display: block;">
@@ -49,17 +55,7 @@
             @change="checkDate()"
             style="cursor: pointer;">
           </el-date-picker>
-
-<!--     
-          <el-select v-model="value" filterable placeholder="Select" @change="convertDate(value)">
-            <el-option
-              v-for="(item, i) in timeZonesList"
-              :key="i"
-              :label="item"
-              :value="item">
-            </el-option>
-          </el-select> -->
-         
+        
           <el-popover
             placement="bottom"
             title="Title"
@@ -91,7 +87,6 @@
           </el-popover>
         </div>
       </div>
-<!--      {{ filteredPositions }}-->
       <el-col id="session-main-container" v-loading="loading" element-loading-background="rgba(0, 0, 0, 0.2)" :span="24" class="session-items-wrapper">
         <transition name="el-fade-in">
           <div v-if="loading" class="loader-container">
@@ -211,7 +206,6 @@
                 <span>VIEW</span>
               </el-col>
             </div>
-<!--          </transition>-->
         </div>
         <p v-if="count_loading">Loading...</p>
         <!--        <p v-if="noMore">No more</p>-->
@@ -297,6 +291,7 @@
             id="alertBookSession"
             title="To cancel a session you must give at least 24 hours notice."
             type="warning"
+            :closable="false"
             show-icon
             style="width: 50%; float:left;">
           </el-alert>
@@ -470,7 +465,6 @@ export default {
     // this.getDate()
     this.loading = false
     this.value = this.timezone
-    // this.datefilter = this.date_filter
   },
   methods: {
     even: function(arr) {
@@ -478,52 +472,37 @@ export default {
         return a.date - b.date;
       });
     },
-    convertDate(value) {
+    convertDate(timezone) {
+      this.loading = true
       let s_date = ''
       let e_date = ''
-      if(this.datefilter === null || this.datefilter === '') {
-        s_date = this.date_filter[0]
-        e_date = this.date_filter[1]  
+      if(this.datefilter.length === 0) {
+          s_date = this.date_filter[0].toString()
+          e_date = this.date_filter[1].toString()
       } else {
-        s_date = this.datefilter[0]
-        e_date = this.datefilter[1]
+        s_date = this.datefilter[0].toString()
+        e_date = this.datefilter[1].toString()
       }
-      
-      let startDate = new Date(s_date)
-      let endDate = new Date(e_date)
-      let start_date = this.getConvertedDate(startDate, value)
-      let end_date = this.getConvertedDate(endDate, value)
-     
-      let date1 = start_date.replaceAll('/', '-')
-      let date2 = end_date.replaceAll('/', '-')
-      
+
+      let date1 = s_date.slice(0,10).replace(/-/g,'-');
+      let date2 = e_date.slice(0,10).replace(/-/g,'-');
+      var s = this.$moment.tz(date1, timezone);
+      var e = this.$moment.tz(date2, timezone);
+
+      s.tz(timezone).format(); 
+      e.tz(timezone).format(); 
+   
+      // changing the date of the filter according to timezone
+      const startDate = new Date(s.toDate())
+      const endDate = new Date(e.toDate())
       let data = []
-      
-      data.push(this.$moment(date1).format('YYYY-MM-DD'))
-      data.push(this.$moment(date2).format('YYYY-MM-DD'))
-      this.date_collections = []
-      this.date_collections = data
-      this.datefilter = []
+      data.push(this.$moment(startDate).format('YYYY-MM-DD'))
+      data.push(this.$moment(endDate).format('YYYY-MM-DD'))
       this.datefilter = data
-      console.log(data,'data', value)
-      // this.datefilter[0] = start_date
-      // this.datefilter[1] = end_date
-      // this.datefilter[0] = value
-      //   console.log(value, strTime);
-      // aryIannaTimeZones.forEach((timeZone) => {
-
-      //   let strTime = date.toLocaleString("en-US", {
-      //     timeZone: `${timeZone}`
-      //   });
-
-      // });
-    },
-    getConvertedDate(date, v) {
-      let strTime = date.toLocaleString("en-US", {
-        value: `${v}`
-      });
-
-      return strTime
+      this.date_collections = data
+      // calling api request
+      this.$emit('filterData', { value: data })
+      this.range_sep = '-'
     },
     handleDeleteBooking(schedule_details) {
       this.btn_loading = true
@@ -546,6 +525,7 @@ export default {
           duration: 4 * 2000
         })
         this.loading = false
+        this.btn_loading = false
         return
       }
 
@@ -584,11 +564,13 @@ export default {
             duration: 4 * 1000
           })
           this.loading = false
+          this.btn_loading = false
         }
       })
         .catch(error => {
           console.log(error)
           this.loading = false
+          this.btn_loading = false
         })
     },
     handleBook(value) {

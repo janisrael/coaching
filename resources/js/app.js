@@ -26,23 +26,19 @@ import Vue from 'vue';
 import ElementUI from 'element-ui';
 import 'element-ui/lib/theme-chalk/index.css';
 import locale from 'element-ui/lib/locale/lang/en'
-// import { faSpinner } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import CountryFlag from 'vue-country-flag'
 import VueMoment from 'vue-moment'
-// import Loading from 'vue-loading-overlay';
-// import MultiFiltersPlugin from './MultiFilters' // <-- THIS
+import moment from 'moment-timezone'
 
 Vue.use(ElementUI, { locale })
-Vue.use(VueMoment)
-// Vue.use(Loading);
-// Vue.use(MultiFiltersPlugin); // <-- THIS
-// library.add(faSpinner)
+Vue.use(VueMoment, {
+    moment,
+})
 
 Vue.component('country-flag', CountryFlag)
 Vue.component('font-awesome-icon', FontAwesomeIcon)
 Vue.component('Index', require('./components/Index.vue').default);
-// Vue.component('loader', require('@C/Loader.vue'));
 
 /**
  * Next, we will create a fresh Vue application instance and attach it to
