@@ -153,6 +153,7 @@ class CoachingSessionController extends Controller
                     CoachingSessionFields::COACH => $session[CoachingSessionFields::COACH],
                     CoachingSessionFields::AVAILABILITY_TYPE => $session[CoachingSessionFields::AVAILABILITY_TYPE],
                     CoachingSessionFields::PREVIOUSLY_CANCELLED => true,
+                    CoachingSessionFields::SORT => $session[CoachingSessionFields::SORT],
                 ];
                 $this->setLog('CANCEL: CLONE_COACHING_SESSON', $cloneCoachingSession);
 

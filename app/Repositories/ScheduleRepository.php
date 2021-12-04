@@ -129,8 +129,8 @@ class ScheduleRepository implements ScheduleRepositoryInterface
             $startTime->setTimezone($customerTimezone);
             $endTime->setTimezone($customerTimezone);
 
-            $startTime = explode(' ', $startTime->format('Y-m-d h:i'));
-            $endTime = explode(' ', $endTime->format('Y-m-d h:i'));
+            $startTime = explode(' ', $startTime->format('Y-m-d H:i'));
+            $endTime = explode(' ', $endTime->format('Y-m-d H:i'));
         }
 
         return [
