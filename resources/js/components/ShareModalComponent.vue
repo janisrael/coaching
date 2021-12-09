@@ -19,7 +19,7 @@
         </div>
         <div style="display: inline-block;">
           <span v-if="ifshare === false" style="display: inline-block;width: 100%;">
-            <p style="color: rgba(255, 255, 255, .51);">N.B. To book metoring sessions, we require you to share your Read-only live account Capital index account with us.</p>
+            <p style="color: rgba(255, 255, 255, .51);">N.B. To book mentoring sessions, we require you to share your Read-only live account Capital index account with us.</p>
           </span>
           <span v-else style="display: inline-block;width: 100%;">
             <p style="color: rgba(255, 255, 255, .51);">To revoke your permission to share read-only account with Learn to Trade Ltd,</p>
