@@ -446,9 +446,9 @@ export default {
       coach_token: APP_TOKEN,
       datefilter: [],
 // dummy
-//       dummy_sales: json_sales,
-//       dummy_schedules: json_schedules,
-//       dummy_coaches: json_coaches,
+      // dummy_sales: json_sales,
+      // dummy_schedules: json_schedules,
+      // dummy_coaches: json_coaches,
     }
   },
   computed: {

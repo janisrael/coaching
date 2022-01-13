@@ -473,7 +473,7 @@ export default {
       });
     },
     convertDate(timezone) {
-      this.loading = true
+      // this.loading = true
       let s_date = ''
       let e_date = ''
       if(this.datefilter.length === 0) {
@@ -486,22 +486,45 @@ export default {
 
       let date1 = s_date.slice(0,10).replace(/-/g,'-');
       let date2 = e_date.slice(0,10).replace(/-/g,'-');
+
       var s = this.$moment.tz(date1, timezone);
       var e = this.$moment.tz(date2, timezone);
 
       s.tz(timezone).format(); 
       e.tz(timezone).format(); 
-   
+
+      // console.log(this.session_collection , 'session_collection')
+      this.session_collection.forEach((value, index) => {
+        if(value.status === 'Pending') {
+          var thisdate = value.date + ' ' + value.start_time
+          var newdate = this.$moment.tz(thisdate, timezone);
+          newdate.tz(timezone).format();
+
+          const neDate = new Date(newdate.toDate())
+          var d = this.$moment(neDate).format('YYYY-MM-DD')
+          var t = this.$moment(neDate).format('HH:mm')
+          value.date = d
+          value.start_time = t
+          console.log(d, t)
+          // return
+        }
+      })
+
+      // console.log(this.session_collection , 'session_collection')
       // changing the date of the filter according to timezone
       const startDate = new Date(s.toDate())
       const endDate = new Date(e.toDate())
+
       let data = []
-      data.push(this.$moment(startDate).format('YYYY-MM-DD'))
+      data.push(this.$moment(startDate).format('YYYY-MM-DD HH:mm:ss'))
       data.push(this.$moment(endDate).format('YYYY-MM-DD'))
+      
+  
       this.datefilter = data
+        //  console.log(data , 'cons')
       this.date_collections = data
       // calling api request
-      this.$emit('filterData', { value: data })
+      // this.$emit('filterData', { value: data })
       this.range_sep = '-'
     },
     handleDeleteBooking(schedule_details) {
