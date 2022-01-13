@@ -495,7 +495,7 @@ export default {
 
       // console.log(this.session_collection , 'session_collection')
       this.session_collection.forEach((value, index) => {
-        if(value.status === 'Pending') {
+        // if(value.status === 'Pending') {
           var thisdate = value.date + ' ' + value.start_time
           var newdate = this.$moment.tz(thisdate, timezone);
           newdate.tz(timezone).format();
@@ -507,7 +507,7 @@ export default {
           value.start_time = t
           console.log(d, t)
           // return
-        }
+        // }
       })
 
       // console.log(this.session_collection , 'session_collection')
