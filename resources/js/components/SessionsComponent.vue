@@ -12,7 +12,7 @@
       <i class="fas fa-globe-americas" style="color: #fff"></i>
         <el-select id="tzSelect" class="tz-select" v-model="tzone" size="small" filterable placeholder="Select" @change="convertDate(tzone)">
           <el-option
-            v-for="(item, i) in defaultTimeZone"
+            v-for="(item, i) in timeZonesList"
             :key="i"
             :label="item"
             :value="item">
@@ -507,19 +507,21 @@ export default {
       let date1 = s_date.slice(0,10).replace(/-/g,'-');
       let date2 = e_date.slice(0,10).replace(/-/g,'-');
 
-      var s = this.$moment.tz(date1, tzone);
-      var e = this.$moment.tz(date2, tzone);
+      var s = this.$moment.tz(new Date(date1), this.tzone).format('YYYY-MM-DD')
+      var e = this.$moment.tz(new Date(date2), this.tzone).format('YYYY-MM-DD')
+      // var s = this.$moment.tz(date1, tzone);
+      // var e = this.$moment.tz(date2, tzone);
 
-      s.tz(tzone).format(); 
-      e.tz(tzone).format(); 
+      // s.tz(tzone).format(); 
+      // e.tz(tzone).format(); 
     
       // changing the date of the filter according to timezone
-      const startDate = new Date(s.toDate())
-      const endDate = new Date(e.toDate())
+      // const startDate = new Date(s.toDate())
+      // const endDate = new Date(e.toDate())
 
       let data = []
-      data.push(this.$moment(startDate).format('YYYY-MM-DD HH:mm:ss'))
-      data.push(this.$moment(endDate).format('YYYY-MM-DD'))
+      data.push(s)
+      data.push(e)
       
       this.datefilter = data
       this.date_collections = data
