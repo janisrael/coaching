@@ -10,9 +10,9 @@
     <br>
     <span v-if="timezone !== null || timezone !== ''" style="color: rgba(255, 255, 255, 0.7); padding-top: 12px; font-size: 14px; display: inline-block;padding-left: 10px;">
       <i class="fas fa-globe-americas" style="color: #fff"></i>
-        <el-select id="tzSelect" class="tz-select" v-model="value" size="small" filterable placeholder="Select" @change="convertDate(value)">
+        <el-select id="tzSelect" class="tz-select" v-model="tzone" size="small" filterable placeholder="Select" @change="convertDate(tzone)">
           <el-option
-            v-for="(item, i) in timeZonesList"
+            v-for="(item, i) in defaultTimeZone"
             :key="i"
             :label="item"
             :value="item">
@@ -96,6 +96,7 @@
           </div>
         </transition>
       <el-col :span="24" class="session-items-container">
+        <!-- {{ selected }} -->
         <div v-for="(position, index) in even(filteredPositions)" :key="index"  :class="['sessions-item-' + index]">
             <div v-if="position.status === 'Pending' && position.visible === true" class="list-item">
               <div @click="dialogMentor(position)" style="display: block !important;">
@@ -105,7 +106,11 @@
                   <img :src="position.coach_image" :alt="position.coach_image"/>
                 </el-avatar>
                 <span class="session-list-time">
-                  {{ position.start_time }}  {{ $moment(position.date).format('dddd') }} {{ $moment(position.date).format('Do') }} {{ $moment(position.date).format('MMM')}}
+                  {{ $moment.tz(new Date(position.date + ' ' + position.start_time), tzone).format('HH:mm') }} 
+                  {{ $moment.tz(new Date(position.date + ' ' + position.start_time), tzone).format('dddd') }}
+                  {{ $moment.tz(new Date(position.date + ' ' + position.start_time), tzone).format('Do') }}
+                  {{ $moment.tz(new Date(position.date + ' ' + position.start_time), tzone).format('MMM') }}
+                  <!-- {{ position.start_time }}  {{ $moment(position.date).format('dddd') }} {{ $moment(position.date).format('Do') }} {{ $moment(position.date).format('MMM')}} -->
                 </span>
                 <span v-if="position.availability_type !== null || position.availability_type !== '' || position.availability_type !== undefined">
                   <span v-if="position.availability_type.includes('Can do either')">
@@ -133,7 +138,11 @@
                     <img :src="selected.coach_image" :alt="selected.coach_image"/>
                   </el-avatar>
                   <span class="session-list-time">
-                  {{ position.start_time }}  {{ $moment(position.date).format('dddd') }} {{ $moment(position.date).format('Do') }} {{ $moment(position.date).format('MMM') }}
+                  {{ $moment.tz(new Date(position.date + ' ' + position.start_time), tzone).format('HH:mm') }} 
+                  {{ $moment.tz(new Date(position.date + ' ' + position.start_time), tzone).format('dddd') }}
+                  {{ $moment.tz(new Date(position.date + ' ' + position.start_time), tzone).format('Do') }}
+                  {{ $moment.tz(new Date(position.date + ' ' + position.start_time), tzone).format('MMM') }}
+                  <!-- {{ $moment(position.date).format('dddd') }} {{ $moment(position.date).format('Do') }} {{ $moment(position.date).format('MMM') }} -->
                   </span>
                 <span v-if="position.availability_type !== null || position.availability_type !== '' || position.availability_type !== undefined">
                   <span v-if="position.availability_type.includes('Can do either')">
@@ -161,7 +170,11 @@
                   <img :src="position.coach_image" :alt="position.coach_image"/>
                 </el-avatar>
                 <span class="session-list-time">
-                  {{ position.start_time }}  {{ $moment(position.date).format('dddd') }} {{ $moment(position.date).format('Do') }} {{ $moment(position.date).format('MMM') }}
+                  {{ $moment.tz(new Date(position.date + ' ' + position.start_time), tzone).format('HH:mm') }} 
+                  {{ $moment.tz(new Date(position.date + ' ' + position.start_time), tzone).format('dddd') }}
+                  {{ $moment.tz(new Date(position.date + ' ' + position.start_time), tzone).format('Do') }}
+                  {{ $moment.tz(new Date(position.date + ' ' + position.start_time), tzone).format('MMM') }}
+                  <!-- {{ position.start_time }}  {{ $moment(position.date).format('dddd') }} {{ $moment(position.date).format('Do') }} {{ $moment(position.date).format('MMM') }} -->
                 </span>
                 <span v-if="position.availability_type !== null || position.availability_type !== '' || position.availability_type !== undefined">
                   <span v-if="position.availability_type.includes('Can do either')">
@@ -187,7 +200,11 @@
                   <img :src="position.coach_image" :alt="position.coach_image"/>
                 </el-avatar>
                 <span class="session-list-time">
-                  {{ position.start_time }}  {{ $moment(position.date).format('dddd') }} {{ $moment(position.date).format('Do') }} {{ $moment(position.date).format('MMM') }}
+                  {{ $moment.tz(new Date(position.date + ' ' + position.start_time), tzone).format('HH:mm') }} 
+                  {{ $moment.tz(new Date(position.date + ' ' + position.start_time), tzone).format('dddd') }}
+                  {{ $moment.tz(new Date(position.date + ' ' + position.start_time), tzone).format('Do') }}
+                  {{ $moment.tz(new Date(position.date + ' ' + position.start_time), tzone).format('MMM') }}
+                  <!-- {{ position.start_time }}  {{ $moment(position.date).format('dddd') }} {{ $moment(position.date).format('Do') }} {{ $moment(position.date).format('MMM') }} -->
                 </span>
                 <span v-if="position.availability_type !== null || position.availability_type !== '' || position.availability_type !== undefined">
                   <span v-if="position.availability_type.includes('Can do either')">
@@ -424,6 +441,8 @@ export default {
       defaultTimeZone: momentTZ.tz.guess(),
       timeZonesList: momentTZ.tz.names(),
       value: [],
+      original_collection: [],
+      tzone: this.timezone
     }
   },
   computed: {
@@ -451,6 +470,7 @@ export default {
   },
   mounted: function() {
     // this.session_collection = this.selected.slice(0, this.count)
+
   },
   watch: {
     session_collection: function() {
@@ -473,7 +493,7 @@ export default {
       });
     },
     convertDate(timezone) {
-      // this.loading = true
+      this.tzone = timezone
       let s_date = ''
       let e_date = ''
       if(this.datefilter.length === 0) {
@@ -487,30 +507,12 @@ export default {
       let date1 = s_date.slice(0,10).replace(/-/g,'-');
       let date2 = e_date.slice(0,10).replace(/-/g,'-');
 
-      var s = this.$moment.tz(date1, timezone);
-      var e = this.$moment.tz(date2, timezone);
+      var s = this.$moment.tz(date1, tzone);
+      var e = this.$moment.tz(date2, tzone);
 
-      s.tz(timezone).format(); 
-      e.tz(timezone).format(); 
-
-      // console.log(this.session_collection , 'session_collection')
-      this.session_collection.forEach((value, index) => {
-        // if(value.status === 'Pending') {
-          var thisdate = value.date + ' ' + value.start_time
-          var newdate = this.$moment.tz(thisdate, timezone);
-          newdate.tz(timezone).format();
-
-          const neDate = new Date(newdate.toDate())
-          var d = this.$moment(neDate).format('YYYY-MM-DD')
-          var t = this.$moment(neDate).format('HH:mm')
-          value.date = d
-          value.start_time = t
-          console.log(d, t)
-          // return
-        // }
-      })
-
-      // console.log(this.session_collection , 'session_collection')
+      s.tz(tzone).format(); 
+      e.tz(tzone).format(); 
+    
       // changing the date of the filter according to timezone
       const startDate = new Date(s.toDate())
       const endDate = new Date(e.toDate())
@@ -519,9 +521,7 @@ export default {
       data.push(this.$moment(startDate).format('YYYY-MM-DD HH:mm:ss'))
       data.push(this.$moment(endDate).format('YYYY-MM-DD'))
       
-  
       this.datefilter = data
-        //  console.log(data , 'cons')
       this.date_collections = data
       // calling api request
       // this.$emit('filterData', { value: data })
@@ -643,6 +643,7 @@ export default {
     },
     assignme() {
       this.session_collection = this.selected.slice(0, this.count)
+      // this.original_collection = this.selected.slice(0, this.count)
     },
     scrollToElement(options) {
       this.count_loading = true
