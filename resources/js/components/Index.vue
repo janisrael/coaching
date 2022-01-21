@@ -443,6 +443,7 @@ export default {
       region: Region,
       // base_url: 'https://' + window.location.host + '#funds',
       base_url: 'https://app.smartcharts.net/#funds',
+      parent_url: window.ENV.PARENT_URL,
       coach_url: '',
       coach_token: APP_TOKEN,
       datefilter: [],
@@ -517,8 +518,8 @@ export default {
   },
   methods: {
     goToAccount() {
-      window.location.href = this.base_url
-      console.log(this.base_url)
+      window.location.href = this.parent_url + '/#funds'
+      console.log(this.parent_url)
     },
     checkUser() {
       let user_id = this.portal_user_id

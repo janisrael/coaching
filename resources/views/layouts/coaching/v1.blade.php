@@ -86,6 +86,7 @@
         window.ENV = {
             APP_URL: '{{ config('app.coaching_url') }}',
             APP_DEBUG: '{{ config('app.debug') }}',
+            PARENT_URL: '{{ config('app.parent_url') }}' 
         };
     </script>
 </body>
