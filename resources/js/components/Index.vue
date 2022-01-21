@@ -441,7 +441,7 @@ export default {
       selected_row: {},
       timezone: '',
       region: Region,
-      base_url: window.location.origin + '#funds',
+      base_url: 'https://' + window.location.host + '#funds',
       coach_url: '',
       coach_token: APP_TOKEN,
       datefilter: [],
@@ -645,6 +645,7 @@ export default {
     },
     async read(action) {
       this.loading = true
+      console.log(this.base_url , 'window.location.href = this.base_url')
       let sched_api = '/api/v1/coaches/schedule'
       let currentDate = new Date().toJSON().slice(0,10).replace(/-/g,'-');
 
