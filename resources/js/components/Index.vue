@@ -519,9 +519,7 @@ export default {
   methods: {
     goToAccount() {
       // window.location.href = this.parent_url + '/#funds'
-      // const url = document.getElementById('ctrMain').location = this.parent_url
-      document.getElementById("ctrMain").contentWindow.location = this.parent_url
-
+      window.top.location.href = this.parent_url
       // location.href = this.parent_url
       console.log(this.parent_url, 'parent url')
     },
