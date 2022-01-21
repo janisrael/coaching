@@ -441,13 +441,12 @@ export default {
       selected_row: {},
       timezone: '',
       region: Region,
-      // base_url: 'https://' + window.location.host + '#funds',
       base_url: '',
-      parent_url: window.ENV.PARENT_URL,
+      parent_url: window.top.location.origin,
       coach_url: '',
       coach_token: APP_TOKEN,
       datefilter: [],
-// dummy
+      // dummy
       // dummy_sales: json_sales,
       // dummy_schedules: json_schedules,
       // dummy_coaches: json_coaches,
@@ -518,10 +517,7 @@ export default {
   },
   methods: {
     goToAccount() {
-      // window.location.href = this.parent_url + '/#funds'
-      window.top.location.href = this.parent_url
-      // location.href = this.parent_url
-      console.log(this.parent_url, 'parent url')
+      window.top.location.href = this.parent_url + '/#funds'
     },
     checkUser() {
       let user_id = this.portal_user_id
@@ -650,7 +646,6 @@ export default {
     },
     async read(action) {
       this.loading = true
-      // console.log(this.base_url , 'window.location.href = this.base_url')
       let sched_api = '/api/v1/coaches/schedule'
       let currentDate = new Date().toJSON().slice(0,10).replace(/-/g,'-');
 
