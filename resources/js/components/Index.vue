@@ -442,7 +442,7 @@ export default {
       timezone: '',
       region: Region,
       base_url: '',
-      parent_url: window.top.location.origin,
+      parent_url: window.parent.location,
       coach_url: '',
       coach_token: APP_TOKEN,
       datefilter: [],
@@ -517,7 +517,10 @@ export default {
   },
   methods: {
     goToAccount() {
+      console.log(window.top.location)
+      console.log(document.location.origin)
       window.top.location.href = this.parent_url + '/#funds'
+      
     },
     checkUser() {
       let user_id = this.portal_user_id
