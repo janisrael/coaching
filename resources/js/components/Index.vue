@@ -442,7 +442,7 @@ export default {
       timezone: '',
       region: Region,
       // base_url: 'https://' + window.location.host + '#funds',
-      base_url: 'https://app.smartcharts.net/#funds',
+      base_url: '',
       parent_url: window.ENV.PARENT_URL,
       coach_url: '',
       coach_token: APP_TOKEN,
@@ -518,8 +518,9 @@ export default {
   },
   methods: {
     goToAccount() {
-      window.location.href = this.parent_url + '/#funds'
-      console.log(this.parent_url)
+      // window.location.href = this.parent_url + '/#funds'
+      document.location.href = this.parent_url + '/#funds'
+      console.log(this.parent_url, 'parent url')
     },
     checkUser() {
       let user_id = this.portal_user_id
@@ -648,7 +649,7 @@ export default {
     },
     async read(action) {
       this.loading = true
-      console.log(this.base_url , 'window.location.href = this.base_url')
+      // console.log(this.base_url , 'window.location.href = this.base_url')
       let sched_api = '/api/v1/coaches/schedule'
       let currentDate = new Date().toJSON().slice(0,10).replace(/-/g,'-');
 
