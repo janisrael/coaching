@@ -71,6 +71,7 @@ class PortalLoginController extends Controller
 
         $password = $clientResponse->user->id . $clientResponse->token . config('app.coaching_url');
 
+        $clientResponse->user->post_login_url = optional($clientResponse)->post_login_url;
         $portalSession = $this->portalLogin->updateOrCreate(
             ['portal_user_id' => $clientResponse->user->id, 'salesforce_token' => $clientResponse->user->salesforce_token],
             [
