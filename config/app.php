@@ -107,7 +107,7 @@ return [
 
     'sf_simple_sale_id' => env('SF_SIMPLE_SALE_ID'),
     
-    'parent_url' => env('PARENT_URL'),
+    // 'parent_url' => env('PARENT_URL'),
 
     'customer_default' => [
         'group' => env('CUSTOMER_DEFAULT_GROUP'),

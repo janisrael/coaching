@@ -442,10 +442,11 @@ export default {
       timezone: '',
       region: Region,
       base_url: '',
-      parent_url: window.ENV.PARENT_URL,
+      // parent_url: window.ENV.PARENT_URL,
       coach_url: '',
       coach_token: APP_TOKEN,
       datefilter: [],
+      post_login_url: ''
       // dummy
       // dummy_sales: json_sales,
       // dummy_schedules: json_schedules,
@@ -517,7 +518,7 @@ export default {
   },
   methods: {
     goToAccount() {
-      window.top.location.href = this.parent_url
+      window.top.location.href = post_login_url + '/#funds'
     },
     checkUser() {
       let user_id = this.portal_user_id
@@ -700,7 +701,12 @@ export default {
         this.datacoach = data[0].data // mentors
         this.datasched = data[1].data // schedules
         this.datasales = data[2].data // sales
-
+        const obj = JSON.parse(this.datasales.portal_user.portal_user_details);
+        if(obj.gin_url !== null || obj.gin_url !== '') {
+          this.post_login_url = obj.gin_url
+        }
+        
+        console.log(obj,'obj')
         if(this.datacoach.coaches.length === 0) {
           if(this.customer_type === 'back end') {
             this.display_message = false
