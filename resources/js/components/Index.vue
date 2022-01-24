@@ -518,7 +518,7 @@ export default {
   },
   methods: {
     goToAccount() {
-      window.top.location.href = post_login_url + '/#funds'
+      window.top.location.href = this.post_login_url + '/#funds'
     },
     checkUser() {
       let user_id = this.portal_user_id
@@ -668,7 +668,7 @@ export default {
         await fetch('/api/v1/account/sales?pl=' + this.coach_token).then(res => res.ok && res.json())
       ]).then(data => {
         console.log(data, ' data')
-        let obj = JSON.parse(data[2].portal_user.portal_user_details);
+        let obj = JSON.parse(data.data[2].portal_user.portal_user_details);
 
         if(obj.gin_url !== null || obj.gin_url !== '') {
           this.post_login_url = obj.gin_url
