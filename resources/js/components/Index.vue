@@ -688,6 +688,14 @@ export default {
         // console.log(this.dummy_schedules,'sd')
 
         //** Check Instance **//
+
+        const obj = JSON.parse(this.datasales.portal_user.portal_user_details);
+        if(obj.gin_url !== null || obj.gin_url !== '') {
+          this.post_login_url = obj.gin_url
+        }
+        
+        console.log(obj,'obj')
+
         if(data[0].error_code) {
           this.loading = false
           this.instanceCheck = false
@@ -701,12 +709,7 @@ export default {
         this.datacoach = data[0].data // mentors
         this.datasched = data[1].data // schedules
         this.datasales = data[2].data // sales
-        const obj = JSON.parse(this.datasales.portal_user.portal_user_details);
-        if(obj.gin_url !== null || obj.gin_url !== '') {
-          this.post_login_url = obj.gin_url
-        }
-        
-        console.log(obj,'obj')
+     
         if(this.datacoach.coaches.length === 0) {
           if(this.customer_type === 'back end') {
             this.display_message = false
