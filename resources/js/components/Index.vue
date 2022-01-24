@@ -668,13 +668,12 @@ export default {
         await fetch('/api/v1/account/sales?pl=' + this.coach_token).then(res => res.ok && res.json())
       ]).then(data => {
         console.log(data, ' data')
-        let obj = JSON.parse(data.data[2].portal_user.portal_user_details);
-
-        if(obj.gin_url !== null || obj.gin_url !== '') {
-          this.post_login_url = obj.gin_url
+        let post_login_url = data[2].data.portal_user.post_login_url
+        if(post_login_url !== null || post_login_url !== '') {
+          this.post_login_url = post_login_url
         }
         
-        console.log(obj,'obj')
+        console.log(post_login_url,'obj')
 
         let check_promise = data.filter(elem => (elem === false))
         if(check_promise.length > 0) {
@@ -697,8 +696,6 @@ export default {
         // console.log(this.dummy_schedules,'sd')
 
         //** Check Instance **//
-
-
 
         if(data[0].error_code) {
           this.loading = false
