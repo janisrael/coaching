@@ -667,6 +667,15 @@ export default {
         await fetch(sched_api + '/' + start_date + '/' + end_date + '?status=all&pl=' + this.coach_token).then(res => res.ok && res.json()),
         await fetch('/api/v1/account/sales?pl=' + this.coach_token).then(res => res.ok && res.json())
       ]).then(data => {
+        console.log(data, ' data')
+        let obj = JSON.parse(data[2].portal_user.portal_user_details);
+
+        if(obj.gin_url !== null || obj.gin_url !== '') {
+          this.post_login_url = obj.gin_url
+        }
+        
+        console.log(obj,'obj')
+
         let check_promise = data.filter(elem => (elem === false))
         if(check_promise.length > 0) {
           Notification.error({
@@ -689,12 +698,7 @@ export default {
 
         //** Check Instance **//
 
-        const obj = JSON.parse(data[2].portal_user.portal_user_details);
-        if(obj.gin_url !== null || obj.gin_url !== '') {
-          this.post_login_url = obj.gin_url
-        }
-        
-        console.log(obj,'obj')
+
 
         if(data[0].error_code) {
           this.loading = false
