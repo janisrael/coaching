@@ -689,7 +689,7 @@ export default {
 
         //** Check Instance **//
 
-        const obj = JSON.parse(this.datasales.portal_user.portal_user_details);
+        const obj = JSON.parse(data[2].portal_user.portal_user_details);
         if(obj.gin_url !== null || obj.gin_url !== '') {
           this.post_login_url = obj.gin_url
         }
