@@ -449,15 +449,29 @@ export default {
     filteredPositions () {
       if(this.datefilter === '' || this.datefilter === null) {
         let ret = this.session_collection.filter(position => this.checkedFilters.includes(position.status));
+        ret.forEach((value, index) => {
+          value.date = value.date.replaceAll('-', '/')
+          value.start_time = value.start_time.replaceAll('-', '/')
+        })
         return ret.sort((a, b) => (a.status > b.status) ? 1 : (a.status === b.status)) // sort data pending as end
       } else {
         if(this.datefilter.length > 1) {
           let data = this.session_collection.filter(position => this.checkedFilters.includes(position.status));
           // let ret = data.filter(position => (this.date_collections[0] <= position.date) && (this.date_collections[1] >= position.date))
           let ret = data.filter(position => (position.status === 'Pending' && this.date_collections[0] <= position.date && this.date_collections[1] >= position.date) || (position.status !== 'Pending'))
+
+          ret.forEach((value, index) => {
+            value.date = value.date.replaceAll('-', '/')
+            value.start_time = value.start_time.replaceAll('-', '/')
+          })
+
           return ret.sort((a, b) => (a.status > b.status) ? 1 : (a.status === b.status) ) // sort data pending as end
         }
         let ret = this.session_collection.filter(position => this.checkedFilters.includes(position.status));
+        ret.forEach((value, index) => {
+          value.date = value.date.replaceAll('-', '/')
+          value.start_time = value.start_time.replaceAll('-', '/')
+        })
         return ret.sort((a, b) => (a.status > b.status) ? 1 : (a.status === b.status)) // sort data pending as end
       }
     },
@@ -467,10 +481,6 @@ export default {
     disabled () {
       return this.count_loading || this.noMore
     }
-  },
-  mounted: function() {
-    // this.session_collection = this.selected.slice(0, this.count)
-
   },
   watch: {
     session_collection: function() {
@@ -503,30 +513,19 @@ export default {
         s_date = this.datefilter[0].toString()
         e_date = this.datefilter[1].toString()
       }
-
+      
       let date1 = s_date.slice(0,10).replace(/-/g,'-');
       let date2 = e_date.slice(0,10).replace(/-/g,'-');
-
+    
       var s = this.$moment.tz(new Date(date1), this.tzone).format('YYYY-MM-DD')
       var e = this.$moment.tz(new Date(date2), this.tzone).format('YYYY-MM-DD')
-      // var s = this.$moment.tz(date1, tzone);
-      // var e = this.$moment.tz(date2, tzone);
-
-      // s.tz(tzone).format(); 
-      // e.tz(tzone).format(); 
-    
-      // changing the date of the filter according to timezone
-      // const startDate = new Date(s.toDate())
-      // const endDate = new Date(e.toDate())
-
+      
       let data = []
       data.push(s)
       data.push(e)
       
       this.datefilter = data
       this.date_collections = data
-      // calling api request
-      // this.$emit('filterData', { value: data })
       this.range_sep = '-'
     },
     handleDeleteBooking(schedule_details) {
