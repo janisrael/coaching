@@ -100,6 +100,7 @@ class SaleRepository implements SaleRepositoryInterface
             $portal_user['customer_region'] = $person[PersonFields::REGION] ?: config('app.customer_default.region');
             $portal_user['customer_type'] = $person[PersonFields::CUSTOMER_TYPE] ?: config('app.customer_default.type');
             $portal_user['customer_timezone'] = session('sf_customer')[PersonFields::TIMEZONE];
+            $portal_user['post_login_url'] = json_decode($portal_user['portal_user_details'])->post_login_url;
             $this->result['portal_user'] = collect($portal_user)->except(['id', 'password']);
         }
     }
