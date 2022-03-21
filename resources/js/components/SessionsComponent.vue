@@ -459,7 +459,7 @@ export default {
         if(this.datefilter.length > 1) {
           let data = this.session_collection.filter(position => this.checkedFilters.includes(position.status));
           // let ret = data.filter(position => (this.date_collections[0] <= position.date) && (this.date_collections[1] >= position.date))
-          let ret = data.filter(position => (position.status === 'Pending' && this.date_collections[0] <= position.date && this.date_collections[1] >= position.date) || (position.status !== 'Pending'))
+          let ret = data.filter(position => (position.status !== 'xx' && this.date_collections[0] <= position.date && this.date_collections[1] >= position.date) || (position.status !== 'xx'))
 
           ret.forEach((value, index) => {
             value.date = value.date.replaceAll('-', '/')
