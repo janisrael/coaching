@@ -105,7 +105,7 @@
                 <el-avatar :size="60" :src="position.coach_image" class="session-list-avatar">
                   <img :src="position.coach_image" :alt="position.coach_image"/>
                 </el-avatar> 
-                 {{ $moment.tz(new Date(position.date + ' ' + position.start_time), 'Australia/Sydney').utcOffset() }} 1
+                 {{ $moment.tz(new Date(position.date + ' ' + position.start_time), tzone).utcOffset() }} 1
                     {{ $moment.tz(new Date(position.date + ' ' + position.start_time), 'Australia/Melbourne').utcOffset() }} 2
                 <span v-if="tzone.includes(position.sched_timezone)" class="session-list-time">
                   {{ position.start_time }} 
