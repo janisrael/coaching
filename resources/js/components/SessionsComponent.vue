@@ -106,7 +106,7 @@
                   <img :src="position.coach_image" :alt="position.coach_image"/>
                 </el-avatar>
                 <span class="session-list-time">
-                {{ position.date }} {{ position.start_time }} -- {{ tzone }}, {{ position }} :: 
+                {{ position.date }} {{ position.start_time }} -- {{ tzone }}, {{ position.sched_timezone }} :: 
                   {{ $moment.tz(new Date(position.date + ' ' + position.start_time), tzone).format('HH:mm') }} 
                   {{ $moment.tz(new Date(position.date + ' ' + position.start_time), tzone).format('dddd') }}
                   {{ $moment.tz(new Date(position.date + ' ' + position.start_time), tzone).format('Do') }}
@@ -356,7 +356,7 @@ export default {
       type: Object
     },
     canbook: {
-      required: true,
+      required: false,
       type: Boolean
     },
     ifshare: {
