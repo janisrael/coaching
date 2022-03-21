@@ -456,7 +456,7 @@ export default {
       if(this.datefilter === '' || this.datefilter === null) {
         let ret = this.session_collection.filter(position => this.checkedFilters.includes(position.status));
         ret.forEach((value, index) => {
-          value.date = value.date.replaceAll('-', '/')
+          // value.date = value.date.replaceAll('-', '/')
           value.start_time = value.start_time.replaceAll('-', '/')
         })
         return ret.sort((a, b) => (a.status > b.status) ? 1 : (a.status === b.status)) // sort data pending as end
@@ -467,7 +467,7 @@ export default {
           // let ret = data.filter(position => (position.status === 'Pending' && this.date_collections[0] <= position.date && this.date_collections[1] >= position.date) || (position.status !== 'Pending'))
 
           ret.forEach((value, index) => {
-            value.date = value.date.replaceAll('-', '/')
+            // value.date = value.date.replaceAll('-', '/')
             value.start_time = value.start_time.replaceAll('-', '/')
           })
 
@@ -475,7 +475,7 @@ export default {
         }
         let ret = this.session_collection.filter(position => this.checkedFilters.includes(position.status));
         ret.forEach((value, index) => {
-          value.date = value.date.replaceAll('-', '/')
+          // value.date = value.date.replaceAll('-', '/')
           value.start_time = value.start_time.replaceAll('-', '/')
         })
         return ret.sort((a, b) => (a.status > b.status) ? 1 : (a.status === b.status)) // sort data pending as end
