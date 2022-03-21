@@ -865,7 +865,7 @@ export default {
             ...itm
           }));
         this.new_collections = mergeById(arr1, arr2); // merge arr1 (SCHEDULES) to arr2 (Coaches)
-
+          console.log(this.new_collections,'new')
         //** Check if coaches is 0  **//
         if(this.customer_group.toLowerCase() === 'ltt' || this.customer_group.toLowerCase() === 'ltt legacy') {
           if(this.coaches.length === 0) {
