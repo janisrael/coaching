@@ -826,7 +826,7 @@ export default {
         let m_index = 0
 
         //** get default sales index by id, index use to default selected mentor on page load **//
-        let regions = Region.data.region
+        let regions = this.region.data.region
 
         //** check if the customer and coach has match region **//
         let fil_res = this.coaches.find(o => o.region.toLowerCase() === this.customer_region.toLowerCase());
@@ -839,7 +839,7 @@ export default {
 
           this.loading = false
         }
-
+        // uk region code = UK white on the coaches region is GB
         this.coaches.forEach((value, index) => {
           let obj = regions.find(o => o.code.toLowerCase() === value.region.toLowerCase());
 

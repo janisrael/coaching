@@ -9,6 +9,7 @@
     <span style="color: rgba(255, 255, 255, 0.7); padding-top: 12px; display: inline-block;padding-left: 10px;">{{ sales.computed_credits.total_available }} sessions left to book</span>
     <br>
     <span v-if="timezone !== null || timezone !== ''" style="color: rgba(255, 255, 255, 0.7); padding-top: 12px; font-size: 14px; display: inline-block;padding-left: 10px;">
+    {{ tzone }}
       <i class="fas fa-globe-americas" style="color: #fff"></i>
         <el-select id="tzSelect" class="tz-select" v-model="tzone" size="small" filterable placeholder="Select" @change="convertDate(tzone)">
           <el-option
@@ -438,11 +439,13 @@ export default {
           return time.getTime() < Date.now() - 8.64e7;
         }
       },
-      defaultTimeZone: momentTZ.tz.guess(),
+      // defaultTimeZone: momentTZ.tz.guess(),
       timeZonesList: momentTZ.tz.names(),
       value: [],
       original_collection: [],
-      tzone: this.selected.timezone
+      tzone: this.selected.timezone // 
+      // tzone: this.selected.timezone // coach timezone
+      // this.timezone // customer timezone
     }
   },
   computed: {
