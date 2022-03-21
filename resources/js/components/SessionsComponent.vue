@@ -106,11 +106,11 @@
                   <img :src="position.coach_image" :alt="position.coach_image"/>
                 </el-avatar>
                 <span class="session-list-time">
-                {{ position.date }} {{ position.start_time }} -- {{ tzone }}, {{ position.sched_timezone }} :: 
-                  {{ $moment.tz(new Date(position.date + ' ' + position.start_time), tzone).format('HH:mm') }} 
-                  {{ $moment.tz(new Date(position.date + ' ' + position.start_time), tzone).format('dddd') }}
-                  {{ $moment.tz(new Date(position.date + ' ' + position.start_time), tzone).format('Do') }}
-                  {{ $moment.tz(new Date(position.date + ' ' + position.start_time), tzone).format('MMM') }}
+                <!-- {{ position.date }} {{ position.start_time }} -- {{ tzone }}, {{ position.sched_timezone }} ::  -->
+                  {{ $moment.tz(new Date(position.start_time), tzone).format('HH:mm') }} 
+                  {{ $moment.tz(new Date(position.date), tzone).format('dddd') }}
+                  {{ $moment.tz(new Date(position.date), tzone).format('Do') }}
+                  {{ $moment.tz(new Date(position.date), tzone).format('MMM') }}
                   <!-- {{ position.start_time }}  {{ $moment(position.date).format('dddd') }} {{ $moment(position.date).format('Do') }} {{ $moment(position.date).format('MMM')}} -->
                 </span>
                 <span v-if="position.availability_type !== null || position.availability_type !== '' || position.availability_type !== undefined">
