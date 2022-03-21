@@ -111,6 +111,8 @@
                   {{ $moment.tz(new Date(position.date + ' ' + position.start_time), tzone).format('dddd') }}
                   {{ $moment.tz(new Date(position.date + ' ' + position.start_time), tzone).format('Do') }}
                   {{ $moment.tz(new Date(position.date + ' ' + position.start_time), tzone).format('MMM') }}
+
+                  {{ position.id }}
                   <!-- {{ position.start_time }}  {{ $moment(position.date).format('dddd') }} {{ $moment(position.date).format('Do') }} {{ $moment(position.date).format('MMM')}} -->
                 </span>
                 <span v-if="position.availability_type !== null || position.availability_type !== '' || position.availability_type !== undefined">
