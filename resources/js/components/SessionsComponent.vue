@@ -109,6 +109,7 @@
                   {{ $moment.tz(new Date(position.date), tzone).format('dddd') }}
                   {{ $moment.tz(new Date(position.date), tzone).format('Do') }}
                   {{ $moment.tz(new Date(position.date), tzone).format('MMM') }}
+                  {{ calculateByTimezone(position) }}
                 </span>
                 <span v-else class="session-list-time">
                   {{ $moment.tz(new Date(position.date + ' ' + position.start_time), tzone).utcOffset(0, true).format('HH:mm') }} 
@@ -522,6 +523,18 @@ export default {
     this.value = this.timezone
   },
   methods: {
+    calculateByTimezone(value) {
+      let coach_tzone = this.coach_tzone
+      let tzone = this.tzone
+      let date = value.date
+      let time = value.start_time
+      let date_time = date + ' ' + time
+      let offset = this.$moment.tz(new Date(date_time), tzone).utcOffset()
+
+      let res = this.$moment.tz(new Date(date_time), tzone)
+
+      comsole.log(res, offset)
+    },
     even: function(arr) {
       return arr.slice().sort(function(a, b) {
         return a.date - b.date;
