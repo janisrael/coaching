@@ -104,7 +104,7 @@
                 <span style="width: 15px; display: inline-block"><i class="far fa-clock"></i></span>
                 <el-avatar :size="60" :src="position.coach_image" class="session-list-avatar">
                   <img :src="position.coach_image" :alt="position.coach_image"/>
-                </el-avatar>
+                </el-avatar> 
                 <span v-if="tzone === position.sched_timezone" class="session-list-time">
                   {{ position.start_time }} 
                   {{ $moment.tz(new Date(position.date), tzone).format('dddd') }}
