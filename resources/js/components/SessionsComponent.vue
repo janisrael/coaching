@@ -104,19 +104,20 @@
                 <el-avatar :size="60" :src="position.coach_image" class="session-list-avatar">
                   <img :src="position.coach_image" :alt="position.coach_image"/>
                 </el-avatar> 
-                <span v-if="($moment.tz(new Date(position.date + ' ' + position.start_time), coach_tzone).utcOffset()) === ($moment.tz(new Date(position.date + ' ' + position.start_time), tzone).utcOffset())" class="session-list-time">
+                   {{ calculateByTimezone(position) }}
+                <!-- <span v-if="($moment.tz(new Date(position.date + ' ' + position.start_time), coach_tzone).utcOffset()) === ($moment.tz(new Date(position.date + ' ' + position.start_time), tzone).utcOffset())" class="session-list-time">
                   {{ position.start_time }} 
                   {{ $moment.tz(new Date(position.date), tzone).format('dddd') }}
                   {{ $moment.tz(new Date(position.date), tzone).format('Do') }}
                   {{ $moment.tz(new Date(position.date), tzone).format('MMM') }}
-                  {{ calculateByTimezone(position) }}
+               
                 </span>
                 <span v-else class="session-list-time">
                   {{ $moment.tz(new Date(position.date + ' ' + position.start_time), tzone).utcOffset(0, true).format('HH:mm') }} 
                   {{ $moment.tz(new Date(position.date), tzone).format('dddd') }}
                   {{ $moment.tz(new Date(position.date), tzone).format('Do') }}
                   {{ $moment.tz(new Date(position.date), tzone).format('MMM') }}
-                </span>
+                </span> -->
                 <span v-if="position.availability_type !== null || position.availability_type !== '' || position.availability_type !== undefined">
                   <span v-if="position.availability_type.includes('Can do either')">
                     <span><i class="fas fa-headset" style="font-size: 14px"></i></span>
