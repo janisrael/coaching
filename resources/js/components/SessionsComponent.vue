@@ -446,7 +446,7 @@ export default {
       timeZonesList: momentTZ.tz.names(),
       value: [],
       original_collection: [],
-      tzone: this.timezone // 
+      tzone: ''// 
       // tzone: this.selected.timezone // coach timezone
       // this.timezone // customer timezone
     }
