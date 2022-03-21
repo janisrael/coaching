@@ -446,7 +446,7 @@ export default {
       timeZonesList: momentTZ.tz.names(),
       value: [],
       original_collection: [],
-      tzone: ''// 
+      tzone: this.$moment.tz.setDefault("Europe/London")
       // tzone: this.selected.timezone // coach timezone
       // this.timezone // customer timezone
     }
