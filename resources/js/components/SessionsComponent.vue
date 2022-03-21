@@ -533,7 +533,8 @@ export default {
       // let withouttimezone =  this.$moment.tz(new Date(date_time)).utcOffset(0, true).format()
       let res = this.$moment.tz(new Date(date_time), 'Europe/London').format('HH:mm ddd Do MMM')
       let orig = this.$moment.tz(new Date(date_time), coach_tzone).format('HH:mm ddd Do MMM')
-      console.log(orig, offset, res)
+      
+      return orig, res;
     },
     even: function(arr) {
       return arr.slice().sort(function(a, b) {
