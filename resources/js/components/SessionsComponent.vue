@@ -96,7 +96,7 @@
           </div>
         </transition>
       <el-col :span="24" class="session-items-container">
-        <!-- {{ selected }} -->
+        {{ coach_tzone }}
         <div v-for="(position, index) in even(filteredPositions)" :key="index"  :class="['sessions-item-' + index]">
             <div v-if="position.status === 'Pending' && position.visible === true" class="list-item">
               <div @click="dialogMentor(position)" style="display: block !important;">
@@ -105,9 +105,9 @@
                 <el-avatar :size="60" :src="position.coach_image" class="session-list-avatar">
                   <img :src="position.coach_image" :alt="position.coach_image"/>
                 </el-avatar> 
-                 {{ $moment.tz(new Date(position.date + ' ' + position.start_time), tzone).utcOffset() }} 1
-                    {{ $moment.tz(new Date(position.date + ' ' + position.start_time), 'Australia/Melbourne').utcOffset() }} 2
-                <span v-if="tzone.includes(position.sched_timezone)" class="session-list-time">
+                 <!-- {{ $moment.tz(new Date(position.date + ' ' + position.start_time), coach_tzone).utcOffset() }} -->
+                    <!-- {{ $moment.tz(new Date(position.date + ' ' + position.start_time), tzone).utcOffset() }} -->
+                <span v-if="($moment.tz(new Date(position.date + ' ' + position.start_time), coach_tzone).utcOffset()) === ($moment.tz(new Date(position.date + ' ' + position.start_time), tzone).utcOffset())" class="session-list-time">
                   {{ position.start_time }} 
                   {{ $moment.tz(new Date(position.date), tzone).format('dddd') }}
                   {{ $moment.tz(new Date(position.date), tzone).format('Do') }}
@@ -469,7 +469,8 @@ export default {
       timeZonesList: momentTZ.tz.names(),
       value: [],
       original_collection: [],
-      tzone: this.timezone
+      tzone: this.timezone,
+      coach_tzone: this.timezone
     }
   },
   computed: {
