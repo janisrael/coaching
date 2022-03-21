@@ -211,7 +211,8 @@
         </el-col>
         <el-col :xs="12" :sm="17" :md="16" :lg="18" :xl="18" class="full-height index-col-right" style="background-image: url('../../images/background.jpg'); background-size: cover;">
           <content-component v-if="instanceCheck === true" :selected="passData" :ifshare="ifShare" :canbook="canbook" @showModal="showShareModal" ></content-component>
-          <session-component v-if="instanceCheck === true" ref="sessionComponent" :coach_token="coach_token" :date_filter="datefilter" :selected="for_sessiondata" :canbook="canbook" :user_id="coach_id" :sales="datasales" :ifshare="ifShare" :can_book="can_book" :timezone="timezone" @reload="reloadData" @showModal="showShareModal" @filterData="filterData"></session-component>
+          <session-component v-if="instanceCheck === true" ref="sessionComponent" 
+            :coach_token="coach_token" :date_filter="datefilter" :selected="for_sessiondata" :canbook="canbook" :user_id="coach_id" :sales="datasales" :ifshare="ifShare" :can_book="can_book" :timezone="timezone" @reload="reloadData" @showModal="showShareModal" @filterData="filterData"></session-component>
         </el-col>
       </el-col>
 
@@ -667,13 +668,10 @@ export default {
         await fetch(sched_api + '/' + start_date + '/' + end_date + '?status=all&pl=' + this.coach_token).then(res => res.ok && res.json()),
         await fetch('/api/v1/account/sales?pl=' + this.coach_token).then(res => res.ok && res.json())
       ]).then(data => {
-        console.log(data, ' data')
         let post_login_url = data[2].data.portal_user.post_login_url
         if(post_login_url !== null || post_login_url !== '') {
           this.post_login_url = post_login_url
         }
-        
-        console.log(post_login_url,'obj')
 
         let check_promise = data.filter(elem => (elem === false))
         if(check_promise.length > 0) {
@@ -866,7 +864,6 @@ export default {
             ...itm
           }));
         this.new_collections = mergeById(arr1, arr2); // merge arr1 (SCHEDULES) to arr2 (Coaches)
-          console.log(this.new_collections,'new')
         //** Check if coaches is 0  **//
         if(this.customer_group.toLowerCase() === 'ltt' || this.customer_group.toLowerCase() === 'ltt legacy') {
           if(this.coaches.length === 0) {
@@ -952,7 +949,7 @@ export default {
       this.datamerge = datares
       this.for_sessiondata = []
       this.for_sessiondata = this.datamerge
-      console.log(this.for_sessiondata,'index page, merge')
+
       setTimeout(() => this.ex_call_session(), 1)
     },
     ex_call_session() {
