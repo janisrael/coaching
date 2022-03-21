@@ -107,11 +107,11 @@
                   <img :src="position.coach_image" :alt="position.coach_image"/>
                 </el-avatar>
                 <span class="session-list-time">
-                {{ tzone }}
-                  {{ $moment.tz(new Date(position.date + ' ' + position.start_time), tzone).format('HH:mm') }} 
+              {{ position.date }} {{ position.time }}
+                  <!-- {{ $moment.tz(new Date(position.date + ' ' + position.start_time), tzone).format('HH:mm') }} 
                   {{ $moment.tz(new Date(position.date + ' ' + position.start_time), tzone).format('dddd') }}
                   {{ $moment.tz(new Date(position.date + ' ' + position.start_time), tzone).format('Do') }}
-                  {{ $moment.tz(new Date(position.date + ' ' + position.start_time), tzone).format('MMM') }}
+                  {{ $moment.tz(new Date(position.date + ' ' + position.start_time), tzone).format('MMM') }} -->
 
                   {{ position.id }}
                   <!-- {{ position.start_time }}  {{ $moment(position.date).format('dddd') }} {{ $moment(position.date).format('Do') }} {{ $moment(position.date).format('MMM')}} -->
@@ -446,7 +446,7 @@ export default {
       timeZonesList: momentTZ.tz.names(),
       value: [],
       original_collection: [],
-      tzone: this.selected.timezone // 
+      tzone: this.timezone // 
       // tzone: this.selected.timezone // coach timezone
       // this.timezone // customer timezone
     }
