@@ -104,6 +104,7 @@
                 <el-avatar :size="60" :src="position.coach_image" class="session-list-avatar">
                   <img :src="position.coach_image" :alt="position.coach_image"/>
                 </el-avatar> 
+                     {{ position.start_time }}    {{ position.date }}  --- - -- 
                    {{ calculateByTimezone(position) }}
                 <!-- <span v-if="($moment.tz(new Date(position.date + ' ' + position.start_time), coach_tzone).utcOffset()) === ($moment.tz(new Date(position.date + ' ' + position.start_time), tzone).utcOffset())" class="session-list-time">
                   {{ position.start_time }} 
@@ -535,7 +536,7 @@ export default {
       let res = this.$moment.tz(new Date(date_time), 'Europe/London').format('HH:mm ddd Do MMM')
       let orig = this.$moment.tz(new Date(date_time), coach_tzone).format('HH:mm ddd Do MMM')
       
-      return orig, res;
+      return res;
     },
     even: function(arr) {
       return arr.slice().sort(function(a, b) {
