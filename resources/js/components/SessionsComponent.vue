@@ -10,7 +10,7 @@
     <br>
     <span v-if="timezone !== null || timezone !== ''" style="color: rgba(255, 255, 255, 0.7); padding-top: 12px; font-size: 14px; display: inline-block;padding-left: 10px;">
       <i class="fas fa-globe-americas" style="color: #fff"></i>
-        <el-select id="tzSelect" class="tz-select" v-model="tzone" size="small" filterable placeholder="Select" @change="convertDate(tzone)">
+        <el-select id="tzSelect" class="tz-select" v-model="tzone" clearable size="small" filterable placeholder="Select" @change="convertDate(tzone)">
           <el-option
             v-for="(item, i) in timeZonesList"
             :key="i"
@@ -105,7 +105,8 @@
                 <el-avatar :size="60" :src="position.coach_image" class="session-list-avatar">
                   <img :src="position.coach_image" :alt="position.coach_image"/>
                 </el-avatar> 
-                <span v-if="tzone === position.sched_timezone" class="session-list-time">
+                    {{ $moment.tz(new Date(position.date + ' ' + position.start_time), 'Australia/Melbourne').format('HH:mm') }} 
+                <span v-if="tzone.toLowerCase().includes(position.sched_timezone).toLowerCase()" class="session-list-time">
                   {{ position.start_time }} 
                   {{ $moment.tz(new Date(position.date), tzone).format('dddd') }}
                   {{ $moment.tz(new Date(position.date), tzone).format('Do') }}
