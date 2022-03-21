@@ -533,7 +533,7 @@ export default {
 
       let res = this.$moment.tz(new Date(date_time), tzone)
 
-      comsole.log(res, offset)
+      console.log(res, offset)
     },
     even: function(arr) {
       return arr.slice().sort(function(a, b) {
