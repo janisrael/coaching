@@ -130,7 +130,8 @@
                   </span>
                 </span>
               </el-col>
-              <el-col :xs="6" :sm="5" :md="4" :lg="2" :xl="2" v-if="position.status === 'Pending'" v-bind:class="[(ifshare === false ? 'class-disable' : 'class-enable' && canbook === false ? 'class-disable' : 'class-enable'), 'list-' + position.status, 'list-item-btn']" >
+              <el-col :xs="6" :sm="5" :md="4" :lg="2" :xl="2" v-if="position.status === 'Pending'" 
+                v-bind:class="[(ifshare === false ? 'class-disable' : 'class-enable' && canbook === false ? 'class-disable' : 'class-enable'), 'list-' + position.status, 'list-item-btn']" >
                 <span>BOOK</span>
               </el-col>
               </div>
@@ -142,12 +143,17 @@
                   <el-avatar :size="60" :src="position.coach_image" class="session-list-avatar">
                     <img :src="selected.coach_image" :alt="selected.coach_image"/>
                   </el-avatar>
-                  <span class="session-list-time">
-                  {{ $moment.tz(new Date(position.date + ' ' + position.start_time), tzone).format('HH:mm') }} 
-                  {{ $moment.tz(new Date(position.date + ' ' + position.start_time), tzone).format('dddd') }}
-                  {{ $moment.tz(new Date(position.date + ' ' + position.start_time), tzone).format('Do') }}
-                  {{ $moment.tz(new Date(position.date + ' ' + position.start_time), tzone).format('MMM') }}
-                  <!-- {{ $moment(position.date).format('dddd') }} {{ $moment(position.date).format('Do') }} {{ $moment(position.date).format('MMM') }} -->
+                  <span v-if="tzone === position.sched_timezone" class="session-list-time">
+                    {{ position.start_time }} 
+                    {{ $moment.tz(new Date(position.date), tzone).format('dddd') }}
+                    {{ $moment.tz(new Date(position.date), tzone).format('Do') }}
+                    {{ $moment.tz(new Date(position.date), tzone).format('MMM') }}
+                  </span>
+                  <span v-else class="session-list-time">
+                    {{ $moment.tz(new Date(position.date + ' ' + position.start_time), tzone).format('HH:mm') }} 
+                    {{ $moment.tz(new Date(position.date + ' ' + position.start_time), tzone).format('dddd') }}
+                    {{ $moment.tz(new Date(position.date + ' ' + position.start_time), tzone).format('Do') }}
+                    {{ $moment.tz(new Date(position.date + ' ' + position.start_time), tzone).format('MMM') }}
                   </span>
                 <span v-if="position.availability_type !== null || position.availability_type !== '' || position.availability_type !== undefined">
                   <span v-if="position.availability_type.includes('Can do either')">
@@ -161,25 +167,32 @@
                     <span v-if="position.availability_type.includes('Group')"><i class="fa fa-users" style="font-size: 14px"></i></span>
                   </span>
                 </span>
-                  <!-- <div class="session-list-time session-list-time-calendar"><i class="fas fa-calendar-plus" style="margin-right:10px;"></i><span class="session-calendar-caption">CALENDAR</span></div> -->
                 </el-col>
-                <el-col :xs="6" :sm="5" :md="4" :lg="2" :xl="2" v-if="position.status === 'Booked'" :class="[(ifshare === false ? 'class-disable' : 'class-enable' && canbook === false ? 'class-disable' : 'class-enable'), 'list-' + position.status, 'list-item-btn']" @click="dialogMentor(position)">
+                <el-col :xs="6" :sm="5" :md="4" :lg="2" :xl="2" v-if="position.status === 'Booked'" 
+                  :class="[(ifshare === false ? 'class-disable' : 'class-enable' && canbook === false ? 'class-disable' : 'class-enable'), 'list-' + position.status, 'list-item-btn']" @click="dialogMentor(position)">
                   <span>VIEW</span>
                 </el-col>
               </div>
             </div>
             <div v-if="position.status === 'Attended'" class="list-item" @click="dialogMentor(position)">
-              <el-col :xs="18" :sm="19" :md="20" :lg="22" :xl="22" :class="[(ifshare === false ? 'class-disable' : 'class-enable' && canbook === false ? 'class-disable' : 'class-enable' && position.disable_schedule === true ? 'class-disable' : 'class-enable'), 'list-' + position.status, 'session-listitem']">
+              <el-col :xs="18" :sm="19" :md="20" :lg="22" :xl="22" 
+                :class="[(ifshare === false ? 'class-disable' : 'class-enable' && canbook === false ? 'class-disable' : 'class-enable' && position.disable_schedule === true ? 'class-disable' : 'class-enable'), 'list-' + position.status, 'session-listitem']">
                 <span style="width: 15px; display: inline-block"> <i class="el-icon-circle-check"></i></span>
                 <el-avatar :size="60" :src="position.coach_image" class="session-list-avatar">
                   <img :src="position.coach_image" :alt="position.coach_image"/>
                 </el-avatar>
-                <span class="session-list-time">
-                  {{ $moment.tz(new Date(position.date + ' ' + position.start_time), tzone).format('HH:mm') }} 
-                  {{ $moment.tz(new Date(position.date + ' ' + position.start_time), tzone).format('dddd') }}
-                  {{ $moment.tz(new Date(position.date + ' ' + position.start_time), tzone).format('Do') }}
-                  {{ $moment.tz(new Date(position.date + ' ' + position.start_time), tzone).format('MMM') }}
-                  <!-- {{ position.start_time }}  {{ $moment(position.date).format('dddd') }} {{ $moment(position.date).format('Do') }} {{ $moment(position.date).format('MMM') }} -->
+                  <span v-if="tzone === position.sched_timezone" class="session-list-time">
+                    {{ position.start_time }} 
+                    {{ $moment.tz(new Date(position.date), tzone).format('dddd') }}
+                    {{ $moment.tz(new Date(position.date), tzone).format('Do') }}
+                    {{ $moment.tz(new Date(position.date), tzone).format('MMM') }}
+                  </span>
+                   <span v-else class="session-list-time">
+                    {{ $moment.tz(new Date(position.date + ' ' + position.start_time), tzone).format('HH:mm') }} 
+                    {{ $moment.tz(new Date(position.date + ' ' + position.start_time), tzone).format('dddd') }}
+                    {{ $moment.tz(new Date(position.date + ' ' + position.start_time), tzone).format('Do') }}
+                    {{ $moment.tz(new Date(position.date + ' ' + position.start_time), tzone).format('MMM') }}
+                  </span>
                 </span>
                 <span v-if="position.availability_type !== null || position.availability_type !== '' || position.availability_type !== undefined">
                   <span v-if="position.availability_type.includes('Can do either')">
@@ -194,22 +207,29 @@
                   </span>
                 </span>
               </el-col>
-              <el-col :xs="6" :sm="5" :md="4" :lg="2" :xl="2" v-if="position.status === 'Attended'" :class="[(ifshare === false ? 'class-disable' : 'class-enable' && canbook === false ? 'class-disable' : 'class-enable'), 'list-' + position.status, 'list-item-btn']">
+              <el-col :xs="6" :sm="5" :md="4" :lg="2" :xl="2" v-if="position.status === 'Attended'" 
+                :class="[(ifshare === false ? 'class-disable' : 'class-enable' && canbook === false ? 'class-disable' : 'class-enable'), 'list-' + position.status, 'list-item-btn']">
                 <span>VIEW</span>
               </el-col>
             </div>
             <div v-if="position.status === 'No Show'" class="list-item" @click="dialogMentor(position)">
-              <el-col :xs="18" :sm="19" :md="20" :lg="22" :xl="22" :class="[(ifshare === false ? 'class-disable' : 'class-enable' && canbook === false ? 'class-disable' : 'class-enable' && position.disable_schedule === true ? 'class-disable' : 'class-enable'), 'list-' + position.status, 'list-no-show session-listitem']">
+              <el-col :xs="18" :sm="19" :md="20" :lg="22" :xl="22" 
+                :class="[(ifshare === false ? 'class-disable' : 'class-enable' && canbook === false ? 'class-disable' : 'class-enable' && position.disable_schedule === true ? 'class-disable' : 'class-enable'), 'list-' + position.status, 'list-no-show session-listitem']">
                 <span style="width: 15px; display: inline-block"><i class="fa fa-ban" aria-hidden="true"></i></span>
                 <el-avatar :size="60" :src="position.coach_image" class="session-list-avatar">
                   <img :src="position.coach_image" :alt="position.coach_image"/>
                 </el-avatar>
-                <span class="session-list-time">
-                  {{ $moment.tz(new Date(position.date + ' ' + position.start_time), tzone).format('HH:mm') }} 
-                  {{ $moment.tz(new Date(position.date + ' ' + position.start_time), tzone).format('dddd') }}
-                  {{ $moment.tz(new Date(position.date + ' ' + position.start_time), tzone).format('Do') }}
-                  {{ $moment.tz(new Date(position.date + ' ' + position.start_time), tzone).format('MMM') }}
-                  <!-- {{ position.start_time }}  {{ $moment(position.date).format('dddd') }} {{ $moment(position.date).format('Do') }} {{ $moment(position.date).format('MMM') }} -->
+                <span v-if="tzone === position.sched_timezone" class="session-list-time">
+                    {{ position.start_time }} 
+                    {{ $moment.tz(new Date(position.date), tzone).format('dddd') }}
+                    {{ $moment.tz(new Date(position.date), tzone).format('Do') }}
+                    {{ $moment.tz(new Date(position.date), tzone).format('MMM') }}
+                </span> 
+                <span v-else class="session-list-time">
+                    {{ $moment.tz(new Date(position.date + ' ' + position.start_time), tzone).format('HH:mm') }} 
+                    {{ $moment.tz(new Date(position.date + ' ' + position.start_time), tzone).format('dddd') }}
+                    {{ $moment.tz(new Date(position.date + ' ' + position.start_time), tzone).format('Do') }}
+                    {{ $moment.tz(new Date(position.date + ' ' + position.start_time), tzone).format('MMM') }}
                 </span>
                 <span v-if="position.availability_type !== null || position.availability_type !== '' || position.availability_type !== undefined">
                   <span v-if="position.availability_type.includes('Can do either')">
