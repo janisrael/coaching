@@ -442,7 +442,7 @@ export default {
       timeZonesList: momentTZ.tz.names(),
       value: [],
       original_collection: [],
-      tzone: this.timezone
+      tzone: this.selected.timezone
     }
   },
   computed: {
@@ -503,7 +503,9 @@ export default {
       });
     },
     convertDate(timezone) {
+      
       this.tzone = timezone
+      console.log(this.tzone, ' tzone in sessions')
       let s_date = ''
       let e_date = ''
       if(this.datefilter.length === 0) {
