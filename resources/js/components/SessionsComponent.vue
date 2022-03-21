@@ -9,7 +9,6 @@
     <span style="color: rgba(255, 255, 255, 0.7); padding-top: 12px; display: inline-block;padding-left: 10px;">{{ sales.computed_credits.total_available }} sessions left to book</span>
     <br>
     <span v-if="timezone !== null || timezone !== ''" style="color: rgba(255, 255, 255, 0.7); padding-top: 12px; font-size: 14px; display: inline-block;padding-left: 10px;">
-    <h1 style="color:#fff !important">test</h1> {{ selected.timezone }}, {{ timezone }} {{ tzone }}
       <i class="fas fa-globe-americas" style="color: #fff"></i>
         <el-select id="tzSelect" class="tz-select" v-model="tzone" size="small" filterable placeholder="Select" @change="convertDate(tzone)">
           <el-option
@@ -107,13 +106,11 @@
                   <img :src="position.coach_image" :alt="position.coach_image"/>
                 </el-avatar>
                 <span class="session-list-time">
-              {{ position.date }} {{ position.start_time }}  -- {{ $moment.tz(new Date(position.date + ' ' + position.start_time), tzone).format('YYYY-MM-DD HH:mm') }}
-                  <!-- {{ $moment.tz(new Date(position.date + ' ' + position.start_time), tzone).format('HH:mm') }} 
+                {{ position.data }} {{ position.time }} -- {{ tzone }},
+                  {{ $moment.tz(new Date(position.date + ' ' + position.start_time), tzone).format('HH:mm') }} 
                   {{ $moment.tz(new Date(position.date + ' ' + position.start_time), tzone).format('dddd') }}
                   {{ $moment.tz(new Date(position.date + ' ' + position.start_time), tzone).format('Do') }}
-                  {{ $moment.tz(new Date(position.date + ' ' + position.start_time), tzone).format('MMM') }} -->
-
-                  {{ position.id }}
+                  {{ $moment.tz(new Date(position.date + ' ' + position.start_time), tzone).format('MMM') }}
                   <!-- {{ position.start_time }}  {{ $moment(position.date).format('dddd') }} {{ $moment(position.date).format('Do') }} {{ $moment(position.date).format('MMM')}} -->
                 </span>
                 <span v-if="position.availability_type !== null || position.availability_type !== '' || position.availability_type !== undefined">
@@ -359,7 +356,7 @@ export default {
       type: Object
     },
     canbook: {
-      required: false,
+      required: true,
       type: Boolean
     },
     ifshare: {
@@ -442,13 +439,11 @@ export default {
           return time.getTime() < Date.now() - 8.64e7;
         }
       },
-      // defaultTimeZone: momentTZ.tz.guess(),
+      defaultTimeZone: momentTZ.tz.guess(),
       timeZonesList: momentTZ.tz.names(),
       value: [],
       original_collection: [],
-      tzone: this.$moment.tz.setDefault("Europe/London")
-      // tzone: this.selected.timezone // coach timezone
-      // this.timezone // customer timezone
+      tzone: this.timezone
     }
   },
   computed: {
@@ -456,7 +451,7 @@ export default {
       if(this.datefilter === '' || this.datefilter === null) {
         let ret = this.session_collection.filter(position => this.checkedFilters.includes(position.status));
         ret.forEach((value, index) => {
-          // value.date = value.date.replaceAll('-', '/')
+          value.date = value.date.replaceAll('-', '/')
           value.start_time = value.start_time.replaceAll('-', '/')
         })
         return ret.sort((a, b) => (a.status > b.status) ? 1 : (a.status === b.status)) // sort data pending as end
@@ -464,10 +459,10 @@ export default {
         if(this.datefilter.length > 1) {
           let data = this.session_collection.filter(position => this.checkedFilters.includes(position.status));
           // let ret = data.filter(position => (this.date_collections[0] <= position.date) && (this.date_collections[1] >= position.date))
-          // let ret = data.filter(position => (position.status === 'Pending' && this.date_collections[0] <= position.date && this.date_collections[1] >= position.date) || (position.status !== 'Pending'))
+          let ret = data.filter(position => (position.status === 'Pending' && this.date_collections[0] <= position.date && this.date_collections[1] >= position.date) || (position.status !== 'Pending'))
 
           ret.forEach((value, index) => {
-            // value.date = value.date.replaceAll('-', '/')
+            value.date = value.date.replaceAll('-', '/')
             value.start_time = value.start_time.replaceAll('-', '/')
           })
 
@@ -475,7 +470,7 @@ export default {
         }
         let ret = this.session_collection.filter(position => this.checkedFilters.includes(position.status));
         ret.forEach((value, index) => {
-          // value.date = value.date.replaceAll('-', '/')
+          value.date = value.date.replaceAll('-', '/')
           value.start_time = value.start_time.replaceAll('-', '/')
         })
         return ret.sort((a, b) => (a.status > b.status) ? 1 : (a.status === b.status)) // sort data pending as end
@@ -509,9 +504,7 @@ export default {
       });
     },
     convertDate(timezone) {
-      
       this.tzone = timezone
-      console.log(this.tzone, ' tzone in sessions')
       let s_date = ''
       let e_date = ''
       if(this.datefilter.length === 0) {
