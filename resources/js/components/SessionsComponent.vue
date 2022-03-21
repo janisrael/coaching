@@ -96,7 +96,7 @@
           </div>
         </transition>
       <el-col :span="24" class="session-items-container">
-        {{ coach_tzone }}
+        <!-- {{ coach_tzone }} -->
         <div v-for="(position, index) in even(filteredPositions)" :key="index"  :class="['sessions-item-' + index]">
             <div v-if="position.status === 'Pending' && position.visible === true" class="list-item">
               <div @click="dialogMentor(position)" style="display: block !important;">
@@ -107,6 +107,7 @@
                 </el-avatar> 
                  <!-- {{ $moment.tz(new Date(position.date + ' ' + position.start_time), coach_tzone).utcOffset() }} -->
                     <!-- {{ $moment.tz(new Date(position.date + ' ' + position.start_time), tzone).utcOffset() }} -->
+                                    {{ position.start_time }} 
                 <span v-if="($moment.tz(new Date(position.date + ' ' + position.start_time), coach_tzone).utcOffset()) === ($moment.tz(new Date(position.date + ' ' + position.start_time), tzone).utcOffset())" class="session-list-time">
                   {{ position.start_time }} 
                   {{ $moment.tz(new Date(position.date), tzone).format('dddd') }}
