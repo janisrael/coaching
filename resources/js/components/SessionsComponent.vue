@@ -106,7 +106,7 @@
                   <img :src="position.coach_image" :alt="position.coach_image"/>
                 </el-avatar> 
                     {{ $moment.tz(new Date(position.date + ' ' + position.start_time), 'Australia/Melbourne').format('HH:mm') }} 
-                <span v-if="tzone.toLowerCase().includes(position.sched_timezone).toLowerCase()" class="session-list-time">
+                <span v-if="tzone.includes(position.sched_timezone)" class="session-list-time">
                   {{ position.start_time }} 
                   {{ $moment.tz(new Date(position.date), tzone).format('dddd') }}
                   {{ $moment.tz(new Date(position.date), tzone).format('Do') }}
