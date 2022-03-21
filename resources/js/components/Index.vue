@@ -806,6 +806,7 @@ export default {
         //** filter schedules date range **//
         const today = new Date()
         schedraw.forEach((value, index) => {
+          value['sched_timezone'] = value.timezone
           let sched_date = value.date + ' ' + value.start_time
           let str_date = sched_date.replaceAll('-', '/')
           let dateTime = new Date(str_date)
