@@ -560,7 +560,7 @@ export default {
       // let res = this.$moment.tz(new Date(orig), 'Europe/London').format('h:mm A ddd Do MMM')
 
       let result = this.$moment(date_time).subtract(converted_offset, 'minutes').format('h:mm A ddd Do MMM')
-      console.log(diffe, 'diff', date_time)
+      console.log(offset, 'diff', date_time)
       return result;
     },
     even: function(arr) {
