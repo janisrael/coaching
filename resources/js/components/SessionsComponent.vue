@@ -526,18 +526,23 @@ export default {
       }
     }
   },
+  mounted () {
+    this.calculateByTimezone()
+  },
   created: function() {
     this.loading = true
     this.session_data = this.selected.coaches
     // this.getDate()
     this.loading = false
     this.value = this.timezone
-    this.calculateByTimezone()
+  
   },
   methods: {
     calculateByTimezone(item) {
       let coach_tzone = this.coach_tzone
       let tzone = this.tzone
+      console.log(tzone, 'timezone dropdown')
+      console.log(coach_tzone, 'timezone customer')
       let date = null
       let time = null
       let date_time = null
@@ -555,7 +560,7 @@ export default {
         let new_date = new Date(date_time);
         let res = date_time  
 
-          if(offset > 0) {
+          if(diff_offset > 0) {
             res = this.adddMinutes(parseInt(diff_offset), new_date)
           } else {
             res = this.subtractMinutes(parseInt(diff_offset), new_date)
