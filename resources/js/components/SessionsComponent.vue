@@ -104,7 +104,7 @@
                 <el-avatar :size="60" :src="position.coach_image" class="session-list-avatar">
                   <img :src="position.coach_image" :alt="position.coach_image"/>
                 </el-avatar> 
-                 {{ position.start_time }}    {{ position.date }}  --- sydney  - london (-11 hrs) -- 
+                 original date {{ position.start_time }}    {{ position.date }}  --- > converted date by tz
                   <!-- {{ $moment.tz(new Date(calculateByTimezone(position))).format('YYYY/MM/DD h:mm') }} -->
                    <!-- {{ $moment(calculateByTimezone(position), "MM-DD-YYYY h:mm") }} -->
                    <!-- {{ calculateByTimezone(position) }} //  -->
@@ -527,7 +527,7 @@ export default {
     }
   },
   mounted () {
-    this.calculateByTimezone()
+
   },
   created: function() {
     this.loading = true
@@ -535,7 +535,9 @@ export default {
     // this.getDate()
     this.loading = false
     this.value = this.timezone
-  
+    if(this.tzone) {
+      this.calculateByTimezone()
+    }
   },
   methods: {
     calculateByTimezone(item) {
