@@ -558,7 +558,7 @@ const aMinuteLess = new Date( someDate.getTime() - 1000 * 60 );
 
 let res = aMinuteLess - 660
 
-let thisone = new Date(res).format('YYYY/MM/DD HH:mm')
+let thisone = new Date(res)
 
 
 
