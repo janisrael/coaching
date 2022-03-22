@@ -558,7 +558,7 @@ var coach_offset = this.$moment.tz(now, coach_tzone).utcOffset()
 var customer_offset = this.$moment.tz(now, tzone).utcOffset()
 // calculate the difference in hours
 // console.log((coach_offset - customer_offset) / 60, '---');
-let diff_offset = (coach_offset - customer_offset) / 60
+let diff_offset = (coach_offset - customer_offset)
 console.log(diff_offset,'=====')
 
       let offset = this.$moment.tz(date_time, 'Europe/London').utcOffset()
