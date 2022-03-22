@@ -529,6 +529,14 @@ export default {
     this.value = this.timezone
   },
   methods: {
+    timeConvert(n) {
+      var num = n;
+      var hours = (num / 60);
+      var rhours = Math.floor(hours);
+      var minutes = (hours - rhours) * 60;
+      var rminutes = Math.round(minutes);
+      return num + " minutes = " + rhours + " hour(s) and " + rminutes + " minute(s).";
+      },
     calculateByTimezone(value) {
       let coach_tzone = this.coach_tzone
       let tzone = this.tzone
@@ -537,17 +545,18 @@ export default {
       let date_time = date + ' ' + time
       let new_date = new Date(date_time)
       let offset = this.$moment.tz(new Date(date_time), 'Europe/London').utcOffset()
-
+      let converted_offset = this.timeConvert(parseInt(offset))
       var now = this.$moment.utc();
       // let withouttimezone =  this.$moment.tz(new Date(date_time)).utcOffset(0, true).format()
       var Australia_tz_offset = this.$moment.tz.zone("Australia/Sydney").offset(now); 
       var London_tz_offset = this.$moment.tz.zone("Europe/London").offset(now);
 
       let diffe = (Australia_tz_offset - London_tz_offset) / 60
+
       let orig = this.$moment.tz(new Date(date_time), 'Australia/Sydney').format('YYYY/MM/DD h:mm')
       let res = this.$moment.tz(new Date(orig), 'Europe/London').format('h:mm A ddd Do MMM')
 
-      let result = this.$moment(new Date(date_time).subtract({days:0, hours: parseInt(diffe)}))
+      let result = this.$moment(now).subtract(converted_offset, 'minutes').format('LT')
       return result;
     },
     even: function(arr) {
