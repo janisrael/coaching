@@ -535,7 +535,7 @@ export default {
     this.calculateByTimezone()
   },
   methods: {
-    calculateByTimezone(value) {
+    calculateByTimezone(item) {
       let coach_tzone = this.coach_tzone
       let tzone = this.tzone
       let date = null
