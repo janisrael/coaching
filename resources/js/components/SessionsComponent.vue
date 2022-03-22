@@ -109,7 +109,7 @@
                    <!-- {{ $moment(calculateByTimezone(position), "MM-DD-YYYY h:mm") }} -->
                    <!-- {{ calculateByTimezone(position) }} //  -->
 
-                   {{ moment(calculateByTimezone(position)).format('HH:mm dddd Do MMM') }}
+                   {{ moment(position.converted_to_tz).format('HH:mm dddd Do MMM') }}
                    <!-- Australia - london diff offset {{ position.date_converted }} --> 
                 <!-- <span v-if="($moment.tz(new Date(position.date + ' ' + position.start_time), coach_tzone).utcOffset()) === ($moment.tz(new Date(position.date + ' ' + position.start_time), tzone).utcOffset())" class="session-list-time">
                   {{ position.start_time }} 
@@ -532,47 +532,38 @@ export default {
     // this.getDate()
     this.loading = false
     this.value = this.timezone
+    this.calculateByTimezone()
   },
   methods: {
-    timeConvert(n) {
-      var num = n;
-      var hours = (num / 60);
-      var rhours = Math.floor(hours);
-      var minutes = (hours - rhours) * 60;
-      var rminutes = Math.round(minutes);
-      return num + " minutes = " + rhours + " hour(s) and " + rminutes + " minute(s).";
-      },
     calculateByTimezone(value) {
       let coach_tzone = this.coach_tzone
       let tzone = this.tzone
-      let date = value.date
-      let time = value.start_time
-      let date_time = date + ' ' + time
-      // let xx = new Date(date_time)
-      // let new_date = new Date(date_time).toLocaleString("en-US", {timeZone: coach_tzone})
+      let date = null
+      let time = null
+      let date_time = null
 
-// var now = this.$moment.utc();
-// get the zone offsets for this time, in minutes
-let now = new Date();
-var coach_offset = this.$moment.tz(now, coach_tzone).utcOffset()
-var customer_offset = this.$moment.tz(now, 'Europe/London').utcOffset()
-// calculate the difference in hours
-// console.log((coach_offset - customer_offset) / 60, '---');
-let diff_offset = (coach_offset - customer_offset)
-console.log(diff_offset,'=====')
+      let now = new Date();
+      var coach_offset = this.$moment.tz(now, coach_tzone).utcOffset()
+      var customer_offset = this.$moment.tz(now, tzone).utcOffset()
+      let diff_offset = (coach_offset - customer_offset)
+      
+      this.session_collection.forEach((value, i) => {
+        date = value.date
+        time = value.start_time
+        date_time = date + ' ' + time
 
-      let offset = this.$moment.tz(date_time, 'Europe/London').utcOffset()
-      let new_off = offset / 60
-      let new_date = new Date(date_time);
-      let res = date_time
-      if(offset > 0) {
-        res = this.adddMinutes(660, new_date)
-      } else {
-        res = this.subtractMinutes(660, new_date)
-      }
+        let new_date = new Date(date_time);
+        let res = date_time  
 
-      console.log(offset)
-      return res;
+          if(offset > 0) {
+            res = this.adddMinutes(parseInt(diff_offset), new_date)
+          } else {
+            res = this.subtractMinutes(parseInt(diff_offset), new_date)
+          }
+
+        value['converted_to_tz'] = res
+      })
+
     },
     adddMinutes(numOfMinutes, date = new Date()) {
       date.setMinutes(date.getMinutes() + numOfMinutes);
@@ -615,6 +606,7 @@ console.log(diff_offset,'=====')
       this.date_collections = data
       this.range_sep = '-'
       
+      this.calculateByTimezone()
     },
     handleDeleteBooking(schedule_details) {
       this.btn_loading = true
