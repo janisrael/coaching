@@ -553,15 +553,16 @@ export default {
 
       let offset = this.$moment.tz(date_time, 'Europe/London').utcOffset()
       let new_off = offset / 60
-      let date2 = new Date(date_time);
+      let new_date = new Date(date_time);
+      let res = null
       if(offset > 0) {
-        let newres = this.adddMinutes(660, date2)
+        res = this.adddMinutes(660, new_date)
       } else {
-        let newres = this.subtractMinutes(660, date2)
+        res = this.subtractMinutes(660, new_date)
       }
 
       console.log(offset)
-      return newres;
+      return res;
     },
     adddMinutes(numOfMinutes, date = new Date()) {
       date.setMinutes(date.getMinutes() + numOfMinutes);
