@@ -109,7 +109,8 @@
                    <!-- {{ $moment(calculateByTimezone(position), "MM-DD-YYYY h:mm") }} -->
                    <!-- {{ calculateByTimezone(position) }} //  -->
                   <span v-if="timezone === position.timezone"> 
-                     {{ moment(position.date + position.start_time).format('HH:mm dddd Do MMM') }} A
+                      {{ position.start_time }} 
+                     {{ moment(position.date).format('dddd Do MMM') }} A
                   </span>
                   <span v-else> 
                      {{ moment(position.converted_to_tz).format('HH:mm dddd Do MMM') }} B
