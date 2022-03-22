@@ -105,7 +105,7 @@
                   <img :src="position.coach_image" :alt="position.coach_image"/>
                 </el-avatar> 
                      {{ position.start_time }}    {{ position.date }}  --- - -- 
-                   {{ calculateByTimezone(position) }}
+                   {{ position.date_converted }}
                 <!-- <span v-if="($moment.tz(new Date(position.date + ' ' + position.start_time), coach_tzone).utcOffset()) === ($moment.tz(new Date(position.date + ' ' + position.start_time), tzone).utcOffset())" class="session-list-time">
                   {{ position.start_time }} 
                   {{ $moment.tz(new Date(position.date), tzone).format('dddd') }}
@@ -474,25 +474,13 @@ export default {
     }
   },
   computed: {
-    calculateByTimezone(value) {
-      let coach_tzone = this.coach_tzone
-      let tzone = this.tzone
-      let date = value.date
-      let time = value.start_time
-      let date_time = date + ' ' + time
-      let offset = this.$moment.tz(new Date(date_time), tzone).utcOffset()
-      // let withouttimezone =  this.$moment.tz(new Date(date_time)).utcOffset(0, true).format()
-      let res = this.$moment.tz(new Date(date_time), 'Europe/London').format('HH:mm ddd Do MMM')
-      let orig = this.$moment.tz(new Date(date_time), this.tzone).format('HH:mm ddd Do MMM')
-      
-      return orig;
-    },
     filteredPositions () {
       if(this.datefilter === '' || this.datefilter === null) {
         let ret = this.session_collection.filter(position => this.checkedFilters.includes(position.status));
         ret.forEach((value, index) => {
           value.date = value.date.replaceAll('-', '/')
           value.start_time = value.start_time.replaceAll('-', '/')
+          value['date_converted'] = this.calculateByTimezone(value)
         })
         return ret.sort((a, b) => (a.status > b.status) ? 1 : (a.status === b.status)) // sort data pending as end
       } else {
@@ -538,7 +526,19 @@ export default {
     this.value = this.timezone
   },
   methods: {
-
+    calculateByTimezone(value) {
+      let coach_tzone = this.coach_tzone
+      let tzone = this.tzone
+      let date = value.date
+      let time = value.start_time
+      let date_time = date + ' ' + time
+      let offset = this.$moment.tz(new Date(date_time), tzone).utcOffset()
+      // let withouttimezone =  this.$moment.tz(new Date(date_time)).utcOffset(0, true).format()
+      let res = this.$moment.tz(new Date(date_time), 'Europe/London').format('HH:mm ddd Do MMM')
+      let orig = this.$moment.tz(new Date(date_time), coach_tzone).format('HH:mm ddd Do MMM')
+      
+      return res;
+    },
     even: function(arr) {
       return arr.slice().sort(function(a, b) {
         return a.date - b.date;
