@@ -538,6 +538,8 @@ export default {
     calculateByTimezone(item) {
       let coach_tzone = this.coach_tzone
       let tzone = this.tzone
+      console.log(tzone, 'timezone dropdown')
+      console.log(coach_tzone, 'timezone customer')
       let date = null
       let time = null
       let date_time = null
