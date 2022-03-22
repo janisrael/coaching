@@ -573,11 +573,11 @@ export default {
         let new_date = new Date(date_time);
         let res = date_time  
 
-          if(diff_offset > 0) {
-            res = this.adddMinutes(parseInt(diff_offset), new_date)
-          } else {
+          // if(diff_offset > 0) {
+            // res = this.adddMinutes(parseInt(diff_offset), new_date)
+          // } else {
             res = this.subtractMinutes(parseInt(diff_offset), new_date)
-          }
+          // }
 
         value['converted_to_tz'] = res
       })
