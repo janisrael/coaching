@@ -377,9 +377,9 @@ export default {
       currentComponent: null,
       // selected: '',
       passData: {},
-      // fit: 'contain',
+      fit: 'contain', //
       search: '',
-      // data: [],
+      data: [], //
       datacoach: [],
       datasched: [],
       datamerge: [],
@@ -406,16 +406,16 @@ export default {
       presearch: '',
       default_image: '../../images/default-avatar.jpg',
       for_sessiondata: [],
-      // coach_id: '',
-      // ex: {},
+      coach_id: '', //
+      ex: {}, //
       booked: 0,
       attended: 0,
       cancelled: 0,
       filter_booked: true,
       // booked_options: 'You havent booked this mentor before',
       booked_options: 'Youve booked this mentor before',
-      // datas: {},
-      // value: [],
+      datas: {}, //
+      value: [], //
       selected_id: '',
       ifShare: false,
       customer_group: '',
@@ -424,9 +424,9 @@ export default {
       can_book: false,
       isStudent: false,
       portal_user_id: 0,
-      // fullPage: true,
-      // bg_color: '#000',
-      // icon_color: '#fff',
+      fullPage: true, //
+      bg_color: '#000', //
+      icon_color: '#fff', //
       mentor_id: 0,
       canbook: true,
       instance_message: '',
@@ -438,9 +438,9 @@ export default {
       selected_row: {},
       timezone: '',
       region: Region,
-      // base_url: '',
-      // parent_url: window.ENV.PARENT_URL,
-      // coach_url: '',
+      base_url: '', //
+      parent_url: window.ENV.PARENT_URL, //
+      coach_url: '', //
       coach_token: APP_TOKEN,
       datefilter: [],
       post_login_url: ''
