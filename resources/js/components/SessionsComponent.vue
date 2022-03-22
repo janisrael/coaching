@@ -104,7 +104,8 @@
                 <el-avatar :size="60" :src="position.coach_image" class="session-list-avatar">
                   <img :src="position.coach_image" :alt="position.coach_image"/>
                 </el-avatar> 
-                 <!-- original date {{ position.start_time }}    {{ position.date }}  --- > converted date by tz -->
+                 original date {{ position.start_time }}    {{ position.date }}  --- > converted date by tz
+                 {{ $moment.tz(new Date(position.date + ' ' + position.start_time), tzone).utcOffset() }}
                   <!-- {{ $moment.tz(new Date(calculateByTimezone(position))).format('YYYY/MM/DD h:mm') }} -->
                    <!-- {{ $moment(calculateByTimezone(position), "MM-DD-YYYY h:mm") }} -->
                    <!-- {{ calculateByTimezone(position) }} //  -->
@@ -558,8 +559,8 @@ export default {
       let now = new Date();
       var coach_offset = this.$moment.tz(now, coach_tzone).utcOffset()
       var customer_offset = this.$moment.tz(now, tzone).utcOffset()
-     console.log(coach_offset, 'coach_offset')
-      console.log(customer_offset, 'customer_offset customer')
+    //  console.log(coach_offset, 'coach_offset')
+      // console.log(customer_offset, 'customer_offset customer')
 
       let diff_offset = coach_offset - customer_offset
       console.log(diff_offset,'diff_offset')
@@ -574,10 +575,8 @@ export default {
 
           if(diff_offset > 0) {
             res = this.adddMinutes(parseInt(diff_offset), new_date)
-          } else if(diff_offset < 0) {
-            res = this.subtractMinutes(parseInt(diff_offset), new_date)
           } else {
-            res = date_time
+            res = this.subtractMinutes(parseInt(diff_offset), new_date)
           }
 
         value['converted_to_tz'] = res
