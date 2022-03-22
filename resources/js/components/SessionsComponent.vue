@@ -104,8 +104,9 @@
                 <el-avatar :size="60" :src="position.coach_image" class="session-list-avatar">
                   <img :src="position.coach_image" :alt="position.coach_image"/>
                 </el-avatar> 
-                 {{ position.start_time }}    {{ position.date }}  --- - -- 
-                  {{ $moment.tz(new Date(calculateByTimezone(position))).format('YYYY/MM/DD h:mm') }}
+                 {{ position.start_time }}    {{ position.date }}  --- sydney  - london (-11 hrs) -- 
+                  <!-- {{ $moment.tz(new Date(calculateByTimezone(position))).format('YYYY/MM/DD h:mm') }} -->
+                   {{ $moment(calculateByTimezone(position), "MM-DD-YYYY h:mm") }}
                    
                    <!-- Australia - london diff offset {{ position.date_converted }} --> -->
                 <!-- <span v-if="($moment.tz(new Date(position.date + ' ' + position.start_time), coach_tzone).utcOffset()) === ($moment.tz(new Date(position.date + ' ' + position.start_time), tzone).utcOffset())" class="session-list-time">
@@ -573,6 +574,7 @@ let newres = this.subtractMinutes(660, date2)
 
       // let result = this.$moment(xx).subtract(660, 'minutes').format('YYYY/MM/DD HH:mm')
       // console.log(xx, 'diff', result)
+      
       return newres;
     },
    subtractMinutes(numOfMinutes, date = new Date()) {
