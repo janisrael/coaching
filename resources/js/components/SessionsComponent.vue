@@ -549,17 +549,18 @@ export default {
 
       let offset = this.$moment.tz(new Date(date_time), this.tzone).utcOffset()
       
-      // var now = this.$moment.utc();
+      var now = this.$moment.utc();
       // let withouttimezone =  this.$moment.tz(new Date(date_time)).utcOffset(0, true).format()
-      // var Australia_tz_offset = this.$moment.tz.zone(this.coach_tzone).offset(now); 
-      // var London_tz_offset = this.$moment.tz.zone(this.tzone).offset(now);
+      var Australia_tz_offset = this.$moment.tz(this.coach_tzone).offset(now); 
+      var London_tz_offset = this.$moment.tz(this.tzone).offset(now);
 
-      // let diffe = (Australia_tz_offset - London_tz_offset) / 60
-      let converted_offset = this.timeConvert(parseInt(offset))
+      let diffe = (Australia_tz_offset - London_tz_offset) / 60
+      let converted_offset = this.timeConvert(parseInt(diffe))
       // let orig = this.$moment.tz(new Date(date_time), 'Australia/Sydney').format('YYYY/MM/DD h:mm')
       // let res = this.$moment.tz(new Date(orig), 'Europe/London').format('h:mm A ddd Do MMM')
 
-      let result = this.$moment(new_date).subtract(converted_offset, 'minutes').format('h:mm A ddd Do MMM')
+      let result = this.$moment(date_time).subtract(converted_offset, 'minutes').format('h:mm A ddd Do MMM')
+      console.log(diffe, 'diff', date_time)
       return result;
     },
     even: function(arr) {
