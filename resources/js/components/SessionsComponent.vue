@@ -547,7 +547,7 @@ export default {
       let date_time = date + ' ' + time
       let new_date = new Date(date_time)
 
-      let offset = this.$moment.tz(new Date(date_time), this.tzone).utcOffset()
+      let offset = this.$moment.tz(new Date(date_time), this.tzone).utcOffset().format('HH:mm')
       
       // var now = this.$moment.utc();
       // let withouttimezone =  this.$moment.tz(new Date(date_time)).utcOffset(0, true).format()
