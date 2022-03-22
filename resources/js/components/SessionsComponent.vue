@@ -108,7 +108,7 @@
                   <!-- {{ $moment.tz(new Date(calculateByTimezone(position))).format('YYYY/MM/DD h:mm') }} -->
                    <!-- {{ $moment(calculateByTimezone(position), "MM-DD-YYYY h:mm") }} -->
                    <!-- {{ calculateByTimezone(position) }} //  -->
-                  <span v-if="timezone === position.timezone"> 
+                  <span v-if="offset === 0"> 
                       {{ position.start_time }} 
                      {{ moment(position.date).format('dddd Do MMM') }} A
                   </span>
@@ -481,7 +481,8 @@ export default {
       value: [],
       original_collection: [],
       tzone: this.timezone,
-      coach_tzone: this.timezone
+      coach_tzone: this.timezone,
+      offset: 0
     }
   },
   computed: {
@@ -560,6 +561,7 @@ export default {
       var customer_offset = this.$moment.tz(now, tzone).utcOffset()
       let diff_offset = (coach_offset - customer_offset)
       console.log(diff_offset,'diff_offset')
+      this.offset = diff_offset
       this.session_collection.forEach((value, i) => {
         date = value.date
         time = value.start_time
