@@ -551,7 +551,7 @@ export default {
       var coach_offset = this.$moment.tz(now, coach_tzone).utcOffset()
       var customer_offset = this.$moment.tz(now, tzone).utcOffset()
       let diff_offset = (coach_offset - customer_offset)
-      
+      console.log(diff_offset,'diff_offset')
       this.session_collection.forEach((value, i) => {
         date = value.date
         time = value.start_time
