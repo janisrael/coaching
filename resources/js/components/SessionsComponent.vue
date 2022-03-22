@@ -105,32 +105,13 @@
                   <img :src="position.coach_image" :alt="position.coach_image"/>
                 </el-avatar> 
                  original date {{ position.start_time }}    {{ position.date }}  --- > converted date by tz
-                 {{ $moment.tz(new Date(position.date + ' ' + position.start_time), tzone).utcOffset() }}
-                  <!-- {{ $moment.tz(new Date(calculateByTimezone(position))).format('YYYY/MM/DD h:mm') }} -->
-                   <!-- {{ $moment(calculateByTimezone(position), "MM-DD-YYYY h:mm") }} -->
-                   <!-- {{ calculateByTimezone(position) }} //  -->
-                  <span v-if="offset === 0"> 
+                  <span v-if="offset === 0" class="session-list-time"> 
                       {{ position.start_time }} 
                      {{ moment(position.date).format('dddd Do MMM') }} A
                   </span>
-                  <span v-else> 
+                  <span v-else class="session-list-time"> 
                      {{ moment(position.converted_to_tz).format('HH:mm dddd Do MMM') }} B
                   </span>
-              
-                   <!-- Australia - london diff offset {{ position.date_converted }} --> 
-                <!-- <span v-if="($moment.tz(new Date(position.date + ' ' + position.start_time), coach_tzone).utcOffset()) === ($moment.tz(new Date(position.date + ' ' + position.start_time), tzone).utcOffset())" class="session-list-time">
-                  {{ position.start_time }} 
-                  {{ $moment.tz(new Date(position.date), tzone).format('dddd') }}
-                  {{ $moment.tz(new Date(position.date), tzone).format('Do') }}
-                  {{ $moment.tz(new Date(position.date), tzone).format('MMM') }}
-               
-                </span>
-                <span v-else class="session-list-time">
-                  {{ $moment.tz(new Date(position.date + ' ' + position.start_time), tzone).utcOffset(0, true).format('HH:mm') }} 
-                  {{ $moment.tz(new Date(position.date), tzone).format('dddd') }}
-                  {{ $moment.tz(new Date(position.date), tzone).format('Do') }}
-                  {{ $moment.tz(new Date(position.date), tzone).format('MMM') }}
-                </span> -->
                 <span v-if="position.availability_type !== null || position.availability_type !== '' || position.availability_type !== undefined">
                   <span v-if="position.availability_type.includes('Can do either')">
                     <span><i class="fas fa-headset" style="font-size: 14px"></i></span>
@@ -157,17 +138,14 @@
                   <el-avatar :size="60" :src="position.coach_image" class="session-list-avatar">
                     <img :src="selected.coach_image" :alt="selected.coach_image"/>
                   </el-avatar>
-                  <span v-if="($moment.tz(new Date(position.date + ' ' + position.start_time), coach_tzone).utcOffset()) === ($moment.tz(new Date(position.date + ' ' + position.start_time), tzone).utcOffset())" class="session-list-time">
-                    {{ position.start_time }} 
-                    {{ $moment.tz(new Date(position.date), tzone).format('dddd') }}
-                    {{ $moment.tz(new Date(position.date), tzone).format('Do') }}
-                    {{ $moment.tz(new Date(position.date), tzone).format('MMM') }}
+                
+                  original date {{ position.start_time }}    {{ position.date }}  --- > converted date by tz
+                  <span v-if="offset === 0" class="session-list-time"> 
+                      {{ position.start_time }} 
+                     {{ moment(position.date).format('dddd Do MMM') }} A
                   </span>
-                  <span v-else class="session-list-time">
-                    {{ $moment.tz(new Date(position.date + ' ' + position.start_time), tzone).format('HH:mm') }} 
-                    {{ $moment.tz(new Date(position.date + ' ' + position.start_time), tzone).format('dddd') }}
-                    {{ $moment.tz(new Date(position.date + ' ' + position.start_time), tzone).format('Do') }}
-                    {{ $moment.tz(new Date(position.date + ' ' + position.start_time), tzone).format('MMM') }}
+                  <span v-else class="session-list-time"> 
+                     {{ moment(position.converted_to_tz).format('HH:mm dddd Do MMM') }} B
                   </span>
                 <span v-if="position.availability_type !== null || position.availability_type !== '' || position.availability_type !== undefined">
                   <span v-if="position.availability_type.includes('Can do either')">
@@ -195,17 +173,13 @@
                 <el-avatar :size="60" :src="position.coach_image" class="session-list-avatar">
                   <img :src="position.coach_image" :alt="position.coach_image"/>
                 </el-avatar>
-                  <span v-if="($moment.tz(new Date(position.date + ' ' + position.start_time), coach_tzone).utcOffset()) === ($moment.tz(new Date(position.date + ' ' + position.start_time), tzone).utcOffset())" class="session-list-time">
-                    {{ position.start_time }} 
-                    {{ $moment.tz(new Date(position.date), tzone).format('dddd') }}
-                    {{ $moment.tz(new Date(position.date), tzone).format('Do') }}
-                    {{ $moment.tz(new Date(position.date), tzone).format('MMM') }}
+                     original date {{ position.start_time }}    {{ position.date }}  --- > converted date by tz
+                  <span v-if="offset === 0" class="session-list-time"> 
+                      {{ position.start_time }} 
+                     {{ moment(position.date).format('dddd Do MMM') }} A
                   </span>
-                   <span v-else class="session-list-time">
-                    {{ $moment.tz(new Date(position.date + ' ' + position.start_time), tzone).format('HH:mm') }} 
-                    {{ $moment.tz(new Date(position.date + ' ' + position.start_time), tzone).format('dddd') }}
-                    {{ $moment.tz(new Date(position.date + ' ' + position.start_time), tzone).format('Do') }}
-                    {{ $moment.tz(new Date(position.date + ' ' + position.start_time), tzone).format('MMM') }}
+                  <span v-else class="session-list-time"> 
+                     {{ moment(position.converted_to_tz).format('HH:mm dddd Do MMM') }} B
                   </span>
                 </span>
                 <span v-if="position.availability_type !== null || position.availability_type !== '' || position.availability_type !== undefined">
@@ -233,18 +207,14 @@
                 <el-avatar :size="60" :src="position.coach_image" class="session-list-avatar">
                   <img :src="position.coach_image" :alt="position.coach_image"/>
                 </el-avatar>
-                <span v-if="($moment.tz(new Date(position.date + ' ' + position.start_time), coach_tzone).utcOffset()) === ($moment.tz(new Date(position.date + ' ' + position.start_time), tzone).utcOffset())" class="session-list-time">
-                    {{ position.start_time }} 
-                    {{ $moment.tz(new Date(position.date), tzone).format('dddd') }}
-                    {{ $moment.tz(new Date(position.date), tzone).format('Do') }}
-                    {{ $moment.tz(new Date(position.date), tzone).format('MMM') }}
-                </span> 
-                <span v-else class="session-list-time">
-                    {{ $moment.tz(new Date(position.date + ' ' + position.start_time), tzone).format('HH:mm') }} 
-                    {{ $moment.tz(new Date(position.date + ' ' + position.start_time), tzone).format('dddd') }}
-                    {{ $moment.tz(new Date(position.date + ' ' + position.start_time), tzone).format('Do') }}
-                    {{ $moment.tz(new Date(position.date + ' ' + position.start_time), tzone).format('MMM') }}
-                </span>
+                   original date {{ position.start_time }}    {{ position.date }}  --- > converted date by tz
+                  <span v-if="offset === 0" class="session-list-time"> 
+                      {{ position.start_time }} 
+                     {{ moment(position.date).format('dddd Do MMM') }} A
+                  </span>
+                  <span v-else class="session-list-time"> 
+                     {{ moment(position.converted_to_tz).format('HH:mm dddd Do MMM') }} B
+                  </span>
                 <span v-if="position.availability_type !== null || position.availability_type !== '' || position.availability_type !== undefined">
                   <span v-if="position.availability_type.includes('Can do either')">
                     <span><i class="fas fa-headset" style="font-size: 14px"></i></span>
@@ -559,11 +529,8 @@ export default {
       let now = new Date();
       var coach_offset = this.$moment.tz(now, coach_tzone).utcOffset()
       var customer_offset = this.$moment.tz(now, tzone).utcOffset()
-    //  console.log(coach_offset, 'coach_offset')
-      // console.log(customer_offset, 'customer_offset customer')
 
       let diff_offset = coach_offset - customer_offset
-      console.log(diff_offset,'diff_offset')
       this.offset = diff_offset
       this.session_collection.forEach((value, i) => {
         date = value.date
@@ -572,11 +539,11 @@ export default {
 
         let new_date = new Date(date_time);
         let res = date_time  
-
+        res = this.subtractMinutes(parseInt(diff_offset), new_date)
           // if(diff_offset > 0) {
             // res = this.adddMinutes(parseInt(diff_offset), new_date)
           // } else {
-            res = this.subtractMinutes(parseInt(diff_offset), new_date)
+       
           // }
 
         value['converted_to_tz'] = res
