@@ -550,8 +550,7 @@ export default {
     calculateByTimezone(item) {
       let coach_tzone = this.coach_tzone
       let tzone = this.tzone
-      console.log(tzone, 'timezone dropdown')
-      console.log(coach_tzone, 'timezone customer')
+ 
       let date = null
       let time = null
       let date_time = null
@@ -559,8 +558,11 @@ export default {
       let now = new Date();
       var coach_offset = this.$moment.tz(now, coach_tzone).utcOffset()
       var customer_offset = this.$moment.tz(now, tzone).utcOffset()
-      let diff_offset = (coach_offset - customer_offset)
-      console.log(customer_offset,'diff_offset')
+     console.log(coach_offset, 'coach_offset')
+      console.log(customer_offset, 'customer_offset customer')
+
+      let diff_offset = coach_offset - customer_offset
+      console.log(diff_offset,'diff_offset')
       this.offset = diff_offset
       this.session_collection.forEach((value, i) => {
         date = value.date
@@ -570,9 +572,9 @@ export default {
         let new_date = new Date(date_time);
         let res = date_time  
 
-          if(customer_offset > 0) {
+          if(diff_offset > 0) {
             res = this.adddMinutes(parseInt(diff_offset), new_date)
-          } else if(customer_offset < 0) {
+          } else if(diff_offset < 0) {
             res = this.subtractMinutes(parseInt(diff_offset), new_date)
           } else {
             res = date_time
