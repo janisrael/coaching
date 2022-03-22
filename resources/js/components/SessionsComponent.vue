@@ -105,7 +105,7 @@
                   <img :src="position.coach_image" :alt="position.coach_image"/>
                 </el-avatar> 
                      {{ position.start_time }}    {{ position.date }}  --- - -- 
-                   {{ position.date_converted }}
+                   Australia - london diff offset {{ position.date_converted }}
                 <!-- <span v-if="($moment.tz(new Date(position.date + ' ' + position.start_time), coach_tzone).utcOffset()) === ($moment.tz(new Date(position.date + ' ' + position.start_time), tzone).utcOffset())" class="session-list-time">
                   {{ position.start_time }} 
                   {{ $moment.tz(new Date(position.date), tzone).format('dddd') }}
@@ -536,11 +536,16 @@ export default {
       let time = value.start_time
       let date_time = date + ' ' + time
       let offset = this.$moment.tz(new Date(date_time), 'Europe/London').utcOffset()
+
+      var now = moment.utc();
       // let withouttimezone =  this.$moment.tz(new Date(date_time)).utcOffset(0, true).format()
-      
-      let orig = this.$moment.tz(new Date(date_time), 'Australia/Sydney').format('YYYY/MM/DD HH:mm')
-      let res = this.$moment.tz(new Date(orig), 'Europe/London').format('HH:mm ddd Do MMM')
-      return res;
+      var Australia_tz_offset = moment.tz.zone("Australia/Sydney").offset(now); 
+      var London_tz_offset = moment.tz.zone("Europe/London").offset(now);
+
+      let diffe = (Australia_tz_offset - London_tz_offset) / 60
+      let orig = this.$moment.tz(new Date(date_time), 'Australia/Sydney').format('YYYY/MM/DD h:mm')
+      let res = this.$moment.tz(new Date(orig), 'Europe/London').format('h:mm A ddd Do MMM')
+      return diffe;
     },
     even: function(arr) {
       return arr.slice().sort(function(a, b) {
