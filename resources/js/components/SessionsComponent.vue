@@ -104,13 +104,12 @@
                 <el-avatar :size="60" :src="position.coach_image" class="session-list-avatar">
                   <img :src="position.coach_image" :alt="position.coach_image"/>
                 </el-avatar> 
-                 original date {{ position.start_time }}    {{ position.date }}  --- > converted date by tz
                   <span v-if="offset === 0" class="session-list-time"> 
-                      {{ position.start_time }} 
-                     {{ moment(position.date).format('dddd Do MMM') }} A
+                    {{ position.start_time }} 
+                    {{ moment(position.date).format('dddd Do MMM') }}
                   </span>
                   <span v-else class="session-list-time"> 
-                     {{ moment(position.converted_to_tz).format('HH:mm dddd Do MMM') }} B
+                     {{ moment(position.converted_to_tz).format('HH:mm dddd Do MMM') }}
                   </span>
                 <span v-if="position.availability_type !== null || position.availability_type !== '' || position.availability_type !== undefined">
                   <span v-if="position.availability_type.includes('Can do either')">
@@ -133,19 +132,18 @@
             </div>
             <div v-if="position.status === 'Booked'" class="list-item">
               <div @click="dialogMentor(position)" style="display: block;">
-                <el-col :xs="18" :sm="19" :md="20" :lg="22" :xl="22" :class="[(ifshare === false ? 'class-disable' : 'class-enable' && canbook === false ? 'class-disable' : 'class-enable' && position.disable_schedule === true ? 'class-disable' : 'class-enable'), 'list-' + position.status, 'session-listitem']">
+                <el-col :xs="18" :sm="19" :md="20" :lg="22" :xl="22" 
+                  :class="[(ifshare === false ? 'class-disable' : 'class-enable' && canbook === false ? 'class-disable' : 'class-enable' && position.disable_schedule === true ? 'class-disable' : 'class-enable'), 'list-' + position.status, 'session-listitem']">
                   <span style="width: 15px; display: inline-block"><i class="fa fa-calendar-check" aria-hidden="true"></i></span>
                   <el-avatar :size="60" :src="position.coach_image" class="session-list-avatar">
                     <img :src="selected.coach_image" :alt="selected.coach_image"/>
                   </el-avatar>
-                
-                  original date {{ position.start_time }}    {{ position.date }}  --- > converted date by tz
                   <span v-if="offset === 0" class="session-list-time"> 
-                      {{ position.start_time }} 
-                     {{ moment(position.date).format('dddd Do MMM') }} A
+                    {{ position.start_time }} 
+                    {{ moment(position.date).format('dddd Do MMM') }}
                   </span>
                   <span v-else class="session-list-time"> 
-                     {{ moment(position.converted_to_tz).format('HH:mm dddd Do MMM') }} B
+                     {{ moment(position.converted_to_tz).format('HH:mm dddd Do MMM') }}
                   </span>
                 <span v-if="position.availability_type !== null || position.availability_type !== '' || position.availability_type !== undefined">
                   <span v-if="position.availability_type.includes('Can do either')">
@@ -173,13 +171,12 @@
                 <el-avatar :size="60" :src="position.coach_image" class="session-list-avatar">
                   <img :src="position.coach_image" :alt="position.coach_image"/>
                 </el-avatar>
-                     original date {{ position.start_time }}    {{ position.date }}  --- > converted date by tz
                   <span v-if="offset === 0" class="session-list-time"> 
-                      {{ position.start_time }} 
-                     {{ moment(position.date).format('dddd Do MMM') }} A
+                    {{ position.start_time }} 
+                    {{ moment(position.date).format('dddd Do MMM') }}
                   </span>
                   <span v-else class="session-list-time"> 
-                     {{ moment(position.converted_to_tz).format('HH:mm dddd Do MMM') }} B
+                     {{ moment(position.converted_to_tz).format('HH:mm dddd Do MMM') }}
                   </span>
                 </span>
                 <span v-if="position.availability_type !== null || position.availability_type !== '' || position.availability_type !== undefined">
@@ -207,13 +204,12 @@
                 <el-avatar :size="60" :src="position.coach_image" class="session-list-avatar">
                   <img :src="position.coach_image" :alt="position.coach_image"/>
                 </el-avatar>
-                   original date {{ position.start_time }}    {{ position.date }}  --- > converted date by tz
                   <span v-if="offset === 0" class="session-list-time"> 
-                      {{ position.start_time }} 
-                     {{ moment(position.date).format('dddd Do MMM') }} A
+                     {{ position.start_time }} 
+                     {{ moment(position.date).format('dddd Do MMM') }}
                   </span>
                   <span v-else class="session-list-time"> 
-                     {{ moment(position.converted_to_tz).format('HH:mm dddd Do MMM') }} B
+                     {{ moment(position.converted_to_tz).format('HH:mm dddd Do MMM') }}
                   </span>
                 <span v-if="position.availability_type !== null || position.availability_type !== '' || position.availability_type !== undefined">
                   <span v-if="position.availability_type.includes('Can do either')">
@@ -228,13 +224,13 @@
                   </span>
                 </span>
               </el-col>
-              <el-col :xs="6" :sm="5" :md="4" :lg="2" :xl="2" v-if="position.status === 'No Show'" :class="[(ifshare === false ? 'class-disable' : 'class-enable' && canbook === false ? 'class-disable' : 'class-enable'), 'list-' + position.status, 'list-no-show list-item-btn']">
+              <el-col :xs="6" :sm="5" :md="4" :lg="2" :xl="2" v-if="position.status === 'No Show'" 
+                :class="[(ifshare === false ? 'class-disable' : 'class-enable' && canbook === false ? 'class-disable' : 'class-enable'), 'list-' + position.status, 'list-no-show list-item-btn']">
                 <span>VIEW</span>
               </el-col>
             </div>
         </div>
         <p v-if="count_loading">Loading...</p>
-        <!--        <p v-if="noMore">No more</p>-->
       </el-col>
       </el-col>
     </el-col>
@@ -371,10 +367,10 @@ export default {
       required: true,
       type: Boolean
     },
-    can_book: {
-      required: true,
-      type: Boolean
-    },
+    // can_book: {
+    //   required: true,
+    //   type: Boolean
+    // },
     date_filter: {
       required: false,
       type: Array
@@ -532,6 +528,7 @@ export default {
 
       let diff_offset = coach_offset - customer_offset
       this.offset = diff_offset
+      
       this.session_collection.forEach((value, i) => {
         date = value.date
         time = value.start_time
@@ -540,21 +537,16 @@ export default {
         let new_date = new Date(date_time);
         let res = date_time  
         res = this.subtractMinutes(parseInt(diff_offset), new_date)
-          // if(diff_offset > 0) {
-            // res = this.adddMinutes(parseInt(diff_offset), new_date)
-          // } else {
-       
-          // }
 
         value['converted_to_tz'] = res
       })
 
     },
-    adddMinutes(numOfMinutes, date = new Date()) {
-      date.setMinutes(date.getMinutes() + numOfMinutes);
+    // adddMinutes(numOfMinutes, date = new Date()) {
+    //   date.setMinutes(date.getMinutes() + numOfMinutes);
 
-      return date;
-    },
+    //   return date;
+    // },
     subtractMinutes(numOfMinutes, date = new Date()) {
       date.setMinutes(date.getMinutes() - numOfMinutes);
 
