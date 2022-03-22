@@ -538,7 +538,7 @@ export default {
       let offset = this.$moment.tz(new Date(date_time), 'Europe/London').utcOffset()
       // let withouttimezone =  this.$moment.tz(new Date(date_time)).utcOffset(0, true).format()
       
-      let orig = this.$moment.tz(new Date(date_time), coach_tzone).format('YYYY/MM/DD HH:mm')
+      let orig = this.$moment.tz(new Date(date_time), 'Australia/Sydney').format('YYYY/MM/DD HH:mm')
       let res = this.$moment.tz(new Date(orig), 'Europe/London').format('HH:mm ddd Do MMM')
       return res;
     },
