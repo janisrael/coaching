@@ -106,8 +106,10 @@
                 </el-avatar> 
                  {{ position.start_time }}    {{ position.date }}  --- sydney  - london (-11 hrs) -- 
                   <!-- {{ $moment.tz(new Date(calculateByTimezone(position))).format('YYYY/MM/DD h:mm') }} -->
-                   {{ $moment(calculateByTimezone(position), "MM-DD-YYYY h:mm") }}
-                   
+                   <!-- {{ $moment(calculateByTimezone(position), "MM-DD-YYYY h:mm") }} -->
+                   {{ calculateByTimezone(position) }} // 
+
+                   {{ moment(calculateByTimezone(position)).format('YYYY-MM-DD') }}
                    <!-- Australia - london diff offset {{ position.date_converted }} --> -->
                 <!-- <span v-if="($moment.tz(new Date(position.date + ' ' + position.start_time), coach_tzone).utcOffset()) === ($moment.tz(new Date(position.date + ' ' + position.start_time), tzone).utcOffset())" class="session-list-time">
                   {{ position.start_time }} 

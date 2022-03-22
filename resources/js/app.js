@@ -39,13 +39,13 @@ Vue.use(VueMoment, {
 Vue.component('country-flag', CountryFlag)
 Vue.component('font-awesome-icon', FontAwesomeIcon)
 Vue.component('Index', require('./components/Index.vue').default);
-moment.tz.setDefault('Europe/London')
+// moment.tz.setDefault('Europe/London')
 /**
  * Next, we will create a fresh Vue application instance and attach it to
  * the page. Then, you may begin adding components to this application
  * or customize the JavaScript scaffolding to fit your unique needs.
  */
-
+Vue.prototype.moment = moment
 const app = new Vue({
     el: '#app',
 });
