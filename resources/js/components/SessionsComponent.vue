@@ -474,6 +474,19 @@ export default {
     }
   },
   computed: {
+    calculateByTimezone(value) {
+      let coach_tzone = this.coach_tzone
+      let tzone = this.tzone
+      let date = value.date
+      let time = value.start_time
+      let date_time = date + ' ' + time
+      let offset = this.$moment.tz(new Date(date_time), tzone).utcOffset()
+      // let withouttimezone =  this.$moment.tz(new Date(date_time)).utcOffset(0, true).format()
+      let res = this.$moment.tz(new Date(date_time), 'Europe/London').format('HH:mm ddd Do MMM')
+      let orig = this.$moment.tz(new Date(date_time), this.tzone).format('HH:mm ddd Do MMM')
+      
+      return orig;
+    },
     filteredPositions () {
       if(this.datefilter === '' || this.datefilter === null) {
         let ret = this.session_collection.filter(position => this.checkedFilters.includes(position.status));
@@ -525,19 +538,7 @@ export default {
     this.value = this.timezone
   },
   methods: {
-    calculateByTimezone(value) {
-      let coach_tzone = this.coach_tzone
-      let tzone = this.tzone
-      let date = value.date
-      let time = value.start_time
-      let date_time = date + ' ' + time
-      let offset = this.$moment.tz(new Date(date_time), tzone).utcOffset()
-      // let withouttimezone =  this.$moment.tz(new Date(date_time)).utcOffset(0, true).format()
-      let res = this.$moment.tz(new Date(date_time), 'Europe/London').format('HH:mm ddd Do MMM')
-      let orig = this.$moment.tz(new Date(date_time), coach_tzone).format('HH:mm ddd Do MMM')
-      
-      return res;
-    },
+
     even: function(arr) {
       return arr.slice().sort(function(a, b) {
         return a.date - b.date;
