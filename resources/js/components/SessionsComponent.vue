@@ -480,7 +480,7 @@ export default {
         ret.forEach((value, index) => {
           value.date = value.date.replaceAll('-', '/')
           value.start_time = value.start_time.replaceAll('-', '/')
-          value['date_converted'] = this.calculateByTimezone(value)
+    
         })
         return ret.sort((a, b) => (a.status > b.status) ? 1 : (a.status === b.status)) // sort data pending as end
       } else {
@@ -492,6 +492,7 @@ export default {
           ret.forEach((value, index) => {
             value.date = value.date.replaceAll('-', '/')
             value.start_time = value.start_time.replaceAll('-', '/')
+     
           })
 
           return ret.sort((a, b) => (a.status > b.status) ? 1 : (a.status === b.status) ) // sort data pending as end
@@ -500,6 +501,8 @@ export default {
         ret.forEach((value, index) => {
           value.date = value.date.replaceAll('-', '/')
           value.start_time = value.start_time.replaceAll('-', '/')
+                value['date_converted'] = this.calculateByTimezone(value)
+          console.log()
         })
         return ret.sort((a, b) => (a.status > b.status) ? 1 : (a.status === b.status)) // sort data pending as end
       }
