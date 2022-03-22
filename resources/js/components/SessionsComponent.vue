@@ -565,7 +565,7 @@ let date2 = new Date(date_time);
 
 // date.setMinutes(date.getMinutes() - 660);
 
-let newres = subtractMinutes(660, date2)
+let newres = this.subtractMinutes(660, date2)
       // let diffe = (Australia_tz_offset - London_tz_offset) / 60
       // let converted_offset = this.timeConvert(parseInt(new_off))
       // let orig = this.$moment.tz(new Date(date_time), 'Australia/Sydney').format('YYYY/MM/DD h:mm')
