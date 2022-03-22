@@ -553,7 +553,7 @@ export default {
       // let withouttimezone =  this.$moment.tz(new Date(date_time)).utcOffset(0, true).format()
       // var Australia_tz_offset = this.$moment.tz.zone(this.coach_tzone).offset(now); 
       // var London_tz_offset = this.$moment.tz.zone('Europe/London').offset(now);
-let someDate = '2022/03/23 06:50'
+let someDate = new Date('2022/03/23 06:50')
 const aMinuteLess = new Date( someDate.getTime() - 1000 * 60 );
 
 let res = aMinuteLess - 660
