@@ -104,9 +104,10 @@
                 <el-avatar :size="60" :src="position.coach_image" class="session-list-avatar">
                   <img :src="position.coach_image" :alt="position.coach_image"/>
                 </el-avatar> 
+                 {{ position.start_time }}    {{ position.date }}  --- - -- 
                   {{ calculateByTimezone(position) }}
-                     <!-- {{ position.start_time }}    {{ position.date }}  --- - -- 
-                   Australia - london diff offset {{ position.date_converted }} -->
+                   
+                   <!-- Australia - london diff offset {{ position.date_converted }} --> -->
                 <!-- <span v-if="($moment.tz(new Date(position.date + ' ' + position.start_time), coach_tzone).utcOffset()) === ($moment.tz(new Date(position.date + ' ' + position.start_time), tzone).utcOffset())" class="session-list-time">
                   {{ position.start_time }} 
                   {{ $moment.tz(new Date(position.date), tzone).format('dddd') }}
@@ -546,17 +547,17 @@ export default {
       let date_time = date + ' ' + time
       let new_date = new Date(date_time)
 
-      let offset = this.$moment.tz(new Date(date_time), 'Europe/London').utcOffset()
-      let converted_offset = this.timeConvert(parseInt(offset))
-      var now = this.$moment.utc();
+      let offset = this.$moment.tz(new Date(date_time), this.tzone).utcOffset()
+      
+      // var now = this.$moment.utc();
       // let withouttimezone =  this.$moment.tz(new Date(date_time)).utcOffset(0, true).format()
-      var Australia_tz_offset = this.$moment.tz.zone(this.coach_tzone).offset(now); 
-      var London_tz_offset = this.$moment.tz.zone(this.tzone).offset(now);
+      // var Australia_tz_offset = this.$moment.tz.zone(this.coach_tzone).offset(now); 
+      // var London_tz_offset = this.$moment.tz.zone(this.tzone).offset(now);
 
-      let diffe = (Australia_tz_offset - London_tz_offset) / 60
-
-      let orig = this.$moment.tz(new Date(date_time), 'Australia/Sydney').format('YYYY/MM/DD h:mm')
-      let res = this.$moment.tz(new Date(orig), 'Europe/London').format('h:mm A ddd Do MMM')
+      // let diffe = (Australia_tz_offset - London_tz_offset) / 60
+      let converted_offset = this.timeConvert(parseInt(offset))
+      // let orig = this.$moment.tz(new Date(date_time), 'Australia/Sydney').format('YYYY/MM/DD h:mm')
+      // let res = this.$moment.tz(new Date(orig), 'Europe/London').format('h:mm A ddd Do MMM')
 
       let result = this.$moment(new_date).subtract(converted_offset, 'minutes').format('h:mm A ddd Do MMM')
       return result;
