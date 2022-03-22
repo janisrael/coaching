@@ -109,8 +109,8 @@
                    <!-- {{ $moment(calculateByTimezone(position), "MM-DD-YYYY h:mm") }} -->
                    <!-- {{ calculateByTimezone(position) }} //  -->
 
-                   {{ moment(calculateByTimezone(position)).format('YYYY-MM-DD HH:mm') }}
-                   <!-- Australia - london diff offset {{ position.date_converted }} --> -->
+                   {{ moment(calculateByTimezone(position)).format('HH:mm dddd Do MMM') }}
+                   <!-- Australia - london diff offset {{ position.date_converted }} --> 
                 <!-- <span v-if="($moment.tz(new Date(position.date + ' ' + position.start_time), coach_tzone).utcOffset()) === ($moment.tz(new Date(position.date + ' ' + position.start_time), tzone).utcOffset())" class="session-list-time">
                   {{ position.start_time }} 
                   {{ $moment.tz(new Date(position.date), tzone).format('dddd') }}
@@ -548,26 +548,27 @@ export default {
       let date = value.date
       let time = value.start_time
       let date_time = date + ' ' + time
-      let xx = new Date(date_time)
-      let new_date = new Date(date_time).toLocaleString("en-US", {timeZone: coach_tzone})
-
+      // let xx = new Date(date_time)
+      // let new_date = new Date(date_time).toLocaleString("en-US", {timeZone: coach_tzone})
 
       let offset = this.$moment.tz(date_time, 'Europe/London').utcOffset()
-
       let new_off = offset / 60
       let date2 = new Date(date_time);
-      let newres = this.subtractMinutes(660, date2)
-      // let diffe = (Australia_tz_offset - London_tz_offset) / 60
-      // let converted_offset = this.timeConvert(parseInt(new_off))
-      // let orig = this.$moment.tz(new Date(date_time), 'Australia/Sydney').format('YYYY/MM/DD h:mm')
-      // let res = this.$moment.tz(new Date(orig), 'Europe/London').format('h:mm A ddd Do MMM')
+      if(offset > 0) {
+        let newres = this.adddMinutes(660, date2)
+      } else {
+        let newres = this.subtractMinutes(660, date2)
+      }
 
-      // let result = this.$moment(xx).subtract(660, 'minutes').format('YYYY/MM/DD HH:mm')
-      // console.log(xx, 'diff', result)
       console.log(offset)
       return newres;
     },
-   subtractMinutes(numOfMinutes, date = new Date()) {
+    adddMinutes(numOfMinutes, date = new Date()) {
+      date.setMinutes(date.getMinutes() + numOfMinutes);
+
+      return date;
+    },
+    subtractMinutes(numOfMinutes, date = new Date()) {
       date.setMinutes(date.getMinutes() - numOfMinutes);
 
       return date;
