@@ -558,7 +558,7 @@ export default {
       // let orig = this.$moment.tz(new Date(date_time), 'Australia/Sydney').format('YYYY/MM/DD h:mm')
       // let res = this.$moment.tz(new Date(orig), 'Europe/London').format('h:mm A ddd Do MMM')
 
-      let result = this.$moment(date_time).subtract(offset, 'minutes').format('YYYY/MM/DD h:mm')
+      let result = this.$moment(date_time).subtract(660, 'minutes').format('YYYY/MM/DD h:mm')
       console.log(offset, 'diff', date_time)
       return result;
     },
