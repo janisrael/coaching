@@ -105,7 +105,7 @@
                   <img :src="position.coach_image" :alt="position.coach_image"/>
                 </el-avatar> 
                  {{ position.start_time }}    {{ position.date }}  --- - -- 
-                  {{ $moment.tz(new Date(calculateByTimezone(position))).format('HH:mm ddd Do MMM') }}
+                  {{ $moment.tz(new Date(calculateByTimezone(position))).format('YYYY/MM/DD h:mm') }}
                    
                    <!-- Australia - london diff offset {{ position.date_converted }} --> -->
                 <!-- <span v-if="($moment.tz(new Date(position.date + ' ' + position.start_time), coach_tzone).utcOffset()) === ($moment.tz(new Date(position.date + ' ' + position.start_time), tzone).utcOffset())" class="session-list-time">
