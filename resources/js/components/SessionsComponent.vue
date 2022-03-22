@@ -537,10 +537,10 @@ export default {
       let date_time = date + ' ' + time
       let offset = this.$moment.tz(new Date(date_time), 'Europe/London').utcOffset()
 
-      var now = moment.utc();
+      var now = this.$moment.utc();
       // let withouttimezone =  this.$moment.tz(new Date(date_time)).utcOffset(0, true).format()
-      var Australia_tz_offset = moment.tz.zone("Australia/Sydney").offset(now); 
-      var London_tz_offset = moment.tz.zone("Europe/London").offset(now);
+      var Australia_tz_offset = this.$moment.tz.zone("Australia/Sydney").offset(now); 
+      var London_tz_offset = this.$moment.tz.zone("Europe/London").offset(now);
 
       let diffe = (Australia_tz_offset - London_tz_offset) / 60
       let orig = this.$moment.tz(new Date(date_time), 'Australia/Sydney').format('YYYY/MM/DD h:mm')
