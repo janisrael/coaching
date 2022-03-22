@@ -104,8 +104,9 @@
                 <el-avatar :size="60" :src="position.coach_image" class="session-list-avatar">
                   <img :src="position.coach_image" :alt="position.coach_image"/>
                 </el-avatar> 
-                     {{ position.start_time }}    {{ position.date }}  --- - -- 
-                   Australia - london diff offset {{ position.date_converted }}
+                  {{ calculateByTimezone(position) }}
+                     <!-- {{ position.start_time }}    {{ position.date }}  --- - -- 
+                   Australia - london diff offset {{ position.date_converted }} -->
                 <!-- <span v-if="($moment.tz(new Date(position.date + ' ' + position.start_time), coach_tzone).utcOffset()) === ($moment.tz(new Date(position.date + ' ' + position.start_time), tzone).utcOffset())" class="session-list-time">
                   {{ position.start_time }} 
                   {{ $moment.tz(new Date(position.date), tzone).format('dddd') }}
@@ -501,7 +502,7 @@ export default {
         ret.forEach((value, index) => {
           value.date = value.date.replaceAll('-', '/')
           value.start_time = value.start_time.replaceAll('-', '/')
-                value['date_converted'] = this.calculateByTimezone(value)
+                // value['date_converted'] = this.calculateByTimezone(value)
           console.log()
         })
         return ret.sort((a, b) => (a.status > b.status) ? 1 : (a.status === b.status)) // sort data pending as end
@@ -544,12 +545,13 @@ export default {
       let time = value.start_time
       let date_time = date + ' ' + time
       let new_date = new Date(date_time)
+
       let offset = this.$moment.tz(new Date(date_time), 'Europe/London').utcOffset()
       let converted_offset = this.timeConvert(parseInt(offset))
       var now = this.$moment.utc();
       // let withouttimezone =  this.$moment.tz(new Date(date_time)).utcOffset(0, true).format()
-      var Australia_tz_offset = this.$moment.tz.zone("Australia/Sydney").offset(now); 
-      var London_tz_offset = this.$moment.tz.zone("Europe/London").offset(now);
+      var Australia_tz_offset = this.$moment.tz.zone(this.coach_tzone).offset(now); 
+      var London_tz_offset = this.$moment.tz.zone(this.tzone).offset(now);
 
       let diffe = (Australia_tz_offset - London_tz_offset) / 60
 
