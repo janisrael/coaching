@@ -550,25 +550,13 @@ export default {
       let date_time = date + ' ' + time
       let xx = new Date(date_time)
       let new_date = new Date(date_time).toLocaleString("en-US", {timeZone: coach_tzone})
+
+
       let offset = this.$moment.tz(date_time, 'Europe/London').utcOffset()
+
       let new_off = offset / 60
-      // var now = this.$moment.utc();
-      // let withouttimezone =  this.$moment.tz(new Date(date_time)).utcOffset(0, true).format()
-      // var Australia_tz_offset = this.$moment.tz.zone(this.coach_tzone).offset(now); 
-      // var London_tz_offset = this.$moment.tz.zone('Europe/London').offset(now);
-// let someDate = new Date('2022/03/23 06:50')
-// const aMinuteLess = new Date( someDate.getTime() - 1000 * 60 );
-
-// let res = aMinuteLess - 660
-
-// let thisone = new Date(res)
-
-let date2 = new Date(date_time);
-
-
-// date.setMinutes(date.getMinutes() - 660);
-
-let newres = this.subtractMinutes(660, date2)
+      let date2 = new Date(date_time);
+      let newres = this.subtractMinutes(660, date2)
       // let diffe = (Australia_tz_offset - London_tz_offset) / 60
       // let converted_offset = this.timeConvert(parseInt(new_off))
       // let orig = this.$moment.tz(new Date(date_time), 'Australia/Sydney').format('YYYY/MM/DD h:mm')
@@ -576,7 +564,7 @@ let newres = this.subtractMinutes(660, date2)
 
       // let result = this.$moment(xx).subtract(660, 'minutes').format('YYYY/MM/DD HH:mm')
       // console.log(xx, 'diff', result)
-      
+      console.log(offset)
       return newres;
     },
    subtractMinutes(numOfMinutes, date = new Date()) {
