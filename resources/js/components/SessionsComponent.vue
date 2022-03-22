@@ -209,7 +209,7 @@
                 </el-avatar>
                    original date {{ position.start_time }}    {{ position.date }}  --- > converted date by tz
                   <span v-if="offset === 0" class="session-list-time"> 
-                      {{ position.start_time }} 
+                     {{ position.start_time }} 
                      {{ moment(position.date).format('dddd Do MMM') }} A
                   </span>
                   <span v-else class="session-list-time"> 
@@ -228,13 +228,13 @@
                   </span>
                 </span>
               </el-col>
-              <el-col :xs="6" :sm="5" :md="4" :lg="2" :xl="2" v-if="position.status === 'No Show'" :class="[(ifshare === false ? 'class-disable' : 'class-enable' && canbook === false ? 'class-disable' : 'class-enable'), 'list-' + position.status, 'list-no-show list-item-btn']">
+              <el-col :xs="6" :sm="5" :md="4" :lg="2" :xl="2" v-if="position.status === 'No Show'" 
+                :class="[(ifshare === false ? 'class-disable' : 'class-enable' && canbook === false ? 'class-disable' : 'class-enable'), 'list-' + position.status, 'list-no-show list-item-btn']">
                 <span>VIEW</span>
               </el-col>
             </div>
         </div>
         <p v-if="count_loading">Loading...</p>
-        <!--        <p v-if="noMore">No more</p>-->
       </el-col>
       </el-col>
     </el-col>
@@ -371,10 +371,10 @@ export default {
       required: true,
       type: Boolean
     },
-    can_book: {
-      required: true,
-      type: Boolean
-    },
+    // can_book: {
+    //   required: true,
+    //   type: Boolean
+    // },
     date_filter: {
       required: false,
       type: Array
@@ -532,6 +532,7 @@ export default {
 
       let diff_offset = coach_offset - customer_offset
       this.offset = diff_offset
+      
       this.session_collection.forEach((value, i) => {
         date = value.date
         time = value.start_time
@@ -540,21 +541,16 @@ export default {
         let new_date = new Date(date_time);
         let res = date_time  
         res = this.subtractMinutes(parseInt(diff_offset), new_date)
-          // if(diff_offset > 0) {
-            // res = this.adddMinutes(parseInt(diff_offset), new_date)
-          // } else {
-       
-          // }
 
         value['converted_to_tz'] = res
       })
 
     },
-    adddMinutes(numOfMinutes, date = new Date()) {
-      date.setMinutes(date.getMinutes() + numOfMinutes);
+    // adddMinutes(numOfMinutes, date = new Date()) {
+    //   date.setMinutes(date.getMinutes() + numOfMinutes);
 
-      return date;
-    },
+    //   return date;
+    // },
     subtractMinutes(numOfMinutes, date = new Date()) {
       date.setMinutes(date.getMinutes() - numOfMinutes);
 

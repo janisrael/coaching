@@ -41,7 +41,7 @@
               <el-table
                 v-loading="loading_coach"
                 :data="activeCards.filter(data => !search || data.last_name.toLowerCase().includes(search.toLowerCase()) || data.first_name.toLowerCase().includes(search.toLowerCase()))"
-                :default-sort = "{prop: 'my_mentor', order: 'descending'}"
+                :default-sort="{prop: 'my_mentor', order: 'descending'}"
                 ref="singleTable"
                 id="tablecoaches"
                 :row-class-name="coachesRowClassName"
@@ -375,13 +375,11 @@ export default {
       loading_coach: false,
       // loadingSession: false,
       currentComponent: null,
-      importComponent: null,
-      dialogFormVisible: false,
-      selected: '',
+      // selected: '',
       passData: {},
-      fit: 'contain',
+      // fit: 'contain',
       search: '',
-      data: [],
+      // data: [],
       datacoach: [],
       datasched: [],
       datamerge: [],
@@ -398,9 +396,7 @@ export default {
       checkboxGroup2: ['End of Day'],
       checkboxGroup3: ['Youve booked this mentor before'],
       checkboxGroup4: ['English'],
-      ex_from: '',
-      ex_to: '',
-      range: '',
+      // range: '',
       value_range: [0,100],
       final_range: [],
       val: 0,
@@ -410,16 +406,16 @@ export default {
       presearch: '',
       default_image: '../../images/default-avatar.jpg',
       for_sessiondata: [],
-      coach_id: '',
-      ex: {},
+      // coach_id: '',
+      // ex: {},
       booked: 0,
       attended: 0,
       cancelled: 0,
       filter_booked: true,
       // booked_options: 'You havent booked this mentor before',
       booked_options: 'Youve booked this mentor before',
-      datas: {},
-      value: [],
+      // datas: {},
+      // value: [],
       selected_id: '',
       ifShare: false,
       customer_group: '',
@@ -428,9 +424,9 @@ export default {
       can_book: false,
       isStudent: false,
       portal_user_id: 0,
-      fullPage: true,
-      bg_color: '#000',
-      icon_color: '#fff',
+      // fullPage: true,
+      // bg_color: '#000',
+      // icon_color: '#fff',
       mentor_id: 0,
       canbook: true,
       instance_message: '',
@@ -442,9 +438,9 @@ export default {
       selected_row: {},
       timezone: '',
       region: Region,
-      base_url: '',
+      // base_url: '',
       // parent_url: window.ENV.PARENT_URL,
-      coach_url: '',
+      // coach_url: '',
       coach_token: APP_TOKEN,
       datefilter: [],
       post_login_url: ''
@@ -524,13 +520,10 @@ export default {
     checkUser() {
       let user_id = this.portal_user_id
       let url = '/api/v1/check-student'
-      axios.get(url,
-        {
-          params: {
-            'id': user_id
-          }
+      let params = {
+          'id': user_id
         }
-      ).then(response => {
+      axios.get(url, params).then(response => {
         if(response.data.is_student === true) {
           this.isStudent = true
           this.ifShare = true
