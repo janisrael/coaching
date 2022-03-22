@@ -545,7 +545,8 @@ export default {
       let date = value.date
       let time = value.start_time
       let date_time = date + ' ' + time
-      let new_date = new Date().toLocaleString("en-US", {timeZone: coach_tzone})
+      let xx = new Date(date_time)
+      let new_date = new Date(date_time).toLocaleString("en-US", {timeZone: coach_tzone})
       let offset = this.$moment.tz(new_date, 'Europe/London').utcOffset()
       let new_off = offset / 60
       // var now = this.$moment.utc();
