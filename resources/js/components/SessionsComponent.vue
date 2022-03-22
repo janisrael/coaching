@@ -535,6 +535,7 @@ export default {
       let date = value.date
       let time = value.start_time
       let date_time = date + ' ' + time
+      let new_date = new Date(date_time)
       let offset = this.$moment.tz(new Date(date_time), 'Europe/London').utcOffset()
 
       var now = this.$moment.utc();
@@ -545,7 +546,9 @@ export default {
       let diffe = (Australia_tz_offset - London_tz_offset) / 60
       let orig = this.$moment.tz(new Date(date_time), 'Australia/Sydney').format('YYYY/MM/DD h:mm')
       let res = this.$moment.tz(new Date(orig), 'Europe/London').format('h:mm A ddd Do MMM')
-      return diffe;
+
+      let result = this.$moment(new Date(date_time).subtract({days:0, hours: parseInt(diffe)}))
+      return result;
     },
     even: function(arr) {
       return arr.slice().sort(function(a, b) {
