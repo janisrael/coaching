@@ -545,8 +545,8 @@ export default {
       let date = value.date
       let time = value.start_time
       let date_time = date + ' ' + time
-      let new_date = new Date(date_time)
-      let offset = this.$moment.tz(new Date(date_time), 'Europe/London').utcOffset()
+      // let new_date = new Date(date_time)
+      let offset = this.$moment.tz(date_time, 'Europe/London').utcOffset()
       let new_off = offset / 60
       // var now = this.$moment.utc();
       // let withouttimezone =  this.$moment.tz(new Date(date_time)).utcOffset(0, true).format()
@@ -558,8 +558,8 @@ export default {
       // let orig = this.$moment.tz(new Date(date_time), 'Australia/Sydney').format('YYYY/MM/DD h:mm')
       // let res = this.$moment.tz(new Date(orig), 'Europe/London').format('h:mm A ddd Do MMM')
 
-      let result = this.$moment(new_date).subtract(offset, 'minutes').format('YYYY/MM/DD h:mm')
-      console.log(offset, 'diff', new_date)
+      let result = this.$moment(date_time).subtract(offset, 'minutes').format('YYYY/MM/DD h:mm')
+      console.log(offset, 'diff', date_time)
       return result;
     },
     even: function(arr) {
