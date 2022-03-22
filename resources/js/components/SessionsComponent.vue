@@ -549,9 +549,18 @@ export default {
       let time = value.start_time
       let date_time = date + ' ' + time
       // let xx = new Date(date_time)
-      let new_date_ = new Date(date_time).toLocaleString("en-US", {timeZone: coach_tzone})
+      // let new_date = new Date(date_time).toLocaleString("en-US", {timeZone: coach_tzone})
 
-      let offset = this.$moment.tz(new_date_, 'Europe/London').utcOffset()
+var now = this.$moment.utc();
+// get the zone offsets for this time, in minutes
+var NewYork_tz_offset = this.$moment.tz(coach_tzone).offset(now); 
+var HongKong_tz_offset = this.$moment.tz('Europe/London').offset(now);
+// calculate the difference in hours
+console.log((NewYork_tz_offset - HongKong_tz_offset) / 60);
+
+
+
+      let offset = this.$moment.tz(date_time, 'Europe/London').utcOffset()
       let new_off = offset / 60
       let new_date = new Date(date_time);
       let res = date_time
@@ -604,8 +613,7 @@ export default {
       this.datefilter = data
       this.date_collections = data
       this.range_sep = '-'
-
-      this.calculateByTimezone()
+      
     },
     handleDeleteBooking(schedule_details) {
       this.btn_loading = true
