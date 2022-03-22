@@ -104,12 +104,17 @@
                 <el-avatar :size="60" :src="position.coach_image" class="session-list-avatar">
                   <img :src="position.coach_image" :alt="position.coach_image"/>
                 </el-avatar> 
-                 original date {{ position.start_time }}    {{ position.date }}  --- > converted date by tz
+                 <!-- original date {{ position.start_time }}    {{ position.date }}  --- > converted date by tz -->
                   <!-- {{ $moment.tz(new Date(calculateByTimezone(position))).format('YYYY/MM/DD h:mm') }} -->
                    <!-- {{ $moment(calculateByTimezone(position), "MM-DD-YYYY h:mm") }} -->
                    <!-- {{ calculateByTimezone(position) }} //  -->
-
-                   {{ moment(position.converted_to_tz).format('HH:mm dddd Do MMM') }}
+                  <span v-if="timezone === position.timezone"> 
+                     {{ moment(position.date + position.start_time).format('HH:mm dddd Do MMM') }} A
+                  </span>
+                  <span v-else> 
+                     {{ moment(position.converted_to_tz).format('HH:mm dddd Do MMM') }} B
+                  </span>
+              
                    <!-- Australia - london diff offset {{ position.date_converted }} --> 
                 <!-- <span v-if="($moment.tz(new Date(position.date + ' ' + position.start_time), coach_tzone).utcOffset()) === ($moment.tz(new Date(position.date + ' ' + position.start_time), tzone).utcOffset())" class="session-list-time">
                   {{ position.start_time }} 
