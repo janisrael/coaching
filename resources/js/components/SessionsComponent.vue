@@ -537,10 +537,10 @@ export default {
       let date_time = date + ' ' + time
       let offset = this.$moment.tz(new Date(date_time), 'Europe/London').utcOffset()
       // let withouttimezone =  this.$moment.tz(new Date(date_time)).utcOffset(0, true).format()
-      let res = this.$moment.tz(new Date(date_time), 'Europe/London').format('HH:mm ddd Do MMM')
-      let orig = this.$moment.tz(new Date(date_time), coach_tzone).format('HH:mm ddd Do MMM')
       
-      return offset;
+      let orig = this.$moment.tz(new Date(date_time), coach_tzone).format('HH:mm ddd Do MMM')
+      let res = this.$moment.tz(new Date(orig), 'Europe/London').format('HH:mm ddd Do MMM')
+      return res;
     },
     even: function(arr) {
       return arr.slice().sort(function(a, b) {
