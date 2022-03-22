@@ -551,12 +551,13 @@ export default {
       // let xx = new Date(date_time)
       // let new_date = new Date(date_time).toLocaleString("en-US", {timeZone: coach_tzone})
 
-var now = this.$moment.utc();
+// var now = this.$moment.utc();
 // get the zone offsets for this time, in minutes
-var NewYork_tz_offset = this.$moment.tz(coach_tzone).offset(now); 
-var HongKong_tz_offset = this.$moment.tz('Europe/London').offset(now);
+let now = new Date();
+var coach_offset = this.$moment.tz(now, coach_tzone).utcOffset()
+var customer_offset = tthis.$moment.tz(now, tzone).utcOffset()
 // calculate the difference in hours
-console.log((NewYork_tz_offset - HongKong_tz_offset) / 60);
+console.log((coach_offset - customer_offset) / 60, '---');
 
 
 
