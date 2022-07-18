@@ -46,6 +46,12 @@ class AccountController extends Controller
         $data = $this->saleRepository->all();
 
         $data['computed_credits'] = $this->saleRepository->computedCredits($data['sales']);
+
+        foreach ($data['sales'] as $key => $sale) {
+            if ($sale['is_child_sale'] == true AND $sale['date_fully_paid_not_null_parent'] == null) {
+                unset($data['sales'][$key]);
+            }
+        }
         
         $this->setLog('SALES:', $data['sales']);
         $this->setLog('SALES: PORTAL_USER', $data['portal_user']->except('portal_user_details'));
