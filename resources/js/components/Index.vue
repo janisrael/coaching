@@ -529,7 +529,7 @@ export default {
           }
         }
       ).then(response => {
-        if(response.data.is_student === true) {
+        if(response.data.is_student) {
           this.isStudent = true
           this.ifShare = true
           console.log('active students')
