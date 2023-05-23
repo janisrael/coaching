@@ -57,13 +57,18 @@ import Loading from "vue-loading-overlay";
       ifshare: {
         required: true,
         type: Boolean
+      },
+      coach_token: {
+        require: true,
+        type: String
       }
     },
     data() {
       return {
         dialogShare: true,
         user_id: '',
-        loading: false
+        loading: false,
+        // coach_token: APP_TOKEN,
       }
     },
     created() {
@@ -77,6 +82,7 @@ import Loading from "vue-loading-overlay";
         axios.get(url,
           {
             params: {
+              'token': this.coach_token,
               'id': user_id
             }
           }
