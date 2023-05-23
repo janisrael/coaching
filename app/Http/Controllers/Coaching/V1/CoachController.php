@@ -99,7 +99,7 @@ class CoachController extends Controller
      */
     public function check(Request $request)
     {
-        $apiURL = config('app.share_url') . '/user/enable-opt-data-sharing?code=' .$request->code;
+        $apiURL = config('app.share_url') . '/user/opt-data-sharing?code=' . $request->token;
         
 
         $headers = [
