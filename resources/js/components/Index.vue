@@ -336,6 +336,7 @@
       <component
         ref="currentComponent"
         :is="currentComponent"
+        :coach_token="coach_token"
         :ifshare="ifShare"
         :datasales="datasales"
         @setShareValue="setShareValue"
@@ -523,6 +524,7 @@ export default {
       axios.get(url,
         {
           params: {
+            'token': this.coach_token,
             'id': user_id
           }
         }

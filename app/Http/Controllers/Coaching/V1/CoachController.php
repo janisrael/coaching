@@ -79,7 +79,6 @@ class CoachController extends Controller
         $apiURL = config('app.share_url').'/api/user/opt-data-sharing?code=' .$request->token;
         
         $headers = [
-            // 'Authorization' => 'Bearer '.config('app.student_token'),
             'Accept' => 'application/json',
             'Content-Type' => 'application/json',
             'Cache-Control' => 'no-cache'
@@ -100,10 +99,11 @@ class CoachController extends Controller
      */
     public function check(Request $request)
     {
-        $apiURL = config('app.share_url') . '/v1/coaching/students/' .$request->id;
+        $apiURL = config('app.share_url') . '/user/enable-opt-data-sharing?code=' .$request->code;
+        
 
         $headers = [
-            'Authorization' => 'Bearer '.config('app.student_token'),
+            // 'Authorization' => 'Bearer '.config('app.student_token'),
             'Accept' => 'application/json',
             'Content-Type' => 'application/json',
             'Cache-Control' => 'no-cache'
