@@ -99,7 +99,7 @@ class CoachController extends Controller
      */
     public function check(Request $request)
     {
-        $apiURL = config('app.share_url') . '/user/opt-data-sharing?code=' . $request->token;
+        $apiURL = config('app.share_url') . '/api/user/opt-data-sharing?code=' . $request->token;
         
 
         $headers = [
@@ -119,6 +119,7 @@ class CoachController extends Controller
         $contents = json_decode($result->getBody(), true);
 
         $status = false;
+
         if($response === 200) {
             $status = true;
         }
